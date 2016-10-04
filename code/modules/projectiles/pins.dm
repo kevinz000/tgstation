@@ -22,21 +22,26 @@
 		gun = newloc
 
 /obj/item/device/firing_pin/afterattack(atom/target, mob/user, proximity_flag)
-	if(proximity_flag)
-		if(istype(target, /obj/item/weapon/gun))
-			var/obj/item/weapon/gun/G = target
-			if(G.pin && (force_replace || G.pin.pin_removeable))
-				G.pin.loc = get_turf(G)
-				G.pin.gun_remove(user)
-				user << "<span class ='notice'>You remove [G]'s old pin.</span>"
+	if(!proximity_flag)
+		return 0
+	if(istype(target, /obj/item/weapon/gun))
+		var/obj/item/weapon/gun/G = target
+		if(G.pin && (force_replace || G.pin.pin_removeable))
+			G.pin.loc = get_turf(G)
+			G.pin.gun_remove(user)
+			user << "<span class ='notice'>You remove [G]'s old pin.</span>"
 
-			if(!G.pin)
-				if(!user.unEquip(src))
-					return
-				gun_insert(user, G)
-				user << "<span class ='notice'>You insert [src] into [G].</span>"
-			else
-				user << "<span class ='notice'>This firearm already has a firing pin installed.</span>"
+		if(!G.pin)
+			if(!user.unEquip(src))
+				return
+			gun_insert(user, G)
+			user << "<span class ='notice'>You insert [src] into [G].</span>"
+		else
+			user << "<span class ='notice'>This firearm already has a firing pin installed.</span>"
+
+	if(ismob(target))
+		if(ismob(user))
+			user.visible_message("<span class='userdanger'>[user] epicly pins [target.name]!</span>")
 
 /obj/item/device/firing_pin/emag_act(mob/user)
 	if(!emagged)
