@@ -486,7 +486,7 @@
 		return FALSE
 	else if(istype(unmovablevictim, /obj/machinery/door))
 		var/obj/machinery/door/D = unmovablevictim
-		if(!airlock_hit(D))
+		if(!airlock_hit(D) && !istype(unmovablevictim, /obj/machinery/door/poddoor))
 			crashing = FALSE
 			return FALSE
 		damage = TRUE
