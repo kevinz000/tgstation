@@ -128,7 +128,7 @@ var/list/preferences_datums = list()
 		return
 	if((user.client.preferences_cd < world.time) && (user.client.preferences_count > 10))
 		return
-	user.client.preferences_cd = world.time + 200
+	user.client.preferences_cd = world.time + 200 + max(preferences_count, 100)
 	if(user.client.preferences_count == 75)
 		log_admin("[user.ckey]/[user] seems to be spamming a laggy game-preferences command!")
 		message_admins("[user.ckey]/[user] seems to be spamming a laggy game-preferences command!")
