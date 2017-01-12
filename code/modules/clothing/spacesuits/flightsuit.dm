@@ -471,7 +471,7 @@
 			wearer.visible_message("<span class='warning'>[wearer] reflexively flies over [L]!</span>")
 			crashing = FALSE
 			return FALSE
-		suit.user.forceMove(get_turf(unmovablevictim))
+		wearer.forceMove(get_turf(unmovablevictim))
 		crashing = FALSE
 		mobknockback(L, crashpower, crashdir)
 		damage = FALSE
@@ -1181,6 +1181,7 @@
 		else
 			maint_panel = FALSE
 		usermessage("You [maint_panel? "open" : "close"] the maintainence panel.")
+		return FALSE
 	if(!maint_panel)
 		usermessage("The maintainence panel is closed!", 1)
 		return FALSE
