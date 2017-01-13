@@ -211,7 +211,7 @@
 			mode = SHUTTLE_CALL
 			setTimer(call_time)
 		else
-			return
+			return FALSE
 
 	if(prob(70))
 		SSshuttle.emergencyLastCallLoc = signalOrigin
@@ -219,6 +219,7 @@
 		SSshuttle.emergencyLastCallLoc = null
 
 	priority_announce("The emergency shuttle has been called. [redAlert ? "Red Alert state confirmed: Dispatching priority shuttle. " : "" ]It will arrive in [timeLeft(600)] minutes.[reason][SSshuttle.emergencyLastCallLoc ? "\n\nCall signal traced. Results can be viewed on any communications console." : "" ]", null, 'sound/AI/shuttlecalled.ogg', "Priority")
+	return TRUE
 
 /obj/docking_port/mobile/emergency/cancel(area/signalOrigin)
 	if(mode != SHUTTLE_CALL)
