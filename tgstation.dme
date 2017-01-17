@@ -1157,6 +1157,7 @@
 #include "code\modules\detectivework\scanner.dm"
 #include "code\modules\emoji\emoji_parse.dm"
 #include "code\modules\endgame\universal_state.dm"
+#include "code\modules\endgame\supermatter\cascade.dm"
 #include "code\modules\events\_event.dm"
 #include "code\modules\events\abductor.dm"
 #include "code\modules\events\alien_infestation.dm"

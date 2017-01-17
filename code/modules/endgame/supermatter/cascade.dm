@@ -1,51 +1,32 @@
 
-#define PRIORITY_UNIVERSE 1	//What levels of fucked are we?
-#define PRIORITY_SOLAR 2
-#define PRIORITY_STATION 3
-#define PRIORITY_CLEAR 4
+#define CASCADE_BAD_ENDING 1
+#define CASCADE_GOOD_ENDING 2
 
-/datum/universal_state
-	var/name = "All Systems Nominal"
-	var/desc = "Everything's fine, go back to work."
+/datum/universal_state/cascade
+	name = "Supermatter Cascade"
+	desc = "An unknown reaction caused by a large mass of supermatter achieving critical energy and causing a resonance that unravels reality at the quantum level."
+	delay_telegraph = 10
+	delay_begin = 10
+	delay_process = 1
+	delay_end = 10
+	delay_close = 10
+	delay_reset = 10
+	process = TRUE
+	level = PRIORITY_UNIVERSE
+	no_shuttle = TRUE
+	set_space_overlay = TRUE
+	overlay_space = image()
+	shuttle_fail_message = ""
+	var/ending = CASCADE_BAD_ENDING
 
-	var/delay_init = 0
-	var/delay_telegraph = 0
-	var/delay_begin = 0
-	var/delay_process = 1
-	var/delay_end = 0
-	var/delay_close = 0
-	var/delay_reset = 0
-	var/processTick = 1
-	var/process = FALSE
-	var/level = PRIORITY_CLEAR
-
-	var/no_shuttle = FALSE
-	var/force_shuttle = FALSE
-	var/force_shuttle_timer = 0
-	var/force_shuttle_reason = ""
-	var/force_shuttle_recall = FALSE
-	var/forced_shuttle = FALSE
-
-	var/starting = FALSE
-	var/started = FALSE
-	var/ending = FALSE
-	var/ended = FALSE
-
-	var/set_space_overlay = FALSE
-	var/reset_space_on_end = TRUE
-	var/image/overlay_space = null
-	var/spaceset = FALSE
-	var/list/turf/changed_turfs = list()
-
-	var/fluff_report_sound = 'sound/AI/attention.ogg'
-	var/fluff_report_sender = "Central Command Report"
-	var/fluff_report_title = "All Systems Nominal"
-	var/fluff_message = "All systems nominal. Please return to work, and have a secure day."
-	var/fluff_autoannounce = FALSe
-
-	var/shuttle_fail_message = ""
-
-/datum/universal_state/New()
+/datum/universal_state/cascade/Initialize()
+	for(var/mob/M in world)
+		if(M.ckey || (M in player_list))
+			M << "<span class='userdanger'>A horrible silence overcomes you, as your ears start unbearably ringing!</span>"
+			M.Weaken(10)
+		else
+			M.visible_message("<span class='warning'>[M] shudders violently as a piercing white fills their body, and falls limp...</span>")
+			M.death()
 	..()
 
 /datum/universal_state/proc/Start()
@@ -55,8 +36,6 @@
 	starting = TRUE
 
 /datum/universal_state/proc/Initialize()
-	if(set_space_overlay)
-		setSpace()
 
 /datum/universal_state/proc/Telegraph()
 	if(force_shuttle)
@@ -79,8 +58,6 @@
 /datum/universal_state/proc/Begin()
 	starting = FALSE
 	started = TRUE
-	if(fluff_autoannounce)
-		commandAnnounce(fluff_report_sender, fluff_report_title, fluff_message, fluff_report_sound)
 
 /datum/universal_state/proc/Stop()
 	addtimer(CALLBACK(src, .proc/End), delay_end)
@@ -130,15 +107,3 @@
 		CHECK_TICK
 		S.overlays -= overlay_space
 	spaceset = FALSE
-
-/datum/universal_state/proc/commandAnnounce(sender, title, text, sound = 'sound/AI/attention.ogg')
-	var/announcement
-	announcement += "<h1 class='alert'>[html_encode(sender)]</h1>"
-	announcement += "<br><h2 class='alert'>[html_encode(title)]</h2>"
-	announcement += "<br><span class='alert'>[html_encode(text)]</span><br>"
-	announcement += "<br>"
-	for(var/mob/M in player_list)
-		if(!isnewplayer(M) && !M.ear_deaf)
-			M << announcement
-			if(M.client.prefs.toggles & SOUND_ANNOUNCEMENTS)
-				M << sound(sound)

@@ -1,6 +1,5 @@
-//Used to process objects. Fires once every second.
 
-var/datum/subsystem/SSEndgame
+var/datum/subsystem/endgame/SSEndgame
 /datum/subsystem/endgame
 	name = "Universal State"
 	priority = 30
@@ -16,26 +15,31 @@ var/datum/subsystem/SSEndgame
 	NEW_SS_GLOBAL(SSEndgame)
 
 /datum/subsystem/endgame/Recover()
-	if(istype(SSEndgame))
+	if(istype(SSEndgame.processing))
 		processing = SSEndgame.processing
+	if(istype(SSEndgame.starting))
 		starting = SSEndgame.starting
+	if(istype(SSEndgame.current))
 		current = SSEndgame.current
+	if(istype(SSEndgame.cleaning_up))
 		cleaning_up = SSEndgame.cleaning_up
 
 /datum/subsystem/endgame/fire()
-	for(/datum/universal_state/A in starting)
+	for(var/datum/universal_state/A in starting)
 		if(!A.starting)
 			A.Start()
 		if(A.started)
 			current.Add(A)
 			starting.Remove(A)
-	for(/datum/universal_state/B in current)
+	for(var/datum/universal_state/B in current)
 		if(B.ending)
 			cleaning_up.Add(B)
 			current.Remove(B)
-	for(/datum/universal_state/C in processing)
+			for(var/datum/universal_state/E in current)
+				E.setSpace()
+	for(var/datum/universal_state/C in processing)
 		C.processTick(wait)
-	for(/datum/universal_state/D in cleaning_up)
+	for(var/datum/universal_state/D in cleaning_up)
 		if(!D.ending)
 			D.End()
 		if(D.ended = TRUE)
@@ -43,8 +47,8 @@ var/datum/subsystem/SSEndgame
 			processing.Remove(D)
 			qdel(D)
 
-/datum/subsystem/endgame/proc/addStateNow(datum/universal_state/state)
-	var/adding = new state()
+/datum/subsystem/endgame/proc/addState(datum/universal_state/state)
+	var/datum/universal_state/adding = new state()
 	adding.Start()
 	starting.Add(adding)
 	processing.Add(adding)
