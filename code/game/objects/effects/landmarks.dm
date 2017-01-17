@@ -67,6 +67,9 @@
 	landmarks_list -= src
 	return ..()
 
+/obj/effect/landmark/proc/register_away()
+	awaydestinations += src
+
 /obj/effect/landmark/start
 	name = "start"
 	icon = 'icons/mob/screen_gen.dmi'
