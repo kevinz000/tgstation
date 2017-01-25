@@ -181,7 +181,16 @@ var/last_irc_status = 0
 			return "Bad Key"
 		else
 			return ircadminwho()
-
+	else if("check_active_ckey" in input)
+		if(!key_valid)
+			return "Bad Key"
+		else
+			return check_ckey_for_living_mob(input["check_active_ckey"])
+	else if("cross_server_atom" in input)
+		if(!key_valid)
+			return "Bad Key"
+		else
+			return make_atom_from_savefile(input["cross_server_atom"], input["atom_x"], input["atom_y"], input["atom_z"], input["atom_ckey_override"], input["cross_server_ckey"])
 
 /world/Reboot(var/reason, var/feedback_c, var/feedback_r, var/time)
 	if (reason == 1) //special reboot, do none of the normal stuff
