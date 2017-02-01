@@ -141,7 +141,11 @@
 	if(!locate(/obj/item/weapon) in held_items)
 		best_force = 0
 
-	if(restrained() || blacklistItems[pickupTarget] || (pickupTarget.flags & NODROP))
+	if(istype(pickupTarget) && pickupTarget.flags)
+		if(pickupTarget.flags & NODROP)
+			pickupTarget = null
+
+	if(restrained() || blacklistItems[pickupTarget])
 		pickupTarget = null
 
 	if(!resisting && pickupTarget)
