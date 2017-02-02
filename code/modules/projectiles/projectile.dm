@@ -264,10 +264,10 @@
 /obj/item/projectile/proc/pixelmove()
 	if((!( current ) || loc == current))
 		current = locate(Clamp(x+xo,1,world.maxx),Clamp(y+yo,1,world.maxy),z)
-	if(!Angle)
-		Angle=round(Get_Angle(src,current))
-	if(spread)
-		Angle += (rand() - 0.5) * spread
+	//if(!Angle)
+	//	Angle=round(Get_Angle(src,current))
+	//if(spread)
+	//	Angle += (rand() - 0.5) * spread
 	var/matrix/M = new
 	M.Turn(Angle)
 	transform = M
@@ -299,11 +299,11 @@
 		new_y--
 		movedtile = TRUE
 	step_towards(src, locate(new_x, new_y, z))
-	if(TRUE)
-		pixel_x = pixel_x_offset
-		pixel_y = pixel_y_offset
-	else
-		animate(src, pixel_x = pixel_x_offset, pixel_y = pixel_y_offset, time = movespeed, flags = ANIMATION_END_NOW)
+	//if(TRUE)
+	//	pixel_x = pixel_x_offset
+	//	pixel_y = pixel_y_offset
+	//else
+	animate(src, pixel_x = pixel_x_offset, pixel_y = pixel_y_offset, time = movespeed, flags = ANIMATION_END_NOW)
 	if(original && (original.layer>=2.75) || ismob(original))
 		if(loc == get_turf(original))
 			if(!(original in permutated))
