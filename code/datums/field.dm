@@ -6,9 +6,8 @@
 
 #define FIELD_RADIUS_SQUARE 1
 #define FIELD_RADIUS_RECTANGE 2
-#define FIELD_RADIUS_CIRCLE 3
-#define FIELD_RADIUS_CUSTOM 4
-#define FIELD_RADIUS_BLOCK 5
+#define FIELD_RADIUS_CUSTOM 3
+#define FIELD_RADIUS_BLOCK 4
 
 /datum/field
 	var/state = null
@@ -30,10 +29,10 @@
 /datum/field/proc/process_general()
 	return
 
-/proc/field(type, turf/epicenter, radius_type, radius1 = null, radius2 = null, list/turf/turfs = list())
-	new type(epicenter, radius_type, radius1, radius2, turfs)
+/proc/field(type, turf/epicenter, radius_type, radius1 = null, radius2 = null, list/turf/turfs = list(), /list/turf/edgeturfs = list(), duration = -1)
+	new type(epicenter, radius_type, radius1, radius2, turfs, edgeturfs, duration)
 
-/datum/field/proc/New(turf/epicenter, radius_type, radius1 = null, radius2 = null, list/turf/turfs = list())
+/datum/field/proc/New(turf/epicenter, radius_type, radius1 = null, radius2 = null, list/turf/turfs = list(), /list/turf/edgeturfs = list(), duration = -1)
 	state = FIELD_STATE_SETUP
 	var/list/turf/affected = list()
 	var/list/turf/affected_edgeturfs = list()
@@ -48,20 +47,22 @@
 			if(isnull(radius1) || isnull(radius2))
 				return FALSE
 			affected = block(locate((epicenter.x - radius1), (epicenter.y - radius2), (epicenter.z)), locate((epicenter.x + radius1), (epicenter.y + radius2), (epicenter.z)))
-			//WIP
-		if(FIELD_RADIUS_CIRCLE)
-			//WIP
-			//WIP
+			affected_innerturfs = block(locate((epicenter.x - (radius1 - 1)), (epicenter.y - (radius2 - 1)), (epicenter.z)), locate((epicenter.x + (radius1 - 1)), (epicenter.y + (radius2 - 1)), (epicenter.z)))
 		if(FIELD_RADIUS_CUSTOM)
 			affected = turfs
-			//WIP
+			affected_innerturfs = turfs - edgeturfs
 		if(FIELD_RADIUS_BLOCK)
 			if(!isturf(radius1)||!isturf(radius2))
 				return FALSE
 			affected = block(radius1, radius2)
-			//WIP
-	if(radius_type != FIELD_RADIUS_CUSTOM)	//Doesn't support edgeturfs for custom turf selection.
+			affected_innerturfs = block(radius1
+	if(radius_type != FIELD_RADIUS_CUSTOM)
 		affected_edgeturfs = affected - affected_innerturfs
+	else
+		affected_edgeturfs = edgeturfs
+
+	if(duration != -1)
+		QDEL_IN(src, duration)
 
 
 
