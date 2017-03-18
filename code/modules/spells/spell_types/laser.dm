@@ -62,6 +62,8 @@
 	var/mob/living/intercepted_shooter = null
 	var/intercepted_params = null
 	var/intercepted_target = null
+	var/list/datum/beam/primary = null
+
 
 /obj/effect/proc_holder/spell/laser/New()
 	START_PROCESSING(SSflightpacks, src)
@@ -78,6 +80,13 @@
 	beam_icon_trailing = icon('icons/effects/96x96.dmi',icon_state = "laser_trailing")
 	ranged_mousepointer = icon('icons/mob/actions.dmi',icon_state = "laser_mouse_target")
 	update_icon()
+
+/obj/effect/proc_holder/spell/laser/proc/generate_beamline(atom/target)
+	if(istype(primary))
+		return FALSE
+	primary = intercepted_shooter.Beam(BeamTarget = targget, icon_state = "laser_tracer_rings", icon = 'icons/effects/96x96.dmi', time = INFINITY, maxdistance = INFINITY, beam_type = /obj/effect/ebeam/magiclaser, beam_sleep_time = )
+
+/obj/effect/proc_holder
 
 /obj/effect/proc_holder/spell/laser/process()
 	handle_charge()
@@ -244,7 +253,7 @@
 	name = "laser beam"
 	desc = "Why are you staring at this? RUN!"
 	icon = null
-	icon_state = null
+	icon_state = ""
 	speed = 0.5
 	forcedodge = TRUE
 	var/obj/effect/proc_holder/spell/laser/host = null
