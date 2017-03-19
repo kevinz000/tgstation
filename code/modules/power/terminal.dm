@@ -46,7 +46,6 @@
 	if(panel_open)
 		. = 1
 
-
 /obj/machinery/power/terminal/proc/dismantle(mob/living/user, obj/item/W)
 	if(isturf(loc))
 		var/turf/T = loc

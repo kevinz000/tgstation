@@ -123,6 +123,7 @@ Class Procs:
 	var/interact_open = 0 // Can the machine be interacted with when in maint/when the panel is open.
 	var/interact_offline = 0 // Can the machine be interacted with while de-powered.
 	var/speed_process = 0 // Process as fast as possible?
+	var/obj/machinery/power/PSU/direct_power = null
 
 /obj/machinery/Initialize()
 	if (!armor)
@@ -191,13 +192,20 @@ Class Procs:
 	updateUsrDialog()
 	update_icon()
 
+/obj/machinery/proc/draw_from_direct(amount)
+	if(!istype(direct_power))
+		return FALSE
+	return direct_power.relay_power(amount)
+
 /obj/machinery/proc/auto_use_power()
-	if(!powered(power_channel))
-		return 0
+	var/draw = 0
 	if(use_power == 1)
-		use_power(idle_power_usage,power_channel)
+		draw = idle_power_usage
 	else if(use_power >= 2)
-		use_power(active_power_usage,power_channel)
+		draw = active_power_usage
+	if(!powered(power_channel))
+		return draw_from_direct(draw)
+	use_power(draw)
 	return 1
 
 /obj/machinery/proc/is_operational()
