@@ -20,7 +20,15 @@ var/datum/controller/subsystem/persistence/SSpersistence
 	LoadSatchels()
 	LoadPoly()
 	LoadChiselMessages()
+	save_roundstart_state()
 	..()
+
+/datum/controller/subsystem/persistence/proc/save_roundstart_state()	//Oh god why.
+	var/tA = 0
+	for(var/turf/T in world)
+		T.save_roundstart_state()
+		tA++
+	world << "<span class='boldnotice'>Saved [tA] turf states!</span>"
 
 /datum/controller/subsystem/persistence/proc/LoadSatchels()
 	secret_satchels = new /savefile("data/npc_saves/SecretSatchels.sav")

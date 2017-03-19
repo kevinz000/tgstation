@@ -25,12 +25,23 @@
 	var/list/decals
 	var/requires_activation	//add to air processing after initialize?
 	var/changing_turf = FALSE
+	var/saved_type
+	var/list/saved_contents
 
 /turf/vv_edit_var(var_name, new_value)
 	var/static/list/banned_edits = list("x", "y", "z")
 	if(var_name in banned_edits)
 		return FALSE
 	. = ..()
+
+/turf/proc/save_roundstart_state()
+	saved_type = type
+	saved_contents = list()
+	for(var/V in contents)
+		if(!isobj(V))
+			continue
+		var/obj/O = V
+		saved_contents[O.type]++
 
 /turf/Initialize()
 	if(initialized)
