@@ -54,7 +54,6 @@
 #define PASSMOB			16
 #define LETPASSTHROW	32
 
-
 //Movement Types
 #define IMMOBILE 0
 #define GROUND 1
