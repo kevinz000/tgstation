@@ -50,6 +50,10 @@
 	var/dismemberment = 0 //The higher the number, the greater the bonus to dismembering. 0 will not dismember at all.
 	var/impact_effect_type //what type of impact effect to show when hitting something
 	var/log_override = FALSE //is this type spammed enough to not log? (KAs)
+	//debug
+	var/original_angle = 0
+	var/original_y_pixel = -1
+	//end
 
 /obj/item/projectile/New()
 	permutated = list()
@@ -169,6 +173,17 @@
 /obj/item/projectile/Process_Spacemove(var/movement_dir = 0)
 	return 1 //Bullets don't drift in space
 
+//debug
+/obj/item/projectile/proc/projectile_debug(line, angle, pixel_y, original_Angle, original_y)
+	if(original_Angle == -1)
+		return
+	if(!((angle != original_Angle) || (pixel_y != original_y)))
+		return
+	original_angle = angle
+	original_y_pixel = pixel_y
+	world << "PROJECTILE DEBUG: Line[line] Angle[angle] Pixel_Y[pixel_y]"
+	sleep(2)
+//end
 /obj/item/projectile/proc/fire(setAngle, atom/direct_target)
 	if(!log_override && firer && original)
 		add_logs(firer, original, "fired at", src, " [get_area(src)]")
@@ -179,67 +194,130 @@
 		return
 	if(setAngle)
 		Angle = setAngle
+	//debug
+	var/iteration = 0
+	world << "PROJECTILE DEBUG: [src] FIRING ANGLE AT [Angle]"
+	original_angle = Angle
+	if(Angle == 270)
+		original_y_pixel = pixel_y
+		world << "STARTING PROJECTILE DEBUG IN [src] AT PIXEL Y = [original_y_pixel] AND ANGLE [Angle]"
+	//end
 	if(!legacy) //new projectiles
 		set waitfor = 0
 		var/next_run = world.time
 		while(loc)
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 			if(paused)
 				next_run = world.time
 				sleep(1)
 				continue
 
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 			if((!( current ) || loc == current))
 				current = locate(Clamp(x+xo,1,world.maxx),Clamp(y+yo,1,world.maxy),z)
 
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 			if(!Angle)
 				Angle=round(Get_Angle(src,current))
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 			if(spread)
 				Angle += (rand() - 0.5) * spread
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 			var/matrix/M = new
 			M.Turn(Angle)
 			transform = M
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 
 			var/Pixel_x=round(sin(Angle)+16*sin(Angle)*2)
 			var/Pixel_y=round(cos(Angle)+16*cos(Angle)*2)
+			//debug
+			iteration++
+			if(Angle == 270)
+				world << "PROJECTILE DEBUG: Iteration [iteration] Pixel_y [Pixel_y] pixel_y [pixel_y]"
+				sleep(1)
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 			var/pixel_x_offset = pixel_x + Pixel_x
 			var/pixel_y_offset = pixel_y + Pixel_y
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 			var/new_x = x
 			var/new_y = y
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 
 			while(pixel_x_offset > 16)
 				pixel_x_offset -= 32
 				pixel_x -= 32
 				new_x++// x++
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 			while(pixel_x_offset < -16)
 				pixel_x_offset += 32
 				pixel_x += 32
 				new_x--
 
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 			while(pixel_y_offset > 16)
 				pixel_y_offset -= 32
 				pixel_y -= 32
 				new_y++
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 			while(pixel_y_offset < -16)
 				pixel_y_offset += 32
 				pixel_y += 32
 				new_y--
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 
 			step_towards(src, locate(new_x, new_y, z))
 			next_run += max(world.tick_lag, speed)
 			var/delay = next_run - world.time
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 			if(delay <= world.tick_lag*2)
 				pixel_x = pixel_x_offset
 				pixel_y = pixel_y_offset
 			else
 				animate(src, pixel_x = pixel_x_offset, pixel_y = pixel_y_offset, time = max(1, (delay <= 3 ? delay - 1 : delay)), flags = ANIMATION_END_NOW)
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 
 			if(original && (original.layer>=2.75) || ismob(original))
 				if(loc == get_turf(original))
 					if(!(original in permutated))
 						Bump(original, 1)
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 			Range()
 			if (delay > 0)
 				sleep(delay)
+			//debug
+			projectile_debug(__LINE__, Angle, pixel_y, original_angle, original_y_pixel)
+			//end
 
 	else //old projectile system
 		set waitfor = 0
