@@ -93,11 +93,11 @@
 	var/datum/objective/O = new("Protect Wizard Academy from the intruders")
 	wizmind.objectives += O
 	wizmind.transfer_to(wizbody)
-	ticker.mode.wizards |= wizmind
+	SSticker.mode.wizards |= wizmind
 
 	wizmind.AddSpell(new /obj/effect/proc_holder/spell/targeted/ethereal_jaunt)
 	wizmind.AddSpell(new /obj/effect/proc_holder/spell/targeted/projectile/magic_missile)
-	wizmind.AddSpell(new /obj/effect/proc_holder/spell/fireball)
+	wizmind.AddSpell(new /obj/effect/proc_holder/spell/aimed/fireball)
 
 	current_wizard = wizbody
 
@@ -133,8 +133,8 @@
 /obj/item/weapon/dice/d20/fate/diceroll(mob/user)
 	..()
 	if(!used)
-		if(!ishuman(user) || !user.mind || (user.mind in ticker.mode.wizards))
-			user << "<span class='warning'>You feel the magic of the dice is restricted to ordinary humans!</span>"
+		if(!ishuman(user) || !user.mind || (user.mind in SSticker.mode.wizards))
+			to_chat(user, "<span class='warning'>You feel the magic of the dice is restricted to ordinary humans!</span>")
 			return
 		if(rigged)
 			effect(user,rigged)
@@ -142,8 +142,8 @@
 			effect(user,result)
 
 /obj/item/weapon/dice/d20/fate/equipped(mob/user, slot)
-	if(!ishuman(user) || !user.mind || (user.mind in ticker.mode.wizards))
-		user << "<span class='warning'>You feel the magic of the dice is restricted to ordinary humans! You should leave it alone.</span>"
+	if(!ishuman(user) || !user.mind || (user.mind in SSticker.mode.wizards))
+		to_chat(user, "<span class='warning'>You feel the magic of the dice is restricted to ordinary humans! You should leave it alone.</span>")
 		user.drop_item()
 
 
@@ -246,7 +246,7 @@
 			new /obj/item/weapon/card/id/captains_spare(get_turf(src))
 		if(19)
 			//Instrinct Resistance
-			user << "<span class='notice'>You feel robust.</span>"
+			to_chat(user, "<span class='notice'>You feel robust.</span>")
 			var/datum/species/S = user.dna.species
 			S.brutemod *= 0.5
 			S.burnmod *= 0.5
@@ -303,6 +303,6 @@
 	user.visible_message("[user] activates \the [src].","<span class='notice'>You activate \the [src].</span>")
 
 /obj/structure/ladder/can_use(mob/user)
-	if(user.mind in ticker.mode.wizards)
+	if(user.mind in SSticker.mode.wizards)
 		return 0
 	return 1

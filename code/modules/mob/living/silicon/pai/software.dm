@@ -200,7 +200,7 @@
 					M = M.loc
 					count++
 					if(count >= 6)
-						src << "You are not being carried by anyone!"
+						to_chat(src, "You are not being carried by anyone!")
 						return 0
 				spawn CheckDNA(M, src)
 
@@ -253,9 +253,9 @@
 					med.remove_hud_from(src)
 		if("translator")
 			if(href_list["toggle"])
-				var/on_already = ((languages_understood == ALL) && (languages_spoken == ALL))
-				languages_spoken = on_already ? (HUMAN | ROBOT) : ALL
-				languages_understood = on_already ? (HUMAN | ROBOT) : ALL
+				if(!HAS_SECONDARY_FLAG(src, OMNITONGUE))
+					grant_all_languages(TRUE)
+					// this is PERMAMENT.
 		if("doorjack")
 			if(href_list["jack"])
 				if(src.cable && src.cable.machine)
@@ -313,7 +313,8 @@
 		if(s == "medical HUD")
 			dat += "<a href='byond://?src=\ref[src];software=medicalhud;sub=0'>Medical Analysis Suite</a>[(src.medHUD) ? "<font color=#55FF55> On</font>" : "<font color=#FF5555> Off</font>"] <br>"
 		if(s == "universal translator")
-			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a>[((languages_spoken == ALL) && (languages_understood == ALL)) ? "<font color=#55FF55> On</font>" : "<font color=#FF5555> Off</font>"] <br>"
+			var/translator_on = HAS_SECONDARY_FLAG(src, OMNITONGUE)
+			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a>[translator_on ? "<font color=#55FF55> On</font>" : "<font color=#FF5555> Off</font>"] <br>"
 		if(s == "projection array")
 			dat += "<a href='byond://?src=\ref[src];software=projectionarray;sub=0'>Projection Array</a> <br>"
 		if(s == "camera jack")
@@ -376,15 +377,15 @@
 						"<span class='notice'>You press your thumb against [P].</span>",\
 						"<span class='notice'>[P] makes a sharp clicking sound as it extracts DNA material from [M].</span>")
 		if(!M.has_dna())
-			P << "<b>No DNA detected</b>"
+			to_chat(P, "<b>No DNA detected</b>")
 			return
-		P << "<font color = red><h3>[M]'s UE string : [M.dna.unique_enzymes]</h3></font>"
+		to_chat(P, "<font color = red><h3>[M]'s UE string : [M.dna.unique_enzymes]</h3></font>")
 		if(M.dna.unique_enzymes == P.master_dna)
-			P << "<b>DNA is a match to stored Master DNA.</b>"
+			to_chat(P, "<b>DNA is a match to stored Master DNA.</b>")
 		else
-			P << "<b>DNA does not match stored Master DNA.</b>"
+			to_chat(P, "<b>DNA does not match stored Master DNA.</b>")
 	else
-		P << "[M] does not seem like [M.p_they()] [M.p_are()] going to provide a DNA sample willingly."
+		to_chat(P, "[M] does not seem like [M.p_they()] [M.p_are()] going to provide a DNA sample willingly.")
 
 // -=-=-=-= Software =-=-=-=-=- //
 
@@ -464,11 +465,10 @@
 
 // Universal Translator
 /mob/living/silicon/pai/proc/softwareTranslator()
+	var/translator_on = HAS_SECONDARY_FLAG(src, OMNITONGUE)
 	. = {"<h3>Universal Translator</h3><br>
-				When enabled, this device will automatically convert all spoken and written language into a format that any known recipient can understand.<br><br>
-				The device is currently [ ((languages_spoken == ALL) && (languages_understood == ALL)) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br>
-				<a href='byond://?src=\ref[src];software=translator;sub=0;toggle=1'>Toggle Device</a><br>
-				"}
+				When enabled, this device will permamently be able to speak and understand all known forms of communication.<br><br>
+				The device is currently [translator_on ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br>[translator_on ? "" : "<a href='byond://?src=\ref[src];software=translator;sub=0;toggle=1'>Activate Translation Module</a><br>"]"}
 	return .
 
 // Security HUD
@@ -565,7 +565,7 @@
 	dat += "<font color=#55FF55>Connected</font> <br>"
 
 	if(!istype(machine, /obj/machinery/camera))
-		src << "DERP"
+		to_chat(src, "DERP")
 	return dat
 
 // Door Jack
@@ -601,9 +601,9 @@
 	var/turf/T = get_turf(src.loc)
 	for(var/mob/living/silicon/ai/AI in player_list)
 		if(T.loc)
-			AI << "<font color = red><b>Network Alert: Brute-force encryption crack in progress in [T.loc].</b></font>"
+			to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress in [T.loc].</b></font>")
 		else
-			AI << "<font color = red><b>Network Alert: Brute-force encryption crack in progress. Unable to pinpoint location.</b></font>"
+			to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress. Unable to pinpoint location.</b></font>")
 	while(src.hackprogress < 100)
 		if(src.cable && src.cable.machine && istype(src.cable.machine, /obj/machinery/door) && src.cable.machine == src.hackdoor && get_dist(src, src.hackdoor) <= 1)
 			hackprogress += rand(1, 10)

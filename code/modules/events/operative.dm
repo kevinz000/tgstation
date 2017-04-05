@@ -32,7 +32,7 @@
 	var/datum/mind/Mind = new /datum/mind(selected.key)
 	Mind.assigned_role = "Lone Operative"
 	Mind.special_role = "Lone Operative"
-	ticker.mode.traitors |= Mind
+	SSticker.mode.traitors |= Mind
 	Mind.active = 1
 
 	var/obj/machinery/nuclearbomb/selfdestruct/nuke = locate() in machines
@@ -45,7 +45,7 @@
 			nuke_code = nuke.r_code
 
 		Mind.store_memory("<B>Station Self-Destruct Device Code</B>: [nuke_code]", 0, 0)
-		Mind.current << "The nuclear authorization code is: <B>[nuke_code]</B>"
+		to_chat(Mind.current, "The nuclear authorization code is: <B>[nuke_code]</B>")
 
 		var/datum/objective/nuclear/O = new()
 		O.owner = Mind

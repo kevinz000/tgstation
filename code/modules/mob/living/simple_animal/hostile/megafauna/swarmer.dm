@@ -65,7 +65,7 @@ var/global/list/AISwarmerCapsByType = list(/mob/living/simple_animal/hostile/swa
 	var/static/list/swarmer_caps
 
 
-/mob/living/simple_animal/hostile/megafauna/swarmer_swarm_beacon/New()
+/mob/living/simple_animal/hostile/megafauna/swarmer_swarm_beacon/Initialize()
 	..()
 	swarmer_caps = AISwarmerCapsByType //for admin-edits
 	internal = new/obj/item/device/gps/internal/swarmer_beacon(src)
@@ -108,7 +108,7 @@ var/global/list/AISwarmerCapsByType = list(/mob/living/simple_animal/hostile/swa
 	AIStatus = AI_ON
 
 
-/mob/living/simple_animal/hostile/swarmer/ai/New()
+/mob/living/simple_animal/hostile/swarmer/ai/Initialize()
 	..()
 	ToggleLight() //so you can see them eating you out of house and home/shooting you/stunlocking you for eternity
 	LAZYINITLIST(AISwarmersByType[type])
@@ -178,7 +178,7 @@ var/global/list/AISwarmerCapsByType = list(/mob/living/simple_animal/hostile/swa
 	var/static/list/sharedIgnore = list()
 
 
-/mob/living/simple_animal/hostile/swarmer/ai/resource/New()
+/mob/living/simple_animal/hostile/swarmer/ai/resource/Initialize()
 	..()
 	sharedWanted = typecacheof(sharedWanted)
 	sharedIgnore = typecacheof(sharedIgnore)
@@ -214,8 +214,10 @@ var/global/list/AISwarmerCapsByType = list(/mob/living/simple_animal/hostile/swa
 /mob/living/simple_animal/hostile/swarmer/ai/resource/AttackingTarget()
 	if(target.swarmer_act(src))
 		add_type_to_wanted(target.type)
+		return TRUE
 	else
 		add_type_to_ignore(target.type)
+		return FALSE
 
 
 /mob/living/simple_animal/hostile/swarmer/ai/resource/handle_automated_action()
@@ -308,8 +310,9 @@ var/global/list/AISwarmerCapsByType = list(/mob/living/simple_animal/hostile/swa
 			var/mob/living/L = target
 			L.attack_animal(src)
 			L.electrocute_act(10, src, safety = TRUE) //safety = TRUE means we don't check gloves... Ok?
+		return TRUE
 	else
-		..()
+		return ..()
 
 
 

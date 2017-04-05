@@ -39,10 +39,11 @@
 	var/attempt_open = 0
 
 // Pickup loot
-/mob/living/simple_animal/hostile/mimic/crate/initialize()
+/mob/living/simple_animal/hostile/mimic/crate/Initialize(mapload)
 	..()
-	for(var/obj/item/I in loc)
-		I.loc = src
+	if(mapload)	//eat shit
+		for(var/obj/item/I in loc)
+			I.loc = src
 
 /mob/living/simple_animal/hostile/mimic/crate/DestroySurroundings()
 	..()
@@ -65,6 +66,11 @@
 	. = ..()
 	if(.)
 		icon_state = initial(icon_state)
+		if(prob(15) && iscarbon(target))
+			var/mob/living/carbon/C = target
+			C.Weaken(2)
+			C.visible_message("<span class='danger'>\The [src] knocks down \the [C]!</span>", \
+					"<span class='userdanger'>\The [src] knocks you down!</span>")
 
 /mob/living/simple_animal/hostile/mimic/crate/proc/trigger()
 	if(!attempt_open)
@@ -86,18 +92,6 @@
 		O.loc = C
 	..()
 
-/mob/living/simple_animal/hostile/mimic/crate/AttackingTarget()
-	. =..()
-	var/mob/living/L = .
-	if(iscarbon(L))
-		var/mob/living/carbon/C = L
-		if(prob(15))
-			C.Weaken(2)
-			C.visible_message("<span class='danger'>\The [src] knocks down \the [C]!</span>", \
-					"<span class='userdanger'>\The [src] knocks you down!</span>")
-
-
-
 var/global/list/protected_objects = list(/obj/structure/table, /obj/structure/cable, /obj/structure/window)
 
 /mob/living/simple_animal/hostile/mimic/copy
@@ -109,8 +103,8 @@ var/global/list/protected_objects = list(/obj/structure/table, /obj/structure/ca
 	var/image/googly_eyes = null
 	gold_core_spawnable = 0
 
-/mob/living/simple_animal/hostile/mimic/copy/New(loc, obj/copy, mob/living/creator, destroy_original = 0)
-	..(loc)
+/mob/living/simple_animal/hostile/mimic/copy/Initialize(mapload, obj/copy, mob/living/creator, destroy_original = 0)
+	..()
 	CopyObject(copy, creator, destroy_original)
 
 /mob/living/simple_animal/hostile/mimic/copy/Life()
@@ -148,7 +142,7 @@ var/global/list/protected_objects = list(/obj/structure/table, /obj/structure/ca
 		icon = O.icon
 		icon_state = O.icon_state
 		icon_living = icon_state
-		overlays = O.overlays
+		copy_overlays(O)
 		googly_eyes = image('icons/mob/mob.dmi',"googly_eyes")
 		add_overlay(googly_eyes)
 		if(istype(O, /obj/structure) || istype(O, /obj/machinery))
@@ -177,14 +171,12 @@ var/global/list/protected_objects = list(/obj/structure/table, /obj/structure/ca
 		..()
 
 /mob/living/simple_animal/hostile/mimic/copy/AttackingTarget()
-	..()
-	if(knockdown_people)
-		if(iscarbon(target))
-			var/mob/living/carbon/C = target
-			if(prob(15))
-				C.Weaken(2)
-				C.visible_message("<span class='danger'>\The [src] knocks down \the [C]!</span>", \
-						"<span class='userdanger'>\The [src] knocks you down!</span>")
+	. = ..()
+	if(knockdown_people && . && prob(15) && iscarbon(target))
+		var/mob/living/carbon/C = target
+		C.Weaken(2)
+		C.visible_message("<span class='danger'>\The [src] knocks down \the [C]!</span>", \
+				"<span class='userdanger'>\The [src] knocks you down!</span>")
 
 /mob/living/simple_animal/hostile/mimic/copy/Aggro()
 	..()

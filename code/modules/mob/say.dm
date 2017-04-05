@@ -3,24 +3,28 @@
 	set name = "Say"
 	set category = "IC"
 	if(say_disabled)	//This is here to try to identify lag problems
-		usr << "<span class='danger'>Speech is currently admin-disabled.</span>"
+		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
 	usr.say(message)
 
-/mob/verb/whisper(message as text)
+
+/mob/verb/whisper_verb(message as text)
 	set name = "Whisper"
 	set category = "IC"
 	if(say_disabled)	//This is here to try to identify lag problems
-		usr << "<span class='danger'>Speech is currently admin-disabled.</span>"
+		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
-	say(message) //only carbons actually whisper, everything else just talks
+	whisper(message)
+
+/mob/proc/whisper(message, datum/language/language=null)
+	say(message, language) //only carbons actually whisper, everything else just talks
 
 /mob/verb/me_verb(message as text)
 	set name = "Me"
 	set category = "IC"
 
 	if(say_disabled)	//This is here to try to identify lag problems
-		usr << "<span class='danger'>Speech is currently admin-disabled.</span>"
+		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
 
 	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
@@ -32,16 +36,16 @@
 	var/alt_name = ""
 
 	if(say_disabled)	//This is here to try to identify lag problems
-		usr << "<span class='danger'>Speech is currently admin-disabled.</span>"
+		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
 
 	if(jobban_isbanned(src, "OOC"))
-		src << "<span class='danger'>You have been banned from deadchat.</span>"
+		to_chat(src, "<span class='danger'>You have been banned from deadchat.</span>")
 		return
 
 	if (src.client)
 		if(src.client.prefs.muted & MUTE_DEADCHAT)
-			src << "<span class='danger'>You cannot talk in deadchat (muted).</span>"
+			to_chat(src, "<span class='danger'>You cannot talk in deadchat (muted).</span>")
 			return
 
 		if(src.client.handle_spam_prevention(message,MUTE_DEADCHAT))

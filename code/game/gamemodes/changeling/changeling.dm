@@ -96,15 +96,15 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 		changeling.current.make_changeling()
 		forge_changeling_objectives(changeling)
 		greet_changeling(changeling)
-		ticker.mode.update_changeling_icons_added(changeling)
+		SSticker.mode.update_changeling_icons_added(changeling)
 	modePlayer += changelings
 	..()
 
 /datum/game_mode/changeling/make_antag_chance(mob/living/carbon/human/character) //Assigns changeling to latejoiners
 	var/changelingcap = min( round(joined_player_list.len/(config.changeling_scaling_coeff*2))+2, round(joined_player_list.len/config.changeling_scaling_coeff) )
-	if(ticker.mode.changelings.len >= changelingcap) //Caps number of latejoin antagonists
+	if(SSticker.mode.changelings.len >= changelingcap) //Caps number of latejoin antagonists
 		return
-	if(ticker.mode.changelings.len <= (changelingcap - 2) || prob(100 - (config.changeling_scaling_coeff*2)))
+	if(SSticker.mode.changelings.len <= (changelingcap - 2) || prob(100 - (config.changeling_scaling_coeff*2)))
 		if(ROLE_CHANGELING in character.client.prefs.be_special)
 			if(!jobban_isbanned(character, ROLE_CHANGELING) && !jobban_isbanned(character, "Syndicate"))
 				if(age_check(character.client))
@@ -197,19 +197,19 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 
 /datum/game_mode/proc/greet_changeling(datum/mind/changeling, you_are=1)
 	if (you_are)
-		changeling.current << "<span class='boldannounce'>You are [changeling.changeling.changelingID], a changeling! You have absorbed and taken the form of a human.</span>"
-	changeling.current << "<span class='boldannounce'>Use say \":g message\" to communicate with your fellow changelings.</span>"
-	changeling.current << "<b>You must complete the following tasks:</b>"
+		to_chat(changeling.current, "<span class='boldannounce'>You are [changeling.changeling.changelingID], a changeling! You have absorbed and taken the form of a human.</span>")
+	to_chat(changeling.current, "<span class='boldannounce'>Use say \":g message\" to communicate with your fellow changelings.</span>")
+	to_chat(changeling.current, "<b>You must complete the following tasks:</b>")
 
 	if (changeling.current.mind)
 		var/mob/living/carbon/human/H = changeling.current
 		if(H.mind.assigned_role == "Clown")
-			H << "You have evolved beyond your clownish nature, allowing you to wield weapons without harming yourself."
+			to_chat(H, "You have evolved beyond your clownish nature, allowing you to wield weapons without harming yourself.")
 			H.dna.remove_mutation(CLOWNMUT)
 
 	var/obj_count = 1
 	for(var/datum/objective/objective in changeling.objectives)
-		changeling.current << "<b>Objective #[obj_count]</b>: [objective.explanation_text]"
+		to_chat(changeling.current, "<b>Objective #[obj_count]</b>: [objective.explanation_text]")
 		obj_count++
 	return
 
@@ -269,7 +269,7 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 				feedback_add_details("changeling_success","FAIL")
 			text += "<br>"
 
-		world << text
+		to_chat(world, text)
 
 
 	return 1
@@ -351,25 +351,25 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 		var/datum/changelingprofile/prof = stored_profiles[1]
 		if(prof.dna == user.dna && stored_profiles.len >= dna_max)//If our current DNA is the stalest, we gotta ditch it.
 			if(verbose)
-				user << "<span class='warning'>We have reached our capacity to store genetic information! We must transform before absorbing more.</span>"
+				to_chat(user, "<span class='warning'>We have reached our capacity to store genetic information! We must transform before absorbing more.</span>")
 			return
 	if(!target)
 		return
 	if((target.disabilities & NOCLONE) || (target.disabilities & HUSK))
 		if(verbose)
-			user << "<span class='warning'>DNA of [target] is ruined beyond usability!</span>"
+			to_chat(user, "<span class='warning'>DNA of [target] is ruined beyond usability!</span>")
 		return
 	if(!ishuman(target))//Absorbing monkeys is entirely possible, but it can cause issues with transforming. That's what lesser form is for anyway!
 		if(verbose)
-			user << "<span class='warning'>We could gain no benefit from absorbing a lesser creature.</span>"
+			to_chat(user, "<span class='warning'>We could gain no benefit from absorbing a lesser creature.</span>")
 		return
 	if(has_dna(target.dna))
 		if(verbose)
-			user << "<span class='warning'>We already have this DNA in storage!</span>"
+			to_chat(user, "<span class='warning'>We already have this DNA in storage!</span>")
 		return
 	if(!target.has_dna())
 		if(verbose)
-			user << "<span class='warning'>[target] is not compatible with our biology.</span>"
+			to_chat(user, "<span class='warning'>[target] is not compatible with our biology.</span>")
 		return
 	return 1
 

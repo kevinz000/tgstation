@@ -1,4 +1,3 @@
-//TODO: Flash range does nothing currently
 var/explosionid = 1
 
 /proc/explosion(turf/epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, adminlog = 1, ignorecap = 0, flame_range = 0 ,silent = 0, smoke = 1)
@@ -37,7 +36,7 @@ var/explosionid = 1
 	var/list/cached_exp_block = list()
 
 	if(adminlog)
-		message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range], [flame_range]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z] - <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</a>)")
+		message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range], [flame_range]) in area: [get_area(epicenter)] [ADMIN_COORDJMP(epicenter)]")
 		log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range], [flame_range]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z])")
 
 	// Play sounds; we want sounds to be different depending on distance so we will manually do it ourselves.
@@ -52,6 +51,7 @@ var/explosionid = 1
 
 	if(!silent)
 		var/frequency = get_rand_frequency()
+		var/ex_sound = get_sfx("explosion")
 		for(var/mob/M in player_list)
 			// Double check for client
 			if(M && M.client)
@@ -60,7 +60,7 @@ var/explosionid = 1
 					var/dist = get_dist(M_turf, epicenter)
 					// If inside the blast radius + world.view - 2
 					if(dist <= round(max_range + world.view - 2, 1))
-						M.playsound_local(epicenter, get_sfx("explosion"), 100, 1, frequency, falloff = 5) // get_sfx() is so that everyone gets the same sound
+						M.playsound_local(epicenter, ex_sound, 100, 1, frequency, falloff = 5)
 					// You hear a far explosion if you're outside the blast radius. Small bombs shouldn't be heard all over the station.
 					else if(dist <= far_dist)
 						var/far_volume = Clamp(far_dist, 30, 50) // Volume is based on explosion size and dist
@@ -70,7 +70,7 @@ var/explosionid = 1
 	//postpone processing for a bit
 	var/postponeCycles = max(round(devastation_range/8),1)
 	SSlighting.postpone(postponeCycles)
-	SSmachine.postpone(postponeCycles)
+	SSmachines.postpone(postponeCycles)
 
 	if(heavy_impact_range > 1)
 		if(smoke)
@@ -106,6 +106,13 @@ var/explosionid = 1
 				cached_exp_block[T] += B.explosion_block
 			CHECK_TICK
 
+	//flash mobs
+	if(flash_range)
+		for(var/mob/living/L in viewers(flash_range, epicenter))
+			L.flash_act()
+
+	CHECK_TICK
+
 	var/list/exploded_this_tick = list()	//open turfs that need to be blocked off while we sleep
 	for(var/turf/T in affected_turfs)
 
@@ -139,7 +146,7 @@ var/explosionid = 1
 
 		if(T)
 			if(flame_dist && prob(40) && !isspaceturf(T) && !T.density)
-				PoolOrNew(/obj/effect/hotspot, T) //Mostly for ambience!
+				new /obj/effect/hotspot(T) //Mostly for ambience!
 			if(dist > 0)
 				T.explosion_level = max(T.explosion_level, dist)	//let the bigger one have it
 				T.explosion_id = id
@@ -156,9 +163,8 @@ var/explosionid = 1
 				I.throw_speed = 4 //Temporarily change their throw_speed for embedding purposes (Reset when it finishes throwing, regardless of hitting anything)
 				I.throw_at(throw_at, throw_range, I.throw_speed)
 
-		if(world.tick_usage > CURRENT_TICKLIMIT)
+		if(TICK_CHECK)
 			stoplag()
-
 			var/circumference = (PI * init_dist * 2) + 8 //+8 to prevent shit gaps
 			if(exploded_this_tick.len > circumference)	//only do this every revolution
 				for(var/Unexplode in exploded_this_tick)
@@ -175,7 +181,7 @@ var/explosionid = 1
 	var/took = (world.timeofday-start)/10
 	//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
 	if(Debug2)
-		world.log << "## DEBUG: Explosion([x0],[y0],[z0])(d[devastation_range],h[heavy_impact_range],l[light_impact_range]): Took [took] seconds."
+		log_world("## DEBUG: Explosion([x0],[y0],[z0])(d[devastation_range],h[heavy_impact_range],l[light_impact_range]): Took [took] seconds.")
 
 	//Machines which report explosions.
 	for(var/array in doppler_arrays)

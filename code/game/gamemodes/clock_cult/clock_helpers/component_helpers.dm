@@ -4,7 +4,8 @@
 		specific_component_id = get_weighted_component_id()
 	clockwork_component_cache[specific_component_id]++
 	if(A)
-		PoolOrNew(get_component_animation_type(specific_component_id), get_turf(A))
+		var/component_animation_type = get_component_animation_type(specific_component_id)
+		new component_animation_type(get_turf(A))
 	update_slab_info()
 	return specific_component_id
 
@@ -36,8 +37,6 @@
 			return "Replicant Alloy"
 		if(HIEROPHANT_ANSIBLE)
 			return "Hierophant Ansible"
-		else
-			return null
 
 //returns a component acronym from a component id
 /proc/get_component_acronym(id)
@@ -52,8 +51,6 @@
 			return "RA"
 		if(HIEROPHANT_ANSIBLE)
 			return "HA"
-		else
-			return null
 
 //returns a component id from a component name
 /proc/get_component_id(name)
@@ -68,8 +65,6 @@
 			return REPLICANT_ALLOY
 		if("Hierophant Ansible")
 			return HIEROPHANT_ANSIBLE
-		else
-			return null
 
 //returns a component spanclass from a component id
 /proc/get_component_span(id)
@@ -126,8 +121,6 @@
 			return /obj/effect/overlay/temp/ratvar/component/alloy
 		if(HIEROPHANT_ANSIBLE)
 			return /obj/effect/overlay/temp/ratvar/component/ansible
-		else
-			return null
 
 //returns a type for a component from a component id
 /proc/get_component_type(id)
@@ -142,5 +135,3 @@
 			return /obj/item/clockwork/component/replicant_alloy
 		if(HIEROPHANT_ANSIBLE)
 			return /obj/item/clockwork/component/hierophant_ansible
-		else
-			return null

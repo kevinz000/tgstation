@@ -1,6 +1,4 @@
-var/datum/subsystem/religion/SSreligion
-
-/datum/subsystem/religion
+SUBSYSTEM_DEF(religion)
 	name = "Religion"
 	init_order = 19
 	flags = SS_NO_FIRE|SS_NO_INIT
@@ -12,6 +10,3 @@ var/datum/subsystem/religion/SSreligion
 	var/Bible_deity_name
 
 	var/holy_weapon
-
-/datum/subsystem/religion/New()
-	NEW_SS_GLOBAL(SSreligion)

@@ -50,7 +50,7 @@
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6")
 	mergeable_decal = 0
 
-/obj/effect/decal/cleanable/blood/gibs/New()
+/obj/effect/decal/cleanable/blood/gibs/Initialize()
 	..()
 	reagents.add_reagent("liquidgibs", 5)
 
@@ -170,7 +170,7 @@
 			var/obj/item/clothing/shoes/S = shoe
 			. += "some <B>[initial(S.name)]</B> \icon[S]\n"
 
-	user << .
+	to_chat(user, .)
 
 /obj/effect/decal/cleanable/blood/footprints/replace_decal(obj/effect/decal/cleanable/C)
 	if(blood_state != C.blood_state) //We only replace footprints of the same type as us

@@ -73,19 +73,19 @@ var/datum/atom_hud/huds = list( \
 //MOB PROCS
 /mob/proc/reload_huds()
 	var/gang_huds = list()
-	if(ticker.mode)
-		for(var/datum/gang/G in ticker.mode.gangs)
+	if(SSticker.mode)
+		for(var/datum/gang/G in SSticker.mode.gangs)
 			gang_huds += G.ganghud
 
 	for(var/datum/atom_hud/hud in (huds|gang_huds))
 		if(src in hud.hudusers)
 			hud.add_hud_to(src)
 
-/mob/new_player/reload_huds()
+/mob/dead/new_player/reload_huds()
 	return
 
 /mob/proc/add_click_catcher()
 	client.screen += client.void
 
-/mob/new_player/add_click_catcher()
+/mob/dead/new_player/add_click_catcher()
 	return

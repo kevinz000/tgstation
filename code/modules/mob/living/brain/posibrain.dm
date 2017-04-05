@@ -25,7 +25,7 @@ var/global/posibrain_notif_cooldown = 0
 	Remember, the purpose of your existence is to serve the crew and the station. Above all else, do no harm.</b>"
 	var/new_mob_message = "<span class='notice'>The positronic brain chimes quietly.</span>"
 	var/dead_message = "<span class='deadsay'>It appears to be completely inactive. The reset light is blinking.</span>"
-	var/list/fluff_names = list("PBU","HIU","SINA","ARMA","OSI","HBL","MSO","RR","CHRI","CDB","HG","XSI","ORNG","GUN","KOR","MET","FRE","XIS","SLI","PKP","HOG","RZH","GOOF","MRPR","JJR","FIRC","INC","PHL","BGB","ANTR","MIW","WJ","JRD","CHOC","ANCL","JLLO","JNLG","KOS","TKRG","XAL","STLP","CBOS","DUNC","FXMC","DRSD")
+	var/list/fluff_names
 	var/picked_fluff_name //which fluff name we picked
 
 
@@ -37,7 +37,7 @@ var/global/posibrain_notif_cooldown = 0
 
 /obj/item/device/mmi/posibrain/proc/ping_ghosts(msg, newlymade)
 	if(newlymade || !posibrain_notif_cooldown)
-		notify_ghosts("[name] [msg] in [get_area(src)]!", ghost_sound = !newlymade ? 'sound/effects/ghost2.ogg':null, enter_link = "<a href=?src=\ref[src];activate=1>(Click to enter)</a>", source = src, action = NOTIFY_ATTACK)
+		notify_ghosts("[name] [msg] in [get_area(src)]!", ghost_sound = !newlymade ? 'sound/effects/ghost2.ogg':null, enter_link = "<a href=?src=\ref[src];activate=1>(Click to enter)</a>", source = src, action = NOTIFY_ATTACK, flashwindow = FALSE)
 		if(!newlymade)
 			posibrain_notif_cooldown = 1
 			addtimer(CALLBACK(src, .proc/reset_posibrain_cooldown), askDelay)
@@ -48,7 +48,7 @@ var/global/posibrain_notif_cooldown = 0
 /obj/item/device/mmi/posibrain/attack_self(mob/user)
 	if(brainmob && !brainmob.key && !notified)
 		//Start the process of requesting a new ghost.
-		user << begin_activation_message
+		to_chat(user, begin_activation_message)
 		ping_ghosts("requested", FALSE)
 		notified = 1
 		used = 0
@@ -73,7 +73,7 @@ var/global/posibrain_notif_cooldown = 0
 		return
 
 	var/posi_ask = alert("Become a [name]? (Warning, You can no longer be cloned, and all past lives will be forgotten!)","Are you positive?","Yes","No")
-	if(posi_ask == "No" || qdeleted(src))
+	if(posi_ask == "No" || QDELETED(src))
 		return
 	transfer_personality(user)
 
@@ -98,7 +98,7 @@ var/global/posibrain_notif_cooldown = 0
 
 /obj/item/device/mmi/posibrain/proc/transfer_personality(mob/candidate)
 	if(used || (brainmob && brainmob.key)) //Prevents hostile takeover if two ghosts get the prompt or link for the same brain.
-		candidate << "This brain has already been taken! Please try your possession again later!"
+		to_chat(candidate, "This brain has already been taken! Please try your possession again later!")
 		return FALSE
 	notified = 0
 	if(candidate.mind && !isobserver(candidate))
@@ -106,7 +106,7 @@ var/global/posibrain_notif_cooldown = 0
 	else
 		brainmob.ckey = candidate.ckey
 	name = "[initial(name)] ([brainmob.name])"
-	brainmob << welcome_message
+	to_chat(brainmob, welcome_message)
 	brainmob.mind.assigned_role = new_role
 	brainmob.stat = CONSCIOUS
 	dead_mob_list -= brainmob
@@ -131,11 +131,14 @@ var/global/posibrain_notif_cooldown = 0
 	else
 		msg = "[dead_message]"
 
-	user << msg
+	to_chat(user, msg)
 
 /obj/item/device/mmi/posibrain/New()
 	brainmob = new(src)
-	picked_fluff_name = pick(fluff_names)
+	if(!fluff_names || !fluff_names.len)
+		picked_fluff_name = pick(posibrain_names)
+	else
+		picked_fluff_name = pick(fluff_names)
 	brainmob.name = "[picked_fluff_name]-[rand(100, 999)]"
 	brainmob.real_name = brainmob.name
 	brainmob.loc = src

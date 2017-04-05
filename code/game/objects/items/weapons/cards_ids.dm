@@ -94,7 +94,7 @@
 /obj/item/weapon/card/id/examine(mob/user)
 	..()
 	if(mining_points)
-		user << "There's [mining_points] mining equipment redemption point\s loaded onto this card."
+		to_chat(user, "There's [mining_points] mining equipment redemption point\s loaded onto this card.")
 
 /obj/item/weapon/card/id/GetAccess()
 	return access
@@ -135,7 +135,7 @@ update_label("John Doe", "Clowny")
 	origin_tech = "syndicate=1"
 	var/anyone = FALSE //Can anyone forge the ID or just syndicate?
 
-/obj/item/weapon/card/id/syndicate/New()
+/obj/item/weapon/card/id/syndicate/Initialize()
 	..()
 	var/datum/action/item_action/chameleon/change/chameleon_action = new(src)
 	chameleon_action.chameleon_type = /obj/item/weapon/card/id
@@ -150,14 +150,14 @@ update_label("John Doe", "Clowny")
 		src.access |= I.access
 		if(isliving(user) && user.mind)
 			if(user.mind.special_role)
-				usr << "<span class='notice'>The card's microscanners activate as you pass it over the ID, copying its access.</span>"
+				to_chat(usr, "<span class='notice'>The card's microscanners activate as you pass it over the ID, copying its access.</span>")
 
 /obj/item/weapon/card/id/syndicate/attack_self(mob/user)
 	if(isliving(user) && user.mind)
 		if(user.mind.special_role || anyone)
 			if(alert(user, "Action", "Agent ID", "Show", "Forge") == "Forge")
 				var t = copytext(sanitize(input(user, "What name would you like to put on this card?", "Agent card name", registered_name ? registered_name : (ishuman(user) ? user.real_name : user.name))as text | null),1,26)
-				if(!t || t == "Unknown" || t == "floor" || t == "wall" || t == "r-wall") //Same as mob/new_player/prefrences.dm
+				if(!t || t == "Unknown" || t == "floor" || t == "wall" || t == "r-wall") //Same as mob/dead/new_player/prefrences.dm
 					if (t)
 						alert("Invalid name.")
 					return
@@ -169,7 +169,7 @@ update_label("John Doe", "Clowny")
 					return
 				assignment = u
 				update_label()
-				user << "<span class='notice'>You successfully forge the ID card.</span>"
+				to_chat(user, "<span class='notice'>You successfully forge the ID card.</span>")
 				return
 	..()
 
@@ -191,7 +191,7 @@ update_label("John Doe", "Clowny")
 	registered_name = "Captain"
 	assignment = "Captain"
 
-/obj/item/weapon/card/id/captains_spare/New()
+/obj/item/weapon/card/id/captains_spare/Initialize()
 	var/datum/job/captain/J = new/datum/job/captain
 	access = J.get_access()
 	..()
@@ -203,7 +203,7 @@ update_label("John Doe", "Clowny")
 	registered_name = "Central Command"
 	assignment = "General"
 
-/obj/item/weapon/card/id/centcom/New()
+/obj/item/weapon/card/id/centcom/Initialize()
 	access = get_all_centcom_access()
 	..()
 
@@ -214,29 +214,33 @@ update_label("John Doe", "Clowny")
 	registered_name = "Emergency Response Team Commander"
 	assignment = "Emergency Response Team Commander"
 
-/obj/item/weapon/card/id/ert/New()
+/obj/item/weapon/card/id/ert/Initialize()
 	access = get_all_accesses()+get_ert_access("commander")-access_change_ids
+	..()
 
 /obj/item/weapon/card/id/ert/Security
 	registered_name = "Security Response Officer"
 	assignment = "Security Response Officer"
 
-/obj/item/weapon/card/id/ert/Security/New()
+/obj/item/weapon/card/id/ert/Security/Initialize()
 	access = get_all_accesses()+get_ert_access("sec")-access_change_ids
+	..()
 
 /obj/item/weapon/card/id/ert/Engineer
 	registered_name = "Engineer Response Officer"
 	assignment = "Engineer Response Officer"
 
-/obj/item/weapon/card/id/ert/Engineer/New()
+/obj/item/weapon/card/id/ert/Engineer/Initialize()
 	access = get_all_accesses()+get_ert_access("eng")-access_change_ids
+	..()
 
 /obj/item/weapon/card/id/ert/Medical
 	registered_name = "Medical Response Officer"
 	assignment = "Medical Response Officer"
 
-/obj/item/weapon/card/id/ert/Medical/New()
+/obj/item/weapon/card/id/ert/Medical/Initialize()
 	access = get_all_accesses()+get_ert_access("med")-access_change_ids
+	..()
 
 /obj/item/weapon/card/id/prisoner
 	name = "prisoner ID card"
@@ -249,7 +253,7 @@ update_label("John Doe", "Clowny")
 	var/points = 0
 
 /obj/item/weapon/card/id/prisoner/attack_self(mob/user)
-	usr << "<span class='notice'>You have accumulated [points] out of the [goal] points you need for freedom.</span>"
+	to_chat(usr, "<span class='notice'>You have accumulated [points] out of the [goal] points you need for freedom.</span>")
 
 /obj/item/weapon/card/id/prisoner/one
 	name = "Prisoner #13-001"

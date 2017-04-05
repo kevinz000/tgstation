@@ -14,9 +14,9 @@
 		if(M.binarycheck())
 			if(isAI(M))
 				var/renderedAI = "<i><span class='game say'>Robotic Talk, <a href='?src=\ref[M];track=[html_encode(name)]'><span class='name'>[name] ([desig])</span></a> <span class='message'>[message_a]</span></span></i>"
-				M << renderedAI
+				to_chat(M, renderedAI)
 			else
-				M << rendered
+				to_chat(M, rendered)
 		if(isobserver(M))
 			var/following = src
 			// If the AI talks on binary chat, we still want to follow
@@ -25,7 +25,7 @@
 				var/mob/living/silicon/ai/ai = src
 				following = ai.eyeobj
 			var/link = FOLLOW_LINK(M, following)
-			M << "[link] [rendered]"
+			to_chat(M, "[link] [rendered]")
 
 /mob/living/silicon/binarycheck()
 	return 1
@@ -33,19 +33,19 @@
 /mob/living/silicon/lingcheck()
 	return 0 //Borged or AI'd lings can't speak on the ling channel.
 
-/mob/living/silicon/radio(message, message_mode, list/spans)
+/mob/living/silicon/radio(message, message_mode, list/spans, language)
 	. = ..()
 	if(. != 0)
 		return .
 
 	if(message_mode == "robot")
 		if (radio)
-			radio.talk_into(src, message, , spans)
+			radio.talk_into(src, message, , spans, language)
 		return REDUCE_RANGE
 
 	else if(message_mode in radiochannels)
 		if(radio)
-			radio.talk_into(src, message, message_mode, spans)
+			radio.talk_into(src, message, message_mode, spans, language)
 			return ITALICS | REDUCE_RANGE
 
 	return 0

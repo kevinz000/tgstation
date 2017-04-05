@@ -22,12 +22,12 @@
 		Feedstop(silent = 1) //releases ourselves from the mob we fed on.
 
 	stat = DEAD
-	overlays.len = 0
+	cut_overlays()
 
 	update_canmove()
 
-	if(ticker && ticker.mode)
-		ticker.mode.check_win()
+	if(SSticker && SSticker.mode)
+		SSticker.mode.check_win()
 
 	return ..(gibbed)
 

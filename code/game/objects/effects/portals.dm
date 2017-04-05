@@ -14,6 +14,9 @@
 /obj/effect/portal/Bumped(mob/M as mob|obj)
 	teleport(M)
 
+/obj/effect/portal/attack_tk(mob/user)
+	return
+
 /obj/effect/portal/attack_hand(mob/user)
 	if(Adjacent(user))
 		teleport(user)
@@ -36,8 +39,7 @@
 		qdel(src)
 		return
 	if(lifespan > 0)
-		spawn(lifespan)
-			qdel(src)
+		QDEL_IN(src, lifespan)
 
 /obj/effect/portal/Destroy()
 	portals -= src

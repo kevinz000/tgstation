@@ -86,7 +86,8 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 			"verb_say" = signal.data["verb_say"],
 			"verb_ask" = signal.data["verb_ask"],
 			"verb_exclaim" = signal.data["verb_exclaim"],
-			"verb_yell" = signal.data["verb_yell"]
+			"verb_yell" = signal.data["verb_yell"],
+			"language" = signal.data["language"]
 			)
 
 			// Keep the "original" signal constant
@@ -147,8 +148,9 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	if(. && T1) // Update listening Z, just in case you have telecomm relay on a shuttle
 		listening_level = T1.z
 
-/obj/machinery/telecomms/initialize()
-	if(autolinkers.len)
+/obj/machinery/telecomms/Initialize(mapload)
+	..()
+	if(mapload && autolinkers.len)
 		// Links nearby machines
 		if(!long_range_link)
 			for(var/obj/machinery/telecomms/T in urange(20, src, 1))

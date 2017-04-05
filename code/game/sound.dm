@@ -1,4 +1,4 @@
-/proc/playsound(atom/source, soundin, vol as num, vary, extrarange as num, falloff, surround = 1)
+/proc/playsound(atom/source, soundin, vol as num, vary, extrarange as num, falloff, surround = 1, frequency = null, channel = 0)
 
 	soundin = get_sfx(soundin) // same sound for everyone
 
@@ -6,7 +6,8 @@
 		throw EXCEPTION("playsound(): source is an area")
 		return
 
-	var/frequency = get_rand_frequency() // Same frequency for everybody
+	if(isnull(frequency))
+		frequency = get_rand_frequency() // Same frequency for everybody
 	var/turf/turf_source = get_turf(source)
 
  	// Looping through the player list has the added bonus of working for mobs inside containers
@@ -17,15 +18,15 @@
 		if(get_dist(M, turf_source) <= world.view + extrarange)
 			var/turf/T = get_turf(M)
 			if(T && T.z == turf_source.z)
-				M.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, surround)
+				M.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, surround, channel)
 
 
-/atom/proc/playsound_local(turf/turf_source, soundin, vol as num, vary, frequency, falloff, surround = 1)
+/atom/proc/playsound_local(turf/turf_source, soundin, vol as num, vary, frequency, falloff, surround = 1, channel = 0)
 	soundin = get_sfx(soundin)
 
 	var/sound/S = sound(soundin)
 	S.wait = 0 //No queue
-	S.channel = 0 //Any channel
+	S.channel = channel
 	S.volume = vol
 
 	if (vary)
@@ -73,19 +74,19 @@
 
 	src << S
 
-/mob/playsound_local(turf/turf_source, soundin, vol as num, vary, frequency, falloff, surround = 1)
+/mob/playsound_local(turf/turf_source, soundin, vol as num, vary, frequency, falloff, surround = 1, channel = 0)
 	if(!client || ear_deaf > 0)
 		return
 	..()
 
-/mob/proc/stopLobbySound()
-	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1)
+/mob/proc/stop_sound_channel(chan)
+	src << sound(null, repeat = 0, wait = 0, channel = chan)
 
 /client/proc/playtitlemusic()
-	if(!ticker || !ticker.login_music)
-		return
+	UNTIL(SSticker.login_music) //wait for SSticker init to set the login music
+
 	if(prefs && (prefs.toggles & SOUND_LOBBY))
-		src << sound(ticker.login_music, repeat = 0, wait = 0, volume = 85, channel = 1) // MAD JAMS
+		src << sound(SSticker.login_music, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBYMUSIC) // MAD JAMS
 
 /proc/get_rand_frequency()
 	return rand(32000, 55000) //Frequency stuff only works with 45kbps oggs.
