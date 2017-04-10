@@ -167,6 +167,11 @@
 			M << 'sound/magic/Charge.ogg'
 			to_chat(M, "<span class='boldannounce'>You feel reality distort for a moment...</span>")
 	if(combined_gas > MOLE_PENALTY_THRESHOLD)
+		if(power > CRITICAL_POWER_PENALTY_THRESHOLD)
+			start_supermatter_cascade(get_turf(src))
+			investigate_log("has started a cascade endgame event.", "supermatter")
+			qdel(src)
+			return
 		investigate_log("has collapsed into a singularity.", "supermatter")
 		if(T)
 			var/obj/singularity/S = new(T)
@@ -180,6 +185,15 @@
 			var/obj/singularity/energy_ball/E = new(T)
 			E.energy = power
 		qdel(src)
+	for(var/mob in living_mob_list)
+		var/mob/living/L = mob
+		if(istype(L) && L.z == T.z)
+			if(ishuman(mob))
+				//Hilariously enough, running into a closet should make you get hit the hardest.
+				var/mob/living/carbon/human/H = mob
+				H.hallucination += max(50, min(300, DETONATION_HALLUCINATION * sqrt(1 / (get_dist(mob, T) + 1)) ) )
+			var/rads = DETONATION_RADS * sqrt( 1 / (get_dist(L, T) + 1) )
+			L.rad_act(rads)
 
 /obj/machinery/power/supermatter_shard/process()
 	var/turf/T = loc
@@ -360,16 +374,6 @@
 				SPEAK("Warning: Critical coolant mass reached.")
 
 		if(damage > explosion_point)
-			for(var/mob in living_mob_list)
-				var/mob/living/L = mob
-				if(istype(L) && L.z == z)
-					if(ishuman(mob))
-						//Hilariously enough, running into a closet should make you get hit the hardest.
-						var/mob/living/carbon/human/H = mob
-						H.hallucination += max(50, min(300, DETONATION_HALLUCINATION * sqrt(1 / (get_dist(mob, src) + 1)) ) )
-					var/rads = DETONATION_RADS * sqrt( 1 / (get_dist(L, src) + 1) )
-					L.rad_act(rads)
-
 			explode()
 
 

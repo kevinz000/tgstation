@@ -1,12 +1,67 @@
 
-#define PRIORITY_UNIVERSE 1	//What levels of fucked are we?
-#define PRIORITY_SOLAR 2
-#define PRIORITY_STATION 3
-#define PRIORITY_CLEAR 4
+#define UNIVERSAL_STATE_INACTIVE 0
+#define UNIVERSAL_STATE_SETUP 1
+#define UNIVERSAL_STATE_RUNNING 2
+#define UNIVERSAL_STATE_ENDING 3
+#define UNIVERSAL_STATE_ENDED 4
 
 /datum/universal_state
 	var/name = "All Systems Nominal"
 	var/desc = "Everything's fine, go back to work."
+
+	var/state = UNIVERSAL_STATE_INACTIVE
+
+	var/setupTime = 0
+	var/startTime = 0
+	var/endTime = 0
+	var/finishTime = 0
+
+/datum/universal_state/proc/Setup()
+	state = UNIVERSAL_STATE_SETUP
+	setupTime = world.time
+
+/datum/universal_state/proc/afterSetup()
+	state = UNIVERSAL_STATE_RUNNING
+	startTime = world.time
+
+/datum/universal_state/process()
+
+/datum/universal_state/proc/End()
+	state = UNIVERSAL_STATE_ENDING
+	endTime = world.time
+
+/datum/universal_state/proc/afterEnd()
+	state = UNIVERSAL_STATE_ENDED
+	finishTime = world.time
+
+/datum/universal_state/proc/getSetupDuration()
+	if(state == UNIVERSAL_STATE_SETUP)
+		return (world.time - setupTime)
+	else
+		return (startTime - setupTime)
+
+/datum/universal_state/proc/getRunningDuration()
+	if(state == UNIVERSAL_STATE_RUNNING)
+		return (world.time - startTime)
+	else
+		return (endTime - startTime)
+
+/datum/universal_state/proc/getEndingDuration()
+	if(state == UNIVERSAL_STATE_ENDING)
+		return (world.time - endTime)
+	else
+		return (finishTime - endTime)
+
+/datum/universal_state/proc/processTurfOverlay(turf/T)
+	return
+
+/*
+
+
+#define PRIORITY_UNIVERSE 1	//What levels of fucked are we?
+#define PRIORITY_SOLAR 2
+#define PRIORITY_STATION 3
+#define PRIORITY_CLEAR 4
 
 	var/delay_init = 0
 	var/delay_telegraph = 0
@@ -44,10 +99,6 @@
 	var/fluff_autoannounce = FALSe
 
 	var/shuttle_fail_message = ""
-
-/datum/universal_state/New()
-	..()
-
 /datum/universal_state/proc/Start()
 	addtimer(CALLBACK(src, .proc/Initialize), delay_init)
 	addtimer(CALLBACK(src, .proc/Telegraph), (delay_init + delay_telegraph))
@@ -142,3 +193,4 @@
 			M << announcement
 			if(M.client.prefs.toggles & SOUND_ANNOUNCEMENTS)
 				M << sound(sound)
+*/
