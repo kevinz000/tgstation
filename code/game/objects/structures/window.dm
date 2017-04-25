@@ -18,7 +18,7 @@
 	var/fulltile = 0
 	var/glass_type = /obj/item/stack/sheet/glass
 	var/glass_amount = 1
-	var/image/crack_overlay
+	var/static/mutable_appearance/crack_overlay = mutable_appearance('icons/obj/structures.dmi')
 	var/list/debris = list()
 	can_be_unanchored = 1
 	resistance_flags = ACID_PROOF
@@ -57,13 +57,13 @@
 	if(rods)
 		debris += new /obj/item/stack/rods(src, rods)
 
-/obj/structure/window/rcd_vals(mob/user, obj/item/weapon/rcd/the_rcd)
+/obj/structure/window/rcd_vals(mob/user, obj/item/weapon/construction/rcd/the_rcd)
 	switch(the_rcd.mode)
 		if(RCD_DECONSTRUCT)
 			return list("mode" = RCD_DECONSTRUCT, "delay" = 20, "cost" = 5)
 	return FALSE
 
-/obj/structure/window/rcd_act(mob/user, var/obj/item/weapon/rcd/the_rcd)
+/obj/structure/window/rcd_act(mob/user, var/obj/item/weapon/construction/rcd/the_rcd)
 	switch(the_rcd.mode)
 		if(RCD_DECONSTRUCT)
 			to_chat(user, "<span class='notice'>You deconstruct the window.</span>")
@@ -361,10 +361,10 @@
 		if(smooth)
 			queue_smooth(src)
 
-		cut_overlay(crack_overlay)
+		cut_overlays()
 		if(ratio > 75)
 			return
-		crack_overlay = image('icons/obj/structures.dmi',"damage[ratio]",-(layer+0.1))
+		crack_overlay.icon_state = "damage[ratio]"
 		add_overlay(crack_overlay)
 
 /obj/structure/window/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
@@ -546,7 +546,7 @@
 	return ..()
 
 /obj/structure/window/reinforced/clockwork/ratvar_act()
-	if(ratvar_awakens)
+	if(GLOB.ratvar_awakens)
 		obj_integrity = max_integrity
 		update_icon()
 

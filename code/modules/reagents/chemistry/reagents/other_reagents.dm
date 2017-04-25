@@ -396,22 +396,24 @@
 
 /datum/reagent/stableslimetoxin/on_mob_life(mob/living/carbon/human/H)
 	..()
+	if(!istype(H))
+		return
 	to_chat(H, "<span class='warning'><b>You crumple in agony as your flesh wildly morphs into new forms!</b></span>")
 	H.visible_message("<b>[H]</b> falls to the ground and screams as [H.p_their()] skin bubbles and froths!") //'froths' sounds painful when used with SKIN.
 	H.Weaken(3, 0)
-	spawn(30)
-		if(!H || QDELETED(H))
-			return
+	addtimer(CALLBACK(src, .proc/mutate, H), 30)
+	return
 
-		var/current_species = H.dna.species.type
-		var/datum/species/mutation = race
-		if(mutation && mutation != current_species)
-			to_chat(H, mutationtext)
-			H.set_species(mutation)
-		else
-			to_chat(H, "<span class='danger'>The pain vanishes suddenly. You feel no different.</span>")
-
-	return 1
+/datum/reagent/stableslimetoxin/proc/mutate(mob/living/carbon/human/H)
+	if(QDELETED(H))
+		return
+	var/current_species = H.dna.species.type
+	var/datum/species/mutation = race
+	if(mutation && mutation != current_species)
+		to_chat(H, mutationtext)
+		H.set_species(mutation)
+	else
+		to_chat(H, "<span class='danger'>The pain vanishes suddenly. You feel no different.</span>")
 
 /datum/reagent/stableslimetoxin/classic //The one from plasma on green slimes
 	name = "Mutation Toxin"
@@ -657,7 +659,7 @@
 
 /datum/reagent/mercury/on_mob_life(mob/living/M)
 	if(M.canmove && isspaceturf(M.loc))
-		step(M, pick(cardinal))
+		step(M, pick(GLOB.cardinal))
 	if(prob(5))
 		M.emote(pick("twitch","drool","moan"))
 	M.adjustBrainLoss(2)
@@ -737,7 +739,7 @@
 
 /datum/reagent/lithium/on_mob_life(mob/living/M)
 	if(M.canmove && isspaceturf(M.loc))
-		step(M, pick(cardinal))
+		step(M, pick(GLOB.cardinal))
 	if(prob(5))
 		M.emote(pick("twitch","drool","moan"))
 	..()
@@ -1368,8 +1370,8 @@
 	if(method == TOUCH || method == VAPOR)
 		if(M && ishuman(M))
 			var/mob/living/carbon/human/H = M
-			var/datum/sprite_accessory/hair/picked_hair = pick(hair_styles_list)
-			var/datum/sprite_accessory/facial_hair/picked_beard = pick(facial_hair_styles_list)
+			var/datum/sprite_accessory/hair/picked_hair = pick(GLOB.hair_styles_list)
+			var/datum/sprite_accessory/facial_hair/picked_beard = pick(GLOB.facial_hair_styles_list)
 			H.hair_style = picked_hair
 			H.facial_hair_style = picked_beard
 			H.update_hair()

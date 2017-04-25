@@ -1,3 +1,11 @@
+
+#ifndef PIXEL_SCALE
+#define PIXEL_SCALE 0
+#if DM_VERSION >= 512
+#error HEY, PIXEL_SCALE probably exists now, remove this gross ass shim.
+#endif
+#endif
+
 /atom/movable
 	layer = OBJ_LAYER
 	var/last_move = null
@@ -12,6 +20,7 @@
 	var/verb_say = "says"
 	var/verb_ask = "asks"
 	var/verb_exclaim = "exclaims"
+	var/verb_whisper = "whispers"
 	var/verb_yell = "yells"
 	var/inertia_dir = 0
 	var/atom/inertia_last_loc
@@ -23,7 +32,7 @@
 	var/list/client_mobs_in_contents // This contains all the client mobs within this container
 	var/list/acted_explosions	//for explosion dodging
 	glide_size = 8
-	appearance_flags = TILE_BOUND
+	appearance_flags = TILE_BOUND|PIXEL_SCALE
 	var/datum/forced_movement/force_moving = null	//handled soley by forced_movement.dm
 	var/floating = FALSE
 
@@ -112,6 +121,11 @@
 
 	if(flags & CLEAN_ON_MOVE)
 		clean_on_move()
+	
+	var/datum/proximity_monitor/proximity_monitor = src.proximity_monitor
+	if(proximity_monitor)
+		proximity_monitor.HandleMove()
+
 	return 1
 
 /atom/movable/proc/clean_on_move()
@@ -162,6 +176,8 @@
 
 	if(stationloving && force)
 		STOP_PROCESSING(SSinbounds, src)
+
+	QDEL_NULL(proximity_monitor)
 
 	. = ..()
 	if(loc)
@@ -452,7 +468,7 @@
 	if(!I)
 		return
 
-	flick_overlay(I, clients, 5) // 5 ticks/half a second
+	flick_overlay(I, GLOB.clients, 5) // 5 ticks/half a second
 
 	// And animate the attack!
 	animate(I, alpha = 175, pixel_x = 0, pixel_y = 0, pixel_z = 0, time = 3)
@@ -525,8 +541,8 @@
 /atom/movable/proc/relocate()
 	var/targetturf = find_safe_turf(ZLEVEL_STATION)
 	if(!targetturf)
-		if(blobstart.len > 0)
-			targetturf = get_turf(pick(blobstart))
+		if(GLOB.blobstart.len > 0)
+			targetturf = get_turf(pick(GLOB.blobstart))
 		else
 			throw EXCEPTION("Unable to find a blobstart landmark")
 
@@ -608,3 +624,8 @@
 			highest_priority = pri
 
 	. = chosen_langtype
+
+/atom/movable/proc/ConveyorMove(movedir)
+	set waitfor = FALSE
+	if(!anchored && has_gravity())
+		step(src, movedir)

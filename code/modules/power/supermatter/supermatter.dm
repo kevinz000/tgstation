@@ -131,7 +131,7 @@
 	. = ..()
 	countdown = new(src)
 	countdown.start()
-	poi_list |= src
+	GLOB.poi_list |= src
 	radio = new(src)
 	radio.listening = 0
 	investigate_log("has been created.", "supermatter")
@@ -140,7 +140,7 @@
 /obj/machinery/power/supermatter_shard/Destroy()
 	investigate_log("has been destroyed.", "supermatter")
 	QDEL_NULL(radio)
-	poi_list -= src
+	GLOB.poi_list -= src
 	QDEL_NULL(countdown)
 	. = ..()
 
@@ -162,7 +162,7 @@
 
 /obj/machinery/power/supermatter_shard/proc/explode()
 	var/turf/T = get_turf(src)
-	for(var/mob/M in mob_list)
+	for(var/mob/M in GLOB.mob_list)
 		if(M.z == z)
 			M << 'sound/magic/Charge.ogg'
 			to_chat(M, "<span class='boldannounce'>You feel reality distort for a moment...</span>")
@@ -180,19 +180,19 @@
 	else
 		investigate_log("has exploded.", "supermatter")
 		explosion(get_turf(T), explosion_power * max(gasmix_power_ratio, 0.205) * 0.5 , explosion_power * max(gasmix_power_ratio, 0.205) + 2, explosion_power * max(gasmix_power_ratio, 0.205) + 4 , explosion_power * max(gasmix_power_ratio, 0.205) + 6, 1, 1)
-		if(power > CRITICAL_POWER_PENALTY_THRESHOLD)
+		if(power > POWER_PENALTY_THRESHOLD)
 			investigate_log("has spawned additional energy balls.", "supermatter")
 			var/obj/singularity/energy_ball/E = new(T)
 			E.energy = power
 		qdel(src)
-	for(var/mob in living_mob_list)
+	for(var/mob in GLOB.living_mob_list)
 		var/mob/living/L = mob
-		if(istype(L) && L.z == T.z)
+		if(istype(L) && L.z == z)
 			if(ishuman(mob))
 				//Hilariously enough, running into a closet should make you get hit the hardest.
 				var/mob/living/carbon/human/H = mob
-				H.hallucination += max(50, min(300, DETONATION_HALLUCINATION * sqrt(1 / (get_dist(mob, T) + 1)) ) )
-			var/rads = DETONATION_RADS * sqrt( 1 / (get_dist(L, T) + 1) )
+				H.hallucination += max(50, min(300, DETONATION_HALLUCINATION * sqrt(1 / (get_dist(mob, src) + 1)) ) )
+			var/rads = DETONATION_RADS * sqrt( 1 / (get_dist(L, src) + 1) )
 			L.rad_act(rads)
 
 /obj/machinery/power/supermatter_shard/process()
@@ -386,8 +386,8 @@
 	if(!istype(L))		// We don't run process() when we are in space
 		return 0	// This stops people from being able to really power up the supermatter
 				// Then bring it inside to explode instantly upon landing on a valid turf.
-
-
+	if(!istype(Proj.firer, /obj/machinery/power/emitter))
+		investigate_log("has been hit by [Proj] fired by [Proj.firer]", "supermatter")
 	if(Proj.flag != "bullet")
 		power += Proj.damage * config_bullet_energy
 		if(!has_been_powered)
@@ -403,7 +403,7 @@
 	investigate_log("Supermatter shard consumed by singularity.","singulo")
 	message_admins("Singularity has consumed a supermatter shard and can now become stage six.")
 	visible_message("<span class='userdanger'>[src] is consumed by the singularity!</span>")
-	for(var/mob/M in mob_list)
+	for(var/mob/M in GLOB.mob_list)
 		if(M.z == z)
 			M << 'sound/effects/supermatter.ogg' //everyone goan know bout this
 			to_chat(M, "<span class='boldannounce'>A horrible screeching fills your ears, and a wave of dread washes over you...</span>")
@@ -422,6 +422,13 @@
 			B.visible_message("<span class='danger'>\The [B] strikes at \the [src] and rapidly flashes to ash.</span>",\
 			"<span class='italics'>You hear a loud crack as you are washed with a wave of heat.</span>")
 			Consume(B)
+
+/obj/machinery/power/supermatter_shard/attack_tk(mob/user)
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		to_chat(C, "<span class='userdanger'>That was a really dumb idea.</span>")
+		var/obj/item/bodypart/head/rip_u = C.get_bodypart("head")
+		rip_u.dismember(BURN) //nice try jedi
 
 /obj/machinery/power/supermatter_shard/attack_paw(mob/user)
 	return attack_hand(user)
@@ -448,7 +455,7 @@
 	Consume(user)
 
 /obj/machinery/power/supermatter_shard/proc/transfer_energy()
-	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
+	for(var/obj/machinery/power/rad_collector/R in GLOB.rad_collectors)
 		if(R.z == z && get_dist(R, src) <= 15) //Better than using orange() every process
 			R.receive_pulse(power * (1 + power_transmission_bonus)/10 * freon_transmit_modifier)
 
@@ -488,6 +495,8 @@
 		investigate_log("has consumed [key_name(user)].", "supermatter")
 		user.dust()
 		matter_power += 200
+	else if(istype(AM, /obj/singularity))
+		return
 	else if(isobj(AM) && !istype(AM, /obj/effect))
 		investigate_log("has consumed [AM].", "supermatter")
 		qdel(AM)

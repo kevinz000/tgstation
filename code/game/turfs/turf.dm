@@ -13,8 +13,6 @@
 
 	flags = CAN_BE_DIRTY
 
-	var/list/proximity_checkers
-
 	var/image/obscured	//camerachunks
 
 	var/list/image/blueprint_data //for the station blueprints, images of objects eg: pipes
@@ -156,10 +154,6 @@
 	return 1 //Nothing found to block so return success!
 
 /turf/Entered(atom/movable/AM)
-	for(var/A in proximity_checkers)
-		var/atom/B = A
-		B.HasProximity(AM)
-
 	if(explosion_level && AM.ex_check(explosion_id))
 		AM.ex_act(explosion_level)
 
@@ -217,7 +211,7 @@
 /turf/proc/ChangeTurf(path, defer_change = FALSE, ignore_air = FALSE)
 	if(!path)
 		return
-	if(!use_preloader && path == type) // Don't no-op if the map loader requires it to be reconstructed
+	if(!GLOB.use_preloader && path == type) // Don't no-op if the map loader requires it to be reconstructed
 		return src
 
 	var/old_baseturf = baseturf
@@ -353,7 +347,7 @@
 
 /turf/proc/visibilityChanged()
 	if(SSticker)
-		cameranet.updateVisibility(src)
+		GLOB.cameranet.updateVisibility(src)
 
 /turf/proc/burn_tile()
 

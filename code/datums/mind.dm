@@ -283,7 +283,7 @@
 		if (SSticker.mode.config_tag=="revolution")
 			text = uppertext(text)
 		text = "<i><b>[text]</b></i>: "
-		if (assigned_role in command_positions)
+		if (assigned_role in GLOB.command_positions)
 			text += "<b>HEAD</b>|loyal|employee|headrev|rev"
 		else if (src in SSticker.mode.head_revolutionaries)
 			text += "head|loyal|<a href='?src=\ref[src];revolution=clear'>employee</a>|<b>HEADREV</b>|<a href='?src=\ref[src];revolution=rev'>rev</a>"
@@ -351,7 +351,7 @@
 				text += "<a href='?src=\ref[src];gangboss=\ref[G]'>gang leader</a>"
 			text += "<BR>"
 
-		if(gang_colors_pool.len)
+		if(GLOB.gang_colors_pool.len)
 			text += "<a href='?src=\ref[src];gang=new'>Create New Gang</a>"
 
 		sections["gang"] = text
@@ -383,7 +383,7 @@
 			text += "<b>OPERATIVE</b>|<a href='?src=\ref[src];nuclear=clear'>nanotrasen</a>"
 			text += "<br><a href='?src=\ref[src];nuclear=lair'>To shuttle</a>, <a href='?src=\ref[src];common=undress'>undress</a>, <a href='?src=\ref[src];nuclear=dressup'>dress up</a>."
 			var/code
-			for (var/obj/machinery/nuclearbomb/bombue in machines)
+			for (var/obj/machinery/nuclearbomb/bombue in GLOB.machines)
 				if (length(bombue.r_code) <= 5 && bombue.r_code != "LOLNO" && bombue.r_code != "ADMIN")
 					code = bombue.r_code
 					break
@@ -898,11 +898,11 @@
 					qdel(SC)
 
 			if("new")
-				if(gang_colors_pool.len)
-					var/list/names = list("Random") + gang_name_pool
+				if(GLOB.gang_colors_pool.len)
+					var/list/names = list("Random") + GLOB.gang_name_pool
 					var/gangname = input("Pick a gang name.","Select Name") as null|anything in names
-					if(gangname && gang_colors_pool.len) //Check again just in case another admin made max gangs at the same time
-						if(!(gangname in gang_name_pool))
+					if(gangname && GLOB.gang_colors_pool.len) //Check again just in case another admin made max gangs at the same time
+						if(!(gangname in GLOB.gang_name_pool))
 							gangname = null
 						var/datum/gang/newgang = new(null,gangname)
 						SSticker.mode.gangs += newgang
@@ -990,7 +990,7 @@
 					log_admin("[key_name(usr)] has wizard'ed [current].")
 					SSticker.mode.update_wiz_icons_added(src)
 			if("lair")
-				current.loc = pick(wizardstart)
+				current.loc = pick(GLOB.wizardstart)
 			if("dressup")
 				SSticker.mode.equip_wizard(current)
 			if("name")
@@ -1069,7 +1069,7 @@
 					to_chat(usr, "<span class='danger'>Equipping a syndicate failed!</span>")
 			if("tellcode")
 				var/code
-				for (var/obj/machinery/nuclearbomb/bombue in machines)
+				for (var/obj/machinery/nuclearbomb/bombue in GLOB.machines)
 					if (length(bombue.r_code) <= 5 && bombue.r_code != "LOLNO" && bombue.r_code != "ADMIN")
 						code = bombue.r_code
 						break
@@ -1192,14 +1192,17 @@
 				log_admin("[key_name(usr)] turned [current] into abductor.")
 				SSticker.mode.update_abductor_icons_added(src)
 			if("equip")
+				if(!ishuman(current))
+					to_chat(usr, "<span class='warning'>This only works on humans!</span>")
+					return
+
+				var/mob/living/carbon/human/H = current
 				var/gear = alert("Agent or Scientist Gear","Gear","Agent","Scientist")
 				if(gear)
-					var/datum/game_mode/abduction/temp = new
-					temp.equip_common(current)
 					if(gear=="Agent")
-						temp.equip_agent(current)
+						H.equipOutfit(/datum/outfit/abductor/agent)
 					else
-						temp.equip_scientist(current)
+						H.equipOutfit(/datum/outfit/abductor/scientist)
 
 	else if (href_list["monkey"])
 		var/mob/living/L = current
@@ -1352,7 +1355,7 @@
 			store_memory("<B>Syndicate Nuclear Bomb Code</B>: [nuke_code]", 0, 0)
 			to_chat(current, "The nuclear authorization code is: <B>[nuke_code]</B>")
 		else
-			var/obj/machinery/nuclearbomb/nuke = locate("syndienuke") in nuke_list
+			var/obj/machinery/nuclearbomb/nuke = locate("syndienuke") in GLOB.nuke_list
 			if(nuke)
 				store_memory("<B>Syndicate Nuclear Bomb Code</B>: [nuke.r_code]", 0, 0)
 				to_chat(current, "The nuclear authorization code is: <B>nuke.r_code</B>")
@@ -1378,11 +1381,11 @@
 		SSticker.mode.wizards += src
 		special_role = "Wizard"
 		assigned_role = "Wizard"
-		if(!wizardstart.len)
-			current.loc = pick(latejoin)
+		if(!GLOB.wizardstart.len)
+			current.loc = pick(GLOB.latejoin)
 			to_chat(current, "HOT INSERTION, GO GO GO")
 		else
-			current.loc = pick(wizardstart)
+			current.loc = pick(GLOB.wizardstart)
 
 		SSticker.mode.equip_wizard(current)
 		SSticker.mode.name_wizard(current)
@@ -1468,18 +1471,15 @@
 	H.set_species(/datum/species/abductor)
 	var/datum/species/abductor/S = H.dna.species
 
-	switch(role)
-		if("Agent")
-			S.agent = 1
-		if("Scientist")
-			S.scientist = 1
+	if(role == "Scientist")
+		S.scientist = TRUE
 	S.team = team
 
 	var/list/obj/effect/landmark/abductor/agent_landmarks = new
 	var/list/obj/effect/landmark/abductor/scientist_landmarks = new
 	agent_landmarks.len = 4
 	scientist_landmarks.len = 4
-	for(var/obj/effect/landmark/abductor/A in landmarks_list)
+	for(var/obj/effect/landmark/abductor/A in GLOB.landmarks_list)
 		if(istype(A,/obj/effect/landmark/abductor/agent))
 			agent_landmarks[text2num(A.team)] = A
 		else if(istype(A,/obj/effect/landmark/abductor/scientist))
@@ -1489,13 +1489,10 @@
 	if(teleport=="Yes")
 		switch(role)
 			if("Agent")
-				S.agent = 1
 				L = agent_landmarks[team]
-				H.loc = L.loc
 			if("Scientist")
-				S.scientist = 1
-				L = agent_landmarks[team]
-				H.loc = L.loc
+				L = scientist_landmarks[team]
+		H.forceMove(L.loc)
 
 /datum/mind/proc/AddSpell(obj/effect/proc_holder/spell/S)
 	spell_list += S
@@ -1532,7 +1529,7 @@
 		INVOKE_ASYNC(S, /obj/effect/proc_holder/spell.proc/start_recharge)
 
 /datum/mind/proc/get_ghost(even_if_they_cant_reenter)
-	for(var/mob/dead/observer/G in dead_mob_list)
+	for(var/mob/dead/observer/G in GLOB.dead_mob_list)
 		if(G.mind == src)
 			if(G.can_reenter_corpse || even_if_they_cant_reenter)
 				return G
