@@ -28,6 +28,8 @@
 		if(CASCADE_ANNOUNCEMENT_UNIVERSE_END)
 			announce_text = "!$##$%F!$()AJ%(%KKKKE#@######<br>"
 			for(var/i = 0, i < 10, i++)
-				announce_text += Gibberish("#########################################################<br>")
+				for(var/ii = 0, ii < 20, ii++)
+					announce_text += ascii2text(rand(0, 127))
+				annoucne_text += "<br>"
 	announce_text = Gibberish(announce_text, 20)
 	print_command_report(text = announce_text, title = null, announce=TRUE)

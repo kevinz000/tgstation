@@ -1,6 +1,8 @@
 
 /datum/universal_state/cascade/proc/scramble_all_areas()
 	for(var/area/A in world)
+		if(istype(A, /area/space) || (A.z == 2))
+			continue
 		var/list/turf/turfs = list()
 		for(var/turf/T in A.contents)
 			turfs += T
