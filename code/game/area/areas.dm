@@ -51,6 +51,7 @@
 	var/gravity_stunning = 0
 	var/gravity_speed = 2	//deciseconds per process. From 1 to practically infinite. Smaller the faster.
 	var/noteleport = 0			//Are you forbidden from teleporting to the area? (centcomm, mobs, wizard, hand teleporter)
+	var/hidden = FALSE 			//Hides area from player Teleport function.
 	var/safe = 0 				//Is the area teleport-safe: no space / radiation / aggresive mobs / other dangers
 
 	var/no_air = null

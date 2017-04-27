@@ -13,6 +13,7 @@
 	var/turf_gravity_speed = 2
 	var/list/atom/movable/atoms_with_forced_gravity
 	var/turf_has_gravity_override = -1
+	var/mutable_appearance/wet_overlay
 
 /turf/open/Initialize()
 	atoms_with_forced_gravity = list()
@@ -291,17 +292,22 @@
 	if(wet_setting != TURF_DRY)
 		if(wet_overlay)
 			cut_overlay(wet_overlay)
-			wet_overlay = null
+		else
+			wet_overlay = mutable_appearance()
 		var/turf/open/floor/F = src
 		if(istype(F))
 			if(wet_setting == TURF_WET_PERMAFROST)
-				wet_overlay = image('icons/effects/water.dmi', src, "ice_floor")
+				wet_overlay.icon = 'icons/effects/water.dmi'
+				wet_overlay.icon_state = "ice_floor"
 			else if(wet_setting == TURF_WET_ICE)
-				wet_overlay = image('icons/turf/overlays.dmi', src, "snowfloor")
+				wet_overlay.icon = 'icons/turf/overlays.dmi'
+				wet_overlay.icon_state = "snowfloor"
 			else
-				wet_overlay = image('icons/effects/water.dmi', src, "wet_floor_static")
+				wet_overlay.icon = 'icons/effects/water.dmi'
+				wet_overlay.icon_state = "wet_floor_static"
 		else
-			wet_overlay = image('icons/effects/water.dmi', src, "wet_static")
+			wet_overlay.icon = 'icons/effects/water.dmi'
+			wet_overlay.icon_state = "wet_static"
 		add_overlay(wet_overlay)
 	HandleWet()
 

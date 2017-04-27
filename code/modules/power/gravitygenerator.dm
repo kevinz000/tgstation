@@ -98,10 +98,12 @@ GLOBAL_LIST_EMPTY(gravity_generators) // We will keep track of this by adding ne
 // Generator which spawns with the station.
 //
 
-/obj/machinery/gravity_generator/main/station/init_gravity()
-	..()
+/obj/machinery/gravity_generator/main/station/Initialize()
+	. = ..()
 	setup_parts()
 	middle.add_overlay("activated")
+
+/obj/machinery/gravity_generator/main/station/init_gravity()
 	update_list()
 	resync_gravgen_areas()
 
@@ -347,7 +349,7 @@ GLOBAL_LIST_EMPTY(gravity_generators) // We will keep track of this by adding ne
 	// Sound the alert if gravity was just enabled or disabled.
 	var/alert = 0
 	var/area/area = get_area(src)
-	if(on && SSticker && SSticker.current_state == GAME_STATE_PLAYING) // If we turned on and the game is live.
+	if(on && SSticker.IsRoundInProgress()) // If we turned on and the game is live.
 		if(gravity_in_level() == 0)
 			alert = 1
 			investigate_log("was brought online and is now producing gravity for this level.", "gravity")

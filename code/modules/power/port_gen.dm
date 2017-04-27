@@ -61,7 +61,7 @@
 	is_affected_by_gravity = TRUE
 
 /obj/machinery/power/port_gen/pacman/Initialize()
-	..()
+	. = ..()
 	is_affected_by_gravity = anchored
 	sync_gravity()
 	if(anchored)
