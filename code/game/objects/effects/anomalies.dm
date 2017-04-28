@@ -83,26 +83,61 @@
 	icon_state = "shield2"
 	density = 0
 	var/boing = 0
+	var/list/turf/open/affected_current = list()	//Needs field tracking in the future to not conflict with other gravity fields
+	var/power = 4
+	var/image/grav_overlay
 
 /obj/effect/anomaly/grav/New()
 	..()
 	aSignal.origin_tech = "magnets=7"
+	grav_overlay = image('icons/effects/effects.dmi', "empdisable")
+
+/obj/effect/anomaly/grav/Destroy()
+	for(var/turf/open/T in affected_current)
+		T.reset_turf_gravity()
+		T.cut_overlay(grav_overlay)
+	..()
 
 /obj/effect/anomaly/grav/anomalyEffect()
 	..()
 	boing = 1
-	for(var/obj/O in orange(4, src))
+	for(var/obj/O in orange(power, src))
 		if(!O.anchored)
 			step_towards(O,src)
-	for(var/mob/living/M in range(0, src))
+	for(var/mob/living/M in range(power, src))
 		gravShock(M)
-	for(var/mob/living/M in orange(4, src))
+	for(var/mob/living/M in orange(power, src))
 		step_towards(M,src)
 	for(var/obj/O in range(0,src))
 		if(!O.anchored)
-			var/mob/living/target = locate() in view(4,src)
+			var/mob/living/target = locate() in view(power,src)
 			if(target && !target.stat)
-				O.throw_at(target, 5, 10)
+				O.throw_at(target, power*3, power*2)
+	var/list/checking = list()
+	var/direction = rand(1,10)
+	switch(direction)
+		if(NORTH|SOUTH|EAST|WEST|NORTHEAST|SOUTHEAST|NORTHWEST|SOUTHWEST)
+			//Nothing!
+		if(3)
+			direction = FALSE
+		if(7)
+			direction = FALSE
+	for(var/turf/open/T in range(power, src))
+		if(affected_current[T])
+			continue
+		checking[T] = T
+		affected_current[T] = T
+		if(direction)
+			T.turf_gravity_overrides_area = TRUE
+			T.turf_gravity_direction = direction
+			T.turf_gravity_speed = 2	//1 would be cruel.
+		T.add_overlay(grav_overlay)
+	for(var/T in affected_current)
+		if(!checking[T])
+			affected_current -= T
+			var/turf/open/O = T
+			O.reset_turf_gravity()
+			O.cut_overlay(grav_overlay)
 
 /obj/effect/anomaly/grav/Crossed(mob/A)
 	gravShock(A)

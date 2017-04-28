@@ -537,16 +537,7 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 
 /proc/reset_all_turf_gravity()
 	for(var/turf/open/T in world)
-		T.turf_gravity_overrides_area = FALSE
-		T.turf_gravity_strength = FALSE
-		T.turf_gravity_direction = FALSE
-		T.turf_gravity_throwing = FALSE
-		T.turf_gravity_stunning = FALSE
-		T.turf_gravity_override = FALSE
-		for(var/atom/movable/AM in T.atoms_with_forced_gravity)
-			T.reset_forced_gravity_atom(AM)
-			CHECK_TICK
-		T.sync_all_gravity()
+		T.reset_turf_gravity()
 		CHECK_TICK
 
 /proc/reset_all_area_gravity()

@@ -4,7 +4,7 @@
 	var/wet = 0
 	var/wet_time = 0 // Time in seconds that this floor will be wet for.
 	var/image/wet_overlay = null
-	var/turf_gravity_overrides_area = FALSE	//USE AREAS. NOT THIS. THIS IS ONLY FOR VERY LOCALIZED EFFECTS.
+	var/turf_gravity_overrides_area = FALSE
 	var/turf_gravity_strength = 1
 	var/turf_gravity_direction = FALSE
 	var/turf_gravity_throwing = 0
@@ -18,6 +18,20 @@
 /turf/open/Initialize()
 	atoms_with_forced_gravity = list()
 	..()
+
+/turf/open/proc/reset_turf_gravity()
+	turf_gravity_overrides_area = initial(turf_gravity_overrides_area)
+	turf_gravity_strength = initial(turf_gravity_strength)
+	turf_gravity_direction = initial(turf_gravity_direction)
+	turf_gravity_throwing = initial(turf_garvity_throwing)
+	turf_gravity_stunning = initial(turf_gravity_stunning)
+	turf_gravity_override = initial(turf_gravity_override)
+	turf_gravity_speed = initial(turf_gravity_speed)
+	turf_has_gravity_override = initial(turf_has_gravity_override)
+	for(var/atom/movable/AM in T.atoms_with_forced_gravity)
+		T.reset_forced_gravity_atom(AM)
+		CHECK_TICK
+	sync_all_gravity()
 
 /turf/open/vv_edit_var(var_name, var_value)
 	. = ..()
