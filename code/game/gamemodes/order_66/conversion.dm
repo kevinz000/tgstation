@@ -82,6 +82,18 @@
 			return TRUE
 	return FALSE
 
+/proc/order_66_is_NT(mob/living/L)
+	if(order_66_is_NT_loyalist(L) || order_66_is_NT_leader(L))
+		return TRUE
+	return FALSE
+
+/proc/order_66_is_NT_leader(mob/living/L)
+	if(istype(SSticker.mode, /datum/game_mode/order_66)
+		var/datum/game_mode/order_66/order = SSticker.mode
+		if(L.mind in order.NT_leaders)
+			return TRUE
+	return FALSE
+
 /datum/game_mode/order_66/proc/add_loyalist(datum/mind/victim)
 
 /datum/game_mode/order_66/proc/remove_loyalist(datum/mind/free)
