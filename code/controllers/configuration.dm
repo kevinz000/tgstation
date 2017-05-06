@@ -133,6 +133,7 @@
 	var/changeling_scaling_coeff = 6	//how much does the amount of players get divided by to determine changelings
 	var/security_scaling_coeff = 8		//how much does the amount of players get divided by to determine open security officer positions
 	var/abductor_scaling_coeff = 15 	//how many players per abductor team
+	var/order_66_implants_coeff = 6		//how much does the amoutn of players get divided by to get how many extra conversion implants the captain gets in order 66.
 
 	var/traitor_objectives_amount = 2
 	var/protect_roles_from_antagonist = 0 //If security and such can be traitor/cult/other
@@ -652,6 +653,8 @@
 					abductor_scaling_coeff	= text2num(value)
 				if("traitor_objectives_amount")
 					traitor_objectives_amount = text2num(value)
+				if("order_66_implants_coeff")
+					order_66_implants_coeff = text2num(value)
 				if("probability")
 					var/prob_pos = findtext(value, " ")
 					var/prob_name = null
