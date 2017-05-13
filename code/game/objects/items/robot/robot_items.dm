@@ -581,7 +581,7 @@ Each laser stays approximately 2 seconds in projectile field.
 
 /obj/item/borg/projectile_dampen/proc/activate_field()
 	if(!istype(dampening_field))
-		dampening_field = new /datum/proximity_monitor/advanced/peaceborg_dampener(src, field_radius)
+		dampening_field = new /datum/proximity_monitor/advanced/peaceborg_dampener(_host = src, range = field_radius)
 
 /obj/item/borg/projectile_dampen/proc/deactivate_field()
 	QDEL_NULL(dampening_field)
