@@ -24,6 +24,9 @@
 /turf/closed/indestructible/oldshuttle/corner
 	icon_state = "corner"
 
+
+
+
 /turf/closed/indestructible/splashscreen
 	name = "Space Station 13"
 	icon = 'config/title_screens/images/blank.png'
