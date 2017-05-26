@@ -8,9 +8,20 @@
 	item_state = "gloo"
 	needs_permit = FALSE	//HONK
 	fire_sound = //need something.
-	var/glue_left = 50
-	var/glue_max = 50
-	var/glue_per_cartridge = 25
+	var/glue_left = 100
+	var/glue_max = 100
+
+/obj/item/weapon/gun/gloo/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/gloo_canister))
+		var/obj/item/gloo_canister/GC = I
+		var/needed = glue_max - glue_left
+		var/avail = GC.amount_left
+		var/transferred = min(needed, avail)
+		GC.amount_left -= transferred
+		glue_left += transferred
+		to_chat(user, "<span class='notice'>You transfer [transferred] units of GLOO from \the [I] to \the [src]</span>")
+	else
+		. = ..()
 
 /obj/item/weapon/gun/gloo/examine(mob/user)
 	..()
@@ -60,8 +71,14 @@
 	name = "glob of glue"
 	desc = "A glob of sticky white liquid."
 	icon_state = ""
+	range = 8
 
 /obj/item/projectile/gloo/on_hit(atom/target)
+	gloo_hit(target)
+	. = ..()
+
+/obj/item/projectile/gloo/proc/gloo_hit(atom/target)
+	set waitfor = FALSE		///Don't bog down projectile code.
 
 /obj/item/projectile/gloo/proc/gloo_mob(mob/living/L)
 
@@ -70,31 +87,50 @@
 /obj/item/projectile/gloo/proc/impact_object(obj/O)
 
 /obj/item/projectile/gloo/proc/structure(turf/T)
+	new /obj/structure/gloo_glob(T)
 
 /obj/item/gloo_canister
 	name = "gloo canister"
 	desc = "A canister of gloo for refilling gloo guns with."
 	icon_state= ""
-	item_state = "'
+	item_state = ""
+	var/amount_max = 50
+	var/amount_left = 50
 
-/obj/structure/gloo
+#define GLOO_HARDEN_AMOUNT 4
+
+/obj/structure/gloo_glob
 	name = "blob of GLOO"
 	desc = "A fast-hardening blob of GLOO."
-	density = TRUE
-	icon_state = ""
+	density = FALSE
+	icon_state = "gloo_glob"
 	max_integrity = 10
 	obj_integrity = 10
 	opacity = TRUE
+	var/amount = 1
 
-/obj/structure/gloo/Initialize(mapload, duration = 1200)	//2 minutes default
+/obj/structure/gloo_glob/Initialize(mapload, duration = 600)	//1 minutes default
 	. = ..()
-	QDEL_IN(src, duration)
+	var/obj/structure/gloo_glob/GG = locate(/obj/structure/gloo_glob) in get_turf(src)
+	if(istype(GG))
+		if(GG.combine(src))
+			. = INITIALIZE_HINT_QDEL
+		else
+			QDEL_IN(duration)
 
-/obj/structure/gloo/proc/harden()
-	name =
-	desc =
-	max_integrity =
-	obj_integrity =
-	opactiy =
+/obj/structure/gloo_glob/combine(/obj/structure/gloo_glob/GG)
+	if(!istype(GG))
+		return FALSE
+	amount++
+	if(amount > GLOO_HARDEN_AMOUNT)
+		harder()
+		return FALSE
+	if(amount == GLOO_HARDEN_AMOUNT)
+		harden()
+		return TRUE
+	icon_state = "gloo_glob[amount]"
+	return TRUE
 
-
+/obj/structure/gloo_glob/proc/harden()
+	new /obj/structure/gloo_wall(get_turf(src))
+	qdel(src)
