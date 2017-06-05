@@ -93,7 +93,7 @@
 	nodamage = 1
 	weaken = 1
 	hitsound = 'sound/weapons/taserhit.ogg'
-	range = 4
+	range = 1
 
 /obj/item/projectile/energy/trap/on_hit(atom/target, blocked = 0)
 	if(!ismob(target) || blocked >= 100) //Fully blocked by mob or collided with dense object - drop a trap
