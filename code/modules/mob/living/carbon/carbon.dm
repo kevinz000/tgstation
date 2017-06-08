@@ -100,6 +100,8 @@
 			var/mob/living/silicon/robot/R = D.thrower
 			if(!R.emagged)
 				hurt = FALSE
+		if(istype(D.thrower, /obj/item/projectile/gravity_bolt))
+			hurt = FALSE
 	if(hit_atom.density && isturf(hit_atom))
 		if(hurt)
 			Weaken(1)
