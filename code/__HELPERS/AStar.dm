@@ -1,3 +1,7 @@
+
+#define ASTAR_RESULT_DELETE_DATUM 1
+#define ASTAR_RESULT_KEEP_DATUM 0
+
 /*
 A Star pathfinding algorithm
 Returns a list of tiles forming a path from A to B, taking dense objects as well as walls, and the orientation of
@@ -60,12 +64,12 @@ Actual Adjacent procs :
 /proc/HeapPathWeightCompare(PathNode/a, PathNode/b)
 	return b.f - a.f
 
-//wrapper that returns the AStar datum or null if it is unable to be started
+//Synchronous wrapper that returns the AStar path or null if the AStar failed.
 /proc/get_path_to(caller, end, dist, maxnodes, maxnodedepth = 30, mintargetdist, adjacent = /turf/proc/reachableAdjacentTurfs, id=null, turf/exclude=null, simulated_only = 1)
 	return AStar(caller, end, dist, maxnodes, maxnodedepth, mintargetdist, adjacent,id, exclude, simulated_only)
 
 /datum/proc/recieveAStarResult(path)
-	return
+	return ASTAR_RESULT_DELETE_DATUM
 
 /proc/AStar(caller, end, dist, maxnodes, maxnodedepth = 30, mintargetdist, adjacent = /turf/proc/reachableAdjacentTurfs, id=null, turf/exclude=null, simulated_only = 1)
 	var/datum/AStar/alg = new
@@ -127,7 +131,8 @@ Actual Adjacent procs :
 	return TRUE
 
 /datum/AStar/proc/sendPath()
-	INVOKE_ASYNC(caller, .proc/recieveAStarResult, path)
+	if(called.recieveAStarResult(path) == ASTAR_RESULT_DELETE_DATUM)
+		qdel(src)
 
 //Initiate!
 /datum/AStar/proc/Start()

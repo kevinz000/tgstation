@@ -8,5 +8,19 @@ PROCESSING_SUBSYSTEM_DEF(pathing)
 	stat_tag = "PF"
 	runlevels = ALL
 
-//Currently no different from other processing subsystems, but different operations should be
-//in separate processing lists in the future if any are added.
+/datum/controller/subsystem/processing/pathing
+	if (!resumed)
+		currentrun = processing.Copy()
+	//cache for sanic speed (lists are references anyways)
+	var/list/current_run = currentrun
+
+	while(current_run.len)
+		var/datum/thing = current_run[current_run.len]
+		current_run.len--
+		if(thing)
+			thing.process(wait)
+		else
+			processing -= thing
+		if (MC_TICK_CHECK)
+			return
+
