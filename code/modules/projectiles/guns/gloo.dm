@@ -7,7 +7,7 @@
 	icon_state = "gloo"
 	item_state = "gloo"
 	needs_permit = FALSE	//HONK
-	fire_sound = //need something.
+	//fire_sound = //need something.
 	var/glue_left = 100
 	var/glue_max = 100
 
@@ -56,11 +56,11 @@
 	if(burst_size > 1)
 		firing_burst = TRUE
 		for(var/i = 1 to burst_size)
-			addtimer(CALLBACK(src, ./proc/shoot_gloo, user, target, params), i * fire_delay)
-			addtimer(CALLBACK(src, ./proc/reset_burstfire), burst_size * fire_delay)
+			addtimer(CALLBACK(src, .proc/shoot_gloo, user, target, params), i * fire_delay)
+			addtimer(CALLBACK(src, .proc/reset_burstfire), burst_size * fire_delay)
 	else
 		semicd = TRUE
-		addtimer(CALLBACK(src, ./proc/reset_semicd), fire_delay)
+		addtimer(CALLBACK(src, .proc/reset_semicd), fire_delay)
 		shoot_gloo(user, target, params)
 	if(user)
 		user.update_inv_hands()
@@ -116,14 +116,14 @@
 		if(GG.combine(src))
 			. = INITIALIZE_HINT_QDEL
 		else
-			QDEL_IN(duration)
+			QDEL_IN(src, duration)
 
-/obj/structure/gloo_glob/combine(/obj/structure/gloo_glob/GG)
+/obj/structure/gloo_glob/combine(obj/structure/gloo_glob/GG)
 	if(!istype(GG))
 		return FALSE
 	amount++
 	if(amount > GLOO_HARDEN_AMOUNT)
-		harder()
+		harden()
 		return FALSE
 	if(amount == GLOO_HARDEN_AMOUNT)
 		harden()
@@ -132,5 +132,5 @@
 	return TRUE
 
 /obj/structure/gloo_glob/proc/harden()
-	new /obj/structure/gloo_wall(get_turf(src))
+	//new /obj/structure/gloo_wall(get_turf(src))
 	qdel(src)
