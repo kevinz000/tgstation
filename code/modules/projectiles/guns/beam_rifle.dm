@@ -452,7 +452,7 @@
 		cached = get_turf(src)
 
 /obj/item/projectile/beam/beam_rifle/hitscan/proc/spawn_tracer_effect()
-	QDEL_IN((new tracer_type(loc, time = 5, angle_override = Angle, p_x = pixel_x, p_y = pixel_y, color_override = color)), 5)
+	QDEL_IN((new tracer_type(loc, time = 5, angle_override = trajectory.return_angle(), p_x = pixel_x, p_y = pixel_y, color_override = color)), 5)
 
 /obj/item/projectile/beam/beam_rifle/hitscan/aiming_beam
 	tracer_type = /obj/effect/temp_visual/projectile_beam/tracer/aiming
@@ -471,7 +471,7 @@
 	return FALSE
 
 /obj/item/projectile/beam/beam_rifle/hitscan/aiming_beam/spawn_tracer_effect()
-	var/obj/effect/temp_visual/projectile_beam/T = new tracer_type(loc, time = 5, angle_override = Angle, p_x = pixel_x, p_y = pixel_y, color_override = color)
+	var/obj/effect/temp_visual/projectile_beam/T = new tracer_type(loc, time = 5, angle_override = trajectory.return_angle(), p_x = pixel_x, p_y = pixel_y, color_override = color)
 	if(istype(gun) && istype(T))
 		gun.current_tracers[T] = TRUE
 
