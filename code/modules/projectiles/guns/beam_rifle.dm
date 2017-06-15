@@ -417,9 +417,6 @@
 	set waitfor = 0
 	if(!log_override && firer && original)
 		add_logs(firer, original, "fired at", src, " [get_area(src)]")
-	var/next_run = world.time
-	var/old_pixel_x = pixel_x
-	var/old_pixel_y = pixel_y
 	var/safety = 0	//The code works fine, but... just in case...
 	if(setAngle)
 		trajectory.setAngle(setAngle)
@@ -444,7 +441,8 @@
 			if(loc == get_turf(original))
 				if(!(original in permutated))
 					Bump(original, 1)
-		Range()
+		if(success)
+			Range()
 
 /obj/item/projectile/beam/beam_rifle/hitscan/Range()
 	spawn_tracer_effect()
