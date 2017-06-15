@@ -586,7 +586,7 @@
 				stopped_atoms |= M
 			else if(istype(A, /obj/item/projectile))
 				var/obj/item/projectile/P = A
-				P.paused = TRUE
+				P.trajectory.halt = TRUE
 				stopped_atoms |= P
 
 		for(var/mob/living/M in stopped_atoms)
@@ -600,7 +600,7 @@
 		unfreeze_mob(M)
 
 	for(var/obj/item/projectile/P in stopped_atoms)
-		P.paused = FALSE
+		P.trajectory.halt = FALSE
 	qdel(src)
 	return
 

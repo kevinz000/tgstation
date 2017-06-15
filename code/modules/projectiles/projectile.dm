@@ -20,11 +20,10 @@
 	var/atom/original = null // the original target clicked
 	var/turf/starting = null // the projectile's starting turf
 	var/list/permutated = list() // we've passed through these atoms, don't try to hit them again
-	var/paused = FALSE //for suspending the projectile midair
 	var/p_x = 16
 	var/p_y = 16			// the pixel location of the tile that the player clicked. Default is the center
-	var/speed = 0.8			//Amount of deciseconds it takes for projectile to travel
-	var/Angle = 0
+	var/speed = 0.8			//Processing delay
+	var/datum/plot_vector/trajectory = new()	//New system.
 	var/spread = 0			//amount (in degrees) of projectile spread
 	var/legacy = 0			//legacy projectile system
 	animate_movement = 0	//Use SLIDE_STEPS in conjunction with legacy
@@ -197,88 +196,58 @@
 		direct_target.bullet_act(src, def_zone)
 		qdel(src)
 		return
-	if(setAngle)
-		Angle = setAngle
-	var/old_pixel_x = pixel_x
-	var/old_pixel_y = pixel_y
 	if(!legacy) //new projectiles
 		set waitfor = 0
 		var/next_run = world.time
+		if(setAngle)
+			trajectory.setAngle(setAngle)
+		if(!trajectory.angle)
+			trajectory.setAngle(Get_Angle(src,current))
+		if(spread)
+			trajectory.setAngle(trajectory.angle += (rand() - 0.5) * spread)
 		while(loc)
-			if(paused)
-				next_run = world.time
-				sleep(1)
-				continue
-
 			if((!( current ) || loc == current))
 				current = locate(Clamp(x+xo,1,world.maxx),Clamp(y+yo,1,world.maxy),z)
-
-			if(!Angle)
-				Angle=round(Get_Angle(src,current))
-			if(spread)
-				Angle += (rand() - 0.5) * spread
 			var/matrix/M = new
-			M.Turn(Angle)
+			M.Turn(trajectory.return_angle())
 			transform = M
-
-			var/Pixel_x=round((sin(Angle)+16*sin(Angle)*2), 1)	//round() is a floor operation when only one argument is supplied, we don't want that here
-			var/Pixel_y=round((cos(Angle)+16*cos(Angle)*2), 1)
-			var/pixel_x_offset = old_pixel_x + Pixel_x
-			var/pixel_y_offset = old_pixel_y + Pixel_y
-			var/new_x = x
-			var/new_y = y
-
-			while(pixel_x_offset > 16)
-				pixel_x_offset -= 32
-				old_pixel_x -= 32
-				new_x++// x++
-			while(pixel_x_offset < -16)
-				pixel_x_offset += 32
-				old_pixel_x += 32
-				new_x--
-			while(pixel_y_offset > 16)
-				pixel_y_offset -= 32
-				old_pixel_y -= 32
-				new_y++
-			while(pixel_y_offset < -16)
-				pixel_y_offset += 32
-				old_pixel_y += 32
-				new_y--
-
-			pixel_x = old_pixel_x
-			pixel_y = old_pixel_y
-			step_towards(src, locate(new_x, new_y, z))
+			var/success = trajectory.increment()
+			var/datum/vector_loc/at = trajectory.return_location()
+			step_towards(src, at.return_turf())
 			next_run += max(world.tick_lag, speed)
 			var/delay = next_run - world.time
 			if(delay <= world.tick_lag*2)
-				pixel_x = pixel_x_offset
-				pixel_y = pixel_y_offset
+				pixel_x = at.pixel_x
+				pixel_y = at.pixel_y
 			else
-				animate(src, pixel_x = pixel_x_offset, pixel_y = pixel_y_offset, time = max(1, (delay <= 3 ? delay - 1 : delay)), flags = ANIMATION_END_NOW)
-			old_pixel_x = pixel_x_offset
-			old_pixel_y = pixel_y_offset
+				animate(src, pixel_x = at.pixel_x, pixel_y = at.pixel_y, time = max(1, (delay <= 3 ? delay - 1 : delay)), flags = ANIMATION_END_NOW)
 
 			if(original && (original.layer>=2.75) || ismob(original))
 				if(loc == get_turf(original))
 					if(!(original in permutated))
 						Bump(original, 1)
-			Range()
+			if(success)
+				Range()
 			if (delay > 0)
 				sleep(delay)
 
 	else //old projectile system
 		set waitfor = 0
 		while(loc)
-			if(!paused)
-				if((!( current ) || loc == current))
-					current = locate(Clamp(x+xo,1,world.maxx),Clamp(y+yo,1,world.maxy),z)
-				step_towards(src, current)
-				if(original && (original.layer>=2.75) || ismob(original))
-					if(loc == get_turf(original))
-						if(!(original in permutated))
-							Bump(original, 1)
-				Range()
+			if((!( current ) || loc == current))
+				current = locate(Clamp(x+xo,1,world.maxx),Clamp(y+yo,1,world.maxy),z)
+			step_towards(src, current)
+			if(original && (original.layer>=2.75) || ismob(original))
+				if(loc == get_turf(original))
+					if(!(original in permutated))
+						Bump(original, 1)
+			Range()
 			sleep(config.run_speed * 0.9)
+
+/obj/item/projectile/proc/setAngle(angle)
+	if(angle)
+		trajectory.angle = angle
+		trajectory.recalculate_offsets()
 
 /obj/item/projectile/proc/preparePixelProjectile(atom/target, var/turf/targloc, mob/living/user, params, spread)
 	var/turf/curloc = get_turf(user)
@@ -289,12 +258,13 @@
 	xo = targloc.x - curloc.x
 
 	var/list/calculated = calculate_projectile_angle_and_pixel_offsets(user, params)
-	Angle = calculated[1]
+	var/Angle = calculated[1]
 	p_x = calculated[2]
 	p_y = calculated[3]
 
 	if(spread)
-		src.Angle += spread
+		Angle += spread
+	trajectory.setup_automatic(Angle, x, y, z, p_x, p_y)
 
 /proc/calculate_projectile_angle_and_pixel_offsets(mob/user, params)
 	var/list/mouse_control = params2list(params)

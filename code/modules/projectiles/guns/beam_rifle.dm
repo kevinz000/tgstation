@@ -296,7 +296,7 @@
 	HS_BB.structure_pierce_amount = structure_piercing
 	HS_BB.structure_bleed_coeff = structure_bleed_coeff
 	HS_BB.do_pierce = do_pierce
-	HS_BB.gun = host	
+	HS_BB.gun = host
 
 /obj/item/ammo_casing/energy/beam_rifle/hitscan
 	projectile_type = /obj/item/projectile/beam/beam_rifle/hitscan
@@ -417,58 +417,29 @@
 	set waitfor = 0
 	if(!log_override && firer && original)
 		add_logs(firer, original, "fired at", src, " [get_area(src)]")
-	if(setAngle)
-		Angle = setAngle
 	var/next_run = world.time
 	var/old_pixel_x = pixel_x
 	var/old_pixel_y = pixel_y
 	var/safety = 0	//The code works fine, but... just in case...
+	if(setAngle)
+		trajectory.setAngle(setAngle)
+	if(!trajectory.angle)
+		trajectory.setAngle(Get_Angle(src,current))
+	if(spread)
+		trajectory.setAngle(trajectory.angle += (rand() - 0.5) * spread)
 	while(loc)
 		if(++safety > (range * 3))	//If it's looping for way, way too long...
 			return	//Kill!
 		if((!( current ) || loc == current))
 			current = locate(Clamp(x+xo,1,world.maxx),Clamp(y+yo,1,world.maxy),z)
-		if(!Angle)
-			Angle=round(Get_Angle(src,current))
-		if(spread)
-			Angle += (rand() - 0.5) * spread
 		var/matrix/M = new
-		M.Turn(Angle)
+		M.Turn(trajectory.return_angle())
 		transform = M
-		var/Pixel_x=sin(Angle)+16*sin(Angle)*2
-		var/Pixel_y=cos(Angle)+16*cos(Angle)*2
-		var/pixel_x_offset = old_pixel_x + Pixel_x
-		var/pixel_y_offset = old_pixel_y + Pixel_y
-		var/new_x = x
-		var/new_y = y
-		while(pixel_x_offset > 16)
-			pixel_x_offset -= 32
-			old_pixel_x -= 32
-			new_x++// x++
-		while(pixel_x_offset < -16)
-			pixel_x_offset += 32
-			old_pixel_x += 32
-			new_x--
-		while(pixel_y_offset > 16)
-			pixel_y_offset -= 32
-			old_pixel_y -= 32
-			new_y++
-		while(pixel_y_offset < -16)
-			pixel_y_offset += 32
-			old_pixel_y += 32
-			new_y--
-		pixel_x = old_pixel_x
-		pixel_y = old_pixel_y
-		step_towards(src, locate(new_x, new_y, z))
-		next_run += max(world.tick_lag, speed)
-		var/delay = next_run - world.time
-		if(delay <= world.tick_lag*2)
-			pixel_x = pixel_x_offset
-			pixel_y = pixel_y_offset
-		else
-			animate(src, pixel_x = pixel_x_offset, pixel_y = pixel_y_offset, time = max(1, (delay <= 3 ? delay - 1 : delay)), flags = ANIMATION_END_NOW)
-		old_pixel_x = pixel_x_offset
-		old_pixel_y = pixel_y_offset
+		var/success = trajectory.increment()
+		var/datum/vector_loc/at = trajectory.return_location()
+		step_towards(src, at.return_turf())
+		pixel_x = at.pixel_x
+		pixel_y = at.pixel_y
 		if(original && (original.layer>=2.75) || ismob(original))
 			if(loc == get_turf(original))
 				if(!(original in permutated))

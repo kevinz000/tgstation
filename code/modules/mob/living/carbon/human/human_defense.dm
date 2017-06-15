@@ -66,7 +66,7 @@
 					P.firer = src
 					P.yo = new_y - curloc.y
 					P.xo = new_x - curloc.x
-					P.Angle = null
+					P.trajectory.setup_automatic(Get_Angle(P.starting, P.original), new_x, new_y, P.z)
 
 				return -1 // complete projectile permutation
 
