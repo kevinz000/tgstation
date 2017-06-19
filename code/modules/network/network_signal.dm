@@ -6,6 +6,7 @@
 	var/list/text_data = list()						//Plaintext. Use this whenever possible for compatibility!
 	var/list/datum/picture/picture_data = list()	//In game picture datums code/modules/paperwork/photography.dm
 	var/list/audio_data = list()					//Plaintext, but meant to be used by audio devices (IE radios/recorders/audio players) and not to be readable otherwise.
+	var/list/command_codes = list()					//Not for user reading, internal codes.
 	var/encryption									//Encryption [WIP]
 	//Add more datatypes manually!
 

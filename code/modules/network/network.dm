@@ -1,6 +1,6 @@
 
 GLOBAL_LIST_EMPTY(networks)							//All unique networks in the game.
-GLOBAL_DATUM_INIT(NETWORK_DEFAULT, NETWORK_PATH_DEFAULT, new)	//Default network. Sending/recieving will always work on this one, no restrictions/checks.
+GLOBAL_DATUM_INIT(network_default, /datum/network/default, new)	//Default network. Sending/recieving will always work on this one, no restrictions/checks.
 
 /proc/return_network_by_id(id)
 	return GLOB.networks[id]
@@ -39,21 +39,48 @@ GLOBAL_DATUM_INIT(NETWORK_DEFAULT, NETWORK_PATH_DEFAULT, new)	//Default network.
 	return TRUE
 
 /datum/network/proc/on_signal_from_device(obj/item/device/network_card/dev, datum/network_signal/sig)
+	if(!can_recieve_from_device(dev))
+		return FALSE
+	sniffer_intercept_signal(sig)
 	if(automatic_signal_relaying)
 		auto_relay(sig)
+	return TRUE
+
+/datum/network/proc/can_recieve_from_device(obj/item/device/network_card/dev)
+	return TRUE
+
+/datum/network/proc/can_send_to_device(obj/item/device/network_card/dev)
+	return TRUE
 
 /datum/network/proc/auto_relay(datum/network_signal/sig)
-	for(var/I in sniffers)
-		send_signal_to_device(I, sig, FALSE)
+	if(sig.broadcast)
+		return network_broadcast(sig)
 	for(var/I in sig.recipient_ids)
 		if(devices[text2num(I)])
-			send_signal_to_device(devices[text2num(I)], sig, TRUE)
+			send_signal_to_device(devices[text2num(I)], sig)
 
-/datum/network/proc/send_signal_to_device(obj/item/device/network_card/dev, datum/network_signal/sig, intended = TRUE)
-	if(!intended)
-		dev.promiscious_recieve(sig, id)
-	else
+/datum/network/proc/network_broadcast(datum/network_signal/sig)
+	for(var/I in devices)
+		send_signal_to_device(devices[I], sig)
+
+/datum/network/proc/sniffer_intercept_signal(datum/network_signal/sig)
+	for(var/I in sniffers)
+		if(can_send_to_device(sniffers[I])
+			var/obj/item/device/network_card/NIC = I
+			NIC.promiscious_recieve(sig, id)
+
+/datum/network/proc/send_signal_to_id(datum/network_signal/sig, id)
+	if(devices[id])
+		send_signal_to_device(devices[id],sig)
+
+/datum/network/proc/send_signal_to_device(obj/item/device/network_card/dev, datum/network_signal/sig)
+	sniffer_intercept_signal(sig)
+	if(can_send_to_device(dev))
 		dev.network_recieve(sig, id)
+
+/datum/network/proc/network_signal_to_device(obj/item/device/network_card/dev, datum/network_signal/sig)
+	sig.source_id = HARDWARE_ID_NETWORK
+	send_signal_to_device(dev, sig)
 
 /datum/network/default
 	id = NETWORK_ID_DEFAULT

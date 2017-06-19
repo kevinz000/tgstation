@@ -1,10 +1,11 @@
 
 GLOBAL_VAR_INIT(network_hardware_id_current, 1)
-GLOBAL_LIST_EMPTY(network_devices_by_id)
+GLOBAL_LIST_EMPTY(network_devices_by_id)		//Admins: Don't touch this. Ever.
 
 /obj/item/device/network_card
 	name = "networking card"
-	var/hardware_id
+	var/hardware_id							//ID of the device. Can not be changed. Admins: Don't touch this. Ever. Doing so will result in bad things.
+	var/network_name = "Network Device"		//Name of the device. Change as you want.
 	var/list/datum/network/connected_networks
 	var/list/autoconnect_network_ids
 	var/atom/host
@@ -51,15 +52,21 @@ GLOBAL_LIST_EMPTY(network_devices_by_id)
 		network_send(sig, i)
 
 /obj/item/device/network_card/proc/network_send(datum/network_signal/sig, network_id)
-	if(!connected_networks[network_id])
+	if(!connected_networks[network_id] || !can_recieve_network(network_id))
 		return FALSE
 	var/datum/network/N = connected_networks[network_id]
 	return N.on_signal_from_device(src, sig)
 
+/obj/item/device/network_card/proc/can_send_network(network_id)
+	return TRUE
+
 /obj/item/device/network_card/proc/network_recieve(datum/network_signal/sig, network_id)
-	if(host)
+	if(host && can_recieve_network(network_id))
 		host.on_network_recieve(src, sig, network_id)
 
+/obj/item/device/network_card/proc/can_recieve_network(network_id)
+	return TRUE
+
 /obj/item/device/network_card/proc/promiscious_recieve(datum/network_signal/sig, network_id)
-	if(host)
+	if(host && can_recieve_network(network_id))
 		host.promiscious_network_recieve(src, sig, network_id)
