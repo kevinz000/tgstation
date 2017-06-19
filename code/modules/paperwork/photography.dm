@@ -343,12 +343,9 @@
 	else
 		injectmasteralbum(icon, img, desc, pixel_x, pixel_y, injectblueprints)
 
-
-
 /datum/picture
 	var/name = "image"
 	var/list/fields = list()
-
 
 /obj/item/device/camera/proc/injectaialbum(icon, img, desc, pixel_x, pixel_y, blueprintsinject) //stores image information to a list similar to that of the datacore
 	var/numberer = 1

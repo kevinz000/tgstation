@@ -135,6 +135,10 @@
 
 	return 0
 
+/atom/proc/on_network_recieve(obj/item/device/network_card/dev, datum/network_signal/sig, network_id)
+
+/atom/proc/promiscious_network_recieve(obj/item/device/network_card/dev, datum/network_signal/sig, network_id)
+
 /atom/proc/attack_hulk(mob/living/carbon/human/user, does_attack_animation = 0)
 	if(does_attack_animation)
 		user.changeNext_move(CLICK_CD_MELEE)
