@@ -36,7 +36,7 @@
 	return TRUE
 
 /datum/network_signal/proc/get_text_data_by_key(key)
-	if(!key ||| !text_data[key])
+	if(!key || !text_data[key])
 		return FALSE
 	return text_data[key]
 
