@@ -1804,6 +1804,7 @@
 #include "code\modules\modular_computers\NTNet\NTNRC\conversation.dm"
 #include "code\modules\network\network.dm"
 #include "code\modules\network\network_card.dm"
+#include "code\modules\network\network_card_types.dm"
 #include "code\modules\network\network_signal.dm"
 #include "code\modules\ninja\__ninjaDefines.dm"
 #include "code\modules\ninja\energy_katana.dm"
