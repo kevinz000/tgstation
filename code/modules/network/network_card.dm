@@ -22,7 +22,7 @@ GLOBAL_LIST_EMPTY(network_devices_by_id)
 /obj/item/device/network_card/Destroy()
 	for(var/net in connected_networks)
 		disconnect_from_network(net)
-	GLOB.network_cards_by_id[hardware_id] = null
+	GLOB.network_devices_by_id[hardware_id] = null
 	host = null
 	return ..()
 

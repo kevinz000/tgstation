@@ -10,10 +10,10 @@
 	//Add more datatypes manually!
 
 /datum/network_signal/proc/add_recipient(id)
-	recipient_ids += ["[id]"]
+	recipient_ids += "[id]"
 
 /datum/network_signal/proc/remove_recipient(id)
-	recipient_ids -= ["[id]"]
+	recipient_ids -= "[id]"
 
 /datum/network_signal/proc/set_text_data_by_key(key, data)
 	if(!istext(data))

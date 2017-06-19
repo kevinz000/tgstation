@@ -27,15 +27,15 @@ GLOBAL_DATUM_INIT(NETWORK_DEFAULT, NETWORK_PATH_DEFAULT, new)	//Default network.
 /datum/network/proc/connect_device(obj/item/device/network_card/dev)
 	if(!istype(dev))
 		return FALSE
-	devices[dev.id] = dev
+	devices[dev.hardware_id] = dev
 	return TRUE
 
 /datum/network/proc/disconnect_device(obj/item/device/network_card/dev)
 	if(!istype(dev))
 		return FALSE
-	if(!devices[dev.id])
+	if(!devices[dev.hardware_id])
 		return FALSE
-	devices[dev.id] = null
+	devices[dev.hardware_id] = null
 	return TRUE
 
 /datum/network/proc/on_signal_from_device(obj/item/device/network_card/dev, datum/network_signal/sig)
@@ -44,9 +44,8 @@ GLOBAL_DATUM_INIT(NETWORK_DEFAULT, NETWORK_PATH_DEFAULT, new)	//Default network.
 
 /datum/network/proc/auto_relay(datum/network_signal/sig)
 	for(var/I in sniffers)
-		var/obj/item/device/network_card/NIC = I
 		send_signal_to_device(I, sig, FALSE)
-	for(var/I in sig.recipients)
+	for(var/I in sig.recipient_ids)
 		if(devices[text2num(I)])
 			send_signal_to_device(devices[text2num(I)], sig, TRUE)
 
