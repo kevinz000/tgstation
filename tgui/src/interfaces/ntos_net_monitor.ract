@@ -36,19 +36,19 @@
 		<tr>
 			<td>Software Downloads
 			<td>{{data.config_softwaredownload ? 'ENABLED' : 'DISABLED'}}
-			<td> <ui-button action='toggle_function' params='{"id": "1"}'>TOGGLE</ui-button>
+			<td> <ui-button action='toggle_function' params='{"id": "4"}'>TOGGLE</ui-button>
 		<tr>
 			<td>Peer to Peer Traffic
 			<td>{{data.config_peertopeer ? 'ENABLED' : 'DISABLED'}}
-			<td><ui-button action='toggle_function' params='{"id": "2"}'>TOGGLE</ui-button>
+			<td><ui-button action='toggle_function' params='{"id": "1"}'>TOGGLE</ui-button>
 		<tr>
 			<td>Communication Systems
 			<td>{{data.config_communication ? 'ENABLED' : 'DISABLED'}}
-			<td><ui-button action='toggle_function' params='{"id": "3"}'>TOGGLE</ui-button>
+			<td><ui-button action='toggle_function' params='{"id": "8"}'>TOGGLE</ui-button>
 		<tr>
 			<td>Remote System Control
 			<td>{{data.config_systemcontrol ? 'ENABLED' : 'DISABLED'}}
-			<td><ui-button action='toggle_function' params='{"id": "4"}'>TOGGLE</ui-button>
+			<td><ui-button action='toggle_function' params='{"id": "2"}'>TOGGLE</ui-button>
 	</table>
 	</ui-display>
 

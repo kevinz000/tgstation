@@ -10,6 +10,7 @@ GLOBAL_DATUM(network_ntnet, /datum/network/ntnet)	//NTNet
 	var/relaychat_channels = list()
 
 	var/ntnet_allow_flags = NTNET_ALLOW_ALL	//Deprecate this ASAP /PLEASE/
+	var/ntnet_wireless = TRUE
 	var/IDS_enabled = TRUE					//Same
 	var/IDS_triggered = FALSE				//Same
 
@@ -22,12 +23,35 @@ GLOBAL_DATUM(network_ntnet, /datum/network/ntnet)	//NTNet
 	ntnet_log("NTNET SYSTEM INIT")
 	build_ntnet_software_lists()
 
+/datum/network/ntnet/proc/purge_logs()
+	logs = list()
+	ntnet_log("WARNING: LOGS PURGED BY NETWORK ADMINISTRATION.")
+
+/datum/network/ntnet/process()
+	. = ..()
+	check_ntnet_device_connections()
+
+/datum/network/ntnet/proc/check_ntnet_device_connections()
+	for(var/i in connected_decices)
+		var/obj/item/device/network_card/NIC = devices[i]
+		if(istype(NIC, /obj/item/device/network_card/ntnet))
+			if(!get_connection_strength_to_device(NIC))
+				drop_device(NIC)
+
 /datum/network/ntnet/proc/register_relay(obj/machinery/ntnet_relay/NTR)
 	relays[NTR.relay_id] = NTR
 	return TRUE
 
 /datum/network/ntnet/proc/unregister_relay(obj/machinery/ntnet_relay/NTR)
-	relays -= [NTR.relay_id]
+	relays -= NTR.relay_id
+	if(!relays.len)
+		drop_all_connections()
+
+/datum/network/ntnet/proc/drop_all_connections()
+	for(var/i in devices)
+		var/obj/item/device/network_card/NIC = devices[i]
+		if(istype(NIC, /obj/item/device/network_card/ntnet))
+			drop_device(NIC)
 
 /datum/network/ntnet/proc/get_relay_by_id(id)
 	if(!istext(id))
@@ -119,14 +143,36 @@ GLOBAL_DATUM(network_ntnet, /datum/network/ntnet)	//NTNet
 		if(filename == P.filename)
 			return P
 
+/datum/network/ntnet/on_signal_to_network(obj/item/device/network_card/dev, datum/network_signal/sig)
+	if(sig.get_text_data_by_key("type") == "NTNET_COMMAND")
+		switch(sig.get_text_data_by_key("command"))
+			if("resetIDS")
+				resetIDS()
+			if("toggleIDS")
+				toggleIDS()
+			if("toggleWireless")
+				toggleWireless()
+			if("purgelogs")
+				purge_logs()
+			if("toggle_function")
+				toggle_function(text2num(sig.get_text_data_by_key("args")))
+	if(sig.get_text_data_by_key("command") == "NTNET_QUERY")
+		if(sig.get_text_data_by_key("query") == "NTNET_STATUS")
+			var/datum/network_signal/output = new()
+			output.add_recipient(dev.hardware_id)
+			output.add_text_data_by_key("type", "NTNET_STATUS")
+			output.set_text_data_by_key("ids_trigger", IDS_triggered)
+			output.set_text_data_by_key("ids_status", IDS_enabled)
+			output.set_text_data_by_key("relay_count", relays.len)
+			output.set_text_data_by_key("wireless_active", ntnet_wireless)
+			output.set_text_data_by_key("logstring", logs.Join(NTNET_LOG_SEPARATOR))
+			output.set_text_data_by_key("dest_prog_name", sig.get_text_data_by_key("return_prog_name"))
+			auto_relay(output)
+
 /datum/network/ntnet/proc/toggle_function(function)
 	if(!function)
 		return
 	var/new_state = !(ntnet_allow_flags & function)
-	if(new_state)
-		ntnet_allow_flags |= function
-	else
-		ntnet_allow_flags &= ~function
 	switch(function)
 		if(NTNET_ALLOW_DOWNLOAD)
 			ntnet_log("Configuration Updated. Wireless network firewall now [new_state ? "allows" : "disallows"] connection to software repositories.")
@@ -136,3 +182,9 @@ GLOBAL_DATUM(network_ntnet, /datum/network/ntnet)	//NTNet
 			ntnet_log("Configuration Updated. Wireless network firewall now [new_state ? "allows" : "disallows"] instant messaging and similar communication services.")
 		if(NTNET_ALLOW_CONTROL)
 			ntnet_log("Configuration Updated. Wireless network firewall now [new_state ? "allows" : "disallows"] remote control of station's systems.")
+		else
+			return	//INVALID FLAG!
+	if(new_state)
+		ntnet_allow_flags |= function
+	else
+		ntnet_allow_flags &= ~function

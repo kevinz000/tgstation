@@ -16,3 +16,6 @@
 		computer.visible_message("<span class='danger'>\The [computer]'s screen displays an \"Process [filename].[filetype] (PID [rand(100,999)]) terminated - Network Error\" error</span>")
 	else
 		computer.visible_message("<span class='danger'>\The [computer]'s screen briefly freezes and then shows \"NETWORK ERROR - NTNet connection lost. Please retry. If problem persists contact your system administrator.\" error.</span>")
+
+/datum/computer_file/program/proc/on_network_recieve(obj/item/device/network_card/NIC, datum/network_signal/sig, network_id)
+	return

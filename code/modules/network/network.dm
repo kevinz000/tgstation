@@ -64,11 +64,17 @@ GLOBAL_DATUM(network_default, /datum/network/default)	//Default network. Sending
 		dev1.on_constant_connection_break(dev2)
 		dev2.on_constant_connection_break(dev1)
 
+/datum/network/proc/acquire_device(obj/item/device/network_card/dev)
+	dev.connect_to_network(src)
+
 /datum/network/proc/connect_device(obj/item/device/network_card/dev)
 	if(!istype(dev))
 		return FALSE
 	devices[dev.hardware_id] = dev
 	return TRUE
+
+/datum/network/proc/drop_device(obj/item/device/network_card/dev)
+	dev.disconnect_from_network(src)
 
 /datum/network/proc/disconnect_device(obj/item/device/network_card/dev)
 	if(!istype(dev))

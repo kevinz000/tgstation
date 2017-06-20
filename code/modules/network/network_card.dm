@@ -41,6 +41,9 @@ GLOBAL_LIST_EMPTY(network_devices_by_id)		//Admins: Don't touch this. Ever.
 /obj/item/device/network_card/proc/get_hardware_id()
 	return hardware_id
 
+/obj/item/device/network_card/proc/set_network_nickname(newname)
+	network_name = replacetext(newname, " ", "_")
+
 /obj/item/device/network_card/proc/return_network_nickname()
 	return network_name
 

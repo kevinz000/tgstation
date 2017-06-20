@@ -177,11 +177,11 @@
 /obj/item/device/modular_computer/emag_act(mob/user)
 	if(emagged)
 		to_chat(user, "<span class='warning'>\The [src] was already emagged.</span>")
-		return 0
+		return FALSE
 	else
 		emagged = 1
 		to_chat(user, "<span class='notice'>You emag \the [src]. It's screen briefly shows a \"OVERRIDE ACCEPTED: New software downloads available.\" message.</span>")
-		return 1
+		return TRUE
 
 /obj/item/device/modular_computer/examine(mob/user)
 	..()
@@ -245,11 +245,11 @@
 /obj/item/device/modular_computer/process()
 	if(!enabled) // The computer is turned off
 		last_power_usage = 0
-		return 0
+		return FALSE
 
 	if(obj_integrity <= integrity_failure)
 		shutdown_computer()
-		return 0
+		return FALSE
 
 	if(active_program && active_program.requires_ntnet && !get_ntnet_status(active_program.requires_ntnet_feature))
 		active_program.event_networkfailure(0) // Active program requires NTNet to run but we've just lost connection. Crash.
@@ -349,15 +349,23 @@
 /obj/item/device/modular_computer/proc/get_ntnet_status(specific_action = 0)
 	var/obj/item/weapon/computer_hardware/network_card/network_card = all_components[MC_NET]
 	if(network_card)
-		return network_card.get_signal(specific_action)
+		return network_card.get_ntnet_feature(specific_action)
 	else
-		return 0
+		return FALSE
 
-/obj/item/device/modular_computer/proc/add_log(text)
+/obj/item/device/modular_computer/on_network_recieve(obj/item/device/network_card/NIC, datum/network_signal/sig, network_id)
+	var/program_destination = sig.get_text_data_by_key("dest_prog_name")
+	if(!istext(program_destination))
+		return ..()
+	for(var/datum/computer_file/program/P in idle_threads)
+		if(P.filename == program_destination)
+			P.on_network_recieve(NIC, sig, network_id)
+
+/obj/item/device/modular_computer/proc/add_log(text)	//Should be ported to signals but I feel like this should remain for now.
 	if(!get_ntnet_status())
 		return FALSE
 	var/obj/item/weapon/computer_hardware/network_card/network_card = all_components[MC_NET]
-	return GLOB.ntnet_global.add_log(text, network_card)
+	return GLOB.network_ntnet.ntnet_log(text, network_card)
 
 /obj/item/device/modular_computer/proc/shutdown_computer(loud = 1)
 	kill_program(forced = TRUE)
@@ -369,6 +377,11 @@
 	enabled = 0
 	update_icon()
 
+/obj/item/device/modular_computer/proc/network_send(datum/network_signal/sig)
+	var/obj/item/weapon/computer_hardware/network_card/netcard = all_components[MC_NET]
+	if(!istype(netcard))
+		return FALSE
+	return netcard.network_send(sig)
 
 /obj/item/device/modular_computer/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	// Insert items into the components

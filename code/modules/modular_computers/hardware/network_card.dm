@@ -8,6 +8,14 @@
 	malfunction_probability = 1
 	device_type = MC_NET
 
+/obj/item/weapon/computer_hardware/network_card/on_network_recieve(card, sig, id)
+	if(holder)
+		holder.on_network_recieve(card, sig, id)
+
+/obj/item/weapon/computer_hardware/network_card/on_promiscious_recieve(card, sig, id)
+	if(holder)
+		holder.on_promiscious_recieve(card, sig, id)
+
 /obj/item/weapon/computer_hardware/network_card/diagnostics(var/mob/user)
 	..()
 	to_chat(user, "NIX Unique ID: [interface.get_hardware_id()]")
@@ -15,7 +23,7 @@
 	to_chat(user, "Supported protocols:")
 	if(interface.wireless_range == NTNET_WIRELESS_RANGE_SHORT)
 		to_chat(user, "511.m SFS (Subspace) - Standard Frequency Spread")
-	if(interface.wireless_range = NTNET_WIRELESS_RANGE_LONG)
+	if(interface.wireless_range == NTNET_WIRELESS_RANGE_LONG)
 		to_chat(user, "511.n WFS/HB (Subspace) - Wide Frequency Spread/High Bandiwdth")
 	if(interface.ethernet)
 		to_chat(user, "OpenEth (Physical Connection) - Physical network connection port")
@@ -23,6 +31,12 @@
 /obj/item/weapon/computer_hardware/network_card/Initialize()
 	. = ..()
 	interface = new interface(src)
+
+/obj/item/weapon/computer_hardware/network_card/proc/network_send(datum/network_signal/sig)
+	return interface.network_send(sig, NETWORK_ID_NTNET)
+
+/obj/item/weapon/computer_hardware/network_card/proc/set_network_name(newname)
+	return interface.set_network_nickname(newname)
 
 // Returns a string identifier of this network card
 /obj/item/weapon/computer_hardware/network_card/proc/get_network_tag()
@@ -36,10 +50,12 @@
 		return NTNET_CONNECTION_NONE
 	return interface.return_ntnet_signal()
 
+/obj/item/weapon/computer_hardware/network_card/proc/get_ntnet_feature(feature_flag)
+	return interface.return_ntnet_feature(feature_flag)
+
 /obj/item/weapon/computer_hardware/network_card/advanced
 	name = "advanced network card"
 	desc = "An advanced network card for usage with standard NTNet frequencies. Its transmitter is strong enough to connect even off-station."
-	long_range = 1
 	origin_tech = "programming=4;engineering=2"
 	power_usage = 100 // Better range but higher power usage.
 	icon_state = "radio"
@@ -49,7 +65,6 @@
 /obj/item/weapon/computer_hardware/network_card/wired
 	name = "wired network card"
 	desc = "An advanced network card for usage with standard NTNet frequencies. This one also supports wired connection."
-	ethernet = 1
 	origin_tech = "programming=5;engineering=3"
 	power_usage = 100 // Better range but higher power usage.
 	icon_state = "net_wired"
