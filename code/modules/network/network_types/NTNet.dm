@@ -61,7 +61,7 @@ GLOBAL_DATUM(network_ntnet, /datum/network/ntnet)	//NTNet
 /datum/network/ntnet/proc/return_zlevel_connectivity(zlevel)
 	var/relay = FALSE
 	for(var/i in relays)
-		var/obj/machinery/nt_relay/NTR = relays[i]
+		var/obj/machinery/ntnet_relay/NTR = relays[i]
 		if(NTR.z == zlevel)
 			relay = TRUE
 			break
@@ -76,7 +76,7 @@ GLOBAL_DATUM(network_ntnet, /datum/network/ntnet)	//NTNet
 	if(.)
 		return get_connection_strength_to_device(NIC)
 
-/datum/network/ntnet/can_recieve_to_device(obj/item/device/network_card/NIC)
+/datum/network/ntnet/can_recieve_from_device(obj/item/device/network_card/NIC)
 	. = ..()
 	if(.)
 		return get_connection_strength_to_device(NIC)
@@ -123,7 +123,7 @@ GLOBAL_DATUM(network_ntnet, /datum/network/ntnet)	//NTNet
 /datum/network/ntnet/proc/ntnet_log(lstring, obj/item/device/network_card/source)
 	var/log_text = "[worldtime2text()] - "
 	if(source)
-		log_text += "[source.get_network_tag()] - "
+		log_text += "[source.get_full_identifier()] - "
 	else
 		log_text += "*SYSTEM* - "
 	log_text += lstring
@@ -156,18 +156,18 @@ GLOBAL_DATUM(network_ntnet, /datum/network/ntnet)	//NTNet
 				purge_logs()
 			if("toggle_function")
 				toggle_function(text2num(sig.get_text_data_by_key("args")))
-	if(sig.get_text_data_by_key("command") == "NTNET_QUERY")
+	if(sig.get_text_data_by_key("type") == "NTNET_QUERY")
 		if(sig.get_text_data_by_key("query") == "NTNET_STATUS")
-			var/datum/network_signal/output = new()
-			output.add_recipient(dev.hardware_id)
-			output.add_text_data_by_key("type", "NTNET_STATUS")
-			output.set_text_data_by_key("ids_trigger", IDS_triggered)
-			output.set_text_data_by_key("ids_status", IDS_enabled)
-			output.set_text_data_by_key("relay_count", relays.len)
-			output.set_text_data_by_key("wireless_active", ntnet_wireless)
-			output.set_text_data_by_key("logstring", logs.Join(NTNET_LOG_SEPARATOR))
-			output.set_text_data_by_key("dest_prog_name", sig.get_text_data_by_key("return_prog_name"))
-			auto_relay(output)
+			var/datum/network_signal/out = new()
+			out.add_recipient(dev.hardware_id)
+			out.add_text_data_by_key("type", "NTNET_STATUS")
+			out.set_text_data_by_key("ids_trigger", IDS_triggered)
+			out.set_text_data_by_key("ids_status", IDS_enabled)
+			out..set_text_data_by_key("relay_count", relays.len)
+			out.set_text_data_by_key("wireless_active", ntnet_wireless)
+			out.set_text_data_by_key("logstring", logs.Join(NTNET_LOG_SEPARATOR))
+			out.set_text_data_by_key("dest_prog_name", sig.get_text_data_by_key("return_prog_name"))
+			auto_relay(out)
 
 /datum/network/ntnet/proc/toggle_function(function)
 	if(!function)

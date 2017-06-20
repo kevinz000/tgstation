@@ -42,7 +42,7 @@
 		return ..()
 	var/list/L = sig.get_all_text_data
 	ntnet_ids_trigger = L["ids_trigger"]
-	ntnet_ids_stauts = L["ids_status"]
+	ntnet_ids_status = L["ids_status"]
 	ntnet_allow_flags = L["allow_flags"]
 	ntnet_wireless = L["wireless_active"]
 	ntnet_relay_count = L["relay_count"]
@@ -94,7 +94,7 @@
 
 	data["ntnetlogs"] = list()
 
-	var/list/ntnet_log_list = splittext(ntnet_logs, NTNET_LOGSTRING_SEPARATOR)
+	var/list/ntnet_log_list = splittext(ntnet_logs, NTNET_LOG_SEPARATOR)
 	for(var/i in ntnet_log_list)
 		data["ntnetlogs"] += list(list("entry" = i))
 

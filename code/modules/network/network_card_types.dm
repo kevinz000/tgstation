@@ -36,7 +36,7 @@
 	return NTNET_CONNECTION_NONE
 
 /obj/item/device/network_card/ntnet/proc/return_ntnet_feature(featureflag)
-	if(!return_ntnet_signal)
+	if(!return_ntnet_signal())
 		return FALSE
 	var/datum/network/ntnet/N = connected_networks[NETWORK_ID_NTNET]
-	return N.check_ntnet_function(feature_flag)
+	return N.check_ntnet_function(featureflag)

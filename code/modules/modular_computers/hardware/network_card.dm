@@ -12,9 +12,9 @@
 	if(holder)
 		holder.on_network_recieve(card, sig, id)
 
-/obj/item/weapon/computer_hardware/network_card/on_promiscious_recieve(card, sig, id)
+/obj/item/weapon/computer_hardware/network_card/promiscious_network_recieve(card, sig, id)
 	if(holder)
-		holder.on_promiscious_recieve(card, sig, id)
+		holder.promiscious_network_recieve(card, sig, id)
 
 /obj/item/weapon/computer_hardware/network_card/diagnostics(var/mob/user)
 	..()
