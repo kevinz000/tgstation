@@ -1,6 +1,12 @@
 
 GLOBAL_LIST_EMPTY(networks)							//All unique networks in the game.
-GLOBAL_DATUM_INIT(network_default, /datum/network/default, new)	//Default network. Sending/recieving will always work on this one, no restrictions/checks.
+GLOBAL_DATUM(network_default, /datum/network/default)	//Default network. Sending/recieving will always work on this one, no restrictions/checks.
+
+/proc/initialize_global_network_list()
+	for(var/path in typesof(/datum/network))
+		var/datum/network/N = path
+		if(initial(N.init_at_roundstart))
+			new path
 
 /proc/return_network_by_id(id)
 	return GLOB.networks[id]
@@ -10,6 +16,8 @@ GLOBAL_DATUM_INIT(network_default, /datum/network/default, new)	//Default networ
 	var/list/obj/item/device/network_card/devices		//Associative list of devices by their ID. ID = device.
 	var/list/obj/item/device/network_card/sniffers		//Above, but this can recieve all signals no matter what.
 	var/automatic_signal_relaying = TRUE
+	var/list/obj/item/device/network_card/constant_connections	//Network side of continuous connections.
+	var/init_at_roundstart = TRUE								//Make at roundstart. Editing this in runtime does nothing!
 
 /datum/network/New()
 	. = ..()
@@ -23,6 +31,38 @@ GLOBAL_DATUM_INIT(network_default, /datum/network/default, new)	//Default networ
 		return
 	GLOB.networks[id] = src
 	devices = list()
+	constant_connections = list()
+	START_PROCESSING(SSnetworks, src)
+
+/datum/network/process()
+	process_constant_connections()
+
+/datum/network/proc/process_constant_connections()
+	for(var/v in constant_connections)
+		var/obj/item/device/network_card/N = v
+		var/obj/item/device/network_card/n = constant_connections[v]
+		if(can_recieve_from_device(N) && can_send_to_device(N) && can_recieve_from_device(n) && can_send_to_device(n))
+			continue
+		else
+			break_constant_connection(N,n)
+
+/datum/network/proc/add_constant_connection(obj/item/device/network_card/dev1, obj/item/device/network_card/dev2)
+	if(constant_connections[dev1] || constant_connections[dev2] || !devices[dev1.hardware_id] || !devices[dev2.hardware_id])
+		return FALSE
+	if(can_recieve_from_device(dev1) && can_send_to_device(dev1) && can_recieve_from_device(dev2) && can_send_to_device(dev2))
+		constant_connections[dev1] = dev2
+		return TRUE
+	return FALSE
+
+/datum/network/proc/break_constant_connection(obj/item/device/network_card/dev1, obj/item/device/network_card/dev2)
+	if(constant_connections[dev1])
+		constant_connections -= dev1
+		dev1.on_constant_connection_break(dev2)
+		dev2.on_constant_connection_break(dev1)
+	if(constant_connections[dev2])
+		constant_connections -= dev2
+		dev1.on_constant_connection_break(dev2)
+		dev2.on_constant_connection_break(dev1)
 
 /datum/network/proc/connect_device(obj/item/device/network_card/dev)
 	if(!istype(dev))
@@ -42,9 +82,13 @@ GLOBAL_DATUM_INIT(network_default, /datum/network/default, new)	//Default networ
 	if(!can_recieve_from_device(dev))
 		return FALSE
 	sniffer_intercept_signal(sig)
+	if(num2text(HARDWARE_ID_NETWORK) in sig.recipient_ids)
+		on_signal_to_network(dev, sig)
 	if(automatic_signal_relaying)
 		auto_relay(sig)
 	return TRUE
+
+/datum/network/proc/on_signal_to_network(obj/item/device/network_card/dev, datum/network_signal/sig)
 
 /datum/network/proc/can_recieve_from_device(obj/item/device/network_card/dev)
 	return TRUE
@@ -65,7 +109,7 @@ GLOBAL_DATUM_INIT(network_default, /datum/network/default, new)	//Default networ
 
 /datum/network/proc/sniffer_intercept_signal(datum/network_signal/sig)
 	for(var/I in sniffers)
-		if(can_send_to_device(sniffers[I])
+		if(can_send_to_device(sniffers[I]))
 			var/obj/item/device/network_card/NIC = I
 			NIC.promiscious_recieve(sig, id)
 

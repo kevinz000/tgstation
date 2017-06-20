@@ -1,3 +1,6 @@
+
+GLOBAL_VAR_INIT(ntnet_relay_id_current, 1)	//Don't touch this admins.
+
 // Relays don't handle any actual communication. Global NTNet datum does that, relays only tell the datum if it should or shouldn't work.
 /obj/machinery/ntnet_relay
 	name = "NTNet Quantum Relay"
@@ -9,16 +12,38 @@
 	icon_state = "bus"
 	anchored = 1
 	density = 1
-	var/datum/ntnet/NTNet = null // This is mostly for backwards reference and to allow varedit modifications from ingame.
+	var/datum/network/ntnet/NTNet = null // This is mostly for backwards reference and to allow varedit modifications from ingame.
 	var/enabled = 1				// Set to 0 if the relay was turned off
 	var/dos_failure = 0			// Set to 1 if the relay failed due to (D)DoS attack
 	var/list/dos_sources = list()	// Backwards reference for qdel() stuff
+	var/relay_id
 
 	// Denial of Service attack variables
 	var/dos_overload = 0		// Amount of DoS "packets" in this relay's buffer
 	var/dos_capacity = 500		// Amount of DoS "packets" in buffer required to crash the relay
 	var/dos_dissipate = 1		// Amount of DoS "packets" dissipated over time.
 
+
+/obj/machinery/ntnet_relay/Initialize()
+	. = ..()
+	relay_id = num2text(GLOB.ntnet_relay_id_current++)
+	uid = gl_uid
+	gl_uid++
+	component_parts = list()
+	var/obj/item/weapon/circuitboard/machine/B = new /obj/item/weapon/circuitboard/machine/ntnet_relay(null)
+	B.apply_default_parts(src)
+	if(!NTNet)
+		register_ntnet()
+
+/obj/machinery/ntnet_relay/Destroy()
+	for(var/datum/computer_file/program/ntnet_dos/D in dos_sources)
+		D.target = null
+		D.error = "Connection to quantum relay severed"
+	GLOB.network_ntnet.unregister_relay(src)
+	return ..()
+
+/obj/machinery/ntnet_relay/proc/register_ntnet()
+	GLOB.network_ntnet.register_relay(src)
 
 // TODO: Implement more logic here. For now it's only a placeholder.
 /obj/machinery/ntnet_relay/is_operational()
@@ -51,12 +76,12 @@
 	if((dos_overload > dos_capacity) && !dos_failure)
 		dos_failure = 1
 		update_icon()
-		GLOB.ntnet_global.add_log("Quantum relay switched from normal operation mode to overload recovery mode.")
+		GLOB.network_ntnet.ntnet_log("Quantum relay switched from normal operation mode to overload recovery mode.")
 	// If the DoS buffer reaches 0 again, restart.
 	if((dos_overload == 0) && dos_failure)
 		dos_failure = 0
 		update_icon()
-		GLOB.ntnet_global.add_log("Quantum relay switched from overload recovery mode to normal operation mode.")
+		GLOB.network_ntnet.ntnet_log("Quantum relay switched from overload recovery mode to normal operation mode.")
 	..()
 
 /obj/machinery/ntnet_relay/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = 0, datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state)
@@ -85,40 +110,14 @@
 			dos_overload = 0
 			dos_failure = 0
 			update_icon()
-			GLOB.ntnet_global.add_log("Quantum relay manually restarted from overload recovery mode to normal operation mode.")
+			GLOB.network_ntnet.ntnet_log("Quantum relay manually restarted from overload recovery mode to normal operation mode.")
 		if("toggle")
 			enabled = !enabled
-			GLOB.ntnet_global.add_log("Quantum relay manually [enabled ? "enabled" : "disabled"].")
+			GLOB.network_ntnet.ntnet_log("Quantum relay manually [enabled ? "enabled" : "disabled"].")
 			update_icon()
-
 
 /obj/machinery/ntnet_relay/attack_hand(mob/living/user)
 	ui_interact(user)
-
-/obj/machinery/ntnet_relay/New()
-	uid = gl_uid
-	gl_uid++
-	component_parts = list()
-	var/obj/item/weapon/circuitboard/machine/B = new /obj/item/weapon/circuitboard/machine/ntnet_relay(null)
-	B.apply_default_parts(src)
-
-	if(GLOB.ntnet_global)
-		GLOB.ntnet_global.relays.Add(src)
-		NTNet = GLOB.ntnet_global
-		GLOB.ntnet_global.add_log("New quantum relay activated. Current amount of linked relays: [NTNet.relays.len]")
-	..()
-
-/obj/machinery/ntnet_relay/Destroy()
-	if(GLOB.ntnet_global)
-		GLOB.ntnet_global.relays.Remove(src)
-		GLOB.ntnet_global.add_log("Quantum relay connection severed. Current amount of linked relays: [NTNet.relays.len]")
-		NTNet = null
-
-	for(var/datum/computer_file/program/ntnet_dos/D in dos_sources)
-		D.target = null
-		D.error = "Connection to quantum relay severed"
-
-	return ..()
 
 /obj/item/weapon/circuitboard/machine/ntnet_relay
 	name = "NTNet Relay (Machine Board)"

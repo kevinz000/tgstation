@@ -9,13 +9,13 @@
 
 /datum/ntnet_conversation/New()
 	id = ntnrc_uid++
-	if(GLOB.ntnet_global)
-		GLOB.ntnet_global.chat_channels.Add(src)
+	if(GLOB.network_ntnet)
+		GLOB.network_ntnet.register_chat_channel(src)
 	..()
 
 /datum/ntnet_conversation/Destroy()
-	if(GLOB.ntnet_global)
-		GLOB.ntnet_global.chat_channels.Remove(src)
+	if(GLOB.network_ntnet)
+		GLOB.network_ntnet.delete_chat_channel(src)
 	return ..()
 
 /datum/ntnet_conversation/proc/add_message(message, username)
