@@ -35,8 +35,10 @@
 /obj/item/weapon/gun/gloo/proc/shoot_gloo(mob/user, atom/target, params)
 	glue_left--
 	var/obj/item/projectile/gloo/BB = new
-	BB.prepare_pixel_projectile(target, get_turf(target), user, params, 0)
+	BB.preparePixelProjectile(target, get_turf(target), user, params, 0)
 	BB.firer = user
+	if(isspaceturf(get_turf(target)))
+		BB.dt = get_turf(target)
 	BB.forceMove(user.loc)
 	BB.fire()
 
@@ -70,8 +72,13 @@
 /obj/item/projectile/gloo
 	name = "glob of glue"
 	desc = "A glob of sticky white liquid."
-	icon_state = ""
+	icon_state = "gloo"
 	range = 8
+	var/turf/dt
+
+/obj/item/projectile/gloo/Range()
+	if(loc == dt)
+		Bump(dt, TRUE)
 
 /obj/item/projectile/gloo/on_hit(atom/target)
 	gloo_hit(target)
@@ -79,12 +86,30 @@
 
 /obj/item/projectile/gloo/proc/gloo_hit(atom/target)
 	set waitfor = FALSE		///Don't bog down projectile code.
+	if(isliving(target))
+		gloo_mob(target)
+	if(isturf(target))
+		gloo_turf(target)
+	if(isobj(target))
+		impact_object(target)
 
 /obj/item/projectile/gloo/proc/gloo_mob(mob/living/L)
+	structure(get_turf(L))
 
 /obj/item/projectile/gloo/proc/gloo_turf(turf/T)
+	if(isspaceturf(T))
+		var/obj/structure/gloo_wall/GW = locate(/obj/structure/gloo_wall) in T
+		if(!GW)
+			new /obj/structure/gloo_wall/temporary/floor(T)
+		else
+			GW.obj_integrity = Clamp(GW.obj_integrity + 10, 0, GW.max_integrity)
+	else if(isclosedturf(T))
+		structure(T)
+	return qdel(src)
+
 
 /obj/item/projectile/gloo/proc/impact_object(obj/O)
+	structure(get_turf(O))
 
 /obj/item/projectile/gloo/proc/structure(turf/T)
 	new /obj/structure/gloo_glob(T)
@@ -92,7 +117,7 @@
 /obj/item/gloo_canister
 	name = "gloo canister"
 	desc = "A canister of gloo for refilling gloo guns with."
-	icon_state= ""
+	icon_state = ""
 	item_state = ""
 	var/amount_max = 50
 	var/amount_left = 50
@@ -118,7 +143,7 @@
 		else
 			QDEL_IN(src, duration)
 
-/obj/structure/gloo_glob/combine(obj/structure/gloo_glob/GG)
+/obj/structure/gloo_glob/proc/combine(obj/structure/gloo_glob/GG)
 	if(!istype(GG))
 		return FALSE
 	amount++
@@ -132,5 +157,37 @@
 	return TRUE
 
 /obj/structure/gloo_glob/proc/harden()
-	//new /obj/structure/gloo_wall(get_turf(src))
+	new /obj/structure/gloo_wall/temporary(get_turf(src))
 	qdel(src)
+
+/obj/structure/gloo_wall
+	name = "gloo wall"
+	desc = "A wall made out of hardened gloo. Probably not strong enough to keep out a greyshirt, but good enough to contain air."
+	icon_state = "gloo_wall"
+	obj_integrity = 30
+	max_integrity = 30
+	density = TRUE
+	opacity = FALSE
+
+/obj/structure/gloo_wall/temporary/Initialize()
+	. = ..()
+	desc += "It seems to be slowly decaying!"
+	START_PROCESSING(SSobj, src)
+
+/obj/structure/gloo_wall/temporary/Destroy()
+	STOP_PROCESSING(SSobj, src)
+	return ..()
+
+/obj/structure/gloo_wall/temporary/process()
+	obj_integrity--
+	if(obj_integrity <= 0)
+		qdel(src)
+
+/obj/structure/gloo_wall/BlockSuperconductivity()
+	return TRUE
+
+/obj/structure/gloo_wall/temporary/floor
+	name = "gloo covering"
+	desc = "A covering of gloo on the floor."
+	alpha = 127
+	layer = TURF_LAYER
