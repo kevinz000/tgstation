@@ -51,6 +51,7 @@ Difficulty: Medium
 	move_to_delay = 10
 	ranged = 1
 	pixel_x = -16
+	crusher_loot = list(/obj/structure/closet/crate/necropolis/dragon/crusher)
 	loot = list(/obj/structure/closet/crate/necropolis/dragon)
 	butcher_results = list(/obj/item/weapon/ore/diamond = 5, /obj/item/stack/sheet/sinew = 5, /obj/item/stack/sheet/animalhide/ashdrake = 10, /obj/item/stack/sheet/bone = 30)
 	var/swooping = NONE
@@ -127,7 +128,7 @@ Difficulty: Medium
 			new /obj/effect/temp_visual/target(turf)
 
 /mob/living/simple_animal/hostile/megafauna/dragon/proc/fire_walls()
-	playsound(get_turf(src),'sound/magic/Fireball.ogg', 200, 1)
+	playsound(get_turf(src),'sound/magic/fireball.ogg', 200, 1)
 
 	for(var/d in GLOB.cardinal)
 		INVOKE_ASYNC(src, .proc/fire_wall, d)
@@ -193,6 +194,7 @@ Difficulty: Medium
 			return
 	animate(src, transform = matrix()*0.7, time = 7)
 	swooping |= SWOOP_INVULNERABLE
+	mouse_opacity = 0
 	sleep(7)
 	var/list/flame_hit = list()
 	while(swoop_duration > 0)
@@ -233,6 +235,7 @@ Difficulty: Medium
 	animate(src, transform = oldtransform, time = 5)
 	sleep(5)
 	swooping &= ~SWOOP_INVULNERABLE
+	mouse_opacity = initial(mouse_opacity)
 	icon_state = "dragon"
 	playsound(src.loc, 'sound/effects/meteorimpact.ogg', 200, 1)
 	for(var/mob/living/L in orange(1, src))
@@ -301,7 +304,7 @@ Difficulty: Medium
 
 /obj/effect/temp_visual/target/proc/fall(list/flame_hit)
 	var/turf/T = get_turf(src)
-	playsound(T,'sound/magic/Fireball.ogg', 80, 1)
+	playsound(T,'sound/magic/fleshtostone.ogg', 80, 1)
 	new /obj/effect/temp_visual/fireball(T)
 	sleep(duration)
 	if(ismineralturf(T))
@@ -313,7 +316,7 @@ Difficulty: Medium
 	for(var/mob/living/L in T.contents)
 		if(istype(L, /mob/living/simple_animal/hostile/megafauna/dragon))
 			continue
-		if(!islist(flame_hit) || !flame_hit[L])
+		if(islist(flame_hit) && !flame_hit[L])
 			L.adjustFireLoss(40)
 			to_chat(L, "<span class='userdanger'>You're hit by the drake's fire breath!</span>")
 			flame_hit[L] = TRUE

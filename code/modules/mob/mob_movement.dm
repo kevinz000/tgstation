@@ -109,10 +109,12 @@
 			mob.control_object.loc = get_step(mob.control_object,direct)
 	return
 
-
+#define MOVEMENT_DELAY_BUFFER 0.75
+#define MOVEMENT_DELAY_BUFFER_DELTA 1.25
 /client/Move(n, direct)
 	if(world.time < move_delay)
 		return 0
+	var/old_move_delay = move_delay
 	move_delay = world.time+world.tick_lag //this is here because Move() can now be called mutiple times per tick
 	if(!mob || !mob.loc)
 		return 0
@@ -159,7 +161,11 @@
 
 	//We are now going to move
 	moving = 1
-	move_delay = mob.movement_delay() + world.time
+	var/delay = mob.movement_delay()
+	if (old_move_delay + (delay*MOVEMENT_DELAY_BUFFER_DELTA) + MOVEMENT_DELAY_BUFFER > world.time)
+		move_delay = old_move_delay + delay
+	else
+		move_delay = delay + world.time
 
 	if(mob.confused)
 		if(mob.confused > 40)
@@ -178,10 +184,17 @@
 		if(mob.throwing)
 			mob.throwing.finalize(FALSE)
 
-	for(var/obj/O in mob)
-		O.on_mob_move(direct, src)
-
 	return .
+
+/mob/Moved(oldLoc, dir)
+	. = ..()
+	for(var/obj/O in contents)
+		O.on_mob_move(dir, src, oldLoc)
+
+/mob/setDir(newDir)
+	. = ..()
+	for(var/obj/O in contents)
+		O.on_mob_turn(newDir, src)
 
 
 ///Process_Grab()
@@ -209,10 +222,10 @@
 		return
 	var/mob/living/L = mob
 	switch(L.incorporeal_move)
-		if(1)
+		if(INCORPOREAL_MOVE_BASIC)
 			L.loc = get_step(L, direct)
 			L.setDir(direct)
-		if(2)
+		if(INCORPOREAL_MOVE_SHADOW)
 			if(prob(50))
 				var/locx
 				var/locy
@@ -250,7 +263,7 @@
 				new /obj/effect/temp_visual/dir_setting/ninja/shadow(mobloc, L.dir)
 				L.loc = get_step(L, direct)
 			L.setDir(direct)
-		if(3) //Incorporeal move, but blocked by holy-watered tiles and salt piles.
+		if(INCORPOREAL_MOVE_JAUNT) //Incorporeal move, but blocked by holy-watered tiles and salt piles.
 			var/turf/open/floor/stepTurf = get_step(L, direct)
 			for(var/obj/effect/decal/cleanable/salt/S in stepTurf)
 				to_chat(L, "<span class='warning'>[S] bars your passage!</span>")

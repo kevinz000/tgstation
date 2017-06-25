@@ -31,7 +31,7 @@
 		playsound(src, O.usesound, 50, 1)
 		if(!do_after(user, 30*O.toolspeed, target = src))
 			return
-		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/deconstruct.ogg', 50, 1)
 		user.visible_message("<span class='notice'>[user] unfastens [src].</span>", \
 							 "<span class='notice'>You unfasten [src].</span>")
 		var/obj/item/sign_backing/SB = new (get_turf(user))
@@ -103,7 +103,7 @@
 		var/turf/T = target
 		user.visible_message("<span class='notice'>[user] fastens [src] to [T].</span>", \
 							 "<span class='notice'>You attach the sign to [T].</span>")
-		playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(T, 'sound/items/deconstruct.ogg', 50, 1)
 		new sign_path(T)
 		user.drop_item()
 		qdel(src)
@@ -245,6 +245,12 @@
 	name = "\improper XENOBIOLOGY"
 	desc = "A sign labelling an area as a place where xenobiological entities are researched."
 	icon_state = "xenobio"
+
+/obj/structure/sign/xeno_warning_mining
+	name = "DANGEROUS ALIEN LIFE"
+	desc = "A sign that warns would-be travellers of hostile alien life in the vicinity."
+	icon = 'icons/obj/mining.dmi'
+	icon_state = "xeno_warning"
 
 /obj/structure/sign/enginesafety
 	name = "\improper ENGINEERING SAFETY"
