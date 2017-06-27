@@ -69,8 +69,6 @@ doesn't have toxins access.
 	. = ..()
 	stored_research = SSresearch.science_tech
 	matching_designs = list()
-	if(!id)
-		fix_noid_research_servers()
 	SyncRDevices()
 
 /obj/machinery/computer/rdconsole/attackby(obj/item/weapon/D, mob/user, params)
@@ -912,7 +910,6 @@ doesn't have toxins access.
 /obj/machinery/computer/rdconsole/robotics
 	name = "Robotics R&D Console"
 	desc = "A console used to interface with R&D tools."
-	id = 2
 	req_access = null
 	req_access_txt = "29"
 
@@ -925,9 +922,7 @@ doesn't have toxins access.
 /obj/machinery/computer/rdconsole/core
 	name = "Core R&D Console"
 	desc = "A console used to interface with R&D tools."
-	id = 1
 
 /obj/machinery/computer/rdconsole/experiment
 	name = "E.X.P.E.R.I-MENTOR R&D Console"
 	desc = "A console used to interface with R&D tools."
-	id = 3
