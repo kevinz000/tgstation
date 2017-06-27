@@ -869,12 +869,12 @@ doesn't have toxins access.
 			if(allowed(usr))
 				lock_console(usr)
 			else
-				to_chat(usr, "<span class='boldwarning'>Unauthorized Access.</span>"
+				to_chat(usr, "<span class='boldwarning'>Unauthorized Access.</span>")
 		if("Unlock")
 			if(allowed(usr))
 				unlock_console(usr)
 			else
-				to_chat(usr, "<span class='boldwarning'>Unauthorized Access.</span>"
+				to_chat(usr, "<span class='boldwarning'>Unauthorized Access.</span>")
 		if("Resync")
 			to_chat(usr, "<span class='boldnotice'>[bicon(src)]: Resyncing with nearby machinery.</span>")
 
