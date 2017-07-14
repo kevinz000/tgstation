@@ -102,14 +102,13 @@
 /atom/proc/handle_ricochet(obj/item/projectile/P)
 	return
 
-/atom/proc/CanPass(atom/movable/mover, turf/target, height=1.5)
-	return (!density || !height)
+/atom/proc/CanPass(atom/movable/mover, turf/target)
+	return !density
 
 /atom/proc/onCentcom()
 	var/turf/T = get_turf(src)
 	if(!T)
 		return FALSE
-
 
 	if(T.z == ZLEVEL_TRANSIT)
 		for(var/A in SSshuttle.mobile)
@@ -191,6 +190,19 @@
 
 /atom/proc/is_transparent()
 	return container_type & TRANSPARENT
+
+/atom/proc/is_injectable(allowmobs = TRUE)
+	if(isliving(src) && allowmobs)
+		var/mob/living/L = src
+		return L.can_inject()
+	if(container_type & OPENCONTAINER)
+		return TRUE
+	return container_type & INJECTABLE
+
+/atom/proc/is_drawable(allowmobs = TRUE)
+	if(is_injectable(allowmobs)) //Everything that can be injected can also be drawn from, but not vice versa
+		return TRUE
+	return container_type & DRAWABLE
 
 /atom/proc/allow_drop()
 	return 1

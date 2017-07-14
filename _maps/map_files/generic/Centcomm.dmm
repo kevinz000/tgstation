@@ -1063,7 +1063,6 @@
 	dir = 8
 	},
 /obj/machinery/sleeper{
-	icon_state = "sleeper-open";
 	dir = 1
 	},
 /turf/open/floor/holofloor{
@@ -1080,7 +1079,6 @@
 /area/holodeck/rec_center/medical)
 "dn" = (
 /obj/machinery/sleeper{
-	icon_state = "sleeper-open";
 	dir = 1
 	},
 /turf/open/floor/holofloor{
@@ -2464,7 +2462,6 @@
 /area/ctf)
 "hf" = (
 /obj/machinery/power/emitter/energycannon{
-	icon_state = "emitter";
 	dir = 1
 	},
 /turf/open/floor/plating,
@@ -3523,11 +3520,7 @@
 	},
 /area/centcom/supply)
 "jZ" = (
-/obj/structure/closet/secure_closet{
-	anchored = 1;
-	name = "Contraband Locker";
-	req_access_txt = "19"
-	},
+/obj/structure/closet/secure_closet/contraband/heads,
 /turf/open/floor/plasteel/vault{
 	dir = 8
 	},
@@ -4446,10 +4439,7 @@
 	name = "Shower"
 	},
 /obj/item/weapon/soap/deluxe,
-/obj/machinery/atmospherics/components/unary/vent_pump{
-	dir = 2;
-	on = 1
-	},
+/obj/machinery/atmospherics/components/unary/vent_pump/on,
 /turf/open/floor/plasteel/white,
 /area/centcom/ferry)
 "ml" = (
@@ -4569,7 +4559,7 @@
 	dir = 4;
 	pixel_x = 11
 	},
-/obj/structure/mirror/magic/badmin{
+/obj/structure/mirror{
 	pixel_x = 28
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -5079,9 +5069,8 @@
 	color = "#596479";
 	dir = 1
 	},
-/obj/machinery/atmospherics/components/unary/vent_pump{
-	dir = 8;
-	on = 1
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 8
 	},
 /turf/open/floor/plasteel/grimy,
 /area/centcom/ferry)
@@ -5139,9 +5128,8 @@
 	},
 /area/centcom/ferry)
 "nV" = (
-/obj/machinery/atmospherics/components/unary/vent_pump{
-	dir = 4;
-	on = 1
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 4
 	},
 /turf/open/floor/wood,
 /area/centcom/ferry)
@@ -5221,7 +5209,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/structure/mirror/magic/badmin{
+/obj/structure/mirror{
 	pixel_x = 28
 	},
 /turf/open/floor/plasteel/vault{
@@ -5338,9 +5326,8 @@
 	dir = 4;
 	pixel_x = 24
 	},
-/obj/machinery/atmospherics/components/unary/vent_pump{
-	dir = 8;
-	on = 1
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 8
 	},
 /turf/open/floor/plasteel/grimy,
 /area/centcom/ferry)
@@ -6319,9 +6306,8 @@
 /obj/machinery/computer/security/telescreen/entertainment{
 	pixel_x = -32
 	},
-/obj/machinery/atmospherics/components/unary/vent_pump{
-	dir = 4;
-	on = 1
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 4
 	},
 /obj/machinery/light{
 	dir = 8
@@ -6471,9 +6457,8 @@
 	},
 /area/centcom/ferry)
 "qN" = (
-/obj/machinery/atmospherics/components/unary/vent_pump{
-	dir = 8;
-	on = 1
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 8
 	},
 /turf/open/floor/plasteel/vault{
 	dir = 8
@@ -6812,9 +6797,8 @@
 /area/centcom/ferry)
 "rG" = (
 /obj/machinery/computer/monitor,
-/obj/machinery/atmospherics/components/unary/vent_pump{
-	dir = 1;
-	on = 1
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 1
 	},
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/cable/white{
@@ -7116,9 +7100,8 @@
 /turf/open/floor/wood,
 /area/centcom/ferry)
 "so" = (
-/obj/machinery/atmospherics/components/unary/vent_pump{
-	dir = 1;
-	on = 1
+/obj/machinery/atmospherics/components/unary/vent_pump/on{
+	dir = 1
 	},
 /turf/open/floor/wood,
 /area/centcom/ferry)
@@ -9222,7 +9205,6 @@
 /area/centcom/control)
 "xK" = (
 /obj/machinery/sleeper{
-	icon_state = "sleeper-open";
 	dir = 4
 	},
 /obj/effect/turf_decal/stripes/line{
@@ -9243,7 +9225,6 @@
 /area/centcom/control)
 "xM" = (
 /obj/machinery/sleeper{
-	icon_state = "sleeper-open";
 	dir = 8
 	},
 /obj/effect/turf_decal/stripes/line{
@@ -11110,7 +11091,6 @@
 	pixel_x = -12
 	},
 /obj/structure/mirror{
-	desc = "Mirror mirror on the wall, who is the most robust of them all?";
 	pixel_x = -28
 	},
 /turf/open/floor/plasteel/whitered/corner{
@@ -11145,7 +11125,6 @@
 	pixel_x = 11
 	},
 /obj/structure/mirror{
-	desc = "Mirror mirror on the wall, who is the most robust of them all?";
 	pixel_x = 28
 	},
 /turf/open/floor/plasteel/whitegreen/corner{
@@ -11177,7 +11156,6 @@
 	pixel_x = -12
 	},
 /obj/structure/mirror{
-	desc = "Mirror mirror on the wall, who is the most robust of them all?";
 	pixel_x = -28
 	},
 /turf/open/floor/plasteel/white,
@@ -11271,7 +11249,6 @@
 	pixel_x = 11
 	},
 /obj/structure/mirror{
-	desc = "Mirror mirror on the wall, who is the most robust of them all?";
 	pixel_x = 28
 	},
 /turf/open/floor/plasteel/white,
@@ -11314,7 +11291,6 @@
 	pixel_x = -12
 	},
 /obj/structure/mirror{
-	desc = "Mirror mirror on the wall, who is the most robust of them all?";
 	pixel_x = -28
 	},
 /turf/open/floor/plasteel/whitered/corner{
@@ -11359,7 +11335,6 @@
 	pixel_x = 11
 	},
 /obj/structure/mirror{
-	desc = "Mirror mirror on the wall, who is the most robust of them all?";
 	pixel_x = 28
 	},
 /turf/open/floor/plasteel/whitegreen/corner,
@@ -11381,7 +11356,6 @@
 	pixel_x = -12
 	},
 /obj/structure/mirror{
-	desc = "Mirror mirror on the wall, who is the most robust of them all?";
 	pixel_x = -28
 	},
 /turf/open/floor/plasteel/whitered/side{
@@ -11462,7 +11436,6 @@
 	pixel_x = 11
 	},
 /obj/structure/mirror{
-	desc = "Mirror mirror on the wall, who is the most robust of them all?";
 	pixel_x = 28
 	},
 /turf/open/floor/plasteel/whitegreen/side{
@@ -12665,7 +12638,6 @@
 /area/centcom/evac)
 "Gt" = (
 /obj/machinery/sleeper{
-	icon_state = "sleeper-open";
 	dir = 8
 	},
 /turf/open/floor/mineral/titanium/blue,
@@ -14452,6 +14424,9 @@
 /turf/open/floor/plasteel/vault{
 	dir = 5
 	},
+/area/centcom/evac)
+"Mi" = (
+/turf/closed/wall/mineral/titanium/nodiagonal,
 /area/centcom/evac)
 
 (1,1,1) = {"
@@ -41153,7 +41128,7 @@ Gs
 GE
 Gs
 GV
-FN
+Mi
 FN
 FN
 Hl
@@ -54211,9 +54186,9 @@ ru
 lJ
 vX
 qA
-wL
-wL
-wL
+ry
+ry
+ry
 qA
 yp
 lJ
@@ -54982,9 +54957,9 @@ ru
 lJ
 wa
 qA
-wL
-wL
-wL
+ry
+ry
+ry
 qA
 ys
 mU
@@ -59358,7 +59333,7 @@ it
 yA
 yI
 lA
-zf
+Ki
 zt
 it
 zH

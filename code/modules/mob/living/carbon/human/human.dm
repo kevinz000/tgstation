@@ -84,10 +84,6 @@
 				stat("Tank Pressure", internal.air_contents.return_pressure())
 				stat("Distribution Pressure", internal.distribute_pressure)
 
-		var/mob/living/simple_animal/borer/B = has_brain_worms()
-		if(B && B.controlling)
-			stat("Chemicals", B.chemicals)
-
 		if(mind)
 			if(mind.changeling)
 				stat("Chemical Storage", "[mind.changeling.chem_charges]/[mind.changeling.chem_storage]")
@@ -886,7 +882,7 @@
 		return 1
 	..()
 
-/mob/living/carbon/human/Bump(atom/A)
+/mob/living/carbon/human/Collide(atom/A)
 	..()
 	var/crashdir = get_dir(src, A)
 	var/obj/item/device/flightpack/FP = get_flightpack()

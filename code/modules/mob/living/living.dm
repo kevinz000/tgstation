@@ -80,19 +80,19 @@
 	staticOverlays["animal"] = staticOverlay
 
 
-//Generic Bump(). Override MobBump() and ObjBump() instead of this.
-/mob/living/Bump(atom/A, yes)
+//Generic Collide(). Override MobCollide() and ObjCollide() instead of this.
+/mob/living/Collide(atom/A)
 	if(..()) //we are thrown onto something
 		return
-	if (buckled || !yes || now_pushing)
+	if (buckled || now_pushing)
 		return
 	if(ismob(A))
 		var/mob/M = A
-		if(MobBump(M))
+		if(MobCollide(M))
 			return
 	if(isobj(A))
 		var/obj/O = A
-		if(ObjBump(O))
+		if(ObjCollide(O))
 			return
 	if(ismovableatom(A))
 		var/atom/movable/AM = A
@@ -104,7 +104,7 @@
 	last_bumped = world.time
 
 //Called when we bump onto a mob
-/mob/living/proc/MobBump(mob/M)
+/mob/living/proc/MobCollide(mob/M)
 	//Even if we don't push/swap places, we "touched" them, so spread fire
 	spreadFire(M)
 
@@ -174,7 +174,7 @@
 				return 1
 
 //Called when we bump onto an obj
-/mob/living/proc/ObjBump(obj/O)
+/mob/living/proc/ObjCollide(obj/O)
 	return
 
 //Called when we want to push an atom/movable
@@ -357,8 +357,13 @@
 		updatehealth() //then we check if the mob should wake up.
 		update_canmove()
 		update_sight()
+		clear_alert("oxy")
 		reload_fullscreen()
 		. = 1
+		if(mind)
+			for(var/S in mind.spell_list)
+				var/obj/effect/proc_holder/spell/spell = S
+				spell.updateButtonIcon()
 
 //proc used to completely heal a mob.
 /mob/living/proc/fully_heal(admin_revive = 0)
@@ -485,7 +490,7 @@
 						newdir = NORTH
 					else if(newdir == 12) //E + W
 						newdir = EAST
-				if((newdir in GLOB.cardinal) && (prob(50)))
+				if((newdir in GLOB.cardinals) && (prob(50)))
 					newdir = turn(get_dir(T, src.loc), 180)
 				if(!blood_exists)
 					new /obj/effect/decal/cleanable/trail_holder(src.loc)
@@ -661,13 +666,13 @@
 		else
 			final_where = where
 
-		if(!what.mob_can_equip(who, src, final_where, TRUE))
+		if(!what.mob_can_equip(who, src, final_where, TRUE, TRUE))
 			to_chat(src, "<span class='warning'>\The [what.name] doesn't fit in that place!</span>")
 			return
 
 		visible_message("<span class='notice'>[src] tries to put [what] on [who].</span>")
 		if(do_mob(src, who, what.equip_delay_other))
-			if(what && Adjacent(who) && what.mob_can_equip(who, src, final_where, TRUE))
+			if(what && Adjacent(who) && what.mob_can_equip(who, src, final_where, TRUE, TRUE))
 				if(temporarilyRemoveItemFromInventory(what))
 					if(where_list)
 						if(!who.put_in_hand(what, where_list[2]))
@@ -888,7 +893,7 @@
 		ExtinguishMob()
 
 //Share fire evenly between the two mobs
-//Called in MobBump() and Crossed()
+//Called in MobCollide() and Crossed()
 /mob/living/proc/spreadFire(mob/living/L)
 	if(!istype(L))
 		return
