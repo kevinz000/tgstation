@@ -15,7 +15,6 @@
 	var/status = 0
 	var/obj/item/weapon/stock_parts/cell/high/cell
 	var/hitcost = 1000
-	var/throw_hit_chance = 35
 
 /obj/item/weapon/melee/baton/get_cell()
 	return cell
@@ -27,12 +26,6 @@
 /obj/item/weapon/melee/baton/Initialize()
 	. = ..()
 	update_icon()
-
-/obj/item/weapon/melee/baton/throw_impact(atom/hit_atom)
-	..()
-	//Only mob/living types have stun handling
-	if(status && prob(throw_hit_chance) && iscarbon(hit_atom))
-		baton_stun(hit_atom)
 
 /obj/item/weapon/melee/baton/loaded/Initialize() //this one starts with a cell pre-installed.
 	cell = new(src)
@@ -185,7 +178,6 @@
 	throwforce = 5
 	stunforce = 100
 	hitcost = 2000
-	throw_hit_chance = 10
 	slot_flags = SLOT_BACK
 	var/obj/item/device/assembly/igniter/sparkler = 0
 
