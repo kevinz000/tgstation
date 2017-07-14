@@ -19,7 +19,10 @@
 		var/transferred = min(needed, avail)
 		GC.amount_left -= transferred
 		glue_left += transferred
-		to_chat(user, "<span class='notice'>You transfer [transferred] units of GLOO from \the [I] to \the [src]</span>")
+		if(transferred > 0)
+			to_chat(user, "<span class='notice'>You transfer [transferred] units of GLOO from \the [I] to \the [src]</span>")
+		else
+			to_chat(user, "<span class='warning'>\The [src] is full!</span>")
 	else
 		. = ..()
 
@@ -73,11 +76,13 @@
 	name = "glob of glue"
 	desc = "A glob of sticky white liquid."
 	icon_state = "gloo"
+	damage = 0
+	nodamage = TRUE
 	range = 8
 	var/turf/dt
 
 /obj/item/projectile/gloo/Range()
-	if(loc == dt)
+	if((loc == dt) && !QDELETED(dt))
 		Bump(dt, TRUE)
 
 /obj/item/projectile/gloo/on_hit(atom/target)
@@ -164,8 +169,8 @@
 	name = "gloo wall"
 	desc = "A wall made out of hardened gloo. Probably not strong enough to keep out a greyshirt, but good enough to contain air."
 	icon_state = "gloo_wall"
-	obj_integrity = 30
-	max_integrity = 30
+	obj_integrity = 20
+	max_integrity = 20
 	density = TRUE
 	opacity = FALSE
 
