@@ -103,14 +103,12 @@
 
 /obj/item/projectile/gloo/proc/gloo_turf(turf/T)
 	if(isspaceturf(T))
-		var/obj/structure/gloo_wall/GW = locate(/obj/structure/gloo_wall) in T
-		if(!GW)
-			new /obj/structure/gloo_wall/temporary/floor(T)
-		else
-			GW.obj_integrity = Clamp(GW.obj_integrity + 10, 0, GW.max_integrity)
+		handle_gloo_spaceturf(T)
 	else if(isclosedturf(T))
 		structure(T)
 	return qdel(src)
+
+/obj/item/projectile/gloo/proc/handle_gloo_spaceturf(turf/T)
 
 
 /obj/item/projectile/gloo/proc/impact_object(obj/O)
