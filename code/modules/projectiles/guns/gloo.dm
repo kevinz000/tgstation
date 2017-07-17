@@ -189,8 +189,18 @@
 /obj/structure/gloo_wall/BlockSuperconductivity()
 	return TRUE
 
-/obj/structure/gloo_wall/temporary/floor
+/turf/open/floor/gloo
 	name = "gloo covering"
 	desc = "A covering of gloo on the floor."
 	alpha = 127
-	layer = TURF_LAYER
+	var/integrity = 20
+	var/max_integrity = 20
+
+/turf/open/floor/gloo/attackby(obj/item/W, mob/user, params)
+	if(W.force)
+		visible_message("<span class='boldwarning'>[user] smashes \the [src] with \the [W]!</span>")
+		integrity -= W.force
+		if(integrity <= 0)
+			changeTurf(baseturf)
+	else
+		visible_message("<span class='warning'>[user] futilely hits \the [src] with \the [W]...</span>")
