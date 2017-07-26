@@ -48,8 +48,11 @@
 	new /obj/effect/particle_effect/foam(loc)
 	return (TOXLOSS)
 
-/obj/item/weapon/soap/Crossed(AM as mob|obj)
+/obj/item/weapon/soap/Crossed(AM as mob|obj, oldloc)
 	if (istype(AM, /mob/living/carbon))
+		var/atom/A = oldloc
+		if(get_turf(A) == get_turf(src))
+			return
 		var/mob/living/carbon/M = AM
 		M.slip(80, src)
 

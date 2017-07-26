@@ -204,8 +204,11 @@
 	rate = 1.6
 	examine_line = "<span class='info'>It has a very slippery skin.</span>"
 
-/datum/plant_gene/trait/slip/on_cross(obj/item/weapon/reagent_containers/food/snacks/grown/G, atom/target)
+/datum/plant_gene/trait/slip/on_cross(obj/item/weapon/reagent_containers/food/snacks/grown/G, atom/target, oldloc)
 	if(iscarbon(target))
+		var/atom/A = oldloc
+		if(get_turf(A) == get_turf(src))
+			return
 		var/obj/item/seeds/seed = G.seed
 		var/mob/living/carbon/M = target
 

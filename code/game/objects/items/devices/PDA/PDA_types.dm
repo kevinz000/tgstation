@@ -7,8 +7,11 @@
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. The surface is coated with polytetrafluoroethylene and banana drippings."
 	ttone = "honk"
 
-/obj/item/device/pda/clown/Crossed(AM as mob|obj)
+/obj/item/device/pda/clown/Crossed(AM as mob|obj, oldloc)
 	if (istype(AM, /mob/living/carbon))
+		var/atom/A = oldloc
+		if(get_turf(A) == get_turf(src))
+			return
 		var/mob/living/carbon/M = AM
 		if(M.slip(120, src, NO_SLIP_WHEN_WALKING))
 			if (ishuman(M) && (M.real_name != src.owner))

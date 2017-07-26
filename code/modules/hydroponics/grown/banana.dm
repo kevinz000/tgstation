@@ -114,8 +114,11 @@
 	name = "synthesized banana peel"
 	desc = "A synthetic banana peel."
 
-/obj/item/weapon/grown/bananapeel/specialpeel/Crossed(AM)
+/obj/item/weapon/grown/bananapeel/specialpeel/Crossed(AM, oldloc)
 	if(iscarbon(AM))
+		var/atom/A = oldloc
+		if(get_turf(A) == get_turf(src))
+			return
 		var/mob/living/carbon/carbon = AM
 		if(carbon.slip(40, src, FALSE))
 			qdel(src)

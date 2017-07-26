@@ -124,10 +124,10 @@
 				T.on_consume(src, usr)
 	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/Crossed(atom/movable/AM)
+/obj/item/weapon/reagent_containers/food/snacks/grown/Crossed(atom/movable/AM, oldloc)
 	if(seed)
 		for(var/datum/plant_gene/trait/T in seed.genes)
-			T.on_cross(src, AM)
+			T.on_cross(src, AM, oldloc)
 	..()
 
 
