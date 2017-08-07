@@ -262,7 +262,7 @@
 		removed = env.remove(gasefficency * env.total_moles())
 	else
 		// Pass all the gas related code an empty gas container
-		removed = new()
+		removed = new
 
 	//Check if we have gas.
 	if(!removed || !removed.total_moles() || isspaceturf(T))
