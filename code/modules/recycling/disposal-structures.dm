@@ -327,7 +327,7 @@
 				stored.anchored = TRUE
 				stored.update_icon()
 		else
-			for(var/D in GLOB.cardinal)
+			for(var/D in GLOB.cardinals)
 				if(D & dpdir)
 					var/obj/structure/disposalpipe/broken/P = new(src.loc)
 					P.setDir(D)
@@ -342,7 +342,7 @@
 /obj/structure/disposalpipe/shuttleRotate(rotation)
 	..()
 	var/new_dpdir = 0
-	for(var/D in GLOB.cardinal)
+	for(var/D in GLOB.cardinals)
 		if(dpdir & D)
 			new_dpdir = new_dpdir | angle2dir(rotation+dir2angle(D))
 	dpdir = new_dpdir
@@ -700,7 +700,7 @@
 			playsound(src.loc, I.usesound, 50, 1)
 			to_chat(user, "<span class='notice'>You attach the screws around the power connection.</span>")
 
-	else if(istype(I,/obj/item/weapon/weldingtool) && mode==1)
+	else if(istype(I, /obj/item/weapon/weldingtool) && mode==1)
 		var/obj/item/weapon/weldingtool/W = I
 		if(W.remove_fuel(0,user))
 			playsound(src.loc, 'sound/items/welder2.ogg', 100, 1)

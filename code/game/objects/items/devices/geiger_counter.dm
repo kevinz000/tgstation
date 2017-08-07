@@ -9,6 +9,8 @@
 	desc = "A handheld device used for detecting and measuring radiation pulses."
 	icon_state = "geiger_off"
 	item_state = "multitool"
+	lefthand_file = 'icons/mob/inhands/equipment/tools_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/equipment/tools_righthand.dmi'
 	w_class = WEIGHT_CLASS_SMALL
 	slot_flags = SLOT_BELT
 	materials = list(MAT_METAL = 150, MAT_GLASS = 150)
@@ -144,12 +146,13 @@
 	update_icon()
 
 /obj/item/device/geiger_counter/emag_act(mob/user)
-	if(!emagged)
-		if(scanning)
-			to_chat(user, "<span class='warning'>Turn off [src] before you perform this action!</span>")
-			return 0
-		to_chat(user, "<span class='warning'>You override [src]'s radiation storing protocols. It will now generate small doses of radiation, and stored rads are now projected into creatures you scan.</span>")
-		emagged = TRUE
+	if(emagged)
+		return
+	if(scanning)
+		to_chat(user, "<span class='warning'>Turn off [src] before you perform this action!</span>")
+		return 0
+	to_chat(user, "<span class='warning'>You override [src]'s radiation storing protocols. It will now generate small doses of radiation, and stored rads are now projected into creatures you scan.</span>")
+	emagged = TRUE
 
 #undef RAD_LEVEL_NORMAL
 #undef RAD_LEVEL_MODERATE

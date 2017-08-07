@@ -363,17 +363,6 @@
 	if(!override)
 		qdel(src)
 
-/obj/structure/spacevine/attackby(obj/item/weapon/W, mob/user, params)
-
-	if(istype(W, /obj/item/weapon/scythe))
-		user.changeNext_move(CLICK_CD_MELEE)
-		for(var/obj/structure/spacevine/B in orange(1,src))
-			B.take_damage(W.force * 4, BRUTE, "melee", 1)
-		return
-	else
-		return ..()
-
-
 /obj/structure/spacevine/attacked_by(obj/item/I, mob/living/user)
 	var/damage_dealt = I.force
 	if(I.is_sharp())
@@ -553,7 +542,7 @@
 		buckle_mob(V, 1)
 
 /obj/structure/spacevine/proc/spread()
-	var/direction = pick(GLOB.cardinal)
+	var/direction = pick(GLOB.cardinals)
 	var/turf/stepturf = get_step(src,direction)
 	for(var/datum/spacevine_mutation/SM in mutations)
 		SM.on_spread(src, stepturf)
@@ -579,7 +568,7 @@
 	if(!override)
 		qdel(src)
 
-/obj/structure/spacevine/CanPass(atom/movable/mover, turf/target, height=0)
+/obj/structure/spacevine/CanPass(atom/movable/mover, turf/target)
 	if(isvineimmune(mover))
 		. = TRUE
 	else

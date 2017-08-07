@@ -323,19 +323,10 @@
 /atom/proc/auto_turn()
 	//Automatically turns based on nearby walls.
 	var/turf/closed/wall/T = null
-	for(var/i = 1, i <= 8; i += i)
+	for(var/i in GLOB.cardinals)
 		T = get_ranged_target_turf(src, i, 1)
 		if(istype(T))
-			//If someone knows a better way to do this, let me know. -Giacom
-			switch(i)
-				if(NORTH)
-					src.setDir(SOUTH)
-				if(SOUTH)
-					src.setDir(NORTH)
-				if(WEST)
-					src.setDir(EAST)
-				if(EAST)
-					src.setDir(WEST)
+			setDir(turn(i, 180))
 			break
 
 //Return a working camera that can see a given mob
@@ -381,20 +372,6 @@
 		set_light(AI_CAMERA_LUMINOSITY)
 	else
 		set_light(0)
-
-/obj/machinery/camera/portable //Cameras which are placed inside of things, such as helmets.
-	var/turf/prev_turf
-
-/obj/machinery/camera/portable/Initialize()
-	. = ..()
-	assembly.state = 0 //These cameras are portable, and so shall be in the portable state if removed.
-	assembly.anchored = FALSE
-	assembly.update_icon()
-
-/obj/machinery/camera/portable/process() //Updates whenever the camera is moved.
-	if(GLOB.cameranet && get_turf(src) != prev_turf)
-		GLOB.cameranet.updatePortableCamera(src)
-		prev_turf = get_turf(src)
 
 /obj/machinery/camera/get_remote_view_fullscreens(mob/user)
 	if(view_range == short_range) //unfocused

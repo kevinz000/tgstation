@@ -13,6 +13,8 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "banner"
 	item_state = "banner"
+	lefthand_file = 'icons/mob/inhands/equipment/banners_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/equipment/banners_righthand.dmi'
 	desc = "A banner with Nanotrasen's logo on it."
 	slowdown = 2
 	throw_speed = 0
@@ -585,10 +587,10 @@
 /obj/effect/ctf/ammo/Crossed(atom/movable/AM)
 	reload(AM)
 
-/obj/effect/ctf/ammo/Bump(atom/movable/AM)
+/obj/effect/ctf/ammo/Collide(atom/movable/AM)
 	reload(AM)
 
-/obj/effect/ctf/ammo/Bumped(atom/movable/AM)
+/obj/effect/ctf/ammo/CollidedWith(atom/movable/AM)
 	reload(AM)
 
 /obj/effect/ctf/ammo/proc/reload(mob/living/M)

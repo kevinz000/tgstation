@@ -80,31 +80,31 @@
 	staticOverlays["animal"] = staticOverlay
 
 
-//Generic Bump(). Override MobBump() and ObjBump() instead of this.
-/mob/living/Bump(atom/A, yes)
+//Generic Collide(). Override MobCollide() and ObjCollide() instead of this.
+/mob/living/Collide(atom/A)
 	if(..()) //we are thrown onto something
 		return
-	if (buckled || !yes || now_pushing)
+	if (buckled || now_pushing)
 		return
 	if(ismob(A))
 		var/mob/M = A
-		if(MobBump(M))
+		if(MobCollide(M))
 			return
 	if(isobj(A))
 		var/obj/O = A
-		if(ObjBump(O))
+		if(ObjCollide(O))
 			return
 	if(ismovableatom(A))
 		var/atom/movable/AM = A
 		if(PushAM(AM))
 			return
 
-/mob/living/Bumped(atom/movable/AM)
+/mob/living/CollidedWith(atom/movable/AM)
 	..()
 	last_bumped = world.time
 
 //Called when we bump onto a mob
-/mob/living/proc/MobBump(mob/M)
+/mob/living/proc/MobCollide(mob/M)
 	//Even if we don't push/swap places, we "touched" them, so spread fire
 	spreadFire(M)
 
@@ -135,7 +135,7 @@
 		//the puller can always swap with its victim if on grab intent
 		if(M.pulledby == src && a_intent == INTENT_GRAB)
 			mob_swap = 1
-		//restrained people act if they were on 'help' intent to prevent a person being pulled from being seperated from their puller
+		//restrained people act if they were on 'help' intent to prevent a person being pulled from being separated from their puller
 		else if((M.restrained() || M.a_intent == INTENT_HELP) && (restrained() || a_intent == INTENT_HELP))
 			mob_swap = 1
 		if(mob_swap)
@@ -174,7 +174,7 @@
 				return 1
 
 //Called when we bump onto an obj
-/mob/living/proc/ObjBump(obj/O)
+/mob/living/proc/ObjCollide(obj/O)
 	return
 
 //Called when we want to push an atom/movable
@@ -357,7 +357,7 @@
 		updatehealth() //then we check if the mob should wake up.
 		update_canmove()
 		update_sight()
-		clear_alert("oxy")
+		clear_alert("not_enough_oxy")
 		reload_fullscreen()
 		. = 1
 		if(mind)
@@ -374,6 +374,7 @@
 	setBrainLoss(0)
 	setStaminaLoss(0, 0)
 	SetUnconscious(0, FALSE)
+	set_disgust(0)
 	SetStun(0, FALSE)
 	SetKnockdown(0, FALSE)
 	SetSleeping(0, FALSE)
@@ -412,7 +413,7 @@
 		if(client)
 			to_chat(src, "[src]'s Metainfo:<br>[client.prefs.metadata]")
 		else
-			to_chat(src, "[src] does not have any stored infomation!")
+			to_chat(src, "[src] does not have any stored information!")
 	else
 		to_chat(src, "OOC Metadata is not supported by this server!")
 
@@ -490,7 +491,7 @@
 						newdir = NORTH
 					else if(newdir == 12) //E + W
 						newdir = EAST
-				if((newdir in GLOB.cardinal) && (prob(50)))
+				if((newdir in GLOB.cardinals) && (prob(50)))
 					newdir = turn(get_dir(T, src.loc), 180)
 				if(!blood_exists)
 					new /obj/effect/decal/cleanable/trail_holder(src.loc)
@@ -893,7 +894,7 @@
 		ExtinguishMob()
 
 //Share fire evenly between the two mobs
-//Called in MobBump() and Crossed()
+//Called in MobCollide() and Crossed()
 /mob/living/proc/spreadFire(mob/living/L)
 	if(!istype(L))
 		return

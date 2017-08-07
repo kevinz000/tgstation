@@ -61,11 +61,8 @@
 	..()
 	SSair.hotspots += src
 	perform_exposure()
-	setDir(pick(GLOB.cardinal))
+	setDir(pick(GLOB.cardinals))
 	air_update_turf()
-
-/obj/effect/hotspot/make_frozen_visual()
-	return	//you take my fun i take yours
 
 /obj/effect/hotspot/proc/perform_exposure()
 	var/turf/open/location = loc

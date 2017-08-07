@@ -460,10 +460,10 @@ GLOBAL_PROTECT(AdminProcCallCount)
 			id.update_label()
 
 			if(worn)
-				if(istype(worn,/obj/item/device/pda))
+				if(istype(worn, /obj/item/device/pda))
 					worn:id = id
 					id.loc = worn
-				else if(istype(worn,/obj/item/weapon/storage/wallet))
+				else if(istype(worn, /obj/item/weapon/storage/wallet))
 					worn:front_id = id
 					id.loc = worn
 					worn.update_icon()
@@ -513,7 +513,7 @@ GLOBAL_PROTECT(AdminProcCallCount)
 			areas_all.Add(A.type)
 
 	for(var/obj/machinery/power/apc/APC in GLOB.apcs_list)
-		var/area/A = get_area(APC)
+		var/area/A = APC.area
 		if(!(A.type in areas_with_APC))
 			areas_with_APC.Add(A.type)
 

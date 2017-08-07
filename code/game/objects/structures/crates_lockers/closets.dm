@@ -38,7 +38,7 @@
 /obj/structure/closet/Initialize(mapload)
 	if(mapload && !opened)		// if closed, any item at the crate's loc is put in the contents
 		addtimer(CALLBACK(src, .proc/take_contents), 0)
-	..()
+	. = ..()
 	update_icon()
 	PopulateContents()
 
@@ -81,8 +81,8 @@
 	else if(secure && !opened)
 		to_chat(user, "<span class='notice'>Alt-click to [locked ? "unlock" : "lock"].</span>")
 
-/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=0)
-	if(height == 0 || wall_mounted)
+/obj/structure/closet/CanPass(atom/movable/mover, turf/target)
+	if(wall_mounted)
 		return 1
 	return !density
 
@@ -415,7 +415,7 @@
 		user.visible_message("<span class='warning'>Sparks fly from [src]!</span>",
 						"<span class='warning'>You scramble [src]'s lock, breaking it open!</span>",
 						"<span class='italics'>You hear a faint electrical spark.</span>")
-		playsound(src.loc, 'sound/effects/sparks4.ogg', 50, 1)
+		playsound(src, "sparks", 50, 1)
 		broken = 1
 		locked = FALSE
 		update_icon()

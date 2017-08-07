@@ -16,7 +16,7 @@
 	var/spreadIntoAdjacentChance = 60
 	var/obj/item/seeds/myseed = /obj/item/seeds/glowshroom
 	var/static/list/blacklisted_glowshroom_turfs = typecacheof(list(
-	/turf/open/floor/plating/lava,
+	/turf/open/lava,
 	/turf/open/floor/plating/beach/water))
 
 /obj/structure/glowshroom/glowcap
@@ -108,7 +108,7 @@
 			var/placeCount = 1
 			for(var/obj/structure/glowshroom/shroom in newLoc)
 				shroomCount++
-			for(var/wallDir in GLOB.cardinal)
+			for(var/wallDir in GLOB.cardinals)
 				var/turf/isWall = get_step(newLoc,wallDir)
 				if(isWall.density)
 					placeCount++
@@ -129,7 +129,7 @@
 /obj/structure/glowshroom/proc/CalcDir(turf/location = loc)
 	var/direction = 16
 
-	for(var/wallDir in GLOB.cardinal)
+	for(var/wallDir in GLOB.cardinals)
 		var/turf/newTurf = get_step(location,wallDir)
 		if(newTurf.density)
 			direction |= wallDir

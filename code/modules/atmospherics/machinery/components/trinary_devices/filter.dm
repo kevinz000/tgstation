@@ -12,12 +12,12 @@
 /obj/machinery/atmospherics/components/trinary/filter/flipped
 	icon_state = "filter_off_f"
 	flipped = 1
-	
+
 // These two filter types have critical_machine flagged to on and thus causes the area they are in to be exempt from the Grid Check event.
-	
+
 /obj/machinery/atmospherics/components/trinary/filter/critical
 	critical_machine = TRUE
-	
+
 /obj/machinery/atmospherics/components/trinary/filter/flipped/critical
 	critical_machine = TRUE
 
@@ -28,13 +28,12 @@
 		radio_connection = SSradio.add_object(src, frequency, GLOB.RADIO_ATMOSIA)
 
 /obj/machinery/atmospherics/components/trinary/filter/Destroy()
-	if(SSradio)
-		SSradio.remove_object(src,frequency)
+	SSradio.remove_object(src,frequency)
 	return ..()
 
 /obj/machinery/atmospherics/components/trinary/filter/update_icon()
 	cut_overlays()
-	for(var/direction in GLOB.cardinal)
+	for(var/direction in GLOB.cardinals)
 		if(direction & initialize_directions)
 			var/obj/machinery/atmospherics/node = findConnecting(direction)
 			if(node)

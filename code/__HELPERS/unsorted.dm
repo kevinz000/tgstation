@@ -48,7 +48,7 @@ Location where the teleport begins, target that will teleport, distance to go, d
 Random error in tile placement x, error in tile placement y, and block offset.
 Block offset tells the proc how to place the box. Behind teleport location, relative to starting location, forward, etc.
 Negative values for offset are accepted, think of it in relation to North, -x is west, -y is south. Error defaults to positive.
-Turf and target are seperate in case you want to teleport some distance from a turf the target is not standing on or something.
+Turf and target are separate in case you want to teleport some distance from a turf the target is not standing on or something.
 */
 
 	var/dirx = 0//Generic location finding variable.
@@ -442,19 +442,23 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/turf/target = locate(A.x, A.y, A.z)
 	if(!A || !target)
 		return 0
-		//since NORTHEAST == NORTH & EAST, etc, doing it this way allows for diagonal mass drivers in the future
+		//since NORTHEAST == NORTH|EAST, etc, doing it this way allows for diagonal mass drivers in the future
 		//and isn't really any more complicated
 
-		// Note diagonal directions won't usually be accurate
+	var/x = A.x
+	var/y = A.y
 	if(direction & NORTH)
-		target = locate(target.x, world.maxy, target.z)
-	if(direction & SOUTH)
-		target = locate(target.x, 1, target.z)
+		y = world.maxy
+	else if(direction & SOUTH) //you should not have both NORTH and SOUTH in the provided direction
+		y = 1
 	if(direction & EAST)
-		target = locate(world.maxx, target.y, target.z)
-	if(direction & WEST)
-		target = locate(1, target.y, target.z)
-	return target
+		x = world.maxx
+	else if(direction & WEST)
+		x = 1
+	if(direction in GLOB.diagonals) //let's make sure it's accurately-placed for diagonals
+		var/lowest_distance_to_map_edge = min(abs(x - A.x), abs(y - A.y))
+		return get_ranged_target_turf(A, direction, lowest_distance_to_map_edge)
+	return locate(x,y,A.z)
 
 // returns turf relative to A in given direction at set range
 // result is bounded to map size
@@ -466,11 +470,11 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/y = A.y
 	if(direction & NORTH)
 		y = min(world.maxy, y + range)
-	if(direction & SOUTH)
+	else if(direction & SOUTH)
 		y = max(1, y - range)
 	if(direction & EAST)
 		x = min(world.maxx, x + range)
-	if(direction & WEST)
+	else if(direction & WEST) //if you have both EAST and WEST in the provided direction, then you're gonna have issues
 		x = max(1, x - range)
 
 	return locate(x,y,A.z)
@@ -487,19 +491,26 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/y=arcsin(x/sqrt(1+x*x))
 	return y
 
-/atom/proc/GetAllContents()
+/atom/proc/GetAllContents(list/ignore_typecache)
 	var/list/processing_list = list(src)
 	var/list/assembled = list()
+	if(ignore_typecache)		//If there's a typecache, use it.
+		while(processing_list.len)
+			var/atom/A = processing_list[1]
+			processing_list -= A
+			if(ignore_typecache[A.type])
+				continue
+			processing_list |= (A.contents - assembled)
+			assembled |= A
 
-	while(processing_list.len)
-		var/atom/A = processing_list[1]
-		processing_list -= A
+	else		//If there's none, only make this check once for performance.
+		while(processing_list.len)
+			var/atom/A = processing_list[1]
+			processing_list -= A
 
-		for(var/atom/a in A)
-			if(!(a in assembled))
-				processing_list |= a
+			processing_list |= (A.contents - assembled)
 
-		assembled |= A
+			assembled |= A
 
 	return assembled
 
@@ -593,6 +604,18 @@ Turf and target are seperate in case you want to teleport some distance from a t
 /area/proc/addSorted()
 	GLOB.sortedAreas.Add(src)
 	sortTim(GLOB.sortedAreas, /proc/cmp_name_asc)
+
+//Takes: Area type as a text string from a variable.
+//Returns: Instance for the area in the world.
+/proc/get_area_instance_from_text(areatext)
+	var/areainstance = null
+	if(istext(areatext))
+		areatext = text2path(areatext)
+	for(var/V in GLOB.sortedAreas)
+		var/area/A = V
+		if(A.type == areatext)
+			areainstance = V
+	return areainstance
 
 //Takes: Area type as text string or as typepath OR an instance of the area.
 //Returns: A list of all areas of that type in the world.

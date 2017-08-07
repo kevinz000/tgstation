@@ -3,6 +3,8 @@
 	desc = "A device used to project your voice. Loudly."
 	icon_state = "megaphone"
 	item_state = "radio"
+	lefthand_file = 'icons/mob/inhands/misc/devices_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/misc/devices_righthand.dmi'
 	w_class = WEIGHT_CLASS_SMALL
 	siemens_coefficient = 1
 	var/spamcheck = 0
@@ -18,6 +20,8 @@
 		return voicespan
 
 /obj/item/device/megaphone/emag_act(mob/user)
+	if(emagged)
+		return
 	to_chat(user, "<span class='warning'>You overload \the [src]'s voice synthesizer.</span>")
 	emagged = TRUE
 	voicespan = list(SPAN_REALLYBIG, "userdanger")

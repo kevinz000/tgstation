@@ -72,7 +72,7 @@
 	//cache some vars
 	var/list/atmos_adjacent_turfs = src.atmos_adjacent_turfs
 
-	for(var/direction in GLOB.cardinal)
+	for(var/direction in GLOB.cardinals)
 		var/turf/open/enemy_tile = get_step(src, direction)
 		if(!istype(enemy_tile))
 			if (atmos_adjacent_turfs)
@@ -122,6 +122,8 @@
 
 /turf/open/proc/freon_gas_act()
 	for(var/obj/I in contents)
+		if(I.resistance_flags & FREEZE_PROOF)
+			return
 		if(!HAS_SECONDARY_FLAG(I, FROZEN)) //let it go
 			I.make_frozen_visual()
 	for(var/mob/living/L in contents)
