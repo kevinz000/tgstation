@@ -270,21 +270,23 @@
 	else
 		has_gas = TRUE
 
-	//Process negative effects.
-	if(power > POWER_PENALTY_THRESHOLD || damage > damage_penalty_point)
-		SM_autoprocess_lightning()
-		SM_autoprocess_anomaly()
-
 	//Process powerloss
 	SM_autoprocess_powerloss()
 
 	//Process radiation
 	SM_autoprocess_proximity()
 
+	//Process gasses
+	SM_autoprocess_gas(removed, env)
 
 	//Process damage.
 	if(takes_damage)
 		SM_autoprocess_damage(removed, T)
+
+	//Process negative effects.
+	if(power > POWER_PENALTY_THRESHOLD || damage > damage_penalty_point)
+		SM_autoprocess_lightning()
+		SM_autoprocess_anomaly()
 
 	//Process matter
 	SM_autoprocess_matter()
@@ -297,9 +299,6 @@
 
 	//Process temperature factor
 	SM_autoprocess_tempfactor()
-
-	//Process gasses
-	SM_autoprocess_gas(removed, env)
 
 	return TRUE
 
@@ -333,7 +332,7 @@
 	else
 		powerloss_dynamic_scaling = Clamp(powerloss_dynamic_scaling - 0.05,0, 1)
 	powerloss_inhibitor = Clamp(1-(powerloss_dynamic_scaling * Clamp(combined_gas/POWERLOSS_INHIBITION_MOLE_BOOST_THRESHOLD,1 ,1.5)),0 ,1)
-	power = max(((removed.temperature * temp_factor / T0C) * gasmix_power_ratio + power) * PROCESSING_HANDICAP, 0) //Total laser power plus an overload
+	power = max(((removed.temperature * temp_factor / T0C) * gasmix_power_ratio * PROCESSING_HANDICAP) + power, 0) //Total laser power plus an overload
 	//To figure out how much temperature to add each tick, consider that at one atmosphere's worth
 	//of pure oxygen, with all four lasers firing at standard energy and no N2 present, at room temperature
 	//that the device energy is around 2140. At that stage, we don't want too much heat to be put out
@@ -377,12 +376,15 @@
 				var/rads = DETONATION_RADS * sqrt( 1 / (get_dist(L, src) + 1) )
 				L.rad_act(rads)
 		explode()
+		return TRUE
+	return FALSE
 
 /obj/machinery/power/supermatter_shard/proc/SM_autoprocess_matter()
 	if(matter_power)
 		var/removed_matter = max((matter_power/MATTER_POWER_CONVERSION) * PROCESSING_HANDICAP, 40)
-		power = max((power + removed_matter) * PROCESSING_HANDICAP, 0)
+		power = max((power + removed_matter), 0)
 		matter_power = max(matter_power - removed_matter, 0)
+	return matter_power
 
 /obj/machinery/power/supermatter_shard/proc/SM_autoprocess_alert()
 	if(damage > warning_point) // while the core is still damaged and it's still worth noting its status
@@ -428,9 +430,9 @@
 		damage = min(damage_archived + (DAMAGE_HARDCAP * explosion_point),max((power-1600)/10, 0) + damage)
 	else
 		//causing damage
-		damage = max(damage + ((max(removed.temperature - ((T0C + HEAT_PENALTY_THRESHOLD)*dynamic_heat_resistance), 0) * mole_heat_penalty / 150 ) * DAMAGE_INCREASE_MULTIPLIER) * PROCESSING_HANDICAP, 0)
-		damage = max(damage + ((max(power - POWER_PENALTY_THRESHOLD, 0)/500) * DAMAGE_INCREASE_MULTIPLIER) * PROCESSING_HANDICAP, 0)
-		damage = max(damage + ((max(combined_gas - MOLE_PENALTY_THRESHOLD, 0)/80) * DAMAGE_INCREASE_MULTIPLIER) * PROCESSING_HANDICAP, 0)
+		damage = max(damage + ((max(removed.temperature - ((T0C + HEAT_PENALTY_THRESHOLD)*dynamic_heat_resistance), 0) * mole_heat_penalty / 150 ) * DAMAGE_INCREASE_MULTIPLIER * PROCESSING_HANDICAP), 0)
+		damage = max(damage + ((max(power - POWER_PENALTY_THRESHOLD, 0)/500) * DAMAGE_INCREASE_MULTIPLIER * PROCESSING_HANDICAP), 0)
+		damage = max(damage + ((max(combined_gas - MOLE_PENALTY_THRESHOLD, 0)/80) * DAMAGE_INCREASE_MULTIPLIER * PROCESSING_HANDICAP), 0)
 		//healing damage
 		if(has_gas)		//No gas you go kaboom.
 			if(combined_gas < MOLE_PENALTY_THRESHOLD)
