@@ -109,7 +109,7 @@
 	return qdel(src)
 
 /obj/item/projectile/gloo/proc/handle_gloo_spaceturf(turf/T)
-
+	new /turf/open/floor/gloo(T)
 
 /obj/item/projectile/gloo/proc/impact_object(obj/O)
 	structure(get_turf(O))
@@ -193,14 +193,51 @@
 	name = "gloo covering"
 	desc = "A covering of gloo on the floor."
 	alpha = 127
+	icon_state = "gloo"
 	var/integrity = 20
 	var/max_integrity = 20
 
 /turf/open/floor/gloo/attackby(obj/item/W, mob/user, params)
-	if(W.force)
+	if(istype(W, /obj/item/stack/rods) && (user.a_intent != INTENT_HARM))
+		var/obj/item/stack/rods/R = W
+		var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
+		var/obj/structure/lattice/catwalk/C = locate(/obj/structure/lattice/catwalk, src)
+		if(C)
+			to_chat(user, "<span class='warning'>There is already a catwalk here!</span>")
+			return
+		if(L)
+			if(R.use(1))
+				to_chat(user, "<span class='notice'>You construct a catwalk.</span>")
+				playsound(src, 'sound/weapons/genhit.ogg', 50, 1)
+				new/obj/structure/lattice/catwalk(src)
+			else
+				to_chat(user, "<span class='warning'>You need two rods to build a catwalk!</span>")
+			return
+		if(R.use(1))
+			to_chat(user, "<span class='notice'>You construct a lattice.</span>")
+			playsound(src, 'sound/weapons/genhit.ogg', 50, 1)
+			ReplaceWithLattice()
+		else
+			to_chat(user, "<span class='warning'>You need one rod to build a lattice.</span>")
+		return
+	else if(istype(W, /obj/item/stack/tile/plasteel) && (user.a_intent != INTENT_HARM))
+		var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
+		if(L)
+			var/obj/item/stack/tile/plasteel/S = W
+			if(S.use(1))
+				qdel(L)
+				playsound(src, 'sound/weapons/genhit.ogg', 50, 1)
+				to_chat(user, "<span class='notice'>You build a floor.</span>")
+				ChangeTurf(/turf/open/floor/plating)
+			else
+				to_chat(user, "<span class='warning'>You need one floor tile to build a floor!</span>")
+		else
+			to_chat(user, "<span class='warning'>The plating is going to need some support! Place metal rods first.</span>")
+	else if(W.force)
 		visible_message("<span class='boldwarning'>[user] smashes \the [src] with \the [W]!</span>")
 		integrity -= W.force
 		if(integrity <= 0)
-			changeTurf(baseturf)
+			visible_message("<span class='boldwarning'>[src] is smashed apart!</span>")
+			ChangeTurf(baseturf)
 	else
 		visible_message("<span class='warning'>[user] futilely hits \the [src] with \the [W]...</span>")
