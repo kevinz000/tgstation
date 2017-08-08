@@ -207,3 +207,11 @@
 	suffix = "lavaland_surface_random_ripley.dmm"
 	allow_duplicates = FALSE
 	cost = 5
+
+/datum/map_template/ruin/lavaland/maidcafe
+	name = "Maid Cafe"
+	id = "maidcafe"
+	description = "A cafe with maids for miners to relax at."
+	suffix = "lavaland_maid_cafe.dmm"
+	allow_duplicates = FALSE
+	cost = 5
