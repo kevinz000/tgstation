@@ -64,9 +64,6 @@
 		stack_trace("Warning: [src]([type]) initialized multiple times!")
 	initialized = TRUE
 
-	if(!forensics)
-		forensics = new
-
 	//atom color stuff
 	if(color)
 		add_atom_colour(color, FIXED_COLOUR_PRIORITY)
@@ -162,9 +159,6 @@
 				reagents = new()
 			reagents.reagent_list.Add(A)
 			reagents.conditional_update()
-		if(istype(A, /datum/forensics))
-			if(!forensics)
-				forensics = new
 		else if(ismovableatom(A))
 			var/atom/movable/M = A
 			if(isliving(M.loc))
@@ -267,7 +261,7 @@
 /atom/proc/examine(mob/user)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
-	if(forensics.blood.len > 0 && !istype(src, /obj/effect/decal))
+	if(has_blood() && !istype(src, /obj/effect/decal))
 		if(gender == PLURAL)
 			f_name = "some "
 		else
@@ -367,21 +361,21 @@ GLOBAL_LIST_EMPTY(blood_splatter_icons)
 	var/obj/effect/decal/cleanable/blood/splatter/B = locate() in src
 	if(!B)
 		B = new /obj/effect/decal/cleanable/blood/splatter(src)
-	B.forensics.transfer_blood_dna(blood_dna) //give blood info to the blood decal.
+	B.transfer_blood_dna(blood_dna) //give blood info to the blood decal.
 	return 1 //we bloodied the floor
 
 /mob/living/carbon/human/proc/add_blood(list/blood_dna)
 	if(wear_suit)
-		wear_suit.forensics.add_blood(blood_dna)
+		wear_suit.add_blood(blood_dna)
 		update_inv_wear_suit()
 	else if(w_uniform)
-		w_uniform.forensics.add_blood(blood_dna)
+		w_uniform.add_blood(blood_dna)
 		update_inv_w_uniform()
 	if(gloves)
 		var/obj/item/clothing/gloves/G = gloves
-		G.forensics.add_blood(blood_dna)
+		G.add_blood(blood_dna)
 	else
-		forensics.transfer_blood_dna(blood_dna)
+		transfer_blood_dna(blood_dna)
 		bloody_hands = rand(2, 4)
 	update_inv_gloves()	//handles bloody hands overlays and updating
 	return 1

@@ -478,8 +478,8 @@
 
 					if(bloodiness)
 						var/obj/effect/decal/cleanable/blood/tracks/B = new(loc)
-						if(forensics.blood && forensics.blood.len)
-							B.forensics.blood |= forensics.blood.Copy()
+						if(has_blood())
+							B.add_blood(return_blood())
 						var/newdir = get_dir(next, loc)
 						if(newdir == dir)
 							B.setDir(newdir)
@@ -662,7 +662,7 @@
 	H.apply_damage(0.5*damage, BRUTE, "r_arm", run_armor_check("r_arm", "melee"))
 
 	var/turf/T = get_turf(src)
-	T.forensics.add_mob_blood(H)
+	T.add_mob_blood(H)
 
 	bloodiness += 4
 

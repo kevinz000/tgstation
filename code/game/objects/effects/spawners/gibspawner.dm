@@ -30,9 +30,9 @@
 					digester.stomach_contents += gib
 
 				if(MobDNA)
-					gib.forensics.blood[MobDNA.unique_enzymes] = MobDNA.blood_type
+					gib.add_blood(MobDNA.unique_enzymes, MobDNA.blood_type)
 				else if(istype(src, /obj/effect/gibspawner/generic)) // Probably a monkey
-					gib.forensics.blood["Non-human DNA"] = "A+"
+					gib.add_blood("Non-human DNA", "A+")
 				var/list/directions = gibdirections[i]
 				if(isturf(loc))
 					if(directions.len)

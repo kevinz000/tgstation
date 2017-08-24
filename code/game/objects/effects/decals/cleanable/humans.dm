@@ -9,8 +9,8 @@
 	var/list/viruses = list()
 
 /obj/effect/decal/cleanable/blood/replace_decal(obj/effect/decal/cleanable/blood/C)
-	if (C.forensics && C.forensics.blood)
-		forensics.blood |= C.forensics.blood.Copy()
+	if (C.has_blood())
+		add_blood(C.return_blood())
 	..()
 
 /obj/effect/decal/cleanable/blood/old
@@ -21,7 +21,7 @@
 /obj/effect/decal/cleanable/blood/old/Initialize()
 	..()
 	icon_state += "-old" //This IS necessary because the parent /blood type uses icon randomization.
-	forensics.blood["Non-human DNA"] = "A+"
+	add_blood("Non-human DNA", "A+")
 
 /obj/effect/decal/cleanable/blood/splatter
 	random_icon_states = list("gibbl1", "gibbl2", "gibbl3", "gibbl4", "gibbl5")
@@ -95,7 +95,7 @@
 	..()
 	setDir(pick(1,2,4,8))
 	icon_state += "-old"
-	forensics.blood["Non-human DNA"] = "A+"
+	add_blood("Non-human DNA", "A+")
 
 
 /obj/effect/decal/cleanable/blood/drip

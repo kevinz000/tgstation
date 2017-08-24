@@ -48,8 +48,8 @@
 						FP.blood_state = S.blood_state
 						FP.entered_dirs |= dir
 						FP.bloodiness = S.bloody_shoes[S.blood_state]
-						if(LAZYLEN(S.forensics.blood))
-							FP.transfer_blood_dna(S.forensics.blood)
+						if(S.has_blood())
+							FP.transfer_blood_dna(S.return_blood())
 						FP.update_icon()
 						update_inv_shoes()
 				//End bloody footprints

@@ -12,7 +12,7 @@
 
 /obj/effect/decal/cleanable/xenoblood/Initialize()
 	. = ..()
-	forensics.blood = list("UNKNOWN DNA" = "X*")
+	add_blood("UNKNOWN DNA", "X*")
 	viruses = list()
 
 
@@ -71,4 +71,4 @@
 
 /obj/effect/decal/cleanable/blood/xtracks/Initialize()
 	. = ..()
-	forensics.blood = list("UNKNOWN DNA" = "X*")
+	add_blood("UNKNOWN DNA", "X*")

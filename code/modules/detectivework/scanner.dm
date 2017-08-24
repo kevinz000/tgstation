@@ -12,7 +12,7 @@
 	righthand_file = 'icons/mob/inhands/misc/devices_righthand.dmi'
 	flags_1 = CONDUCT_1 | NOBLUDGEON_1
 	slot_flags = SLOT_BELT
-	var/scanning = 0
+	var/scanning = FALSE
 	var/list/log = list()
 	origin_tech = "engineering=4;biotech=2;programming=5"
 	var/range = 8
@@ -20,7 +20,7 @@
 
 /obj/item/device/detective_scanner/attack_self(mob/user)
 	if(log.len && !scanning)
-		scanning = 1
+		scanning = TRUE
 		to_chat(user, "<span class='notice'>Printing report, please wait...</span>")
 		addtimer(CALLBACK(src, .proc/PrintReport), 100)
 	else
@@ -45,20 +45,20 @@
 
 	// Clear the logs
 	log = list()
-	scanning = 0
+	scanning = FALSE
 
 /obj/item/device/detective_scanner/afterattack(atom/A, mob/user, params)
 	scan(A, user)
 	return FALSE
 
 /obj/item/device/detective_scanner/proc/scan(atom/A, mob/user)
-	set waitfor = 0
+	set waitfor = FALSE
 	if(!scanning)
 		// Can remotely scan objects and mobs.
 		if((get_dist(A, user) > range) || (!(A in view(range, user)) && view_check) || (loc != user))
 			return
 
-		scanning = 1
+		scanning = TRUE
 
 		user.visible_message("\The [user] points the [src.name] at \the [A] and performs a forensic scan.")
 		to_chat(user, "<span class='notice'>You scan \the [A]. The scanner is now analysing the results...</span>")
@@ -78,11 +78,11 @@
 
 
 
-		if(LAZYLEN(A.forensics.blood))
-			blood = A.forensics.blood.Copy()
+		if(A.has_blood())
+			blood = A.return_blood()
 
-		if(LAZYLEN(A.forensics.fibers))
-			fibers = A.forensics.fibers.Copy()
+		if(A.has_fibers())
+			fibers = A.return_fibers()
 
 		if(ishuman(A))
 
@@ -92,8 +92,8 @@
 
 		else if(!ismob(A))
 
-			if(LAZYLEN(A.forensics.prints))
-				fingerprints = A.forensics.prints.Copy()
+			if(A.has_prints())
+				fingerprints = A.return_prints()
 
 			// Only get reagents from non-mobs.
 			if(LAZYLEN(A.reagents.reagent_list))
@@ -111,40 +111,40 @@
 
 		// We gathered everything. Create a fork and slowly display the results to the holder of the scanner.
 
-		var/found_something = 0
-		add_log("<B>[worldtime2text()][get_timestamp()] - [target_name]</B>", 0)
+		var/found_something = FALSE
+		add_log("<B>[worldtime2text()][get_timestamp()] - [target_name]</B>", FALSE)
 
 		// Fingerprints
-		if(LAZYLEN(forensics.prints))
+		if(fingerprints.len)
 			sleep(30)
 			add_log("<span class='info'><B>Prints:</B></span>")
 			for(var/finger in fingerprints)
 				add_log("[finger]")
-			found_something = 1
+			found_something = TRUE
 
 		// Blood
-		if (LAZYLEN(forensics.blood))
+		if(blood.len)
 			sleep(30)
 			add_log("<span class='info'><B>Blood:</B></span>")
-			found_something = 1
+			found_something = TRUE
 			for(var/B in blood)
 				add_log("Type: <font color='red'>[blood[B]]</font> DNA: <font color='red'>[B]</font>")
 
 		//Fibers
-		if(LAZYLEN(forensics.fibers))
+		if(fibers.len)
 			sleep(30)
 			add_log("<span class='info'><B>Fibers:</B></span>")
 			for(var/fiber in fibers)
 				add_log("[fiber]")
-			found_something = 1
+			found_something = TRUE
 
 		//Reagents
-		if(LAZYLEN(reagents)) //reagants aren't forensics, so they aren't in the datum
+		if(reagents.len)
 			sleep(30)
 			add_log("<span class='info'><B>Reagents:</B></span>")
 			for(var/R in reagents)
 				add_log("Reagent: <font color='red'>[R]</font> Volume: <font color='red'>[reagents[R]]</font>")
-			found_something = 1
+			found_something = TRUE
 
 		// Get a new user
 		var/mob/holder = null
@@ -152,18 +152,18 @@
 			holder = src.loc
 
 		if(!found_something)
-			add_log("<I># No forensic traces found #</I>", 0) // Don't display this to the holder user
+			add_log("<I># No forensic traces found #</I>", FALSE) // Don't display this to the holder user
 			if(holder)
 				to_chat(holder, "<span class='warning'>Unable to locate any fingerprints, materials, fibers, or blood on \the [target_name]!</span>")
 		else
 			if(holder)
 				to_chat(holder, "<span class='notice'>You finish scanning \the [target_name].</span>")
 
-		add_log("---------------------------------------------------------", 0)
-		scanning = 0
+		add_log("---------------------------------------------------------", FALSE)
+		scanning = FALSE
 		return
 
-/obj/item/device/detective_scanner/proc/add_log(msg, broadcast = 1)
+/obj/item/device/detective_scanner/proc/add_log(msg, broadcast = TRUE)
 	if(scanning)
 		if(broadcast && ismob(loc))
 			var/mob/M = loc
