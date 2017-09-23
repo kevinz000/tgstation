@@ -30,7 +30,7 @@ Note: Must be placed west/left of and R&D console to function.
 								"Computer Parts"
 								)
 
-	var/datum/component/materials			//Store for hyper speed!
+	var/datum/component/material_container/materials			//Store for hyper speed!
 
 /obj/machinery/rnd/protolathe/Initialize()
 	create_reagents(0)
@@ -79,7 +79,7 @@ Note: Must be placed west/left of and R&D console to function.
 	linked_console.linked_lathe = null
 	..()
 
-/obj/machinery/r_n_d/protolathe/ComponentActivated(datum/component/C)
+/obj/machinery/rnd/protolathe/ComponentActivated(datum/component/C)
 	..()
 	if(istype(C, /datum/component/material_container))
 		var/datum/component/material_container/M = C
