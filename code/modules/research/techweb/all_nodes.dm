@@ -823,11 +823,6 @@
 	research_cost = 5000
 	export_price = 5000
 
-
-
-
-
-
 /datum/design/borg_syndicate_module
 	name = "Cyborg Upgrade (Illegal Modules)"
 	id = "borg_syndicate_module"
