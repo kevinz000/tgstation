@@ -18,7 +18,7 @@
 	var/has_latches = TRUE
 
 /obj/item/storage/toolbox/Initialize()
-	..()
+	. = ..()
 	if(has_latches)
 		if(prob(10))
 			latches = "double_latch"
