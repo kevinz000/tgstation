@@ -660,7 +660,6 @@
 /obj/item/circuitboard/machine/vending/donksofttoyvendor
 	name = "Donksoft Toy Vendor (Machine Board)"
 	build_path = /obj/machinery/vending/donksofttoyvendor
-	origin_tech = "programming=1;syndicate=2"
 	req_components = list(
 		/obj/item/stock_parts/console_screen = 1,
 		/obj/item/vending_refill/donksoft = 3)

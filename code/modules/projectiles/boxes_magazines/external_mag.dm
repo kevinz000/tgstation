@@ -209,7 +209,6 @@
 /obj/item/ammo_box/magazine/sniper_rounds
 	name = "sniper rounds (.50)"
 	icon_state = ".50mag"
-	origin_tech = "combat=6;syndicate=2"
 	ammo_type = /obj/item/ammo_casing/p50
 	max_ammo = 6
 	caliber = ".50"

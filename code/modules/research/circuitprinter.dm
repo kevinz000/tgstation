@@ -13,6 +13,8 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 
 	var/efficiency_coeff
 
+	var/datum/component/materials	//Store for hyper speed!
+
 	var/list/categories = list(
 								"AI Modules",
 								"Computer Boards",
@@ -30,6 +32,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 /obj/machinery/r_n_d/circuit_imprinter/Initialize()
 	AddComponent(/datum/component/material_container, list(MAT_GLASS, MAT_GOLD, MAT_DIAMOND, MAT_METAL, MAT_BLUESPACE),
 		FALSE, list(/obj/item/stack, /obj/item/ore/bluespace_crystal), CALLBACK(src, .proc/is_insertion_ready))
+	materials = GetComponent(/datum/component/material_container)
 	create_reagents(0)
 	return ..()
 
