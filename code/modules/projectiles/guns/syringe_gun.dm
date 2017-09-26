@@ -74,8 +74,8 @@
 	item_state = "gun" //Smaller inhand
 	w_class = WEIGHT_CLASS_SMALL
 	force = 2 //Also very weak because it's smaller
-	suppressed = 1 //Softer fire sound
-	can_unsuppress = 0 //Permanently silenced
+	suppressed = TRUE //Softer fire sound
+	can_unsuppress = FALSE //Permanently silenced
 	
 /obj/item/gun/syringe/dna
 	name = "modified syringe gun"

@@ -3,7 +3,7 @@
 	desc = "A suspicious revolver. Uses .357 ammo." //usually used by syndicates
 	icon_state = "revolver"
 	mag_type = /obj/item/ammo_box/magazine/internal/cylinder
-	casing_ejector = 0
+	casing_ejector = FALSE
 
 /obj/item/gun/ballistic/revolver/Initialize()
 	. = ..()
@@ -157,7 +157,8 @@
 	name = "nagant revolver"
 	desc = "An old model of revolver that originated in Russia. Able to be suppressed. Uses 7.62x38mmR ammo."
 	icon_state = "nagant"
-	can_suppress = 1
+	can_suppress = TRUE
+
 	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/rev762
 
 

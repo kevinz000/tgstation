@@ -47,6 +47,8 @@
 
 	if(timer_id)
 		return
+	if(owner.suiciding)
+		return
 	if(owner.stat != DEAD && !converts_living)
 		return
 	if(!iszombie(owner))

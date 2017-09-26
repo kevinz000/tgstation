@@ -12,7 +12,7 @@
 	can_suppress = TRUE
 	clumsy_check = 0
 	needs_permit = 0
-	casing_ejector = 0
+	casing_ejector = FALSE
 
 /obj/item/gun/ballistic/automatic/toy/unrestricted
 	pin = /obj/item/device/firing_pin
@@ -54,7 +54,7 @@
 	mag_type = /obj/item/ammo_box/magazine/internal/shot/toy
 	clumsy_check = 0
 	needs_permit = 0
-	casing_ejector = 0
+	casing_ejector = FALSE
 	can_suppress = FALSE
 
 /obj/item/gun/ballistic/shotgun/toy/process_chamber(empty_chamber = 0)
@@ -83,7 +83,7 @@
 	can_suppress = TRUE
 	needs_permit = 0
 	mag_type = /obj/item/ammo_box/magazine/toy/smgm45/riot
-	casing_ejector = 0
+	casing_ejector = FALSE
 
 /obj/item/gun/ballistic/automatic/c20r/toy/unrestricted //Use this for actual toys
 	pin = /obj/item/device/firing_pin
@@ -99,7 +99,7 @@
 	can_suppress = FALSE
 	needs_permit = 0
 	mag_type = /obj/item/ammo_box/magazine/toy/m762/riot
-	casing_ejector = 0
+	casing_ejector = FALSE
 
 /obj/item/gun/ballistic/automatic/l6_saw/toy/unrestricted //Use this for actual toys
 	pin = /obj/item/device/firing_pin

@@ -39,7 +39,7 @@
 	burst_size = 1
 	fire_delay = 0
 	actions_types = list()
-	casing_ejector = 0
+	casing_ejector = FALSE
 
 /obj/item/gun/ballistic/automatic/gyropistol/update_icon()
 	..()
@@ -52,14 +52,14 @@
 	item_state = "speargun"
 	w_class = WEIGHT_CLASS_BULKY
 	force = 10
-	can_suppress = 0
+	can_suppress = FALSE
 	mag_type = /obj/item/ammo_box/magazine/internal/speargun
 	fire_sound = 'sound/weapons/grenadelaunch.ogg'
 	burst_size = 1
 	fire_delay = 0
 	select = 0
 	actions_types = list()
-	casing_ejector = 0
+	casing_ejector = FALSE
 
 /obj/item/gun/ballistic/automatic/speargun/update_icon()
 	return
@@ -82,12 +82,12 @@
 	mag_type = /obj/item/ammo_box/magazine/internal/rocketlauncher
 	fire_sound = 'sound/weapons/rocketlaunch.ogg'
 	w_class = WEIGHT_CLASS_BULKY
-	can_suppress = 0
+	can_suppress = FALSE
 	burst_size = 1
 	fire_delay = 0
 	select = 0
 	actions_types = list()
-	casing_ejector = 0
+	casing_ejector = FALSE
 	weapon_weight = WEAPON_HEAVY
 
 /obj/item/gun/ballistic/automatic/atlauncher/attack_self()

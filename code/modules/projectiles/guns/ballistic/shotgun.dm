@@ -8,7 +8,7 @@
 	flags_1 =  CONDUCT_1
 	slot_flags = SLOT_BACK
 	mag_type = /obj/item/ammo_box/magazine/internal/shot
-	casing_ejector = 0
+	casing_ejector = FALSE
 	var/recentpump = 0 // to prevent spammage
 	weapon_weight = WEAPON_MEDIUM
 

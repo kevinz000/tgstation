@@ -4,7 +4,7 @@
 	icon_state = "pistol"
 	w_class = WEIGHT_CLASS_SMALL
 	mag_type = /obj/item/ammo_box/magazine/m10mm
-	can_suppress = 1
+	can_suppress = TRUE
 	burst_size = 1
 	fire_delay = 0
 	actions_types = list()
@@ -20,7 +20,7 @@
 	icon_state = "m1911"
 	w_class = WEIGHT_CLASS_NORMAL
 	mag_type = /obj/item/ammo_box/magazine/m45
-	can_suppress = 0
+	can_suppress = FALSE
 
 /obj/item/gun/ballistic/automatic/pistol/deagle
 	name = "desert eagle"
@@ -28,7 +28,7 @@
 	icon_state = "deagle"
 	force = 14
 	mag_type = /obj/item/ammo_box/magazine/m50
-	can_suppress = 0
+	can_suppress = FALSE
 
 /obj/item/gun/ballistic/automatic/pistol/deagle/update_icon()
 	..()
@@ -55,7 +55,7 @@
 	icon_state = "aps"
 	w_class = WEIGHT_CLASS_SMALL
 	mag_type = /obj/item/ammo_box/magazine/pistolm9mm
-	can_suppress = 0
+	can_suppress = FALSE
 	burst_size = 3
 	fire_delay = 2
 	actions_types = list(/datum/action/item_action/toggle_firemode)

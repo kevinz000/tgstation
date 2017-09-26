@@ -86,7 +86,7 @@
 	item_state = "crossbow"
 	w_class = WEIGHT_CLASS_SMALL
 	materials = list(MAT_METAL=2000)
-	suppressed = 1
+	suppressed = TRUE
 	ammo_type = list(/obj/item/ammo_casing/energy/bolt)
 	weapon_weight = WEAPON_LIGHT
 	unique_rename = 0
@@ -110,7 +110,7 @@
 	icon_state = "crossbowlarge"
 	w_class = WEIGHT_CLASS_NORMAL
 	materials = list(MAT_METAL=4000)
-	suppressed = 0
+	suppressed = null
 	ammo_type = list(/obj/item/ammo_casing/energy/bolt/large)
 	pin = null
 
