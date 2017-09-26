@@ -12,6 +12,8 @@
 	var/list/datum/techweb_node/hidden_nodes = list()			//Hidden nodes. id = datum. Used for unhiding nodes when requirements are met by removing the entry of the node.
 	var/research_points = 0										//Available research points.
 	var/list/obj/machinery/computer/rdconsole/consoles_accessing = list()
+	var/id = "generic"
+	var/list/research_logs = list()								//IC logs.
 
 /datum/techweb/New()
 	for(var/i in SSresearch.techweb_nodes_starting)
@@ -22,6 +24,7 @@
 
 /datum/techweb/admin
 	research_points = INFINITY	//KEKKLES.
+	id = "ADMIN"
 
 /datum/techweb/admin/New()	//All unlocked.
 	. = ..()
@@ -31,6 +34,7 @@
 	hidden_nodes = list()
 
 /datum/techweb/science	//Global science techweb for RND consoles.
+	id = "SCIENCE"
 
 /datum/techweb/Destroy()
 	researched_nodes = null
@@ -103,16 +107,18 @@
 	researched_designs[design.id] = design
 	return TRUE
 
-/datum/techweb/proc/research_node_id(id, force = FALSE)
-	return research_node(get_techweb_node_by_id(id), force)
+/datum/techweb/proc/research_node_id(id, force, auto_update_points)
+	return research_node(get_techweb_node_by_id(id), force, auto_update_points)
 
-/datum/techweb/proc/research_node(datum/techweb_node/node, force = FALSE)
+/datum/techweb/proc/research_node(datum/techweb_node/node, force = FALSE, auto_adjust_cost = TRUE)
 	if(!istype(node))
 		return FALSE
 	update_node_status(node)
 	if(!force)
-		if(!available_nodes[node.id])
+		if(!available_nodes[node.id] || (auto_adjust_cost && (research_points < node.get_price())))
 			return FALSE
+	if(auto_adjust_cost)
+		research_points -= node.get_price()
 	researched_nodes[node.id] = node				//Add to our researched list
 	for(var/i in node.unlocks)
 		visible_nodes[i] = node.unlocks[i]
@@ -167,8 +173,8 @@
 				visible_nodes[node.id] = node
 	if(autoupdate_consoles)
 		for(var/v in consoles_accessing)
-			var/obj/machinery/computer/rdconsole/V = consoles_accessing[v]
-			V.rescan_category_views()
+			var/obj/machinery/computer/rdconsole/V = v
+			V.rescan_views()
 
 //Laggy procs to do specific checks, just in case. Don't use them if you can just use the vars that already store all this!
 /datum/techweb/proc/designHasReqs(datum/design/D)

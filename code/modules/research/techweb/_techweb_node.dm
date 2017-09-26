@@ -16,6 +16,7 @@
 	var/export_price = 0					//Cargo export price.
 	var/research_cost = 0					//Point cost to research.
 	var/actual_cost = 0
+	var/category = "Misc"				//Category
 
 /datum/techweb_node/New()
 	actual_cost = research_cost

@@ -10,6 +10,7 @@ SUBSYSTEM_DEF(research)
 	var/datum/techweb/science/science_tech
 	var/datum/techweb/admin/admin_tech
 	var/list/techweb_nodes = list()				//associative id = node datum
+	var/list/techweb_categories = list()		//category name = list(node.id = node)
 	var/list/techweb_designs = list()			//associative id = node datum
 	var/list/techweb_nodes_starting = list()	//associative id = node datum
 	var/list/techweb_boost_items = list()		//associative double-layer path = list(node = point_discount)
@@ -28,6 +29,7 @@ SUBSYSTEM_DEF(research)
 	initialize_all_techweb_nodes()
 	science_tech = new /datum/techweb/science
 	admin_tech = new /datum/techweb/admin
+	autosort_categories()
 	return ..()
 
 /datum/controller/subsystem/research/process()
@@ -51,3 +53,11 @@ SUBSYSTEM_DEF(research)
 	var/coeff = 100
 	coeff = sqrt(coeff / amt)
 	return coeff
+
+/datum/controller/subsystem/research/proc/autosort_categories()
+	for(var/i in techweb_nodes)
+		var/datum/techweb_node/I = techweb_nodes[i]
+		if(techweb_categories[I.category])
+			techweb_categories[I.category][I.id] = I
+		else
+			techweb_categories[I.category] = list(I.id = I)

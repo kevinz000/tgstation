@@ -11,6 +11,7 @@
 #define INVESTIGATE_WIRES            "wires"
 #define INVESTIGATE_PORTAL			"portals"
 #define INVESTIGATE_HALLUCINATIONS   "hallucinations"
+#define INVESTIGATE_RESEARCH		"research"
 
 //Individual logging defines
 #define INDIVIDUAL_ATTACK_LOG   "Attack log"

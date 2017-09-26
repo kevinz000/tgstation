@@ -10,6 +10,7 @@
 				<ui-section title='Disk Space'>Disk Capacity: {{data.ddisk_size}} blueprints.</ui-section>
 				<ui-section title='Disk IO'><ui-button action='ddisk_upall'>Upload all designs</ui-button></ui-section>
 				<ui-section title='Clear Disk'><ui-button action='clear_designdisk' style='danger'>WIPE ALL DATA</ui-button></ui-section>
+				<ui-section title='Eject Disk'><ui-button action='eject_designdisk'>Eject Disk</ui-button></ui-section>
 			</ui-display>
 			<ui-display title='Disk Contents'>
 				{{#each data.ddisk_designs}}

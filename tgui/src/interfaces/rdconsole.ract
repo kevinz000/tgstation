@@ -8,6 +8,7 @@
 <link rel='ractive' href='./rdconsole/protolathe.ract'>
 <link rel='ractive' href='./rdconsole/circuit.ract'>
 <link rel='ractive' href='./rdconsole/settings.ract'>
+<rdheader/>
 {{#if data.locked}}
 	<ui-display title='CONSOLE LOCKED'>
 		<ui-button action='Unlock'>Unlock</ui-button>

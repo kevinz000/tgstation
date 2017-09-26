@@ -103,6 +103,8 @@ Note: Must be placed west/left of and R&D console to function.
 		return FALSE
 	if(isnull(amount))
 		amount = 1
+	if(istext(amount))
+		amount = text2num(amount)
 	var/datum/design/D = linked_console.stored_research.researched_designs[id]
 	if(!istype(D))
 		return FALSE
