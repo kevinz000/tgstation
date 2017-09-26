@@ -495,7 +495,7 @@ doesn't have toxins access.
 		if(d_disk.blueprints[i])
 			var/datum/design/D = d_disk.blueprints[i]
 			l += "<A href='?src=\ref[src];view_design=[D.id]'>[D.name]</A>"
-			l += "Operations: <A href='?src=\ref[src];updt_design=[i]'>Upload to labase</A> <A href='?src=\ref[src];clear_design=[i]'>Clear Slot</A>"
+			l += "Operations: <A href='?src=\ref[src];updt_design=[i]'>Upload to database</A> <A href='?src=\ref[src];clear_design=[i]'>Clear Slot</A>"
 		else
 			l += "Empty Slot Operations: <A href='?src=\ref[src];switch_screen=[RDSCREEN_DESIGNDISK_UPLOAD];disk_slot=[i]'>Load Design to Slot</A>"
 		l += "</div>"
