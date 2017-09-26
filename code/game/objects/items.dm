@@ -216,7 +216,7 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 		else
 			msg += "<span class='danger'>No extractable materials detected.</span>"
 		msg += "*--------*"
-	to_chat(user, msg.Join("<br>"))
+		to_chat(user, msg.Join("<br>"))
 
 /obj/item/proc/speechModification(message)			//for message modding by mask slot.
 	return message
