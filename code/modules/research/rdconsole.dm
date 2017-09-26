@@ -766,6 +766,10 @@ doesn't have toxins access.
 		searchstring = ls["to_search"]
 		searchtype = ls["type"]
 		rescan_views()
+		if(searchtype == "proto")
+			screen = RDSCREEN_PROTOLATHE_SEARCH
+		else
+			screen = RDSCREEN_IMPRINTER_SEARCH
 	if(ls["updt_tech"]) //Uple the research holder with information from the technology disk.
 		say("Uploading Technology Disk.")
 		if(t_disk)
@@ -843,12 +847,10 @@ doesn't have toxins access.
 /obj/machinery/computer/rdconsole/proc/rescan_views()
 	var/compare
 	matching_designs.Cut()
-	if(searchtype)
+	if(searchtype == "proto")
 		compare = PROTOLATHE
-		screen = RDSCREEN_PROTOLATHE_SEARCH
-	else
+	else if(searchtype == "imprint")
 		compare = IMPRINTER
-		screen = RDSCREEN_IMPRINTER_SEARCH
 	for(var/v in stored_research.researched_designs)
 		var/datum/design/D = stored_research.researched_designs[v]
 		if(!(D.build_type & compare))
