@@ -27365,7 +27365,7 @@
 	},
 /area/science/research)
 "aWs" = (
-/obj/machinery/rnd/server/core,
+/obj/machinery/rnd/server,
 /obj/machinery/atmospherics/pipe/manifold/general/visible{
 	dir = 8
 	},
@@ -27380,7 +27380,7 @@
 	},
 /area/science/research)
 "aWu" = (
-/obj/machinery/rnd/server/robotics,
+/obj/machinery/rnd/server,
 /obj/machinery/atmospherics/pipe/simple/general/hidden{
 	dir = 9
 	},

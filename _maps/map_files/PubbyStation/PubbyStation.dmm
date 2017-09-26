@@ -28900,7 +28900,7 @@
 	},
 /area/science/robotics/lab)
 "blM" = (
-/obj/machinery/rnd/server/core,
+/obj/machinery/rnd/server,
 /obj/structure/sign/poster/random{
 	pixel_y = 32
 	},
@@ -28917,7 +28917,7 @@
 /turf/open/floor/plasteel/black/telecomms/server/walkway,
 /area/science/server)
 "blO" = (
-/obj/machinery/rnd/server/robotics,
+/obj/machinery/rnd/server,
 /obj/structure/sign/poster/random{
 	pixel_y = 32
 	},

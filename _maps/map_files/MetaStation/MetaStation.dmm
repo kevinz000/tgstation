@@ -72358,7 +72358,7 @@
 /turf/open/floor/plating,
 /area/science/server)
 "cIe" = (
-/obj/machinery/rnd/server/robotics,
+/obj/machinery/rnd/server,
 /turf/open/floor/circuit/telecomms/server,
 /area/science/server)
 "cIf" = (
@@ -73317,7 +73317,7 @@
 /turf/open/floor/plating,
 /area/science/server)
 "cJV" = (
-/obj/machinery/rnd/server/core,
+/obj/machinery/rnd/server,
 /turf/open/floor/circuit/telecomms/server,
 /area/science/server)
 "cJW" = (
