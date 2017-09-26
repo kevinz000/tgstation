@@ -33,11 +33,11 @@
 	verify_techweb_designs()
 
 /proc/count_unique_techweb_nodes()
-	var/list/L = typesof(/datum/techweb_node)
+	var/static/list/L = typesof(/datum/techweb_node)
 	return L.len
 
 /proc/count_unique_techweb_designs()
-	var/list/L = typesof(/datum/design)
+	var/static/list/L = typesof(/datum/design)
 	return L.len
 
 /proc/get_techweb_node_by_id(id)
