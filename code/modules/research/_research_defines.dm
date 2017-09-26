@@ -21,7 +21,7 @@
 #define RDSCREEN_TECHWEB_NODEVIEW 71
 #define RDSCREEN_TECHWEB_DESIGNVIEW 72
 
-#define RDSCREEN_NOBREAK "\[NO_HTML_BREAK\]"
+#define RDSCREEN_NOBREAK "<NO_HTML_BREAK>"
 
 #define RDSCREEN_TEXT_NO_PROTOLATHE "<div><h3>No Protolathe Linked!</h3></div><br>"
 #define RDSCREEN_TEXT_NO_IMPRINTER "<div><h3>No Circuit Imprinter Linked!</h3></div><br>"
