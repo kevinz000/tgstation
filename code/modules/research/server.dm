@@ -20,6 +20,7 @@
 	. = ..()
 	var/obj/item/circuitboard/machine/B = new /obj/item/circuitboard/machine/rdserver(null)
 	B.apply_default_parts(src)
+	SSresearch.servers += src
 
 /obj/machinery/rnd/server/Destroy()
 	SSresearch.servers -= src
