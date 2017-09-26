@@ -691,9 +691,15 @@ doesn't have toxins access.
 	if(ls["back_screen"])
 		back = text2num(ls["back_screen"])
 	if(ls["build"]) //Causes the Protolathe to build something.
-		linked_lathe.user_try_print_id(ls["build"], ls["amount"])
+		if(linked_lathe.busy)
+			say("Warning: Protolathe busy!")
+		else
+			linked_lathe.user_try_print_id(ls["build"], ls["amount"])
 	if(ls["imprint"])
-		linked_imprinter.user_try_print_id(ls["imprint"])
+		if(linked_imprinter.busy)
+			say("Warning: Imprinter busy!")
+		else
+			linked_imprinter.user_try_print_id(ls["imprint"])
 	if(ls["category"])
 		selected_category = ls["category"]
 	if(ls["disconnect"]) //The R&D console disconnects with a specific device.
