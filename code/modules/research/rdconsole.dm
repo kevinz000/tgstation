@@ -674,7 +674,6 @@ GLOBAL_VAR(test)
 /obj/machinery/computer/rdconsole/Topic(raw, ls)
 	if(..())
 		return
-	to_chat(world, "DEBUG: Topic: [raw]")
 	add_fingerprint(usr)
 	usr.set_machine(src)
 	if(ls["switch_screen"])
