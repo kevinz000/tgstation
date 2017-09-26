@@ -253,7 +253,7 @@ doesn't have toxins access.
 	var/list/l = list()
 	l += "<div class='statusDisplay'><A href='?src=\ref[src];switch_screen=[RDSCREEN_PROTOLATHE]'>Protolathe Menu</A>"
 	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_PROTOLATHE_MATERIALS]'><B>Material Amount:</B> [linked_lathe.materials.total_amount] / [linked_lathe.materials.max_amount]</A>"
-	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_PROTOLATHE_CHEMICALS]'><B>Chemical volume:</B> [linked_lathe.reagents.total_volume] / [linked_lathe.reagents.maximum_volume]<HR></A></div class='statusDisplay'>"
+	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_PROTOLATHE_CHEMICALS]'><B>Chemical volume:</B> [linked_lathe.reagents.total_volume] / [linked_lathe.reagents.maximum_volume]</A></div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_protolathe_category_view()	//Legacy code
@@ -285,7 +285,7 @@ doesn't have toxins access.
 			if(c >= 5)
 				l += "<A href='?src=\ref[src];build=[D.id];amount=5'>x5</A>[RDSCREEN_NOBREAK]"
 			if(c >= 10)
-				l += "<A href='?src=\ref[src];build=[D.id];amount=10'>x10</A>"
+				l += "<A href='?src=\ref[src];build=[D.id];amount=10'>x10</A>[RDSCREEN_NOBREAK]"
 			l += "[temp_material]"
 		else
 			l += "<span class='linkOff'>[D.name]</span>[temp_material]"
@@ -334,7 +334,7 @@ doesn't have toxins access.
 			if(c >= 5)
 				l += "<A href='?src=\ref[src];build=[D.id];amount=5'>x5</A>[RDSCREEN_NOBREAK]"
 			if(c >= 10)
-				l += "<A href='?src=\ref[src];build=[D.id];amount=10'>x10</A>"
+				l += "<A href='?src=\ref[src];build=[D.id];amount=10'>x10</A>[RDSCREEN_NOBREAK]"
 			l += "[temp_material]"
 		else
 			l += "<span class='linkOff'>[D.name]</span>[temp_material]"
@@ -373,7 +373,7 @@ doesn't have toxins access.
 	var/list/l = list()
 	l += "<div class='statusDisplay'><A href='?src=\ref[src];switch_screen=[RDSCREEN_IMPRINTER]'>Circuit Imprinter Menu</A>"
 	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_IMPRINTER_MATERIALS]'><B>Material Amount:</B> [linked_imprinter.materials.total_amount] / [linked_imprinter.materials.max_amount]</A>"
-	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_IMPRINTER_CHEMICALS]'><B>Chemical volume:</B> [linked_imprinter.reagents.total_volume] / [linked_imprinter.reagents.maximum_volume]</A></div class='statusDisplay'>"
+	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_IMPRINTER_CHEMICALS]'><B>Chemical volume:</B> [linked_imprinter.reagents.total_volume] / [linked_imprinter.reagents.maximum_volume]</A></div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_circuit()		//Legacy code

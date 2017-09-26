@@ -1,7 +1,9 @@
 
 SUBSYSTEM_DEF(research)
 	name = "Research"
-	flags = SS_NO_FIRE
+	flags = SS_KEEP_TIMING
+	priority = 15		//My powergame is priority.
+	wait = 10
 	init_order = INIT_ORDER_RESEARCH
 	var/list/invalid_design_ids = list()		//associative id = number of times
 	var/list/invalid_node_ids = list()			//associative id = number of times
@@ -17,12 +19,12 @@ SUBSYSTEM_DEF(research)
 	var/list/techweb_nodes_hidden = list()		//Nodes that should be hidden by default.
 	var/single_server_income = 50
 	var/multiserver_calculation = FALSE
-	//20 wait = 2 seconds per tick
-	//50 points per tick, 30 ticks per minute
+	//10 wait = 2 seconds per tick
+	//50 points per tick, 60 ticks per minute
 	//Assuming avg round time is 50 minutes
-	//30 * 50 * 50 = 75000 points in average round
+	//60 * 50 * 50 = 150000 points in average round
 	//Aiming for 1.5 hours to max R&D
-	//1.5 hours = 90 minutes, 30 * 50 * 90 = 135000 points to max R&D.
+	//1.5 hours = 90 minutes, 60 * 50 * 90 = 270000 points to max R&D.
 
 /datum/controller/subsystem/research/Initialize()
 	initialize_all_techweb_designs()
