@@ -281,9 +281,9 @@ doesn't have toxins access.
 			c = min(c,t)
 
 		if (c >= 1)
-			l += "<A href='?src=\ref[src];build=[D.id];amount=1'>[D.name]</A>"
+			l += "<A href='?src=\ref[src];build=[D.id];amount=1'>[D.name]</A>[RDSCREEN_NOBREAK]"
 			if(c >= 5)
-				l += "<A href='?src=\ref[src];build=[D.id];amount=5'>x5</A>"
+				l += "<A href='?src=\ref[src];build=[D.id];amount=5'>x5</A>[RDSCREEN_NOBREAK]"
 			if(c >= 10)
 				l += "<A href='?src=\ref[src];build=[D.id];amount=10'>x10</A>"
 			l += "[temp_material]"
@@ -330,9 +330,9 @@ doesn't have toxins access.
 			c = min(c,t)
 
 		if (c >= 1)
-			l += "<A href='?src=\ref[src];build=[D.id];amount=1'>[D.name]</A>"
+			l += "<A href='?src=\ref[src];build=[D.id];amount=1'>[D.name]</A>[RDSCREEN_NOBREAK]"
 			if(c >= 5)
-				l += "<A href='?src=\ref[src];build=[D.id];amount=5'>x5</A>"
+				l += "<A href='?src=\ref[src];build=[D.id];amount=5'>x5</A>[RDSCREEN_NOBREAK]"
 			if(c >= 10)
 				l += "<A href='?src=\ref[src];build=[D.id];amount=10'>x10</A>"
 			l += "[temp_material]"
