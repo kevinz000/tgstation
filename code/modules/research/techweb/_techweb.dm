@@ -155,7 +155,7 @@
 	for(var/i in node.prereq_ids)
 		if(researched_nodes[i])
 			visible = TRUE
-		needed--
+			needed--
 	if(!needed)
 		available = TRUE
 	researched_nodes -= node.id

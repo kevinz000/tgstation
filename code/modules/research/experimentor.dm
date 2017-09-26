@@ -125,7 +125,7 @@
 
 /obj/machinery/rnd/experimentor/attack_hand(mob/user)
 	user.set_machine(src)
-	var/list/dat = "<center>"
+	var/list/dat = list("<center>")
 	if(!linked_console)
 		dat += "<b><a href='byond://?src=\ref[src];function=search'>Scan for R&D Console</A></b>"
 	if(loaded_item)
