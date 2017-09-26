@@ -34,7 +34,7 @@ SUBSYSTEM_DEF(research)
 	autosort_categories()
 	return ..()
 
-/datum/controller/subsystem/research/process()
+/datum/controller/subsystem/research/fire()
 	handle_research_income()
 
 /datum/controller/subsystem/research/proc/handle_research_income()

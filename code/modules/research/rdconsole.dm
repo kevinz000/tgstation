@@ -210,7 +210,7 @@ doesn't have toxins access.
 	l += "<h2>Nanotrasen Research and Development</h2>[RDSCREEN_NOBREAK]"
 	l += "<div class='statusDisplay'><b>Connected Technology database: [stored_research == SSresearch.science_tech? "Nanotrasen" : "Third Party"]"
 	l += "Available Points: [stored_research.research_points]"
-	l += "Security protocols: [emagged? "<font color='green'>Enabled</font>" : "<font color='red'>Disabled</font>"]"
+	l += "Security protocols: [emagged? "<font color='red'>Disabled</font>" : "<font color='green'>Enabled</font>"]"
 	l += "Design Disk: [d_disk? "<font color='green'>Loaded</font>" : "<font color='red'>Not Loaded</font>"] | \
 	 Technology Disk: [t_disk? "<font color='green'>Loaded</font>" : "<font color='red'>Not Loaded</font>"]</b>"
 	l += "<a href='?src=\ref[src];switch_screen=[RDSCREEN_MENU]'>Main Menu</a> | <a href='?src=\ref[src];switch_screen=[back]'>Back</a></div>[RDSCREEN_NOBREAK]"
@@ -350,9 +350,9 @@ doesn't have toxins access.
 	for(var/mat_id in linked_lathe.materials.materials)
 		var/datum/material/M = linked_lathe.materials.materials[mat_id]
 		l += "* [M.amount] of [M.name]: "
-		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=\ref[src];ejectsheet=[M.id];eject_amt=1'>Eject</A> "
-		if(M.amount >= MINERAL_MATERIAL_AMOUNT*5) l += "<A href='?src=\ref[src];ejectsheet=[M.id];eject_amt=5'>5x</A> "
-		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=\ref[src];ejectsheet=[M.id];eject_amt=50'>All</A>"
+		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=\ref[src];ejectsheet=[M.id];eject_amt=1'>Eject</A> [RDSCREEN_NOBREAK]"
+		if(M.amount >= MINERAL_MATERIAL_AMOUNT*5) l += "<A href='?src=\ref[src];ejectsheet=[M.id];eject_amt=5'>5x</A> [RDSCREEN_NOBREAK]"
+		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=\ref[src];ejectsheet=[M.id];eject_amt=50'>All</A>[RDSCREEN_NOBREAK]"
 		l += ""
 	l += "</div>[RDSCREEN_NOBREAK]"
 	return l
@@ -361,8 +361,8 @@ doesn't have toxins access.
 	RDSCREEN_UI_LATHE_CHECK
 	var/list/l = list()
 	l += ui_protolathe_header()
-	l += "<A href='?src=\ref[src];disposeallP=1'>Disposal All Chemicals in Storage</A><div class='statusDisplay'>"
-	l += "<h3>Chemical Storage:</h3><HR>"
+	l += "<div class='statusDisplay'><A href='?src=\ref[src];disposeallP=1'>Disposal All Chemicals in Storage</A>"
+	l += "<h3>Chemical Storage:</h3>"
 	for(var/datum/reagent/R in linked_lathe.reagents.reagent_list)
 		l += "[R.name]: [R.volume]"
 		l += "<A href='?src=\ref[src];disposeP=[R.id]'>Purge</A>"
@@ -463,13 +463,13 @@ doesn't have toxins access.
 	RDSCREEN_UI_IMPRINTER_CHECK
 	var/list/l = list()
 	l += ui_circuit_header()
-	l += "<h3><div class='statusDisplay'>Material Storage:</h3><HR>"
+	l += "<h3><div class='statusDisplay'>Material Storage:</h3>"
 	for(var/mat_id in linked_imprinter.materials.materials)
 		var/datum/material/M = linked_imprinter.materials.materials[mat_id]
 		l += "* [M.amount] of [M.name]: "
-		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=\ref[src];imprinter_ejectsheet=[M.id];eject_amt=1'>Eject</A> "
-		if(M.amount >= MINERAL_MATERIAL_AMOUNT*5) l += "<A href='?src=\ref[src];imprinter_ejectsheet=[M.id];eject_amt=5'>5x</A> "
-		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=\ref[src];imprinter_ejectsheet=[M.id];eject_amt=50'>All</A></div>"
+		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=\ref[src];imprinter_ejectsheet=[M.id];eject_amt=1'>Eject</A> [RDSCREEN_NOBREAK]"
+		if(M.amount >= MINERAL_MATERIAL_AMOUNT*5) l += "<A href='?src=\ref[src];imprinter_ejectsheet=[M.id];eject_amt=5'>5x</A> [RDSCREEN_NOBREAK]"
+		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=\ref[src];imprinter_ejectsheet=[M.id];eject_amt=50'>All</A>[RDSCREEN_NOBREAK]</div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_techdisk()		//Legacy code
