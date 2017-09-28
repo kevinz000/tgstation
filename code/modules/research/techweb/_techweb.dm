@@ -115,10 +115,10 @@
 		return FALSE
 	update_node_status(node)
 	if(!force)
-		if(!available_nodes[node.id] || (auto_adjust_cost && (research_points < node.get_price())))
+		if(!available_nodes[node.id] || (auto_adjust_cost && (research_points < node.get_price(src))))
 			return FALSE
 	if(auto_adjust_cost)
-		research_points -= node.get_price()
+		research_points -= node.get_price(src)
 	researched_nodes[node.id] = node				//Add to our researched list
 	for(var/i in node.unlocks)
 		visible_nodes[i] = node.unlocks[i]
@@ -211,11 +211,11 @@
 	return available_nodes[id]
 
 /datum/techweb/autolathe/New()
-	. = ..()
 	for(var/D in SSresearch.techweb_designs)
 		var/datum/design/d = SSresearch.techweb_designs[D]
 		if((d.build_type & AUTOLATHE) && ("initial" in d.category))
 			add_design(d)
+	return ..()
 
 /datum/techweb/autolathe/add_design(datum/design/D)
 	if(!(D.build_type & AUTOLATHE))
@@ -223,11 +223,11 @@
 	return ..()
 
 /datum/techweb/limbgrower/New()
-	. = ..()
 	for(var/D in SSresearch.techweb_designs)
 		var/datum/design/d = SSresearch.techweb_designs[D]
 		if((d.build_type & LIMBGROWER) && ("initial" in d.category))
 			add_design(d)
+	return ..()
 
 /datum/techweb/limbgrower/add_design(datum/design/D)
 	if(!(D.build_type & LIMBGROWER))
@@ -235,11 +235,11 @@
 	return TRUE
 
 /datum/techweb/biogenerator/New()
-	. = ..()
 	for(var/D in SSresearch.techweb_designs)
 		var/datum/design/d = SSresearch.techweb_designs[D]
 		if((d.build_type & BIOGENERATOR) && ("initial" in d.category))
 			add_design(d)
+	return ..()
 
 /datum/techweb/biogenerator/add_design(datum/design/D)
 	if(!(D.build_type & BIOGENERATOR))
@@ -251,8 +251,15 @@
 		var/datum/design/d = SSresearch.techweb_designs[D]
 		if((d.build_type & SMELTER) && ("initial" in d.category))
 			add_design(d)
+	return ..()
 
 /datum/techweb/smelter/add_design(datum/design/D)
 	if(!(D.build_type & SMELTER))
 		return FALSE
+	return ..()
+
+/datum/techweb/exofab/New()
+	var/static/list/starting_exofab_nodes = list("robotics", "mmi", "cyborg")
+	for(var/i in starting_exofab_nodes)
+		research_node(get_techweb_node_by_id(i), TRUE, FALSE)
 	return ..()

@@ -139,7 +139,7 @@ doesn't have toxins access.
 	if(!istype(TN))
 		say("Node unlock failed: Unknown error.")
 		return FALSE
-	var/price = TN.get_price()
+	var/price = TN.get_price(stored_research)
 	if(stored_research.research_points >= price)
 		investigate_log("[key_name_admin(user)] researched [id]([price]) on techweb id [stored_research.id].")
 		if(stored_research == SSresearch.science_tech)
@@ -566,7 +566,8 @@ doesn't have toxins access.
 	var/list/l = list()
 	l += "<div><h3>[selected_node.display_name]</h3>"
 	l += "Description: [selected_node.description]"
-	l += "Status: [stored_research.researched_nodes[selected_node.id]? "<font color='green'><b>Researched</b></font>" : "<span class='bad'>Locked</span>"]</div>[RDSCREEN_NOBREAK]"
+	l += "Status: [stored_research.researched_nodes[selected_node.id]? "<font color='green'><b>Researched</b></font>" : "<span class='bad'>Locked</span>"]"
+	l += "Point Cost: [selected_node.get_price(stored_research)]. </div>[RDSCREEN_NOBREAK]"
 	l += "<div><h3>Designs:</h3>[RDSCREEN_NOBREAK]"
 	for(var/i in selected_node.designs)
 		var/datum/design/D = selected_node.designs[i]
@@ -574,14 +575,14 @@ doesn't have toxins access.
 	l += "</div><div><h3>Prerequisites:</h3>[RDSCREEN_NOBREAK]"
 	for(var/i in selected_node.prerequisites)
 		var/datum/techweb_node/prereq = selected_node.prerequisites[i]
-		var/sc = stored_research.researched_nodes[prereq.id]? "alienbold" : "prefix danger"
-		l += "<A href='?src=\ref[src];view_node=[i]'><span class='[sc]'>[prereq.display_name]</span></A>"
+		var/sc = stored_research.researched_nodes[prereq.id]
+		l += "<A href='?src=\ref[src];view_node=[i]'>[sc? "<font color='green'><b>": "<span class='bad'>"][prereq.display_name][sc? "</font></b>" : </span>]</A>"
 	l += "</div><div><h3>Unlocks:</h3>[RDSCREEN_NOBREAK]"
 	for(var/i in selected_node.unlocks)
 		var/datum/techweb_node/unlock = selected_node.unlocks[i]
 		l += "<A href='?src=\ref[src];view_node=[i]'>[unlock.display_name]</A>"
 	if(stored_research.available_nodes[selected_node.id] && !stored_research.researched_nodes[selected_node.id])
-		if(stored_research.research_points >= selected_node.get_price())
+		if(stored_research.research_points >= selected_node.get_price(stored_research))
 			l += "<h3><A href='?src=\ref[src];research_node=[selected_node.id]'>Research</A></h3>[RDSCREEN_NOBREAK]"
 		else
 			l += "<h3><span class='linkOff bad'>Not Enough Points</span></h3>[RDSCREEN_NOBREAK]"
