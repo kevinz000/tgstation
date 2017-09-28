@@ -576,7 +576,15 @@ doesn't have toxins access.
 	for(var/i in selected_node.prerequisites)
 		var/datum/techweb_node/prereq = selected_node.prerequisites[i]
 		var/sc = stored_research.researched_nodes[prereq.id]
-		l += "<A href='?src=\ref[src];view_node=[i]'>[sc? "<font color='green'><b>": "<span class='bad'>"][prereq.display_name][sc? "</font></b>" : </span>]</A>"
+		var/begin
+		var/end
+		if(sc)
+			begin = "<font color='green'><b>"
+			end = "</font></b>"
+		else
+			begin = "<span class='bad'>"
+			end = "</span>"
+		l += "<A href='?src=\ref[src];view_node=[i]'>[begin][prereq.display_name][end]</A>"
 	l += "</div><div><h3>Unlocks:</h3>[RDSCREEN_NOBREAK]"
 	for(var/i in selected_node.unlocks)
 		var/datum/techweb_node/unlock = selected_node.unlocks[i]
@@ -594,9 +602,8 @@ doesn't have toxins access.
 /obj/machinery/computer/rdconsole/proc/ui_techweb_designview()		//Legacy code
 	RDSCREEN_UI_SDESIGN_CHECK
 	var/list/l = list()
-	l += "<div>"
 	var/datum/design/D = selected_design
-	l += "Name: [D.name]"
+	l += "<div>Name: [D.name]"
 	if(D.build_type)
 		l += "Lathe Types:"
 		if(D.build_type & IMPRINTER) l += "Circuit Imprinter"
@@ -610,7 +617,7 @@ doesn't have toxins access.
 	var/all_mats = D.materials + D.reagents_list
 	for(var/M in all_mats)
 		l += "* [CallMaterialName(M)] x [all_mats[M]]"
-	l += "</div>"
+	l += "[RDSCREEN_NOBREAK]</div>"
 	return l
 
 //Fuck TGUI.
