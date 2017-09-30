@@ -131,13 +131,13 @@
 	if(loaded_item)
 		dat += "<b>Loaded Item:</b> [loaded_item]"
 
-		dat += "Available tests:"
+		dat += "<div>Available tests:"
 		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_POKE]'>Poke</A></b>"
 		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_IRRADIATE];'>Irradiate</A></b>"
 		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_GAS]'>Gas</A></b>"
 		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_HEAT]'>Burn</A></b>"
 		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_COLD]'>Freeze</A></b>"
-		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_OBLITERATE]'>Destroy</A></b>"
+		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_OBLITERATE]'>Destroy</A></b></div>"
 		if(istype(loaded_item,/obj/item/relic))
 			dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_DISCOVER]'>Discover</A></b>"
 		dat += "<b><a href='byond://?src=\ref[src];function=eject'>Eject</A>"
@@ -165,6 +165,46 @@
 	popup.open()
 	onclose(user, "experimentor")
 
+/obj/machinery/rnd/experimentor/Topic(href, href_list)
+	if(..())
+		return
+	usr.set_machine(src)
+
+	var/scantype = href_list["function"]
+	var/obj/item/process = locate(href_list["item"]) in src
+
+	if(href_list["close"])
+		usr << browse(null, "window=experimentor")
+		return
+	if(scantype == "search")
+		var/obj/machinery/computer/rdconsole/D = locate(/obj/machinery/computer/rdconsole) in oview(3,src)
+		if(D)
+			linked_console = D
+	else if(scantype == "eject")
+		ejectItem()
+	else if(scantype == "refresh")
+		updateUsrDialog()
+	else
+		if(recentlyExperimented)
+			to_chat(usr, "<span class='warning'>[src] has been used too recently!</span>")
+		else if(!loaded_item)
+			to_chat(usr, "<span class='warning'>[src] is not currently loaded!</span>")
+		else if(!process || process != loaded_item) //Interface exploit protection (such as hrefs or swapping items with interface set to old item)
+			to_chat(usr, "<span class='danger'>Interface failure detected in [src]. Please try again.</span>")
+		else
+			var/dotype
+			if(text2num(scantype) == SCANTYPE_DISCOVER)
+				dotype = SCANTYPE_DISCOVER
+			else
+				dotype = matchReaction(process,scantype)
+			experiment(dotype,process)
+			use_power(750)
+			if(dotype != FAIL)
+				var/list/datum/techweb_node/nodes = techweb_item_boost_check(process)
+				var/picked = pickweight(nodes)		//This should work.
+				if(linked_console)
+					linked_console.stored_research.boost_with_path(picked, process.type)
+	updateUsrDialog()
 
 /obj/machinery/rnd/experimentor/proc/matchReaction(matching,reaction)
 	var/obj/item/D = matching
@@ -505,50 +545,6 @@
 
 /obj/machinery/rnd/experimentor/update_icon()
 	icon_state = "h_lathe"
-
-/obj/machinery/rnd/experimentor/Topic(href, href_list)
-	if(..())
-		return
-	usr.set_machine(src)
-
-	var/scantype = href_list["function"]
-	var/obj/item/process = locate(href_list["item"]) in src
-
-	if(href_list["close"])
-		usr << browse(null, "window=experimentor")
-		return
-	else if(scantype == "search")
-		var/obj/machinery/computer/rdconsole/D = locate(/obj/machinery/computer/rdconsole) in oview(3,src)
-		if(D)
-			linked_console = D
-	else if(scantype == "eject")
-		ejectItem()
-	else if(scantype == "refresh")
-		updateUsrDialog()
-	else
-		if(recentlyExperimented)
-			to_chat(usr, "<span class='warning'>[src] has been used too recently!</span>")
-			return
-		else if(!loaded_item)
-			updateUsrDialog() //Set the interface to unloaded mode
-			to_chat(usr, "<span class='warning'>[src] is not currently loaded!</span>")
-			return
-		else if(!process || process != loaded_item) //Interface exploit protection (such as hrefs or swapping items with interface set to old item)
-			updateUsrDialog() //Refresh interface to update interface hrefs
-			to_chat(usr, "<span class='danger'>Interface failure detected in [src]. Please try again.</span>")
-			return
-		var/dotype
-		if(text2num(scantype) == SCANTYPE_DISCOVER)
-			dotype = SCANTYPE_DISCOVER
-		else
-			dotype = matchReaction(process,scantype)
-		experiment(dotype,process)
-		use_power(750)
-		if(dotype != FAIL)
-			var/list/datum/techweb_node/nodes = techweb_item_boost_check(process)
-			var/picked = pickweight(nodes)		//This should work.
-			if(linked_console)
-				linked_console.stored_research.boost_with_path(picked, process.type)
 
 /obj/machinery/rnd/experimentor/proc/warn_admins(user, ReactionName)
 	var/turf/T = get_turf(user)

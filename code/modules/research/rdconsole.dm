@@ -453,7 +453,7 @@ doesn't have toxins access.
 	var/list/l = list()
 	l += ui_circuit_header()
 	l += "<A href='?src=\ref[src];disposeallI=1'>Disposal All Chemicals in Storage</A><div class='statusDisplay'>"
-	l += "<h3>Chemical Storage:</h3><HR>"
+	l += "<h3>Chemical Storage:</h3>"
 	for(var/datum/reagent/R in linked_imprinter.reagents.reagent_list)
 		l += "[R.name]: [R.volume]"
 		l += "<A href='?src=\ref[src];disposeI=[R.id]'>Purge</A>"
@@ -548,14 +548,14 @@ doesn't have toxins access.
 		if(stored_research.available_nodes[v])
 			continue
 		unavail += stored_research.visible_nodes[v]
-	l += "<h2>Technology Nodes:</h2>"
-	l += "<div><h3>Available for Research:</h3>[RDSCREEN_NOBREAK]"
+	l += "<h2>Technology Nodes:</h2>[RDSCREEN_NOBREAK]"
+	l += "<div><h3>Available for Research:</h3>"
 	for(var/datum/techweb_node/N in avail)
 		l += "<A href='?src=\ref[src];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>"
-	l += "</div><div><h3>Locked Nodes:</h3>[RDSCREEN_NOBREAK]"
+	l += "</div><div><h3>Locked Nodes:</h3>"
 	for(var/datum/techweb_node/N in unavail)
 		l += "<A href='?src=\ref[src];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>"
-	l += "</div><div><h3>Researched Nodes:</h3>[RDSCREEN_NOBREAK]"
+	l += "</div><div><h3>Researched Nodes:</h3>"
 	for(var/datum/techweb_node/N in res)
 		l += "<A href='?src=\ref[src];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>"
 	l += "</div>[RDSCREEN_NOBREAK]"

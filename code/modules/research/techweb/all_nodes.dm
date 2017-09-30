@@ -54,7 +54,7 @@
 	description = "Modern Engineering Technology."
 	display_name = "Industrial Engineering"
 	prereq_ids = list("base")
-	design_ids = list("solarcontrol", "recharger", "power_monitor", "rped", "pacman", "adv_capacitor", "adv_scanning", "emitter", "high_cell", "adv_matter_bin",
+	design_ids = list("solarcontrol", "recharger", "powermonitor", "rped", "pacman", "adv_capacitor", "adv_scanning", "emitter", "high_cell", "adv_matter_bin",
 	"atmosalerts", "atmos_control", "recycler", "autolathe", "high_micro_laser", "nano_mani", "weldingmask", "mesons", "thermomachine", "tesla_coil", "grounding_rod", "apc_control")
 	research_cost = 2500
 	export_price = 10000
@@ -64,7 +64,7 @@
 	description = "Advanced Engineering research"
 	display_name = "Advanced Engineering"
 	prereq_ids = list("engineering", "emp_basic")
-	design_ids = list("enginegoggles", "diagnostic_hud", "magboots")
+	design_ids = list("engine_goggles", "diagnostic_hud", "magboots")
 	research_cost = 2500
 	export_price = 10000
 
@@ -149,7 +149,7 @@
 	display_name = "Quantum Electromagnetic Technology"	//bs
 	description = "Even better electromagnetic technology"
 	prereq_ids = list("emp_adv")
-	design_ids = list("quad_ultra_micro_laser")
+	design_ids = list("quadultra_micro_laser")
 	research_cost = 2500
 	export_price = 10000
 
@@ -160,7 +160,7 @@
 	description = "Honk?!"
 	prereq_ids = list("base")
 	design_ids = list("air_horn", "honker_main", "honker_peri", "honker_targ", "honk_chassis", "honk_head", "honk_torso", "honk_left_arm", "honk_right_arm",
-	"honk_left_leg", "honk_right_leg", "mech_banana_mortar", "mech_mousetrap_mortar", "mech_honker", "mech_punch_face", "implant_trombone")
+	"honk_left_leg", "honk_right_leg", "mech_banana_mortar", "mech_mousetrap_mortar", "mech_honker", "mech_punching_face", "implant_trombone")
 	research_cost = 2500
 	export_price = 10000
 
@@ -199,7 +199,7 @@
 	display_name = "Computerized Recordkeeping"
 	description = "Organized record databases and how they're used."
 	prereq_ids = list("comptech")
-	design_ids = list("secdata", "meddata", "prison_manage", "vendor", "automated_announcement")
+	design_ids = list("secdata", "med_data", "prisonmanage", "vendor", "automated_announcement")
 	research_cost = 2500
 	export_price = 10000
 
@@ -210,7 +210,7 @@
 	prereq_ids = list("comptech", "bluespace_basic")
 	research_cost = 2500
 	export_price = 10000
-	design_ids = list("s-reciever", "s-bus", "s-broadcaster", "s-processor", "s-hub", "s-server", "s-relay", "comm_monitor", "comm_server",
+	design_ids = list("s-receiver", "s-bus", "s-broadcaster", "s-processor", "s-hub", "s-server", "s-relay", "comm_monitor", "comm_server",
 	"s-ansible", "s-filter", "s-amplifier", "ntnet_relay", "s-treatment", "s-analyzer", "s-crystal", "s-transmitter")
 
 /datum/techweb_node/integrated_HUDs
@@ -302,7 +302,7 @@
 	prereq_ids = list("robotics", "neural_programming")
 	design_ids = list("aicore", "safeguard_module", "onehuman_module", "protectstation_module", "quarantine_module", "oxygen_module", "freeform_module",
 	"reset_module", "purge_module", "remove_module", "freeformcore_module", "asimov_module", "paladin_module", "tyrant_module", "corporate_module",
-	"default_module", "borg_ai_control", "mecha_tracking_ai_control", "ai_upload", "intellicard")
+	"default_module", "borg_ai_control", "mecha_tracking_ai_control", "aiupload", "intellicard")
 	research_cost = 2500
 	export_price = 10000
 
@@ -321,7 +321,7 @@
 	display_name = "Cryostasis Technology"
 	description = "Smart freezing of objects to preserve them!"
 	prereq_ids = list("adv_engi", "emp_basic", "biotech")
-	design_ids = list("splitbeaker", "noreactsyringe", "cryotube", "cryoGrenade")
+	design_ids = list("splitbeaker", "noreactsyringe", "cryotube", "cryo_Grenade")
 	research_cost = 2500
 	export_price = 10000
 
@@ -532,7 +532,7 @@
 	display_name = "Advanced Beam Weaponry"
 	description = "Various advanced beam weapons"
 	prereq_ids = list("beam_weapons")
-	design_ids = list("Xray Laser Gun")
+	design_ids = list("xray_laser")
 	research_cost = 2500
 	export_price = 10000
 
@@ -584,7 +584,7 @@
 	export_price = 10000
 
 /datum/techweb_node/adv_mech
-	id = "mech"
+	id = "adv_mech"
 	display_name = "Mechanical Exosuits"
 	description = "Mechanized exosuits that are several magnitudes stronger and more powerful than the average human."
 	prereq_ids = list("adv_robotics", "mech")

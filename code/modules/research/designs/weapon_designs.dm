@@ -124,8 +124,6 @@
 	build_path = /obj/item/grenade/chem_grenade/pyro
 	category = list("Weapons")
 
-/* // Currently commented out, because it has no worthwhile useage yet.
-
 /datum/design/cryo_grenade
 	name = "Cryo Grenade"
 	desc = "An advanced grenade that rapidly cools its contents upon detonation."
@@ -135,7 +133,6 @@
 	materials = list(MAT_METAL = 2000, MAT_SILVER = 500)
 	build_path = /obj/item/grenade/chem_grenade/cryo
 	category = list("Weapons")
-*/
 
 /datum/design/adv_grenade
 	name = "Advanced Release Grenade"
@@ -150,7 +147,7 @@
 /datum/design/xray
 	name = "Xray Laser Gun"
 	desc = "Not quite as menacing as it sounds"
-	id = "xray"
+	id = "xray_laser"
 	req_tech = list("combat" = 7, "magnets" = 5, "biotech" = 5, "powerstorage" = 4)
 	build_type = PROTOLATHE
 	materials = list(MAT_GOLD = 5000, MAT_URANIUM = 4000, MAT_METAL = 5000, MAT_TITANIUM = 2000, MAT_BLUESPACE = 2000)
