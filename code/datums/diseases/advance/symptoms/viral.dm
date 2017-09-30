@@ -77,13 +77,16 @@ Bonus
 	level = 3
 	symptom_delay_min = 1
 	symptom_delay_max = 1
-	var/time_to_cure
+	var/time_to_cure = 0
+	var/time_set = FALSE
 	threshold_desc = "<b>Resistance/Stage Speed:</b> Highest between these determines the amount of time before self-curing.<br>\
 					  <b>Stealth 4:</b> Doubles the time before the virus self-cures."
 
 /datum/symptom/viralreverse/Activate(datum/disease/advance/A)
 	if(!..())
 		return
+	if(!time_set)
+		autoset_time_to_cure()
 	if(time_to_cure > 0)
 		time_to_cure--
 	else
@@ -101,4 +104,8 @@ Bonus
 	A.stage = 5
 	if(A.properties["stealth"] >= 4) //more time before it's cured
 		power = 2
+	if(!time_set)
+		autoset_time_to_cure()
+
+/datum/symptom/viralreverse/proc/autoset_time_to_cure()
 	time_to_cure = max(A.properties["resistance"], A.properties["stage_rate"]) * 10 * power
