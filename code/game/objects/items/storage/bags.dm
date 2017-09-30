@@ -72,6 +72,7 @@
 	icon_state = "bluetrashbag"
 	max_combined_w_class = 60
 	storage_slots = 60
+	flags_2 = NO_MAT_REDEMPTION_2
 
 // -----------------------------
 //        Mining Satchel

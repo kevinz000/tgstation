@@ -500,31 +500,25 @@ GLOBAL_LIST_EMPTY(possible_items_special)
 /datum/objective/download
 
 /datum/objective/download/proc/gen_amount_goal()
-	target_amount = rand(10,20)
-	explanation_text = "Download [target_amount] research level\s."
+	target_amount = rand(20,40)
+	explanation_text = "Download [target_amount] research node\s."
 	return target_amount
 
-/datum/objective/download/check_completion()//NINJACODE
-	if(!ishuman(owner.current))
-		return FALSE
-
-	var/mob/living/carbon/human/H = owner.current
-	if(!H || H.stat == DEAD)
-		return FALSE
-
-	if(!istype(H.wear_suit, /obj/item/clothing/suit/space/space_ninja))
-		return FALSE
-
-	var/obj/item/clothing/suit/space/space_ninja/SN = H.wear_suit
-	if(!SN.s_initialized)
-		return FALSE
-
-	var/current_amount = 0
-	for(var/datum/techweb_node/TN in SN.stored_research)
-		current_amount++
-	if(current_amount<target_amount)
-		return FALSE
-	return TRUE
+/datum/objective/download/check_completion()
+	var/datum/techweb/checking = new
+	var/list/datum/mind/owners = get_owners()
+	for(var/datum/mind/owner in owners)
+		if(ismob(owner.current))
+			var/mob/M = owner.current			//Yeah if you get morphed and you eat a quantum tech disk with the RD's latest backup good on you soldier.
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				if(H && (H.stat != DEAD) && istype(H.wear_suit, /obj/item/clothing/suit/space/space_ninja))
+					var/obj/item/clothing/suit/space/space_ninja/S = H.wear_suit
+					S.stored_research.copy_research_to(checking)
+			var/list/otherwise = M.GetAllContents()
+			for(var/obj/item/disk/tech_disk/TD in otherwise)
+				TD.stored_research.copy_research_to(checking)
+	return checking.researched_nodes.len >= target
 
 /datum/objective/capture
 
