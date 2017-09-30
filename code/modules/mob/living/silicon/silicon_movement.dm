@@ -2,7 +2,7 @@
 	. = ..()
 	update_camera_location(oldLoc)
 
-/mob/living/silicon/forceMove(atom/destination)
+/mob/living/silicon/forceMove(atom/destination, forceop = FALSE)
 	. = ..()
 	update_camera_location(destination)
 
