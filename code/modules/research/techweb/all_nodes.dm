@@ -583,8 +583,8 @@
 	research_cost = 2500
 	export_price = 10000
 
-/datum/techweb_node/adv_mech
-	id = "adv_mech"
+/datum/techweb_node/adv_mecha
+	id = "adv_mecha"
 	display_name = "Mechanical Exosuits"
 	description = "Mechanized exosuits that are several magnitudes stronger and more powerful than the average human."
 	prereq_ids = list("adv_robotics", "mecha")
@@ -606,7 +606,7 @@
 	id = "mech_gygax"
 	display_name = "EXOSUIT: Gygax"
 	description = "Gygax exosuit designs"
-	prereq_ids = list("adv_mech", "weaponry")
+	prereq_ids = list("adv_mecha", "weaponry")
 	design_ids = list("gygax_chassis", "gygax_torso", "gygax_head", "gygax_left_arm", "gygax_right_arm", "gygax_left_leg", "gygax_right_leg", "gygax_main",
 	"gygax_peri", "gygax_targ", "gygax_armor")
 	research_cost = 2500
@@ -616,9 +616,9 @@
 	id = "mech_durand"
 	display_name = "EXOSUIT: Durand"
 	description = "Durand exosuit designs"
-	prereq_ids = list("adv_mech", "adv_weaponry")
+	prereq_ids = list("adv_mecha", "adv_weaponry")
 	design_ids = list("durand_chassis", "durand_torso", "durand_head", "durand_left_arm", "durand_right_arm", "durand_left_leg", "durand_right_leg", "durand_main",
-	"durand_peri", "durand_target", "durand_armor")
+	"durand_peri", "durand_targ", "durand_armor")
 	research_cost = 2500
 	export_price = 10000
 
@@ -626,9 +626,9 @@
 	id = "mecha_phazon"
 	display_name = "EXOSUIT: Phazon"
 	description = "Phazon exosuit designs"
-	prereq_ids = list("adv_mecha", "weaponry")
+	prereq_ids = list("adv_mechaa", "weaponry")
 	design_ids = list("phazon_chassis", "phazon_torso", "phazon_head", "phazon_left_arm", "phazon_right_arm", "phazon_left_leg", "phazon_right_leg", "phazon_main",
-	"phazon_peri", "phazon_target", "phazon_armor")
+	"phazon_peri", "phazon_targ", "phazon_armor")
 	research_cost = 2500
 	export_price = 10000
 
@@ -636,16 +636,16 @@
 	id = "mech_tools"
 	display_name = "Basic Exosuit Equipment"
 	description = "Various tools fit for basic mech units"
-	prereq_ids = list("mecha", "engi")
+	prereq_ids = list("mecha", "engineering")
 	design_ids = list("mech_drill", "mech_mscanner", "mech_extinguisher", "mech_cable_layer")
 	research_cost = 2500
 	export_price = 10000
 
-/datum/techweb_node/adv_mech_tools
-	id = "adv_mech_tools"
+/datum/techweb_node/adv_mecha_tools
+	id = "adv_mecha_tools"
 	display_name = "Advanced Exosuit Equipment"
 	description = "Tools for high level mech suits"
-	prereq_ids = list("adv_mech", "mech_tools", "adv_engi")
+	prereq_ids = list("adv_mecha", "mech_tools", "adv_engi")
 	design_ids = list("mech_rcd")
 	research_cost = 2500
 	export_price = 10000
@@ -654,17 +654,17 @@
 	id = "med_mech_tools"
 	display_name = "Medical Exosuit Equipment"
 	description = "Tools for high level mech suits"
-	prereq_ids = list("mecha", "adv_biotech")
-	design_ids = list("mech_sleeper", "mech_tools", "mech_syringe_gun", "mech_medi_beam")
+	prereq_ids = list("mecha", "adv_biotech", "mech_tools")
+	design_ids = list("mech_sleeper", "mech_syringe_gun", "mech_medi_beam")
 	research_cost = 2500
 	export_price = 10000
 
 /datum/techweb_node/mech_modules
-	id = "adv_mech_modules"
+	id = "adv_mecha_modules"
 	display_name = "Basic Exosuit Modules"
 	description = "An advanced piece of mech weaponry"
-	prereq_ids = list("adv_mech", "adv_power")
-	design_ids = list("mech_energy_relay", "mech_ccw_armor", "mech_proj_armor", "Exosuit Module (ExoNuclear Reactor)")
+	prereq_ids = list("adv_mecha", "adv_power")
+	design_ids = list("mech_energy_relay", "mech_ccw_armor", "mech_proj_armor", "mech_generator_nuclear")
 	research_cost = 2500
 	export_price = 10000
 
@@ -780,7 +780,7 @@
 	id = "mech_lmg"
 	display_name =  "Exosuit Weapon (PBT \"Pacifier\" Mounted Taser)"
 	description = "An advanced piece of mech weaponry"
-	prereq_ids = list("adv_mech", "adv_weaponry", "ballistic_weapons")
+	prereq_ids = list("adv_mecha", "adv_weaponry", "ballistic_weapons")
 	design_ids = list("mech_lmg")
 	research_cost = 2500
 	export_price = 10000
