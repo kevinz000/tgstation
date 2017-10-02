@@ -181,11 +181,10 @@ doesn't have toxins access.
 	..()
 
 /obj/machinery/computer/rdconsole/emag_act(mob/user)
-	if(emagged)
-		return
-	playsound(src, "sparks", 75, 1)
-	emagged = TRUE
-	to_chat(user, "<span class='notice'>You disable the security protocols</span>")
+	if(!emagged)
+		to_chat(user, "<span class='notice'>You disable the security protocols</span>")
+		playsound(src, "sparks", 75, 1)
+	return ..()
 
 /obj/machinery/computer/rdconsole/proc/list_categories(list/categories, menu_num as num)
 	if(!categories)

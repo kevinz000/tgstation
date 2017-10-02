@@ -46,7 +46,7 @@
 /datum/design/diagnostic_hud
 	name = "Diagnostic HUD"
 	desc = "A HUD used to analyze and determine faults within robotic machinery."
-	id = "diagostic_hud"
+	id = "diagnostic_hud"
 	req_tech = list("magnets" = 3, "engineering" = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_METAL = 500, MAT_GLASS = 500)
@@ -56,7 +56,7 @@
 /datum/design/diagnostic_hud_night
 	name = "Night Vision Diagnostic HUD"
 	desc = "Upgraded version of the diagnostic HUD designed to function during a power failure."
-	id = "diagostic_hud_night"
+	id = "diagnostic_hud_night"
 	req_tech = list("magnets" = 5, "plasmatech" = 4, "engineering" = 6, "powerstorage" = 4)
 	build_type = PROTOLATHE
 	materials = list(MAT_METAL = 600, MAT_GLASS = 600, MAT_URANIUM = 1000, MAT_PLASMA = 300)
@@ -80,6 +80,7 @@
 /datum/design/portaseeder
 	name = "Portable Seed Extractor"
 	desc = "For the enterprising botanist on the go. Less efficient than the stationary model, it creates one seed per plant."
+	id = "portaseeder"
 	build_type = PROTOLATHE
 	req_tech = list("biotech" = 3, "engineering" = 2)
 	materials = list(MAT_METAL = 1000, MAT_GLASS = 400)

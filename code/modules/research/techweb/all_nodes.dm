@@ -218,7 +218,7 @@
 	display_name = "Integrated HUDs"
 	description = "The usefulness of computerized records, projected straight onto your eyepiece!"
 	prereq_ids = list("comp_recordkeeping", "emp_basic")
-	design_ids = list("health_hud", "security+hud", "diagnostic_hud", "scigoggles")
+	design_ids = list("health_hud", "security_hud", "diagnostic_hud", "scigoggles")
 	research_cost = 2500
 	export_price = 10000
 
@@ -449,7 +449,7 @@
 	id = "exp_tools"
 	display_name = "Experimental Tools"
 	description = "Highly advanced construction tools."
-	design_ids = list("ex_welder", "jawsoflife", "handdrill")
+	design_ids = list("exwelder", "jawsoflife", "handdrill")
 	prereq_ids = list("adv_engi")
 	research_cost = 2500
 	export_price = 10000
@@ -468,7 +468,7 @@
 	display_name = "Bluespace Power Technology"
 	description = "Even more powerful.. power!"
 	prereq_ids = list("adv_power", "adv_bluespace")
-	design_ids = list("bluespace_cell", "quadratic_capcitor")
+	design_ids = list("bluespace_cell", "quadratic_capacitor")
 	research_cost = 2500
 	export_price = 10000
 
@@ -550,16 +550,16 @@
 	display_name = "Ballistic Weaponry"
 	description = "This isn't research..This is reverse-engineering!"
 	prereq_ids = list("weaponry")
-	design_ids = list("mag_oldsmg", "mag_oldsmg_ap", "mag_oldsmg_ic", "mag_oldsmg_tx")
+	design_ids = list("mag_oldsmg", "mag_oldsmg_ap", "mag_oldsmg_ic")
 	research_cost = 2500
 	export_price = 10000
 
 /datum/techweb_node/tech_shell
 	id = "tech_shell"
-	display_name = "technological Shells"
+	display_name = "Technological Shells"
 	description = "They're more technological than regular shot."
 	prereq_ids = list("adv_weaponry")
-	design_ids = list("techshell")
+	design_ids = list("techshotshell")
 	research_cost = 2500
 	export_price = 10000
 
@@ -574,7 +574,7 @@
 
 ////////////////////////mech technology////////////////////////
 /datum/techweb_node/mech
-	id = "mech"
+	id = "mecha"
 	display_name = "Mechanical Exosuits"
 	description = "Mechanized exosuits that are several magnitudes stronger and more powerful than the average human."
 	prereq_ids = list("robotics", "adv_engi")
@@ -587,7 +587,7 @@
 	id = "adv_mech"
 	display_name = "Mechanical Exosuits"
 	description = "Mechanized exosuits that are several magnitudes stronger and more powerful than the average human."
-	prereq_ids = list("adv_robotics", "mech")
+	prereq_ids = list("adv_robotics", "mecha")
 	design_ids = list("mech_repair_droid")
 	research_cost = 2500
 	export_price = 10000
@@ -597,7 +597,7 @@
 	display_name = "EXOSUIT: Odysseus"
 	description = "Odysseus exosuit designs"
 	prereq_ids = list("mecha")
-	design_ids = list("odysseus_chassis", "odysseus_torso", "odysseus_head", "oddyesus_left_arm", "odysseus_right_arm" ,"odysseus_left_leg", "odysseus_right_leg",
+	design_ids = list("odysseus_chassis", "odysseus_torso", "odysseus_head", "odysseus_left_arm", "odysseus_right_arm" ,"odysseus_left_leg", "odysseus_right_leg",
 	"odysseus_main", "odysseus_peri")
 	research_cost = 2500
 	export_price = 10000
@@ -636,7 +636,7 @@
 	id = "mech_tools"
 	display_name = "Basic Exosuit Equipment"
 	description = "Various tools fit for basic mech units"
-	prereq_ids = list("mech", "engi")
+	prereq_ids = list("mecha", "engi")
 	design_ids = list("mech_drill", "mech_mscanner", "mech_extinguisher", "mech_cable_layer")
 	research_cost = 2500
 	export_price = 10000
@@ -654,7 +654,7 @@
 	id = "med_mech_tools"
 	display_name = "Medical Exosuit Equipment"
 	description = "Tools for high level mech suits"
-	prereq_ids = list("mech", "adv_biotech")
+	prereq_ids = list("mecha", "adv_biotech")
 	design_ids = list("mech_sleeper", "mech_tools", "mech_syringe_gun", "mech_medi_beam")
 	research_cost = 2500
 	export_price = 10000
@@ -672,7 +672,7 @@
 	id = "mecha_tools"
 	display_name = "Exosuit Weapon (LBX AC 10 \"Scattershot\")"
 	description = "An advanced piece of mech weaponry"
-	prereq_ids = list("mech", "adv_weaponry", "ballistic_weapons")
+	prereq_ids = list("mecha", "adv_weaponry", "ballistic_weapons")
 	design_ids = list("mech_scattershot")
 	research_cost = 2500
 	export_price = 10000
@@ -681,7 +681,7 @@
 	id = "mech_carbine"
 	display_name = "Exosuit Weapon (FNX-99 \"Hades\" Carbine)"
 	description = "An advanced piece of mech weaponry"
-	prereq_ids = list("mech", "adv_weaponry", "ballistic_weapons")
+	prereq_ids = list("mecha", "adv_weaponry", "ballistic_weapons")
 	design_ids = list("mech_carbine")
 	research_cost = 2500
 	export_price = 10000
@@ -690,7 +690,7 @@
 	id = "mmech_ion"
 	display_name = "Exosuit Weapon (MKIV Ion Heavy Cannon)"
 	description = "An advanced piece of mech weaponry"
-	prereq_ids = list("mech", "adv_weaponry", "emp_adv")
+	prereq_ids = list("mecha", "adv_weaponry", "emp_adv")
 	design_ids = list("mech_ion")
 	research_cost = 2500
 	export_price = 10000
@@ -699,7 +699,7 @@
 	id = "mech_tesla"
 	display_name = "Exosuit Weapon (MKI Tesla Cannon)"
 	description = "An advanced piece of mech weaponry"
-	prereq_ids = list("mech", "weaponry", "adv_power")
+	prereq_ids = list("mecha", "weaponry", "adv_power")
 	design_ids = list("mech_tesla")
 	research_cost = 2500
 	export_price = 10000
@@ -708,7 +708,7 @@
 	id = "mech_laser"
 	display_name = "Exosuit Weapon (CH-PS \"Immolator\" Laser)"
 	description = "A basic piece of mech weaponry"
-	prereq_ids = list("mech", "beam_weapons")
+	prereq_ids = list("mecha", "beam_weapons")
 	design_ids = list("mech_laser")
 	research_cost = 2500
 	export_price = 10000
@@ -717,7 +717,7 @@
 	id = "mech_laser_heavy"
 	display_name = "Exosuit Weapon (CH-LC \"Solaris\" Laser Cannon)"
 	description = "An advanced piece of mech weaponry"
-	prereq_ids = list("mech", "adv_weaponry", "adv_beam_weapons")
+	prereq_ids = list("mecha", "adv_weaponry", "adv_beam_weapons")
 	design_ids = list("mech_laser_heavy")
 	research_cost = 2500
 	export_price = 10000
@@ -726,7 +726,7 @@
 	id = "mech_grenade_launcher"
 	display_name = "Exosuit Weapon (SGL-6 Grenade Launcher)"
 	description = "An advanced piece of mech weaponry"
-	prereq_ids = list("mech", "explosive_weapons")
+	prereq_ids = list("mecha", "explosive_weapons")
 	design_ids = list("mech_grenade_launcher")
 	research_cost = 2500
 	export_price = 10000
@@ -735,7 +735,7 @@
 	id = "mech_missile_rack"
 	display_name = "Exosuit Weapon (SRM-8 Missile Rack)"
 	description = "An advanced piece of mech weaponry"
-	prereq_ids = list("mech", "explosive_weapons")
+	prereq_ids = list("mecha", "explosive_weapons")
 	design_ids = list("mech_missile_rack")
 	research_cost = 2500
 	export_price = 10000
@@ -744,7 +744,7 @@
 	id = "clusterbang_launcher"
 	display_name = "Exosuit Module (SOB-3 Clusterbang Launcher)"
 	description = "An advanced piece of mech weaponry"
-	prereq_ids = list("mech", "weaponry")
+	prereq_ids = list("mecha", "weaponry")
 	design_ids = list("clusterbang_launcher")
 	research_cost = 2500
 	export_price = 10000
@@ -753,7 +753,7 @@
 	id = "mech_teleporter"
 	display_name = "Exosuit Module (Teleporter Module)"
 	description = "An advanced piece of mech Equipment"
-	prereq_ids = list("mech", "mech_tools", "adv_bluespace")
+	prereq_ids = list("mecha", "mech_tools", "adv_bluespace")
 	design_ids = list("mech_teleporter")
 	research_cost = 2500
 	export_price = 10000
@@ -762,7 +762,7 @@
 	id = "mech_wormhole_gen"
 	display_name = "Exosuit Module (Localized Wormhole Generator)"
 	description = "An advanced piece of mech weaponry"
-	prereq_ids = list("mech", "mech_tools", "adv_bluespace")
+	prereq_ids = list("mecha", "mech_tools", "adv_bluespace")
 	design_ids = list("mech_wormhole_gen")
 	research_cost = 2500
 	export_price = 10000
@@ -771,7 +771,7 @@
 	id = "mech_taser"
 	display_name =  "Exosuit Weapon (PBT \"Pacifier\" Mounted Taser)"
 	description = "A basic piece of mech weaponry"
-	prereq_ids = list("mech", "weaponry")
+	prereq_ids = list("mecha", "weaponry")
 	design_ids = list("mech_taser")
 	research_cost = 2500
 	export_price = 10000
@@ -789,7 +789,7 @@
 	id = "mech_diamond_drill"
 	display_name =  "Exosuit Diamond Drill"
 	description = "A diamond drill fit for a large exosuit"
-	prereq_ids = list("mech", "adv_mining")
+	prereq_ids = list("mecha", "adv_mining")
 	design_ids = list("mech_diamond_drill")
 	research_cost = 2500
 	export_price = 10000
