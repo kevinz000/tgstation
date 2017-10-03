@@ -26,8 +26,12 @@
 	for(var/path in subtypesof(/datum/design))
 		var/datum/design/DN = path
 		if(isnull(initial(DN.id)))
+			stack_trace("WARNING: Design with null ID detected. Build path: [initial(DN.build_path)]")
 			continue
 		DN = new path
+		if(returned[initial(DN.id)])
+			stack_trace("WARNING: Design ID clash with ID [initial(DN.id)] detected!")
+			continue
 		returned[initial(DN.id)] = DN
 	SSresearch.techweb_designs = returned
 	verify_techweb_designs()
@@ -70,6 +74,18 @@
 			stack_trace("WARNING: Invalid research node with ID [n] detected and removed.")
 			SSresearch.techweb_nodes -= n
 			research_node_id_error(n)
+		for(var/p in N.prereq_ids)
+			var/datum/techweb_node/P = SSresearch.techweb_nodes[p]
+			if(!istype(P))
+				stack_trace("WARNING: Invalid research prerequisite node with ID [p] detected in node [N.display_name]\[[N.id]\] removed.")
+				N.prereq_ids  -= p
+				research_node_id_error(p)
+		for(var/d in N.design_ids)
+			var/datum/design/D = SSresearch.techweb_designs[d]
+			if(!istype(D))
+				stack_trace("WARNING: Invalid research design with ID [d] detected in node [N.display_name]\[[N.id]\] removed.")
+				N.designs -= d
+				design_id_error(d)
 		for(var/p in N.prerequisites)
 			var/datum/techweb_node/P = N.prerequisites[p]
 			if(!istype(P))
