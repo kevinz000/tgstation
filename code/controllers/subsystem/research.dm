@@ -17,14 +17,16 @@ SUBSYSTEM_DEF(research)
 	var/list/techweb_nodes_starting = list()	//associative id = node datum
 	var/list/techweb_boost_items = list()		//associative double-layer path = list(node = point_discount)
 	var/list/techweb_nodes_hidden = list()		//Nodes that should be hidden by default.
-	var/single_server_income = 50
+	//----------------------------------------------
+	var/single_server_income = 85
 	var/multiserver_calculation = FALSE
-	//10 wait = 2 seconds per tick
-	//50 points per tick, 60 ticks per minute
-	//Assuming avg round time is 50 minutes
-	//60 * 50 * 50 = 150000 points in average round
+	var/last_income = 0
+	//^^^^^^^^ ALL OF THESE ARE PER SECOND! ^^^^^^^^
+
 	//Aiming for 1.5 hours to max R&D
-	//1.5 hours = 90 minutes, 60 * 50 * 90 = 270000 points to max R&D.
+	//[88nodes * 5000points/node] / [1.5hr * 90min/hr * 60s/min]
+
+
 
 /datum/controller/subsystem/research/Initialize()
 	initialize_all_techweb_designs()
@@ -48,7 +50,10 @@ SUBSYSTEM_DEF(research)
 			if(miner.working)
 				bitcoins = single_server_income
 				break			//Just need one to work.
+	var/income_time_difference = world.time - last_income
+	bitcoins *= income_time_difference / 10
 	science_tech.research_points += bitcoins
+	last_income = world.time
 
 /datum/controller/subsystem/research/proc/calculate_server_coefficient()	//Diminishing returns.
 	var/amt = servers.len

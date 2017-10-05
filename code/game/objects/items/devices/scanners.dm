@@ -307,7 +307,6 @@ MASS SPECTROMETER
 	name = "advanced health analyzer"
 	icon_state = "health_adv"
 	desc = "A hand-held body scanner able to distinguish vital signs of the subject with high accuracy."
-	origin_tech = "magnets=3;biotech=3"
 	advanced = TRUE
 
 /obj/item/device/analyzer
