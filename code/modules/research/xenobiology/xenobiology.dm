@@ -409,7 +409,7 @@
 
 /obj/item/clothing/under/golem
 	name = "adamantine skin"
-	desc = "a golem's skin"
+	desc = "A golem's skin."
 	icon_state = "golem"
 	item_state = "golem"
 	item_color = "golem"
@@ -419,7 +419,7 @@
 
 /obj/item/clothing/suit/golem
 	name = "adamantine shell"
-	desc = "a golem's thick outer shell"
+	desc = "A golem's thick outer shell."
 	icon_state = "golem"
 	item_state = "golem"
 	w_class = WEIGHT_CLASS_BULKY
@@ -432,7 +432,7 @@
 
 /obj/item/clothing/shoes/golem
 	name = "golem's feet"
-	desc = "sturdy adamantine feet"
+	desc = "Sturdy adamantine feet."
 	icon_state = "golem"
 	item_state = null
 	resistance_flags = LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
@@ -441,7 +441,7 @@
 
 /obj/item/clothing/mask/breath/golem
 	name = "golem's face"
-	desc = "the imposing face of an adamantine golem"
+	desc = "The imposing face of an adamantine golem."
 	icon_state = "golem"
 	item_state = "golem"
 	siemens_coefficient = 0
@@ -451,7 +451,7 @@
 
 /obj/item/clothing/gloves/golem
 	name = "golem's hands"
-	desc = "strong adamantine hands"
+	desc = "Strong adamantine hands."
 	icon_state = "golem"
 	item_state = null
 	siemens_coefficient = 0
@@ -464,13 +464,13 @@
 	item_state = "dermal"
 	item_color = "dermal"
 	name = "golem's head"
-	desc = "a golem's head"
+	desc = "A golem's head."
 	resistance_flags = LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
 	flags_1 = ABSTRACT_1 | NODROP_1
 
 /obj/effect/golemrune
 	anchored = TRUE
-	desc = "a strange rune used to create golems. It glows when spirits are nearby."
+	desc = "A strange rune used to create golems. It glows when spirits are nearby."
 	name = "rune"
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "golem"
@@ -539,7 +539,7 @@
 /obj/item/stack/tile/bluespace
 	name = "bluespace floor tile"
 	singular_name = "floor tile"
-	desc = "Through a series of micro-teleports these tiles let people move at incredible speeds"
+	desc = "Through a series of micro-teleports these tiles let people move at incredible speeds."
 	icon_state = "tile-bluespace"
 	w_class = WEIGHT_CLASS_NORMAL
 	force = 6
@@ -555,7 +555,7 @@
 /obj/item/stack/tile/sepia
 	name = "sepia floor tile"
 	singular_name = "floor tile"
-	desc = "Time seems to flow very slowly around these tiles"
+	desc = "Time seems to flow very slowly around these tiles."
 	icon_state = "tile-sepia"
 	w_class = WEIGHT_CLASS_NORMAL
 	force = 6

@@ -492,7 +492,6 @@ Congratulations! You are now trained for invasive xenobiology research!"}
 	trashtype = /obj/item/restraints/handcuffs/energy/used
 
 /obj/item/restraints/handcuffs/energy/used
-	desc = "energy discharge"
 	flags_1 = DROPDEL_1
 
 /obj/item/restraints/handcuffs/energy/used/dropped(mob/user)
@@ -583,7 +582,7 @@ Congratulations! You are now trained for invasive xenobiology research!"}
 
 /obj/structure/bed/abductor
 	name = "resting contraption"
-	desc = "This looks similar to contraptions from earth. Could aliens be stealing our technology?"
+	desc = "This looks similar to contraptions from Earth. Could aliens be stealing our technology?"
 	icon = 'icons/obj/abductor.dmi'
 	buildstacktype = /obj/item/stack/sheet/mineral/abductor
 	icon_state = "bed"

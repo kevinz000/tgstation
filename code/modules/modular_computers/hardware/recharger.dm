@@ -30,7 +30,7 @@
 	w_class = WEIGHT_CLASS_SMALL // Can't be installed into tablets/PDAs
 
 /obj/item/computer_hardware/recharger/APC/use_power(amount, charging=0)
-	if(istype(holder.physical, /obj/machinery))
+	if(ismachinery(holder.physical))
 		var/obj/machinery/M = holder.physical
 		if(M.powered())
 			M.use_power(amount)
@@ -53,13 +53,13 @@
 	w_class = WEIGHT_CLASS_NORMAL
 
 /obj/item/computer_hardware/recharger/wired/can_install(obj/item/device/modular_computer/M, mob/living/user = null)
-	if(istype(M.physical, /obj/machinery) && M.physical.anchored)
+	if(ismachinery(M.physical) && M.physical.anchored)
 		return ..()
 	to_chat(user, "<span class='warning'>\The [src] is incompatible with portable computers!</span>")
 	return 0
 
 /obj/item/computer_hardware/recharger/wired/use_power(amount, charging=0)
-	if(istype(holder.physical, /obj/machinery) && holder.physical.anchored)
+	if(ismachinery(holder.physical) && holder.physical.anchored)
 		var/obj/machinery/M = holder.physical
 		var/turf/T = M.loc
 		if(!T || !istype(T))

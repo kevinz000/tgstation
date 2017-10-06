@@ -466,7 +466,8 @@
 
 
 /obj/item/weldingtool/afterattack(atom/O, mob/user, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 
 	if(welding)
 		remove_fuel(1)

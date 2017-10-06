@@ -106,7 +106,8 @@ Code:
 	..()
 
 /obj/item/device/assembly/signaler/proc/signal()
-	if(!radio_connection) return
+	if(!radio_connection)
+		return
 
 	var/datum/signal/signal = new
 	signal.source = src
@@ -172,7 +173,8 @@ Code:
 	return "The radio receiver is [on?"on":"off"]."
 
 /obj/item/device/assembly/signaler/reciever/receive_signal(datum/signal/signal)
-	if(!on) return
+	if(!on)
+		return
 	return ..(signal)
 
 
