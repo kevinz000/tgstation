@@ -36,9 +36,6 @@ Note: Must be placed within 3 tiles of the R&D Console
 		. = 1
 		if(!is_insertion_ready(user))
 			return
-		if(!techweb_item_boost_check(O))
-			to_chat(user, "<span class='warning'>This item is of no value to research!</span>")
-			return
 		if(!user.drop_item())
 			to_chat(user, "<span class='warning'>\The [O] is stuck to your hand, you cannot put it in the [src.name]!</span>")
 			return
@@ -59,42 +56,66 @@ Note: Must be placed within 3 tiles of the R&D Console
 	else
 		icon_state = initial(icon_state)
 
-/obj/machinery/rnd/destructive_analyzer/proc/user_try_decon_id(id)
-	var/datum/techweb_node/TN = get_techweb_node_by_id(id)
-	if(!id || !istype(TN) || !istype(loaded_item) || !linked_console)
-		return FALSE
-	var/list/pos1 = techweb_item_boost_check(loaded_item)
-	if(!pos1[TN])
-		return FALSE
-	var/dpath = loaded_item.type
-	if(!TN[dpath])
-		return FALSE
-	var/dboost = TN[dpath]
-	var/choice = input("Are you sure you want to destroy [loaded_item.name] for a boost of [dboost] in node [TN.display_name]") in list("Proceed", "Cancel")
-	if(choice == "Cancel")
-		return FALSE
-	busy = TRUE
-	addtimer(CALLBACK(src, .proc/reset_busy), 24)
-	flick("d_analyzer_process", src)
-	if(QDELETED(loaded_item) || QDELETED(src) || QDELETED(linked_console))
-		return FALSE
-	linked_console.stored_research.boost_with_path(SSresearch.techweb_nodes[TN.id], loaded_item.type)
-	SSblackbox.add_details("item_deconstructed","[loaded_item.type] - [TN.id]")
+/obj/machinery/rnd/destructive_analyzer/proc/reclaim_materials_from(obj/item/thing)
+	. = 0
 	if(linked_console && linked_console.linked_lathe) //Also sends salvaged materials to a linked protolathe, if any.
-		for(var/material in loaded_item.materials)
-			linked_console.linked_lathe.materials.insert_amount(min((linked_console.linked_lathe.materials.max_amount - linked_console.linked_lathe.materials.total_amount), (loaded_item.materials[material]*(decon_mod/10))), material)
-	for(var/mob/M in loaded_item.contents)
+		for(var/material in thing.materials)
+			var/can_insert = min((linked_console.linked_lathe.materials.max_amount - linked_console.linked_lathe.materials.total_amount), (max(thing.materials[material]*(decon_mod/10), thing.materials[material])))
+			linked_console.linked_lathe.materials.insert_amount(can_insert, material)
+			. += can_insert
+
+/obj/machinery/rnd/destructive_analyzer/proc/destroy_item(obj/item/thing, innermode = FALSE)
+	if(QDELETED(thing) || QDELETED(src) || QDELETED(linked_console))
+		return FALSE
+	if(!innermode)
+		flick("d_analyzer_process", src)
+		busy = TRUE
+		addtimer(CALLBACK(src, .proc/reset_busy), 24)
+		use_power(250)
+		update_icon()
+		var/list/food = GetAllContents(thing)
+		for(var/obj/item/innerthing in food)
+			destroy_item(innerthing, TRUE)
+	reclaim_materials_from(thing)
+	for(var/mob/M in thing)
 		M.death()
-	if(istype(loaded_item, /obj/item/stack/sheet))
-		var/obj/item/stack/sheet/S = loaded_item
-		if(S.amount > 1)
+	if(istype(thing, /obj/item/stack/sheet))
+		var/obj/item/stack/sheet/S = thing
+		if(S.amount > 1 && !innermode)
 			S.amount--
 		else
 			qdel(S)
 	else
-		qdel(loaded_item)
-	use_power(250)
-	update_icon()
+		qdel(thing)
+	return TRUE
+
+/obj/machinery/rnd/destructive_analyzer/proc/user_try_decon_id(id)
+	if(!istype(loaded_item) || !istype(linked_console))
+		return FALSE
+	if(id)
+		var/datum/techweb_node/TN = get_techweb_node_by_id(id)
+		if(!istype(TN))
+			return FALSE
+		var/list/pos1 = techweb_item_boost_check(loaded_item)
+		if(!pos1[TN])
+			return FALSE
+		var/dpath = loaded_item.type
+		if(!TN.boost_item_paths[dpath])
+			return FALSE
+		var/dboost = TN.boost_item_paths[dpath]
+		var/choice = input("Are you sure you want to destroy [loaded_item.name] for a boost of [dboost] in node [TN.display_name]") in list("Proceed", "Cancel")
+		if(choice == "Cancel")
+			return FALSE
+		SSblackbox.add_details("item_deconstructed","[loaded_item.type] - [TN.id]")
+		if(destroy_item(loaded_item))
+			linked_console.stored_research.boost_with_path(SSresearch.techweb_nodes[TN.id], dpath)
+	else
+		var/choice = input("Are you sure you want to destroy [loaded_item.name] for material reclaimation?") in list("Proceed", "Cancel")
+		if(choice == "Cancel")
+			return FALSE
+		else
+			destroy_item(loaded_item)
+	return TRUE
 
 /obj/machinery/rnd/destructive_analyzer/proc/unload_item()
 	if(!loaded_item)
