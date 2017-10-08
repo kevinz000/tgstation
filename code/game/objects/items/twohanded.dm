@@ -23,7 +23,7 @@
  * Twohanded
  */
 /obj/item/twohanded
-	var/wielded = 0
+	var/wielded = FALSE
 	var/force_unwielded = 0
 	var/force_wielded = 0
 	var/wieldsound = null
@@ -32,7 +32,7 @@
 /obj/item/twohanded/proc/unwield(mob/living/carbon/user, show_message = TRUE)
 	if(!wielded || !user)
 		return
-	wielded = 0
+	wielded = FALSE
 	if(force_unwielded)
 		force = force_unwielded
 	var/sf = findtext(name," (Wielded)")
@@ -65,7 +65,7 @@
 	if(user.get_num_arms() < 2)
 		to_chat(user, "<span class='warning'>You don't have enough hands.</span>")
 		return
-	wielded = 1
+	wielded = TRUE
 	if(force_wielded)
 		force = force_wielded
 	name = "[name] (Wielded)"
@@ -123,18 +123,20 @@
 /obj/item/twohanded/offhand/unwield()
 	if(wielded)//Only delete if we're wielded
 		wielded = FALSE
-		qdel(src)
+		if(!QDELETED(src))
+			qdel(src)
 
 /obj/item/twohanded/offhand/wield()
 	if(wielded)//Only delete if we're wielded
 		wielded = FALSE
-		qdel(src)
+		if(!QDELETED(src))
+			qdel(src)
 
 /obj/item/twohanded/offhand/attack_self(mob/living/carbon/user)		//You should never be able to do this in standard use of two handed items. This is a backup for lingering offhands.
 	var/obj/item/twohanded/O = user.get_inactive_held_item()
-	if (istype(O) && !istype(O, /obj/item/twohanded/offhand/))		//If you have a proper item in your other hand that the offhand is for, do nothing. This should never happen.
+	if(istype(O) && !istype(O, /obj/item/twohanded/offhand/))		//If you have a proper item in your other hand that the offhand is for, do nothing. This should never happen.
 		return
-	if (QDELETED(src))
+	if(QDELETED(src))
 		return
 	qdel(src)																//If it's another offhand, or literally anything else, qdel. If I knew how to add logging messages I'd put one here.
 
@@ -149,7 +151,7 @@
 /obj/item/twohanded/required/mob_can_equip(mob/M, mob/equipper, slot, disable_warning = 0)
 	if(wielded && !slot_flags)
 		to_chat(M, "<span class='warning'>[src] is too cumbersome to carry with anything but your hands!</span>")
-		return 0
+		return FALSE
 	return ..()
 
 /obj/item/twohanded/required/attack_hand(mob/user)//Can't even pick it up without both hands empty
