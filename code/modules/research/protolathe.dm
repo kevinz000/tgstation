@@ -34,10 +34,10 @@ Note: Must be placed west/left of and R&D console to function.
 
 /obj/machinery/rnd/protolathe/Initialize()
 	create_reagents(0)
-	AddComponent(/datum/component/material_container,
+	materials = AddComponent(/datum/component/material_container,
 		list(MAT_METAL, MAT_GLASS, MAT_SILVER, MAT_GOLD, MAT_DIAMOND, MAT_PLASMA, MAT_URANIUM, MAT_BANANIUM, MAT_TITANIUM, MAT_BLUESPACE),
 		FALSE, list(/obj/item/stack, /obj/item/ore/bluespace_crystal), CALLBACK(src, .proc/is_insertion_ready))
-	materials = GetComponent(/datum/component/material_container)
+	materials.precise_insertion = TRUE
 	return ..()
 
 /obj/machinery/rnd/protolathe/RefreshParts()

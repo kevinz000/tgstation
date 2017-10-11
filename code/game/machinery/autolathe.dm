@@ -387,6 +387,10 @@
 			else
 				stored_research.remove_design(D)
 
+/obj/machinery/autolathe/hacked/Initialize()
+	. = ..()
+	adjust_hacked(TRUE)
+
 //Called when the object is constructed by an autolathe
 //Has a reference to the autolathe so you can do !!FUN!! things with hacked lathes
 /obj/item/proc/autolathe_crafted(obj/machinery/autolathe/A)

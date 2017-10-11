@@ -41,7 +41,6 @@ Note: Must be placed within 3 tiles of the R&D Console
 			return
 		busy = TRUE
 		loaded_item = O
-		O.forceMove(src)
 		to_chat(user, "<span class='notice'>You add the [O.name] to the [src.name]!</span>")
 		flick("d_analyzer_la", src)
 		addtimer(CALLBACK(src, .proc/finish_loading), 10)

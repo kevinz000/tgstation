@@ -111,16 +111,15 @@ doesn't have toxins access.
 			if(t_disk)
 				to_chat(user, "<span class='danger'>A technology disk is already loaded!</span>")
 				return
-			if(!user.drop_item())
+			if(!user.transferItemToLoc(D, src))
 				to_chat(user, "<span class='danger'>[D] is stuck to your hand!</span>")
 				return
-			D.forceMove(src)
 			t_disk = D
 		else if (istype(D, /obj/item/disk/design_disk))
 			if(d_disk)
 				to_chat(user, "<span class='danger'>A design disk is already loaded!</span>")
 				return
-			if(!user.drop_item())
+			if(!user.transferItemToLoc(D, src))
 				to_chat(user, "<span class='danger'>[D] is stuck to your hand!</span>")
 				return
 			d_disk = D

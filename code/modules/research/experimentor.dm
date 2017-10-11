@@ -115,7 +115,6 @@
 		if(!user.drop_item())
 			return
 		loaded_item = O
-		O.loc = src
 		to_chat(user, "<span class='notice'>You add the [O.name] to the machine.</span>")
 		flick("h_lathe_load", src)
 

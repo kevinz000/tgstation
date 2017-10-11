@@ -113,4 +113,4 @@
 		if(prob(20))
 			M.Unconscious(force / 0.3)
 			M.Knockdown(force / 0.75)
-		M.drop_item()
+		M.drop_all_held_items()

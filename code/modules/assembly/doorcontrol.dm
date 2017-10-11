@@ -12,7 +12,6 @@
 	if(id)
 		to_chat(user, "<span class='notice'>Its channel ID is '[id]'.</span>")
 
-
 /obj/item/device/assembly/control/activate()
 	cooldown = 1
 	var/openclose
@@ -20,13 +19,7 @@
 		if(M.id == src.id)
 			if(openclose == null)
 				openclose = M.density
-			spawn(0)
-				if(M)
-					if(openclose)
-						M.open()
-					else
-						M.close()
-				return
+			INVOKE_ASYNC(M, openclose ? /obj/machinery/door/poddoor.proc/open : /obj/machinery/door/poddoor.proc/close)
 	sleep(10)
 	cooldown = 0
 
@@ -85,8 +78,7 @@
 	cooldown = 1
 	for(var/obj/machinery/door/poddoor/M in GLOB.machines)
 		if (M.id == src.id)
-			spawn( 0 )
-				M.open()
+			INVOKE_ASYNC(M, /obj/machinery/door/poddoor.proc/open)
 
 	sleep(10)
 
@@ -98,8 +90,7 @@
 
 	for(var/obj/machinery/door/poddoor/M in GLOB.machines)
 		if (M.id == src.id)
-			spawn( 0 )
-				M.close()
+			INVOKE_ASYNC(M, /obj/machinery/door/poddoor.proc/close)
 
 	sleep(10)
 	cooldown = 0
@@ -113,8 +104,7 @@
 	cooldown = 1
 	for(var/obj/machinery/sparker/M in GLOB.machines)
 		if (M.id == src.id)
-			spawn( 0 )
-				M.ignite()
+			INVOKE_ASYNC(M, /obj/machinery/sparker.proc/ignite)
 
 	for(var/obj/machinery/igniter/M in GLOB.machines)
 		if(M.id == src.id)
@@ -134,8 +124,7 @@
 	cooldown = 1
 	for(var/obj/machinery/flasher/M in GLOB.machines)
 		if(M.id == src.id)
-			spawn(0)
-				M.flash()
+			INVOKE_ASYNC(M, /obj/machinery/flasher.proc/flash)
 
 	sleep(50)
 	cooldown = 0
