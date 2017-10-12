@@ -112,7 +112,7 @@
 		. = 1
 		if(!is_insertion_ready(user))
 			return
-		if(!user.drop_item())
+		if(!user.transferItemToLoc(O, src))
 			return
 		loaded_item = O
 		to_chat(user, "<span class='notice'>You add the [O.name] to the machine.</span>")
