@@ -985,7 +985,6 @@ GLOBAL_LIST_EMPTY(friendly_animal_types)
 	I.DrawBox(colour,drawX, drawY)
 	return I
 
-
 //Interface for easy drawing of one pixel on an atom.
 /atom/proc/DrawPixelOn(colour, drawX, drawY)
 	var/icon/I = new(icon)

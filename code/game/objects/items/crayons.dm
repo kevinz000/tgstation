@@ -67,6 +67,11 @@
 	var/pre_noise = FALSE
 	var/post_noise = FALSE
 
+	var/pixel_draw = FALSE
+	var/ranged_pixel_draw = FALSE
+	var/pixel_draw_capable = FALSE
+	var/pixel_draw_continuous = FALSE
+	var/pixel_decal_type = /obj/effect/decal/cleanable/crayon_pixel_drawing
 
 /obj/item/toy/crayon/suicide_act(mob/user)
 	user.visible_message("<span class='suicide'>[user] is jamming [src] up [user.p_their()] nose and into [user.p_their()] brain. It looks like [user.p_theyre()] trying to commit suicide!</span>")
@@ -242,9 +247,70 @@
 			out += a
 	return jointext(out,"")
 
-/obj/item/toy/crayon/afterattack(atom/target, mob/user, proximity)
+/obj/item/toy/crayon/canItemMouseDown()
+	return (pixel_draw && pixel_draw_continuous && pixel_draw_capable)? src : ..()
+
+/obj/item/toy/crayon/onMouseDrag(src_object, over_object, src_location, over_location, params, mob)
+	var/turf/T = over_object
+	if(!istype(T))
+		return ..()
+	if(pixel_draw && pixel_draw_continuous)
+		pixel_draw(T, mob, T.Adjacent(mob), params)
+	return ..()
+
+/obj/item/toy/crayon/onMouseDown(object, location, params, mob)
+	var/turf/T = get_turf(object)
+	if(!istype(T))
+		return ..()
+	if(pixel_draw && pixel_draw_continuous)
+		pixel_draw(T, mob, T.Adjacent(mob), params)
+	return ..()
+
+/obj/item/toy/crayon/proc/pixel_draw(atom/target, mob/user, proximity, params)
+	to_chat(world, "DEBUG: pixel_draw with target [target][COORD(target)] user [user] proximity [proximity] params [params]")
+	if(ranged_pixel_draw < get_dist(get_turf(target), get_turf(user)) && !proximity)
+		return
+	if(!isturf(target) || !params)
+		return
+	var/turf/T = target
+	params = params2list(params)
+	var/p_x = text2num(params["icon-x"])
+	var/p_y = text2num(params["icon-y"])
+	if(!p_x || !p_y)
+		return
+	return T.pixel_draw(pixel_decal_type, p_x, p_y, paint_color)
+
+/obj/effect/decal/cleanable/crayon_pixel_drawing
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "nothing"
+
+/obj/effect/decal/cleanable/crayon_pixel_drawing/DrawPixelOn(color, p_x, p_y)
+	to_chat(world, "DrawPixelOn: color [color] x [p_x] y [p_y]")
+	return ..()
+
+/proc/clear_crayon_drawings()
+	for(var/obj/effect/decal/cleanable/crayon_pixel_drawing/D in world)
+		qdel(D)
+
+/turf/proc/pixel_draw(decal_type, pixel_x, pixel_y, color = "#FFFFFF")
+	if(!ispath(decal_type))
+		to_chat(world, "DEBUG: turf pixel_draw: error: no decal type.")
+		return FALSE
+	var/atom/decal_used = locate(decal_type) in src
+	if(istype(decal_used))
+		to_chat(world, "DEBUG: turf pixel_draw: decal located type [decal_type] at [COORD(decal_used)]")
+	if(!istype(decal_used))
+		to_chat(world, "Making new decal")
+		decal_used = new decal_type(src)
+		decal_used.layer = layer + 1
+	return decal_used.DrawPixelOn(color, pixel_x, pixel_y)
+
+/obj/item/toy/crayon/afterattack(atom/target, mob/user, proximity, params)
 	if(!proximity || !check_allowed_items(target))
 		return
+
+	if(pixel_draw)
+		return pixel_draw(target, user, proximity, params)
 
 	if(check_empty(user))
 		return
