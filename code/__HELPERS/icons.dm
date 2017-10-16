@@ -983,6 +983,7 @@ GLOBAL_LIST_EMPTY(friendly_animal_types)
 		return 0
 
 	I.DrawBox(colour,drawX, drawY)
+	I.GetPixel(1,1)			//Prevents BYOND from chaining the DrawBox resulting in crashes/whatnot, ask MSO.
 	return I
 
 //Interface for easy drawing of one pixel on an atom.

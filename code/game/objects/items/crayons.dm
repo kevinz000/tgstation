@@ -71,7 +71,7 @@
 	var/ranged_pixel_draw = FALSE
 	var/pixel_draw_capable = FALSE
 	var/pixel_draw_continuous = FALSE
-	var/pixel_decal_type = /obj/effect/decal/cleanable/crayon_pixel_drawing
+	var/pixel_decal_type = /obj/effect/decal/cleanable/pixel_drawing/crayon
 
 /obj/item/toy/crayon/suicide_act(mob/user)
 	user.visible_message("<span class='suicide'>[user] is jamming [src] up [user.p_their()] nose and into [user.p_their()] brain. It looks like [user.p_theyre()] trying to commit suicide!</span>")
@@ -267,7 +267,6 @@
 	return ..()
 
 /obj/item/toy/crayon/proc/pixel_draw(atom/target, mob/user, proximity, params)
-	to_chat(world, "DEBUG: pixel_draw with target [target][COORD(target)] user [user] proximity [proximity] params [params]")
 	if(ranged_pixel_draw < get_dist(get_turf(target), get_turf(user)) && !proximity)
 		return
 	if(!isturf(target) || !params)
@@ -280,30 +279,47 @@
 		return
 	return T.pixel_draw(pixel_decal_type, p_x, p_y, paint_color)
 
-/obj/effect/decal/cleanable/crayon_pixel_drawing
+/obj/effect/decal/cleanable/pixel_drawing
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "nothing"
+	var/list/cached_draws
+	var/flushing = FALSE
 
-/obj/effect/decal/cleanable/crayon_pixel_drawing/DrawPixelOn(color, p_x, p_y)
-	to_chat(world, "DrawPixelOn: color [color] x [p_x] y [p_y]")
-	return ..()
+/obj/effect/decal/cleanable/pixel_drawing/proc/WrapDrawPixelOn(color, pixel_x, pixel_y)
+	LAZYINITLIST(cached_draws)
+	cached_draws += list2params(list(color,pixel_x,pixel_y))
+	to_chat(world, "DEBUG: Cached params [list2params(list(color,pixel_x,pixel_y))]")
+
+/obj/effect/decal/cleanable/pixel_drawing/proc/FlushPixelDraws()
+	if(flushing || !cached_draws)		//the whole point is to not do this multiple times at once.
+		return
+	to_chat(world, "DEBUG: Flushing [cached_draws.len] changes...")
+	flushing = TRUE
+	var/list/flush = cached_draws.Copy()
+	cached_draws = null
+	for(var/i in 1 to flush.len)
+		var/list/drawinfo = params2list(flush[i])
+		if(drawinfo.len != 3)	//INVALID
+			to_chat(world, "DEBUG: Drawinfo invalid [drawinfo]")
+			continue
+		DrawPixelOn(drawinfo[1], text2num(drawinfo[2]), text2num(drawinfo[3]))
+	flushing = FALSE
+	to_chat(world, "DEBUG: Flushed [flush.len] changes!")
+
+/obj/effect/decal/cleanable/pixel_drawing/crayon
 
 /proc/clear_crayon_drawings()
-	for(var/obj/effect/decal/cleanable/crayon_pixel_drawing/D in world)
+	for(var/obj/effect/decal/cleanable/pixel_drawing/crayon/D in world)
 		qdel(D)
 
 /turf/proc/pixel_draw(decal_type, pixel_x, pixel_y, color = "#FFFFFF")
-	if(!ispath(decal_type))
-		to_chat(world, "DEBUG: turf pixel_draw: error: no decal type.")
+	if(!ispath(decal_type, /obj/effect/decal/cleanable/pixel_drawing))			//NEVER EVER TRY TO PIXEL DRAW WITH ANOTHER ATOM TYPE.
 		return FALSE
-	var/atom/decal_used = locate(decal_type) in src
-	if(istype(decal_used))
-		to_chat(world, "DEBUG: turf pixel_draw: decal located type [decal_type] at [COORD(decal_used)]")
+	var/obj/effect/decal/cleanable/pixel_drawing/decal_used = locate(decal_type) in src
 	if(!istype(decal_used))
-		to_chat(world, "Making new decal")
 		decal_used = new decal_type(src)
-		decal_used.layer = layer + 1
-	return decal_used.DrawPixelOn(color, pixel_x, pixel_y)
+		decal_used.layer = layer + 0.5
+	return decal_used.WrapDrawPixelOn(color, pixel_x, pixel_y)
 
 /obj/item/toy/crayon/afterattack(atom/target, mob/user, proximity, params)
 	if(!proximity || !check_allowed_items(target))
