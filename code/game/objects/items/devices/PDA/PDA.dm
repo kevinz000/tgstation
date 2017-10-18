@@ -822,8 +822,8 @@ GLOBAL_LIST_EMPTY(PDAs)
 			to_chat(user, "<span class='notice'>You slide \the [C] into \the [src].</span>")
 			inserted_item = C
 			update_icon()
-	else if(istype(C, /obj/item/weapon/photo))
-		var/obj/item/weapon/photo/P = C
+	else if(istype(C, /obj/item/photo))
+		var/obj/item/photo/P = C
 		photo = P.picture.picture_image
 		to_chat(user, "<span class='notice'>You scan \the [C].</span>")
 	else if(hidden_uplink && hidden_uplink.active)

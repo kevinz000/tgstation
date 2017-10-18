@@ -111,11 +111,11 @@
 
 					dat += "<table><tr><td><b><font size='4'>Medical Record</font></b></td></tr>"
 					if(active1 in GLOB.data_core.general)
-						if(istype(active1.fields["photo_front"], /obj/item/weapon/photo))
-							var/obj/item/weapon/photo/P1 = active1.fields["photo_front"]
+						if(istype(active1.fields["photo_front"], /obj/item/photo))
+							var/obj/item/photo/P1 = active1.fields["photo_front"]
 							user << browse_rsc(P1.picture.picture_image, "photo_front")
-						if(istype(active1.fields["photo_side"], /obj/item/weapon/photo))
-							var/obj/item/weapon/photo/P2 = active1.fields["photo_side"]
+						if(istype(active1.fields["photo_side"], /obj/item/photo))
+							var/obj/item/photo/P2 = active1.fields["photo_side"]
 							user << browse_rsc(P2.picture.picture_image, "photo_side")
 						dat += "<tr><td>Name:</td><td>[active1.fields["name"]]</td>"
 						dat += "<td><a href='?src=\ref[src];field=show_photo_front'><img src=photo_front height=80 width=80 border=4></a></td>"
@@ -254,7 +254,7 @@
 				authenticated = 1
 				rank = "Central Command"
 				screen = 1
-			else if(istype(scan, /obj/item/weapon/card/id))
+			else if(istype(scan, /obj/item/card/id))
 				active1 = null
 				active2 = null
 				if(check_access(scan))

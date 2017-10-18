@@ -146,8 +146,8 @@
 /datum/objective_item/steal/blueprints/check_special_completion(obj/item/I)
 	if(istype(I, /obj/item/areaeditor/blueprints))
 		return TRUE
-	if(istype(I, /obj/item/weapon/photo))
-		var/obj/item/weapon/photo/P = I
+	if(istype(I, /obj/item/photo))
+		var/obj/item/photo/P = I
 		if(P.picture.has_blueprints)	//if the blueprints are in frame
 			return TRUE
 	return FALSE

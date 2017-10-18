@@ -794,7 +794,7 @@ GLOBAL_LIST_EMPTY(allCasters)
 		if(!istype(S) || !istype(S.aicamera))
 			return
 		var/datum/picture/selection = S.aicamera.selectpicture()
-		var/obj/item/weapon/photo/P = new/obj/item/weapon/photo(src, selection)
+		var/obj/item/photo/P = new/obj/item/photo(src, selection)
 		P.sillynewscastervar = TRUE
 		photo = P
 		qdel(P)

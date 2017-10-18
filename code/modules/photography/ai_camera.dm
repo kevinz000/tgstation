@@ -28,7 +28,7 @@
 /obj/item/device/camera/siliconcam/proc/viewpictures()
 	var/datum/picture/selection = selectpicture()
 	if(istype(selection))
-		var/obj/item/weapon/photo/P = new(src, selection)
+		var/obj/item/photo/P = new(src, selection)
 		P.show(usr)
 		to_chat(usr, P.desc)
 		qdel(P)
@@ -84,7 +84,7 @@
 	if(!istype(selection))
 		to_chat(usr, "<span class='warning'>Invalid Image.</span>")
 		return
-	var/obj/item/weapon/photo/p = new /obj/item/weapon/photo(C.loc, selection)
+	var/obj/item/photo/p = new /obj/item/photo(C.loc, selection)
 	p.pixel_x = rand(-10, 10)
 	p.pixel_y = rand(-10, 10)
 	C.toner -= printcost	 //All fun allowed.

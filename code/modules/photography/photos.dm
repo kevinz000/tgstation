@@ -1,5 +1,5 @@
 
-/obj/item/weapon/photo
+/obj/item/photo
 	name = "photo"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "photo"
@@ -13,33 +13,33 @@
 	var/sillynewscastervar  //Photo objects with this set to 1 will not be ejected by a newscaster. Only gets set to 1 if a silicon puts one of their images into a newscaster
 	//Someone refactor out sillynewscastervar and other things to use the datum and not the phyiscal object later....
 
-/obj/item/weapon/photo/Initialize(mapload, datum/picture/P)
+/obj/item/photo/Initialize(mapload, datum/picture/P)
 	init_photo(P)
 	return ..()
 
-/obj/item/weapon/photo/proc/init_photo(datum/picture/P)
+/obj/item/photo/proc/init_photo(datum/picture/P)
 	if(istype(P))
 		picture = P
 		icon = P.picture_icon
 		if(P.caption)
 			scribble = P.caption
 
-/obj/item/weapon/photo/attack_self(mob/user)
+/obj/item/photo/attack_self(mob/user)
 	user.examinate(src)
 
-/obj/item/weapon/photo/attackby(obj/item/weapon/P, mob/user, params)
-	if(istype(P, /obj/item/weapon/pen) || istype(P, /obj/item/toy/crayon))
+/obj/item/photo/attackby(obj/item/weapon/P, mob/user, params)
+	if(istype(P, /obj/item/pen) || istype(P, /obj/item/toy/crayon))
 		var/txt = sanitize(input(user, "What would you like to write on the back?", "Photo Writing", null)  as text)
 		txt = copytext(txt, 1, 128)
 		if(loc == user && user.stat == 0)
 			scribble = txt
 	..()
 
-/obj/item/weapon/photo/proc/photocopy(greyscale = FALSE, cropx = 0, cropy = 0)
-	var/obj/item/weapon/photo/P = new(src, picture.Copy(greyscale, cropx, cropy))
+/obj/item/photo/proc/photocopy(greyscale = FALSE, cropx = 0, cropy = 0)
+	var/obj/item/photo/P = new(src, picture.Copy(greyscale, cropx, cropy))
 	return P
 
-/obj/item/weapon/photo/examine(mob/user)
+/obj/item/photo/examine(mob/user)
 	..()
 
 	if(in_range(src, user))
@@ -47,7 +47,7 @@
 	else
 		to_chat(user, "<span class='warning'>You need to get closer to get a good look at this photo!</span>")
 
-/obj/item/weapon/photo/proc/show(mob/user)
+/obj/item/photo/proc/show(mob/user)
 	user << browse_rsc(picture.picture_image, "tmp_photo.png")
 	user << browse("<html><head><title>[name]</title></head>" \
 		+ "<body style='overflow:hidden;margin:0;text-align:center'>" \
@@ -56,7 +56,7 @@
 		+ "</body></html>", "window=book;size=["[picture.psize_x]"]x[scribble ? "[picture.psize_y + 208]" : "[picture.psize_y]"]")
 	onclose(user, "[name]")
 
-/obj/item/weapon/photo/verb/rename()
+/obj/item/photo/verb/rename()
 	set name = "Rename photo"
 	set category = "Object"
 	set src in usr
@@ -70,12 +70,12 @@
 /*
  * Photo album
  */
-/obj/item/weapon/storage/photo_album
+/obj/item/storage/photo_album
 	name = "photo album"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "album"
 	item_state = "briefcase"
-	can_hold = list(/obj/item/weapon/photo)
+	can_hold = list(/obj/item/photo)
 	resistance_flags = FLAMMABLE
 
 // Picture frames
@@ -88,10 +88,10 @@
 	flags = 0
 	icon_state = "frame-empty"
 	result_path = /obj/structure/sign/picture_frame
-	var/obj/item/weapon/photo/displayed
+	var/obj/item/photo/displayed
 
 /obj/item/wallframe/picture/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/photo))
+	if(istype(I, /obj/item/photo))
 		if(!displayed)
 			if(!user.transferItemToLoc(I, src))
 				return
@@ -142,7 +142,7 @@
 	desc = "Every time you look it makes you laugh."
 	icon = 'icons/obj/decals.dmi'
 	icon_state = "frame-empty"
-	var/obj/item/weapon/photo/framed
+	var/obj/item/photo/framed
 
 /obj/structure/sign/picture_frame/New(loc, dir, building)
 	..()
@@ -159,7 +159,7 @@
 		..()
 
 /obj/structure/sign/picture_frame/attackby(obj/item/I, mob/user, params)
-	if(istype(I, /obj/item/weapon/screwdriver) || istype(I, /obj/item/weapon/wrench))
+	if(istype(I, /obj/item/screwdriver) || istype(I, /obj/item/wrench))
 		to_chat(user, "<span class='notice'>You start unsecuring [name]...</span>")
 		playsound(loc, I.usesound, 50, 1)
 		if(do_after(user, 30*I.toolspeed, target = src))
@@ -168,9 +168,9 @@
 		deconstruct()
 		return
 
-	else if(istype(I, /obj/item/weapon/photo))
+	else if(istype(I, /obj/item/photo))
 		if(!framed)
-			var/obj/item/weapon/photo/P = I
+			var/obj/item/photo/P = I
 			if(!user.transferItemToLoc(P, src))
 				return
 			framed = P

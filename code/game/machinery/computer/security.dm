@@ -181,11 +181,11 @@
 				if(3)
 					dat += "<font size='4'><b>Security Record</b></font><br>"
 					if(istype(active1, /datum/data/record) && GLOB.data_core.general.Find(active1))
-						if(istype(active1.fields["photo_front"], /obj/item/weapon/photo))
-							var/obj/item/weapon/photo/P1 = active1.fields["photo_front"]
+						if(istype(active1.fields["photo_front"], /obj/item/photo))
+							var/obj/item/photo/P1 = active1.fields["photo_front"]
 							user << browse_rsc(P1.picture.picture_image, "photo_front")
-						if(istype(active1.fields["photo_side"], /obj/item/weapon/photo))
-							var/obj/item/weapon/photo/P2 = active1.fields["photo_side"]
+						if(istype(active1.fields["photo_side"], /obj/item/photo))
+							var/obj/item/photo/P2 = active1.fields["photo_side"]
 							user << browse_rsc(P2.picture.picture_image, "photo_side")
 						dat += {"<table><tr><td><table>
 						<tr><td>Name:</td><td><A href='?src=\ref[src];choice=Edit Field;field=name'>&nbsp;[active1.fields["name"]]&nbsp;</A></td></tr>
@@ -445,8 +445,8 @@ What a mess.*/
 							printing = TRUE
 							sleep(30)
 							if((istype(active1, /datum/data/record) && GLOB.data_core.general.Find(active1)))//make sure the record still exists.
-								var/obj/item/weapon/photo/photo = active1.fields["photo_front"]
-								new /obj/item/weapon/poster/wanted(loc, photo.picture.picture_image, wanted_name, info)
+								var/obj/item/photo/photo = active1.fields["photo_front"]
+								new /obj/item/poster/wanted(loc, photo.picture.picture_image, wanted_name, info)
 							printing = FALSE
 
 //RECORD DELETE

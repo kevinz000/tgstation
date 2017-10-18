@@ -221,8 +221,8 @@
 		ps.picture_desc = "This is [H]."
 		pf.picture_image = icon(image, dir = SOUTH)
 		ps.picture_image = icon(image, dir = WEST)
-		var/obj/item/weapon/photo/photo_front = new(null, pf)
-		var/obj/item/weapon/photo/photo_side = new(null, ps)
+		var/obj/item/photo/photo_front = new(null, pf)
+		var/obj/item/photo/photo_side = new(null, ps)
 
 		//These records should ~really~ be merged or something
 		//General Record

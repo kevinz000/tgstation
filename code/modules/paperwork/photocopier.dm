@@ -108,7 +108,7 @@
 						toner -= tonercost
 					else
 						break
-					var/obj/item/weapon/photo/p = photocopy.photocopy(greyscale, 0, 0)
+					var/obj/item/photo/p = photocopy.photocopy(greyscale, 0, 0)
 					p.forceMove(loc)
 					p.pixel_x = rand(-10, 10)
 					p.pixel_y = rand(-10, 10)
@@ -155,7 +155,7 @@
 					small_img.Scale(8, 8)
 					ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 					P.picture_icon = ic
-					var/obj/item/weapon/photo/p = new (loc, P)
+					var/obj/item/photo/p = new (loc, P)
 					p.desc = "You see [ass]'s ass on the photo."
 					p.pixel_x = rand(-10, 10)
 					p.pixel_y = rand(-10, 10)
@@ -196,7 +196,7 @@
 			if(!istype(selection))
 				to_chat(tempAI, "<span class='warning'>Invalid Picture.</span>")
 				return
-			var/obj/item/weapon/photo/p = new(loc, selection)
+			var/obj/item/photo/p = new(loc, selection)
 			p.pixel_x = rand(-10, 10)
 			p.pixel_y = rand(-10, 10)
 			toner -= 5	 //AI prints color pictures only, thus they can do it more efficiently
