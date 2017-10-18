@@ -1,8 +1,8 @@
 /mob
-	density = 1
+	density = TRUE
 	layer = MOB_LAYER
 	animate_movement = 2
-	flags = HEAR
+	flags_1 = HEAR_1
 	hud_possible = list(ANTAG_HUD)
 	pressure_resistance = 8
 	var/lighting_alpha = LIGHTING_PLANE_ALPHA_VISIBLE
@@ -78,7 +78,7 @@
 	var/list/held_items = list(null, null) //len = number of hands, eg: 2 nulls is 2 empty hands, 1 item and 1 null is 1 full hand and 1 empty hand.
 	//held_items[active_hand_index] is the actively held item, but please use get_active_held_item() instead, because OOP
 
-	var/obj/item/weapon/storage/s_active = null//Carbon
+	var/obj/item/storage/s_active = null//Carbon
 
 	var/see_override = 0 //0 for no override, sets see_invisible = see_override in mob life process
 
@@ -104,6 +104,7 @@
 //The last mob/living/carbon to push/drag/grab this mob (mostly used by slimes friend recognition)
 	var/mob/living/carbon/LAssailant = null
 
+	var/list/obj/user_movement_hooks	//Passes movement in client/Move() to these!
 
 	var/list/mob_spell_list = list() //construct spells and mime spells. Spells that do not transfer from one mob to another and can not be lost in mindswap.
 
@@ -112,7 +113,7 @@
 
 //List of active diseases
 
-	var/list/viruses = list() // replaces var/datum/disease/virus
+	var/list/viruses = list() // list of all diseases in a mob
 	var/list/resistances = list()
 
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
@@ -140,3 +141,7 @@
 
 	var/list/progressbars = null	//for stacking do_after bars
 	var/list/can_ride_typecache = list()
+
+	var/list/mousemove_intercept_objects
+
+	var/ventcrawl_layer = PIPING_LAYER_DEFAULT

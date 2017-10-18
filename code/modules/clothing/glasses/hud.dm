@@ -1,7 +1,7 @@
 /obj/item/clothing/glasses/hud
 	name = "HUD"
 	desc = "A heads-up display that provides important info in (almost) real time."
-	flags = null //doesn't protect eyes because it's a monocle, duh
+	flags_1 = null //doesn't protect eyes because it's a monocle, duh
 	origin_tech = "magnets=3;biotech=2"
 	var/hud_type = null
 
@@ -18,15 +18,17 @@
 		H.remove_hud_from(user)
 
 /obj/item/clothing/glasses/hud/emp_act(severity)
-	if(emagged == 0)
-		emagged = 1
-		desc = "[desc] The display is flickering slightly."
+	if(emagged)
+		return
+	emagged = TRUE
+	desc = "[desc] The display is flickering slightly."
 
 /obj/item/clothing/glasses/hud/emag_act(mob/user)
-	if(emagged == 0)
-		emagged = 1
-		to_chat(user, "<span class='warning'>PZZTTPFFFT</span>")
-		desc = "[desc] The display is flickering slightly."
+	if(emagged)
+		return
+	emagged = TRUE
+	to_chat(user, "<span class='warning'>PZZTTPFFFT</span>")
+	desc = "[desc] The display is flickering slightly."
 
 /obj/item/clothing/glasses/hud/health
 	name = "health scanner HUD"

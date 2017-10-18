@@ -1,8 +1,9 @@
 /obj/item/organ/heart
 	name = "heart"
+	desc = "I feel bad for the heartless bastard who lost this."
 	icon_state = "heart-on"
 	zone = "chest"
-	slot = "heart"
+	slot = ORGAN_SLOT_HEART
 	origin_tech = "biotech=5"
 	// Heart attack code is in code/modules/mob/living/carbon/human/life.dm
 	var/beating = 1
@@ -28,9 +29,8 @@
 /obj/item/organ/heart/attack_self(mob/user)
 	..()
 	if(!beating)
-		visible_message("<span class='notice'>[user] squeezes [src] to \
-			make it beat again!</span>", "<span class='notice'>You squeeze \
-			[src] to make it beat again!</span>")
+		user.visible_message("<span class='notice'>[user] squeezes [src] to \
+			make it beat again!</span>","<span class='notice'>You squeeze [src] to make it beat again!</span>")
 		Restart()
 		addtimer(CALLBACK(src, .proc/stop_if_unowned), 80)
 
@@ -50,11 +50,11 @@
 	return S
 
 /obj/item/organ/heart/on_life()
-	if(owner.client)
+	if(owner.client && beating)
 		var/sound/slowbeat = sound('sound/health/slowbeat.ogg', repeat = TRUE)
-
 		var/sound/fastbeat = sound('sound/health/fastbeat.ogg', repeat = TRUE)
 		var/mob/living/carbon/H = owner
+		
 		if(H.health <= HEALTH_THRESHOLD_CRIT && beat != BEAT_SLOW)
 			beat = BEAT_SLOW
 			H.playsound_local(get_turf(H), slowbeat,40,0, channel = CHANNEL_HEARTBEAT)
@@ -89,7 +89,7 @@
 /obj/item/organ/heart/cursed/attack(mob/living/carbon/human/H, mob/living/carbon/human/user, obj/target)
 	if(H == user && istype(H))
 		playsound(user,'sound/effects/singlebeat.ogg',40,1)
-		user.drop_item()
+		user.temporarilyRemoveItemFromInventory(src, TRUE)
 		Insert(user)
 	else
 		return ..()
@@ -118,7 +118,7 @@
 //You are now brea- pumping blood manually
 /datum/action/item_action/organ_action/cursed_heart/Trigger()
 	. = ..()
-	if(. && istype(target,/obj/item/organ/heart/cursed))
+	if(. && istype(target, /obj/item/organ/heart/cursed))
 		var/obj/item/organ/heart/cursed/cursed_heart = target
 
 		if(world.time < (cursed_heart.last_pump + (cursed_heart.pump_delay-10))) //no spam
@@ -143,3 +143,12 @@
 /datum/client_colour/cursed_heart_blood
 	priority = 100 //it's an indicator you're dieing, so it's very high priority
 	colour = "red"
+
+/obj/item/organ/heart/cybernetic
+	name = "cybernetic heart"
+	desc = "An electronic device designed to mimic the functions of an organic human heart. Offers no benefit over an organic heart other than being easy to make."
+	icon_state = "heart-c"
+	origin_tech = "biotech=5"
+
+/obj/item/organ/heart/cybernetic/emp_act()
+	Stop()

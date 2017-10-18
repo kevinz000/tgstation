@@ -53,7 +53,7 @@ Difficulty: Medium
 	pixel_x = -16
 	crusher_loot = list(/obj/structure/closet/crate/necropolis/dragon/crusher)
 	loot = list(/obj/structure/closet/crate/necropolis/dragon)
-	butcher_results = list(/obj/item/weapon/ore/diamond = 5, /obj/item/stack/sheet/sinew = 5, /obj/item/stack/sheet/animalhide/ashdrake = 10, /obj/item/stack/sheet/bone = 30)
+	butcher_results = list(/obj/item/ore/diamond = 5, /obj/item/stack/sheet/sinew = 5, /obj/item/stack/sheet/animalhide/ashdrake = 10, /obj/item/stack/sheet/bone = 30)
 	var/swooping = NONE
 	var/swoop_cooldown = 0
 	medal_type = MEDAL_PREFIX
@@ -130,7 +130,7 @@ Difficulty: Medium
 /mob/living/simple_animal/hostile/megafauna/dragon/proc/fire_walls()
 	playsound(get_turf(src),'sound/magic/fireball.ogg', 200, 1)
 
-	for(var/d in GLOB.cardinal)
+	for(var/d in GLOB.cardinals)
 		INVOKE_ASYNC(src, .proc/fire_wall, d)
 
 /mob/living/simple_animal/hostile/megafauna/dragon/proc/fire_wall(dir)
@@ -191,11 +191,13 @@ Difficulty: Medium
 		sleep(1)
 		if(QDELETED(src) || stat == DEAD) //we got hit and died, rip us
 			qdel(F)
-			swooping &= ~SWOOP_DAMAGEABLE
+			if(stat == DEAD)
+				swooping &= ~SWOOP_DAMAGEABLE
+				animate(src, alpha = 255, transform = oldtransform, time = 0, flags = ANIMATION_END_NOW) //reset immediately
 			return
 	animate(src, alpha = 100, transform = matrix()*0.7, time = 7)
 	swooping |= SWOOP_INVULNERABLE
-	mouse_opacity = 0
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	sleep(7)
 	var/list/flame_hit = list()
 	while(swoop_duration > 0)
@@ -291,7 +293,7 @@ Difficulty: Medium
 	animate(src, pixel_z = 0, time = duration)
 
 /obj/effect/temp_visual/target
-	icon = 'icons/mob/actions.dmi'
+	icon = 'icons/mob/actions/actions_items.dmi'
 	icon_state = "sniper_zoom"
 	layer = BELOW_MOB_LAYER
 	light_range = 2
@@ -350,9 +352,9 @@ Difficulty: Medium
 
 /obj/effect/temp_visual/dragon_flight/proc/flight(negative)
 	if(negative)
-		animate(src, pixel_x = -DRAKE_SWOOP_HEIGHT*0.10, pixel_z = DRAKE_SWOOP_HEIGHT*0.15, time = 3, easing = BOUNCE_EASING)
+		animate(src, pixel_x = -DRAKE_SWOOP_HEIGHT*0.1, pixel_z = DRAKE_SWOOP_HEIGHT*0.15, time = 3, easing = BOUNCE_EASING)
 	else
-		animate(src, pixel_x = DRAKE_SWOOP_HEIGHT*0.10, pixel_z = DRAKE_SWOOP_HEIGHT*0.15, time = 3, easing = BOUNCE_EASING)
+		animate(src, pixel_x = DRAKE_SWOOP_HEIGHT*0.1, pixel_z = DRAKE_SWOOP_HEIGHT*0.15, time = 3, easing = BOUNCE_EASING)
 	sleep(3)
 	icon_state = "swoop"
 	if(negative)
@@ -382,6 +384,7 @@ Difficulty: Medium
 	melee_damage_lower = 30
 	damage_coeff = list(BRUTE = 1, BURN = 1, TOX = 1, CLONE = 1, STAMINA = 0, OXY = 1)
 	loot = list()
+	butcher_results = list(/obj/item/ore/diamond = 5, /obj/item/stack/sheet/sinew = 5, /obj/item/stack/sheet/bone = 30)
 
 /mob/living/simple_animal/hostile/megafauna/dragon/lesser/grant_achievement(medaltype,scoretype)
 	return

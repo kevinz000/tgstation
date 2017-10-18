@@ -5,6 +5,9 @@
 	if(digitalinvis)
 		handle_diginvis() //AI becomes unable to see mob
 
+	if((movement_type & FLYING) && !floating)	//TODO: Better floating
+		float(on = TRUE)
+
 	if (notransform)
 		return
 	if(!loc)
@@ -19,14 +22,15 @@
 	var/datum/gas_mixture/environment = loc.return_air()
 
 	if(stat != DEAD)
-		//Breathing, if applicable
-		handle_breathing(times_fired)
-	if(stat != DEAD)
 		//Mutations and radiation
 		handle_mutations_and_radiation()
+
 	if(stat != DEAD)
-		//Chemicals in the body
-		handle_chemicals_in_body()
+		//Breathing, if applicable
+		handle_breathing(times_fired)
+
+	handle_diseases() // DEAD check is in the proc itself; we want it to spread even if the mob is dead, but to handle its disease-y properties only if you're not.
+
 	if(stat != DEAD)
 		//Random events (vomiting etc)
 		handle_random_events()
@@ -60,7 +64,7 @@
 	radiation = 0 //so radiation don't accumulate in simple animals
 	return
 
-/mob/living/proc/handle_chemicals_in_body()
+/mob/living/proc/handle_diseases()
 	return
 
 /mob/living/proc/handle_diginvis()
@@ -88,7 +92,7 @@
 		ExtinguishMob()
 		return
 	var/datum/gas_mixture/G = loc.return_air() // Check if we're standing in an oxygenless environment
-	if(!G.gases["o2"] || G.gases["o2"][MOLES] < 1)
+	if(!G.gases[/datum/gas/oxygen] || G.gases[/datum/gas/oxygen][MOLES] < 1)
 		ExtinguishMob() //If there's no oxygen in the tile we're on, put out the fire
 		return
 	var/turf/location = get_turf(src)
@@ -119,5 +123,3 @@
 
 /mob/living/proc/update_damage_hud()
 	return
-
-

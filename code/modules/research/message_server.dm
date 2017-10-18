@@ -67,8 +67,9 @@ GLOBAL_LIST_INIT(message_servers, list())
 	icon = 'icons/obj/machines/research.dmi'
 	icon_state = "server"
 	name = "Messaging Server"
-	density = 1
-	anchored = 1
+	desc = "A machine that attempts to gather the secret knowledge of the universe."
+	density = TRUE
+	anchored = TRUE
 	use_power = IDLE_POWER_USE
 	idle_power_usage = 10
 	active_power_usage = 100
@@ -133,8 +134,8 @@ GLOBAL_LIST_INIT(message_servers, list())
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "blackbox"
 	name = "Blackbox Recorder"
-	density = 1
-	anchored = 1
+	density = TRUE
+	anchored = TRUE
 	use_power = IDLE_POWER_USE
 	idle_power_usage = 10
 	active_power_usage = 100

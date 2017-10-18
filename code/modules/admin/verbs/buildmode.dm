@@ -101,6 +101,7 @@
 	stored = null
 	for(var/button in buttons)
 		qdel(button)
+	return ..()
 
 /datum/buildmode/proc/create_buttons()
 	buttons += new /obj/screen/buildmode/mode(src)
@@ -171,7 +172,7 @@
 					objholder = /obj/structure/closet
 					alert("That path is not allowed.")
 			else
-				if(ispath(objholder,/mob) && !check_rights(R_DEBUG,0))
+				if(ispath(objholder, /mob) && !check_rights(R_DEBUG,0))
 					objholder = /obj/structure/closet
 		if(VAR_BUILDMODE)
 			var/list/locked = list("vars", "key", "ckey", "client", "firemut", "ishulk", "telekinesis", "xray", "virus", "viruses", "cuffed", "ka", "last_eaten", "urine")
@@ -180,7 +181,8 @@
 			if(varholder in locked && !check_rights(R_DEBUG,0))
 				return 1
 			var/thetype = input(user,"Select variable type:" ,"Type") in list("text","number","mob-reference","obj-reference","turf-reference")
-			if(!thetype) return 1
+			if(!thetype)
+				return 1
 			switch(thetype)
 				if("text")
 					valueholder = input(user,"Enter variable value:" ,"Value", "value") as text
@@ -194,11 +196,15 @@
 					valueholder = input(user,"Enter variable value:" ,"Value") as turf in world
 		if(AREA_BUILDMODE)
 			var/list/gen_paths = subtypesof(/datum/mapGenerator)
+			var/list/options = list()
+			for(var/path in gen_paths)
+				var/datum/mapGenerator/MP = path
+				options[initial(MP.buildmode_name)] = path
+			var/type = input(user,"Select Generator Type","Type") as null|anything in options
+			if(!type)
+				return
 
-			var/type = input(user,"Select Generator Type","Type") as null|anything in gen_paths
-			if(!type) return
-
-			generator_path = type
+			generator_path = options[type]
 			cornerA = null
 			cornerB = null
 
@@ -224,7 +230,7 @@
 	set name = "Toggle Build Mode"
 	set category = "Special Verbs"
 	if(M.client)
-		if(istype(M.client.click_intercept,/datum/buildmode))
+		if(istype(M.client.click_intercept, /datum/buildmode))
 			var/datum/buildmode/B = M.client.click_intercept
 			B.quit()
 			log_admin("[key_name(usr)] has left build mode.")
@@ -262,7 +268,7 @@
 				else if(isfloorturf(object))
 					var/turf/T = object
 					T.ChangeTurf(/turf/open/space)
-				else if(istype(object,/turf/closed/wall/r_wall))
+				else if(istype(object, /turf/closed/wall/r_wall))
 					var/turf/T = object
 					T.ChangeTurf(/turf/closed/wall)
 				else if(isobj(object))
@@ -291,7 +297,7 @@
 				log_admin("Build Mode: [key_name(user)] built a window at ([object.x],[object.y],[object.z])")
 		if(ADV_BUILDMODE)
 			if(left_click)
-				if(ispath(objholder,/turf))
+				if(ispath(objholder, /turf))
 					var/turf/T = get_turf(object)
 					log_admin("Build Mode: [key_name(user)] modified [T] ([T.x],[T.y],[T.z]) to [objholder]")
 					T.ChangeTurf(objholder)
@@ -342,7 +348,12 @@
 				if(cornerA && cornerB)
 					if(!generator_path)
 						to_chat(user, "<span class='warning'>Select generator type first.</span>")
+						return
 					var/datum/mapGenerator/G = new generator_path
+					if(istype(G, /datum/mapGenerator/repair/reload_station_map))
+						if(GLOB.reloading_map)
+							to_chat(user, "<span class='boldwarning'>You are already reloading an area! Please wait for it to fully finish loading before trying to load another!</span>")
+							return
 					G.defineRegion(cornerA,cornerB,1)
 					G.generate()
 					cornerA = null

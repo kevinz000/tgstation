@@ -10,6 +10,8 @@
 	icon_state = "smooth"
 	canSmoothWith = list(/turf/open/floor/fakepit, /turf/open/chasm)
 	density = TRUE //This will prevent hostile mobs from pathing into chasms, while the canpass override will still let it function like an open turf
+	var/static/list/falling_atoms = list() //Atoms currently falling into the chasm
+	var/static/list/forbidden_types = typecacheof(list(/obj/effect/portal, /obj/singularity, /obj/structure/stone_tile, /obj/item/projectile, /obj/effect/abstract, /obj/effect/temp_visual))
 	var/drop_x = 1
 	var/drop_y = 1
 	var/drop_z = 1
@@ -21,6 +23,7 @@
 	return
 
 /turf/open/chasm/Entered(atom/movable/AM)
+	..()
 	START_PROCESSING(SSobj, src)
 	drop_stuff(AM)
 
@@ -64,6 +67,9 @@
 	//if anything matching this typecache is found in the chasm, we don't drop things
 	var/static/list/chasm_safeties_typecache = typecacheof(list(/obj/structure/lattice/catwalk, /obj/structure/stone_tile))
 	var/list/found_safeties = typecache_filter_list(contents, chasm_safeties_typecache)
+	for(var/obj/structure/stone_tile/S in found_safeties)
+		if(S.fallen)
+			LAZYREMOVE(found_safeties, S)
 	return LAZYLEN(found_safeties)
 
 /turf/open/chasm/proc/drop_stuff(AM)
@@ -79,18 +85,17 @@
 			INVOKE_ASYNC(src, .proc/drop, thing)
 
 /turf/open/chasm/proc/droppable(atom/movable/AM)
+	if(falling_atoms[AM])
+		return FALSE
 	if(!isliving(AM) && !isobj(AM))
-		return 0
-	if(istype(AM, /obj/singularity) || istype(AM, /obj/item/projectile) || AM.throwing)
-		return 0
-	if(istype(AM, /obj/effect/portal))
-		//Portals aren't affected by gravity. Probably.
-		return 0
+		return FALSE
+	if(is_type_in_typecache(AM, forbidden_types) || AM.throwing)
+		return FALSE
 	//Flies right over the chasm
 	if(isliving(AM))
-		var/mob/MM = AM
-		if(MM.movement_type & FLYING)
-			return 0
+		var/mob/M = AM
+		if(M.is_flying())
+			return FALSE
 	if(ishuman(AM))
 		var/mob/living/carbon/human/H = AM
 		if(istype(H.belt, /obj/item/device/wormhole_jaunter))
@@ -98,14 +103,15 @@
 			//To freak out any bystanders
 			visible_message("<span class='boldwarning'>[H] falls into [src]!</span>")
 			J.chasm_react(H)
-			return 0
-	return 1
+			return FALSE
+	return TRUE
+
 
 /turf/open/chasm/proc/drop(atom/movable/AM)
 	//Make sure the item is still there after our sleep
 	if(!AM || QDELETED(AM))
 		return
-
+	falling_atoms[AM] = TRUE
 	var/turf/T = locate(drop_x, drop_y, drop_z)
 	if(T)
 		AM.visible_message("<span class='boldwarning'>[AM] falls into [src]!</span>", "<span class='userdanger'>GAH! Ah... where are you?</span>")
@@ -115,14 +121,17 @@
 			var/mob/living/L = AM
 			L.Knockdown(100)
 			L.adjustBruteLoss(30)
+	falling_atoms -= AM
 
 
 /turf/open/chasm/straight_down/Initialize()
-	..()
+	. = ..()
 	drop_x = x
 	drop_y = y
-	if(z+1 <= world.maxz)
-		drop_z = z+1
+	drop_z = z - 1
+	var/turf/T = locate(drop_x, drop_y, drop_z)
+	T.visible_message("<span class='boldwarning'>The ceiling gives way!</span>")
+	playsound(T, 'sound/effects/break_stone.ogg', 50, 1)
 
 
 /turf/open/chasm/straight_down/lava_land_surface
@@ -137,6 +146,7 @@
 	//Make sure the item is still there after our sleep
 	if(!AM || QDELETED(AM))
 		return
+	falling_atoms[AM] = TRUE
 	AM.visible_message("<span class='boldwarning'>[AM] falls into [src]!</span>", "<span class='userdanger'>You stumble and stare into an abyss before you. It stares back, and you fall \
 	into the enveloping dark.</span>")
 	if(isliving(AM))
@@ -163,6 +173,8 @@
 		var/mob/living/silicon/robot/S = AM
 		qdel(S.mmi)
 
+	falling_atoms -= AM
+
 	qdel(AM)
 
 	if(AM && !QDELETED(AM))	//It's indestructible
@@ -177,10 +189,8 @@
 
 
 
-/turf/open/chasm/CanPass(atom/movable/mover, turf/target, height=0)
+/turf/open/chasm/CanPass(atom/movable/mover, turf/target)
 	return 1
-
-
 
 //Jungle
 

@@ -18,7 +18,7 @@ If you want to contribute the first thing you'll need to do is [set up Git](http
 
 We have a [list of guides on the wiki](http://www.tgstation13.org/wiki/index.php/Guides#Development_and_Contribution_Guides) that will help you get started contributing to /tg/station with Git and Dream Maker. For beginners, it is recommended you work on small projects like bugfixes at first. If you need help learning to program in BYOND, check out this [repository of resources](http://www.byond.com/developer/articles/resources).
 
-There is an open list of approachable issues for [your inspiration here](https://github.com/tgstation/-tg-station/issues?q=is%3Aopen+is%3Aissue+label%3A%22Easy+Fix%22).
+There is an open list of approachable issues for [your inspiration here](https://github.com/tgstation/-tg-station/issues?q=is%3Aopen+is%3Aissue+label%3A%22Good+First+Issue%22).
 
 You can of course, as always, ask for help at [#coderbus](irc://irc.rizon.net/coderbus) on irc.rizon.net. We're just here to have fun and help out, so please don't expect professional support.
 
@@ -29,6 +29,7 @@ You can of course, as always, ask for help at [#coderbus](irc://irc.rizon.net/co
 The Design Lead has the final say on what gameplay changes get into and out of the game. He or she has full veto power on any feature or balance additions, changes, or removals, and establishes a general, personally-preferred direction for the game.
 
 **Headcoder**
+
 The Headcoder is responsible for controlling, adding, and removing maintainers from the project. In addition to filling the role of a normal maintainer, they have sole authority on who becomes a maintainer, as well as who remains a maintainer and who does not.
 
 **Art Director**
@@ -118,11 +119,14 @@ It is rarely allowed to put type paths in a text format, as there are no compile
 
 ```DM
 //Good
-var/path_type = /obj/item/weapon/baseball_bat
+var/path_type = /obj/item/baseball_bat
 
 //Bad
-var/path_type = "/obj/item/weapon/baseball_bat"
+var/path_type = "/obj/item/baseball_bat"
 ```
+
+### Use var/name format when declaring variables
+While DM allows other ways of declaring variables, this one should be used for consistency.
 
 ### Tabs, not spaces
 You must use tabs to indent your code, NOT SPACES.
@@ -232,6 +236,8 @@ This prevents nesting levels from getting deeper then they need to be.
 
 * All changes to the database's layout(schema) must be specified in the database changelog in SQL, as well as reflected in the schema files
 
+* Any time the schema is changed the `schema_revision` table and `DB_MAJOR_VERSION` or `DB_MINOR_VERSION` defines must be incremented.
+
 * Queries must never specify the database, be it in code, or in text files in the repo.
 
 
@@ -244,6 +250,8 @@ This prevents nesting levels from getting deeper then they need to be.
 * You are expected to help maintain the code that you add, meaning that if there is a problem then you are likely to be approached in order to fix any issues, runtimes, or bugs.
 
 * Do not divide when you can easily convert it to multiplication. (ie `4/2` should be done as `4*0.5`)
+
+* If you used regex to replace code during development of your code, post the regex in your PR for the benefit of future developers and downstream users.
 
 #### Enforced not enforced
 The following coding styles are not only not enforced at all, but are generally frowned upon to change for little to no reason:
@@ -273,7 +281,9 @@ Math operators like +, -, /, *, etc are up in the air, just choose which version
 #### Use
 * Bitwise AND - '&'
 	* Should be written as ```bitfield & bitflag``` NEVER ```bitflag & bitfield```, both are valid, but the latter is confusing and nonstandard.
-
+* Associated lists declarations must have their key value quoted if it's a string
+	* WRONG: list(a = "b")
+	* RIGHT: list("a" = "b")
 
 ### Dream Maker Quirks/Tricks
 Like all languages, Dream Maker has its quirks, some of them are beneficial to us, like these
@@ -288,18 +298,18 @@ HOWEVER, if either ```some_value``` or ```i``` changes within the body of the fo
 A name for a differing syntax for writing for-each style loops in DM. It's NOT DM's standard syntax, hence why this is considered a quirk. Take a look at this:
 ```DM
 var/list/bag_of_items = list(sword, apple, coinpouch, sword, sword)
-var/obj/item/sword/best_sword = null
+var/obj/item/sword/best_sword
 for(var/obj/item/sword/S in bag_of_items)
 	if(!best_sword || S.damage > best_sword.damage)
-    		best_sword = S
+		best_sword = S
 ```
 The above is a simple proc for checking all swords in a container and returning the one with the highest damage, and it uses DM's standard syntax for a for-loop by specifying a type in the variable of the for's header that DM interprets as a type to filter by. It performs this filter using ```istype()``` (or some internal-magic similar to ```istype()``` - this is BYOND, after all). This is fine in its current state for ```bag_of_items```, but if ```bag_of_items``` contained ONLY swords, or only SUBTYPES of swords, then the above is inefficient. For example:
 ```DM
 var/list/bag_of_swords = list(sword, sword, sword, sword)
-var/obj/item/sword/best_sword = null
+var/obj/item/sword/best_sword
 for(var/obj/item/sword/S in bag_of_swords)
 	if(!best_sword || S.damage > best_sword.damage)
-    		best_sword = S
+		best_sword = S
 ```
 specifies a type for DM to filter by. 
 
@@ -307,11 +317,11 @@ With the previous example that's perfectly fine, we only want swords, but here t
 you can circumvent DM's filtering and automatic ```istype()``` checks by writing the loop as such:
 ```DM
 var/list/bag_of_swords = list(sword, sword, sword, sword)
-var/obj/item/sword/best_sword = null
+var/obj/item/sword/best_sword
 for(var/s in bag_of_swords)
 	var/obj/item/sword/S = s
 	if(!best_sword || S.damage > best_sword.damage)
-    		best_sword = S
+		best_sword = S
 ```
 Of course, if the list contains data of a mixed type then the above optimisation is DANGEROUS, as it will blindly typecast all data in the list as the specified type, even if it isn't really that type, causing runtime errors.
 
@@ -334,9 +344,9 @@ DM has a var keyword, called global. This var keyword is for vars inside of type
 
 ```DM
 mob
-    var
-        global
-            thing = TRUE
+	var
+		global
+			thing = TRUE
 ```
 This does NOT mean that you can access it everywhere like a global var. Instead, it means that that var will only exist once for all instances of its type, in this case that var will only exist once for all mobs - it's shared across everything in its type. (Much more like the keyword `static` in other languages like PHP/C++/C#/Java)
 

@@ -30,7 +30,7 @@
 	var/turf/location = C.loc
 	if(istype(location))
 		C.add_splatter_floor(location)
-	var/direction = pick(GLOB.cardinal)
+	var/direction = pick(GLOB.cardinals)
 	var/t_range = rand(2,max(throw_range/2, 2))
 	var/turf/target_turf = get_turf(src)
 	for(var/i in 1 to t_range-1)
@@ -219,6 +219,8 @@
 			var/obj/item/I = X
 			owner.dropItemToGround(I, TRUE)
 
+	owner.wash_cream() //clean creampie overlay
+
 	//Handle dental implants
 	for(var/datum/action/item_action/hands_free/activate_pill/AP in owner.actions)
 		AP.Remove(owner)
@@ -316,7 +318,7 @@
 	name = initial(name)
 
 	//Handle dental implants
-	for(var/obj/item/weapon/reagent_containers/pill/P in src)
+	for(var/obj/item/reagent_containers/pill/P in src)
 		for(var/datum/action/item_action/hands_free/activate_pill/AP in P.actions)
 			P.forceMove(C)
 			AP.Grant(C)

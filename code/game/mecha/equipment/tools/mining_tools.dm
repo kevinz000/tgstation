@@ -35,7 +35,7 @@
 				else
 					drill_mob(target, chassis.occupant)
 			else
-				target.ex_act(2)
+				target.ex_act(EXPLODE_HEAVY)
 
 /turf/proc/drill_act(obj/item/mecha_parts/mecha_equipment/drill/drill)
 	return
@@ -44,7 +44,7 @@
 	if(istype(drill, /obj/item/mecha_parts/mecha_equipment/drill/diamonddrill))
 		if(drill.do_after_cooldown(src))//To slow down how fast mechs can drill through the station
 			drill.log_message("Drilled through [src]")
-			ex_act(3)
+			ex_act(EXPLODE_LIGHT)
 	else
 		drill.occupant_message("<span class='danger'>[src] is too durable to drill through.</span>")
 
@@ -58,7 +58,9 @@
 /turf/open/floor/plating/asteroid/drill_act(obj/item/mecha_parts/mecha_equipment/drill/drill)
 	for(var/turf/open/floor/plating/asteroid/M in range(1, drill.chassis))
 		if(get_dir(drill.chassis,M)&drill.chassis.dir)
-			M.gets_dug()
+			for(var/I in GetComponents(/datum/component/archaeology))
+				var/datum/component/archaeology/archy = I
+				archy.gets_dug()
 	drill.log_message("Drilled through [src]")
 	drill.move_ores()
 
@@ -116,7 +118,7 @@
 	if(!loc)
 		STOP_PROCESSING(SSobj, src)
 		qdel(src)
-	if(istype(loc,/obj/mecha/working) && scanning_time <= world.time)
+	if(istype(loc, /obj/mecha/working) && scanning_time <= world.time)
 		var/obj/mecha/working/mecha = loc
 		if(!mecha.occupant)
 			return

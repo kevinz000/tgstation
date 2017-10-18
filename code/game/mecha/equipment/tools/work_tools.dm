@@ -36,11 +36,11 @@
 		if(!O.anchored)
 			if(cargo_holder.cargo.len < cargo_holder.cargo_capacity)
 				chassis.visible_message("[chassis] lifts [target] and starts to load it into cargo compartment.")
-				O.anchored = 1
+				O.anchored = TRUE
 				if(do_after_cooldown(target))
 					cargo_holder.cargo += O
 					O.loc = chassis
-					O.anchored = 0
+					O.anchored = FALSE
 					occupant_message("<span class='notice'>[target] successfully loaded.</span>")
 					log_message("Loaded [O]. Cargo compartment capacity: [cargo_holder.cargo_capacity - cargo_holder.cargo.len]")
 				else
@@ -52,7 +52,8 @@
 
 	else if(isliving(target))
 		var/mob/living/M = target
-		if(M.stat == DEAD) return
+		if(M.stat == DEAD)
+			return
 		if(chassis.occupant.a_intent == INTENT_HARM)
 			M.take_overall_damage(dam_force)
 			if(!M)
@@ -87,11 +88,11 @@
 		if(!O.anchored)
 			if(cargo_holder.cargo.len < cargo_holder.cargo_capacity)
 				chassis.visible_message("[chassis] lifts [target] and starts to load it into cargo compartment.")
-				O.anchored = 1
+				O.anchored = TRUE
 				if(do_after_cooldown(target))
 					cargo_holder.cargo += O
 					O.loc = chassis
-					O.anchored = 0
+					O.anchored = FALSE
 					occupant_message("<span class='notice'>[target] successfully loaded.</span>")
 					log_message("Loaded [O]. Cargo compartment capacity: [cargo_holder.cargo_capacity - cargo_holder.cargo.len]")
 				else
@@ -103,7 +104,8 @@
 
 	else if(isliving(target))
 		var/mob/living/M = target
-		if(M.stat == DEAD) return
+		if(M.stat == DEAD)
+			return
 		if(chassis.occupant.a_intent == INTENT_HARM)
 			target.visible_message("<span class='danger'>[chassis] destroys [target] in an unholy fury.</span>", \
 								"<span class='userdanger'>[chassis] destroys [target] in an unholy fury.</span>")
@@ -196,6 +198,7 @@
 	equip_cooldown = 10
 	energy_drain = 250
 	range = MELEE|RANGED
+	flags_2 = NO_MAT_REDEMPTION_2
 	var/mode = 0 //0 - deconstruct, 1 - wall or floor, 2 - airlock.
 
 /obj/item/mecha_parts/mecha_equipment/rcd/New()
@@ -259,7 +262,7 @@
 				if(do_after_cooldown(target))
 					chassis.spark_system.start()
 					var/obj/machinery/door/airlock/T = new /obj/machinery/door/airlock(target)
-					T.autoclose = 1
+					T.autoclose = TRUE
 					playsound(target, 'sound/items/deconstruct.ogg', 50, 1)
 					playsound(target, 'sound/effects/sparks2.ogg', 50, 1)
 
