@@ -339,5 +339,3 @@ GLOBAL_VAR_INIT(say_disabled, FALSE)
 	to_chat(usr, "<span class='userdanger'>This command is disabled in non-debug environments.</span>")
 
 #endif
-
-#define TESTING

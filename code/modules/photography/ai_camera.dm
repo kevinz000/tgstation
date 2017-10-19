@@ -1,7 +1,7 @@
 
 /obj/item/device/camera/siliconcam
 	name = "silicon photo camera"
-	var/in_camera_mode = 0
+	var/in_camera_mode = FALSE
 	var/list/datum/picture/stored = list()
 
 /obj/item/device/camera/siliconcam/proc/toggle_camera_mode()

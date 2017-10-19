@@ -1,8 +1,8 @@
 
 GLOBAL_VAR_INIT(picture_datum_id, 1)
-//GLOBAL_PROTECT(picture_datum_id)			//please don't.
+//GLOBAL_PROTECT(picture_datum_id)			//debug comment
 GLOBAL_LIST_EMPTY(picture_logging_information)
-//GLOBAL_PROTECT(picture_logging_information)			//pls no.
+//GLOBAL_PROTECT(picture_logging_information)			//debug comment
 
 /datum/picture
 	var/picture_name = "picture"
@@ -21,7 +21,10 @@ GLOBAL_LIST_EMPTY(picture_logging_information)
 	picture_name = name
 	picture_desc = desc
 	picture_image = image
-	picture_icon = icon
+	if(isnull(icon))
+		regenerate_small_icon()
+	else
+		picture_icon = icon
 	psize_x = size_x
 	psize_y = size_y
 	has_blueprints = bp

@@ -10,7 +10,7 @@
 	var/state_on = "camera"
 	var/state_off = "camera_off"
 	w_class = WEIGHT_CLASS_SMALL
-	flags = CONDUCT
+	flags_1 = CONDUCT_1
 	slot_flags = SLOT_BELT
 	materials = list(MAT_METAL=2000)
 	var/pictures_max = 10
@@ -150,6 +150,8 @@
 /obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center, psize_x = 96, psize_y = 96)
 	var/icon/res = icon('icons/effects/96x96.dmi', "")
 	res.Scale(psize_x, psize_y)
+	res.Blend(res, ICON_UNDERLAY)
+	res = icon(res)
 	var/list/atoms = list()
 	for(var/turf/T in turfs)
 		atoms[T] = TRUE
