@@ -150,7 +150,7 @@
 		return
 	return doGetFlatIconSquare(islist(turfs_override)? turfs_override : range(_range, T), T, psize_x_override? psize_x_override : (_range * 2 + 1) * world.icon_size, psize_y_override? psize_y_override : (_range * 2 + 1) * world.icon_size)
 
-/proc/doGetFlatIconSquare(list/turfs, turf/center, psize_x = 96, psize_y = 96)
+/proc/doGetFlatIconSquare(list/turfs, turf/center, psize_x = 96, psize_y = 96, see_invisibility = 0, see_ghosts = FALSE)
 	var/icon/res = icon('icons/effects/96x96.dmi', "")
 	res.Blend("#000", ICON_OVERLAY)
 	res.Scale(psize_x, psize_y)
@@ -159,8 +159,8 @@
 	for(var/turf/T in turfs)
 		atoms[T] = TRUE
 		for(var/atom/movable/A in T)
-			if(A.invisibility)
-				if(!(see_ghosts && isobserver(A)))
+			if(A.invisibility > see_invisibility)
+				if(!isobserver(A) || !see_ghosts)
 					continue
 			atoms[A] = TRUE
 		CHECK_TICK
@@ -189,14 +189,14 @@
 		res.Blend(img, blendMode2iconMode(A.blend_mode), xo, yo)
 		CHECK_TICK
 
-	if(istype(custom_sound))				//This is where the camera actually finishes its exposure.
-		playsound(loc, custom_sound, 75, 1, -3)
-	else
-		playsound(loc, pick('sound/items/polaroid1.ogg', 'sound/items/polaroid2.ogg'), 75, 1, -3)
 
 	return res
 
 /obj/item/device/camera/proc/after_picture(mob/user, datum/picture/picture, proximity_flag)
+	if(istype(custom_sound))				//This is where the camera actually finishes its exposure.
+		playsound(src, custom_sound, 75, 1, -3)
+	else
+		playsound(src, pick('sound/items/polaroid1.ogg', 'sound/items/polaroid2.ogg'), 75, 1, -3)
 	printpicture(user, picture)
 
 /obj/item/device/camera/proc/printpicture(mob/user, datum/picture/picture) //Normal camera proc for creating photos
