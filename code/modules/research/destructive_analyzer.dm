@@ -88,10 +88,10 @@ Note: Must be placed within 3 tiles of the R&D Console
 		qdel(thing)
 	return TRUE
 
-/obj/machinery/rnd/destructive_analyzer/proc/user_try_decon_id(id)
+/obj/machinery/rnd/destructive_analyzer/proc/user_try_decon_id(id, mob/user)
 	if(!istype(loaded_item) || !istype(linked_console))
 		return FALSE
-	if(id)
+	if(id && !id == "0")
 		var/datum/techweb_node/TN = get_techweb_node_by_id(id)
 		if(!istype(TN))
 			return FALSE
@@ -109,7 +109,10 @@ Note: Must be placed within 3 tiles of the R&D Console
 		if(destroy_item(loaded_item))
 			linked_console.stored_research.boost_with_path(SSresearch.techweb_nodes[TN.id], dpath)
 	else
-		var/choice = input("Are you sure you want to destroy [loaded_item.name] for material reclaimation?") in list("Proceed", "Cancel")
+		var/point_value = techweb_item_point_check(linked_destroy.loaded_item)
+		if(stored_research.deconstructed_items[linked_destroy.loaded_item.type])
+			point_value = 0
+		var/choice = input("Are you sure you want to destroy [loaded_item.name] for [point_value? "[point_value] points" : "material reclaimation"]?") in list("Proceed", "Cancel")
 		if(choice == "Cancel")
 			return FALSE
 		else

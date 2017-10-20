@@ -114,6 +114,11 @@ They *could* go in their appropriate files, but this is supposed to be modular
 			corrupt()
 			update_icon()
 
+/obj/machinery/proc/AI_notify_hack()
+	var/turf/location = get_turf(src)
+	var/alertstr = "<span class='userdanger'>Network Alert: Hacking attempt detected[location?" in [location]":". Unable to pinpoint location"]</span>."
+	for(var/mob/living/silicon/ai/AI in GLOB.player_list)
+		to_chat(AI, alertstr)
 
 //RDCONSOLE//
 /obj/machinery/computer/rdconsole/ninjadrain_act(obj/item/clothing/suit/space/space_ninja/S, mob/living/carbon/human/H, obj/item/clothing/gloves/space_ninja/G)
@@ -123,17 +128,13 @@ They *could* go in their appropriate files, but this is supposed to be modular
 	. = DRAIN_RD_HACK_FAILED
 
 	to_chat(H, "<span class='notice'>Hacking \the [src]...</span>")
-	spawn(0)
-		var/turf/location = get_turf(H)
-		for(var/mob/living/silicon/ai/AI in GLOB.player_list)
-			to_chat(AI, "<span class='userdanger'>Network Alert: Hacking attempt detected[location?" in [location]":". Unable to pinpoint location"]</span>.")
+	AI_notify_hack()
 
 	if(stored_research)
 		to_chat(H, "<span class='notice'>Copying files...</span>")
 		if(do_after(H, S.s_delay, target = src) && G.candrain && src)
 			stored_research.copy_research_to(S.stored_research)
 	to_chat(H, "<span class='notice'>Data analyzed. Process finished.</span>")
-
 
 //RD SERVER//
 //Shamelessly copypasted from above, since these two used to be the same proc, but with MANY colon operators
@@ -144,10 +145,7 @@ They *could* go in their appropriate files, but this is supposed to be modular
 	. = DRAIN_RD_HACK_FAILED
 
 	to_chat(H, "<span class='notice'>Hacking \the [src]...</span>")
-	spawn(0)
-		var/turf/location = get_turf(H)
-		for(var/mob/living/silicon/ai/AI in GLOB.player_list)
-			to_chat(AI, "<span class='userdanger'>Network Alert: Hacking attempt detected[location?" in [location]":". Unable to pinpoint location"]</span>.")
+	AI_notify_hack()
 
 	if(stored_research)
 		to_chat(H, "<span class='notice'>Copying files...</span>")

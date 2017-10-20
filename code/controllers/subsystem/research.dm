@@ -17,6 +17,7 @@ SUBSYSTEM_DEF(research)
 	var/list/techweb_nodes_starting = list()	//associative id = node datum
 	var/list/techweb_boost_items = list()		//associative double-layer path = list(node = point_discount)
 	var/list/techweb_nodes_hidden = list()		//Nodes that should be hidden by default.
+	var/list/techweb_point_items = list()		//path = value
 	//----------------------------------------------
 	var/single_server_income = 85
 	var/multiserver_calculation = FALSE
@@ -25,8 +26,9 @@ SUBSYSTEM_DEF(research)
 
 	//Aiming for 1.5 hours to max R&D
 	//[88nodes * 5000points/node] / [1.5hr * 90min/hr * 60s/min]
+	//Around 450000 points max???
 
-
+	var/bomb_research_point_scaling = 1900
 
 /datum/controller/subsystem/research/Initialize()
 	initialize_all_techweb_designs()

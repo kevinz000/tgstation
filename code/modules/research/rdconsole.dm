@@ -528,6 +528,11 @@ doesn't have toxins access.
 				l += "<A href='?src=\ref[src];deconstruct=[N.id]'>[N.display_name]: [input[N]] points</A>"
 			else
 				l += "<span class='linkOff>[N.display_name]: [input[N]] points</span>"
+		var/point_value = techweb_item_point_check(linked_destroy.loaded_item)
+		if(point_value && !stored_research.deconstructed_items[linked_destroy.loaded_item.type])
+			l += "<A href='?src=\ref[src];deconstruct=0'>Generic Point Deconstruction - [point_value] points</A>"
+		else
+			l += "<A href='?src=\ref[src];deconstruct=0'>Material Reclaimation Deconstruction</A>"
 		l += "</div>"
 	return l
 
@@ -727,7 +732,7 @@ doesn't have toxins access.
 		screen = RDSCREEN_MENU
 		say("Ejecting Technology Disk")
 	if(ls["deconstruct"])
-		linked_destroy.user_try_decon_id(ls["deconstruct"])
+		linked_destroy.user_try_decon_id(ls["deconstruct"], usr)
 	//Protolathe Materials
 	if(ls["disposeP"] && linked_lathe)  //Causes the protolathe to dispose of a single reagent (all of it)
 		linked_lathe.reagents.del_reagent(ls["disposeP"])

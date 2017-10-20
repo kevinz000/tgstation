@@ -10,10 +10,12 @@
 	var/list/datum/design/researched_designs = list()			//Designs that are available for use. Assoc list, id = datum
 	var/list/datum/techweb_node/boosted_nodes = list()			//Already boosted nodes that can't be boosted again. node datum = path of boost object.
 	var/list/datum/techweb_node/hidden_nodes = list()			//Hidden nodes. id = datum. Used for unhiding nodes when requirements are met by removing the entry of the node.
+	var/list/deconstructed_items = list()						//items already deconstructed for a generic point boost
 	var/research_points = 0										//Available research points.
 	var/list/obj/machinery/computer/rdconsole/consoles_accessing = list()
 	var/id = "generic"
 	var/list/research_logs = list()								//IC logs.
+	var/max_bomb_value = 0
 
 /datum/techweb/New()
 	for(var/i in SSresearch.techweb_nodes_starting)

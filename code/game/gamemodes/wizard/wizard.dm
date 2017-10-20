@@ -21,7 +21,6 @@
 /datum/game_mode/wizard/pre_setup()
 	var/datum/mind/wizard = pick(antag_candidates)
 	wizards += wizard
-	modePlayer += wizard
 	wizard.assigned_role = "Wizard"
 	wizard.special_role = "Wizard"
 	log_game("[wizard.key] (ckey) has been selected as a Wizard") //TODO: Move these to base antag datum
@@ -46,7 +45,11 @@
 /datum/game_mode/wizard/check_finished()
 	for(var/datum/mind/wizard in wizards)
 		if(isliving(wizard.current) && wizard.current.stat!=DEAD)
-			return ..()
+			return FALSE
+	
+	for(var/obj/item/phylactery/P in GLOB.poi_list) //TODO : IsProperlyDead()
+		if(P.mind && P.mind.has_antag_datum(/datum/antagonist/wizard))
+			return FALSE
 
 	if(SSevents.wizardmode) //If summon events was active, turn it off
 		SSevents.toggleWizardmode()
