@@ -117,7 +117,7 @@ GLOBAL_LIST_EMPTY(doppler_arrays)
 	use_power = NO_POWER_USE
 
 /obj/machinery/doppler_array/research
-	name = "tacyon-dopplar research array"
+	name = "tachyon-dopplar research array"
 	desc = "A specialized tacyhon-dopplar bomb detection array that uses the results of the highest yield of explosions for research."
 	var/datum/techweb/linked_techweb
 
@@ -126,10 +126,10 @@ GLOBAL_LIST_EMPTY(doppler_arrays)
 	if(!istype(linked_techweb))
 		say("Warning: No linked research system!")
 		return
-	var/point_gain = min((orig_light - 20 - linked_techweb.max_bomb_value) * SSresearch.bomb_research_point_scaling, 0)	//Only get points if you go past maxcap!
+	var/point_gain = max((orig_light - 20 - linked_techweb.max_bomb_value) * SSresearch.bomb_research_point_scaling, 0)	//Only get points if you go past maxcap!
 	if(!point_gain)
 		return
-	linked_techweb.max_bomb_value = orig_light
+	linked_techweb.max_bomb_value = orig_light - 20
 	linked_techweb.research_points += point_gain
 	say("Gained [point_gain] points from explosion dataset.")
 
