@@ -116,12 +116,12 @@ GLOBAL_LIST_EMPTY(doppler_arrays)
 	max_dist = 21 //Should detect most explosions in hearing range.
 	use_power = NO_POWER_USE
 
-/obj/machinery/dopplar_array/research
+/obj/machinery/doppler_array/research
 	name = "tacyon-dopplar research array"
 	desc = "A specialized tacyhon-dopplar bomb detection array that uses the results of the highest yield of explosions for research."
 	var/datum/techweb/linked_techweb
 
-/obj/machinery/dopplar_array/research/sense_explosion(turf/epicenter, dev, heavy, light, time, orig_dev, orig_heavy, orig_light)	//probably needs a way to ignore admin explosives later on
+/obj/machinery/doppler_array/research/sense_explosion(turf/epicenter, dev, heavy, light, time, orig_dev, orig_heavy, orig_light)	//probably needs a way to ignore admin explosives later on
 	. = ..()
 	if(!istype(linked_techweb))
 		say("Warning: No linked research system!")
@@ -133,8 +133,8 @@ GLOBAL_LIST_EMPTY(doppler_arrays)
 	linked_techweb.research_points += point_gain
 	say("Gained [point_gain] points from explosion dataset.")
 
-/obj/machinery/dopplar_array/research/science
+/obj/machinery/doppler_array/research/science
 
-/obj/machinery/dopplar_array/research/science/Initialize()
+/obj/machinery/doppler_array/research/science/Initialize()
 	. = ..()
 	linked_techweb = SSresearch.techweb_science
