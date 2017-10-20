@@ -120,7 +120,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 				return FALSE
 			if(destroy_item(loaded_item))
 				linked_console.stored_research.research_points += point_value
-				linked_console.stored_research.deconstructed_items[linked_item.type] = point_value
+				linked_console.stored_research.deconstructed_items[loaded_item.type] = point_value
 	return TRUE
 
 /obj/machinery/rnd/destructive_analyzer/proc/unload_item()

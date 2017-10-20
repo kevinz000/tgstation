@@ -137,4 +137,4 @@ GLOBAL_LIST_EMPTY(doppler_arrays)
 
 /obj/machinery/doppler_array/research/science/Initialize()
 	. = ..()
-	linked_techweb = SSresearch.techweb_science
+	linked_techweb = SSresearch.science_tech
