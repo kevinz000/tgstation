@@ -109,14 +109,18 @@ Note: Must be placed within 3 tiles of the R&D Console
 		if(destroy_item(loaded_item))
 			linked_console.stored_research.boost_with_path(SSresearch.techweb_nodes[TN.id], dpath)
 	else
-		var/point_value = techweb_item_point_check(linked_destroy.loaded_item)
-		if(stored_research.deconstructed_items[linked_destroy.loaded_item.type])
+		var/point_value = techweb_item_point_check(loaded_item)
+		if(linked_console.stored_research.deconstructed_items[loaded_item.type])
 			point_value = 0
 		var/choice = input("Are you sure you want to destroy [loaded_item.name] for [point_value? "[point_value] points" : "material reclaimation"]?") in list("Proceed", "Cancel")
 		if(choice == "Cancel")
 			return FALSE
 		else
-			destroy_item(loaded_item)
+			if(QDELETED(loaded_item) || QDELETED(linked_console) || !user.Adjacent(linked_console) || QDELETED(src))
+				return FALSE
+			if(destroy_item(loaded_item))
+				linked_console.stored_research.research_points += point_value
+				linked_console.stored_research.deconstructed_items[linked_item.type] = point_value
 	return TRUE
 
 /obj/machinery/rnd/destructive_analyzer/proc/unload_item()
