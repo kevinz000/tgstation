@@ -32,7 +32,7 @@ GLOBAL_LIST_EMPTY(picture_logging_information)
 
 /datum/picture/proc/regenerate_small_icon()
 	var/icon/small_img = icon(picture_image)
-	var/icon/ic = icon('icons/obj/items.dmi',"photo")
+	var/icon/ic = icon('icons/obj/items_and_weapons.dmi',"photo")
 	small_img.Scale(8, 8)
 	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 	picture_icon = ic

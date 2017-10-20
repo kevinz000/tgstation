@@ -1,9 +1,9 @@
 
-#define CAMERA_PICTURE_SIZE_HARD_LIMIT 15
+#define CAMERA_PICTURE_SIZE_HARD_LIMIT 10
 
 /obj/item/device/camera
 	name = "camera"
-	icon = 'icons/obj/items.dmi'
+	icon = 'icons/obj/items_and_weapons.dmi'
 	desc = "A polaroid camera."
 	icon_state = "camera"
 	item_state = "electropack"
@@ -115,13 +115,10 @@
 	var/psize_x = (size_x * 2 + 1) * world.icon_size
 	var/psize_y = (size_y * 2 + 1) * world.icon_size
 
-	var/icon/temp = icon('icons/effects/96x96.dmi',"")
-	temp.Blend("#000", ICON_OVERLAY)
-	temp.Scale(psize_x, psize_y)
-	temp.Blend(camera_get_icon(turfs, target_turf, psize_x, psize_y), ICON_OVERLAY)
+	var/icon/temp = getFlatIconSquare(target_turf, 1, psize_x, psize_y, turfs)
 
 	var/icon/small_img = icon(temp)
-	var/icon/ic = icon('icons/obj/items.dmi',"photo")
+	var/icon/ic = icon('icons/obj/items_and_weapons.dmi',"photo")
 	small_img.Scale(8, 8)
 	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 	var/datum/picture/P = new("picture", desc.Join(""), temp, ic, psize_x, psize_y, blueprints)
@@ -147,11 +144,17 @@
 		mob_details += "You can also see [L] on the photo[L.health < (L.maxHealth * 0.75) ? " - [L] looks hurt":""].[holding ? " [holding]":"."]."
 	return mob_details
 
-/obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center, psize_x = 96, psize_y = 96)
+/proc/getFlatIconSquare(atom/A, _range = 1, psize_x_override, psize_y_override, list/turfs_override)
+	var/turf/T = get_turf(A)
+	if(!istype(A) || !isturf(get_turf(A)))
+		return
+	return doGetFlatIconSquare(islist(turfs_override)? turfs_override : range(_range, T), T, psize_x_override? psize_x_override : (_range * 2 + 1) * world.icon_size, psize_y_override? psize_y_override : (_range * 2 + 1) * world.icon_size)
+
+/proc/doGetFlatIconSquare(list/turfs, turf/center, psize_x = 96, psize_y = 96)
 	var/icon/res = icon('icons/effects/96x96.dmi', "")
+	res.Blend("#000", ICON_OVERLAY)
 	res.Scale(psize_x, psize_y)
-	res.Blend(res, ICON_UNDERLAY)
-	res = icon(res)
+
 	var/list/atoms = list()
 	for(var/turf/T in turfs)
 		atoms[T] = TRUE
