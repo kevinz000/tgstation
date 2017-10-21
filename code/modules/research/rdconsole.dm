@@ -284,9 +284,9 @@ doesn't have toxins access.
 				l += "<A href='?src=\ref[src];build=[D.id];amount=5'>x5</A>[RDSCREEN_NOBREAK]"
 			if(c >= 10)
 				l += "<A href='?src=\ref[src];build=[D.id];amount=10'>x10</A>[RDSCREEN_NOBREAK]"
-			l += "[temp_material]"
+			l += "[temp_material][RDSCREEN_NOBREAK]"
 		else
-			l += "<span class='linkOff'>[D.name]</span>[temp_material]"
+			l += "<span class='linkOff'>[D.name]</span>[temp_material][RDSCREEN_NOBREAK]"
 		l += ""
 	l += "</div>"
 	return l
@@ -333,9 +333,9 @@ doesn't have toxins access.
 				l += "<A href='?src=\ref[src];build=[D.id];amount=5'>x5</A>[RDSCREEN_NOBREAK]"
 			if(c >= 10)
 				l += "<A href='?src=\ref[src];build=[D.id];amount=10'>x10</A>[RDSCREEN_NOBREAK]"
-			l += "[temp_material]"
+			l += "[temp_material][RDSCREEN_NOBREAK]"
 		else
-			l += "<span class='linkOff'>[D.name]</span>[temp_material]"
+			l += "<span class='linkOff'>[D.name]</span>[temp_material][RDSCREEN_NOBREAK]"
 		l += ""
 	l += "</div>"
 	return l
