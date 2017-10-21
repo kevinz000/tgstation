@@ -19,7 +19,7 @@ SUBSYSTEM_DEF(research)
 	var/list/techweb_nodes_hidden = list()		//Nodes that should be hidden by default.
 	var/list/techweb_point_items = list()		//path = value
 	//----------------------------------------------
-	var/single_server_income = 85
+	var/single_server_income = 40.7
 	var/multiserver_calculation = FALSE
 	var/last_income = 0
 	//^^^^^^^^ ALL OF THESE ARE PER SECOND! ^^^^^^^^
@@ -28,7 +28,7 @@ SUBSYSTEM_DEF(research)
 	//[88nodes * 5000points/node] / [1.5hr * 90min/hr * 60s/min]
 	//Around 450000 points max???
 
-	var/bomb_research_point_scaling = 1900
+	var/bomb_research_point_scaling = 1800
 
 /datum/controller/subsystem/research/Initialize()
 	initialize_all_techweb_designs()

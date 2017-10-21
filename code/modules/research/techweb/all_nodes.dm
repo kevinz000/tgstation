@@ -813,6 +813,7 @@
 	design_ids = list("alien_scalpel", "alien_hemostat", "alien_retractor", "alien_saw", "alien_drill", "alien_cautery")
 	research_cost = 2500
 	export_price = 10000
+	hidden = TRUE
 
 /datum/techweb_node/alien_engi
 	id = "alien_engi"
@@ -822,6 +823,7 @@
 	design_ids = list("alien_wrench", "alien_wirecutters", "alien_screwdriver", "alien_crowbar", "alien_welder", "alien_multitool")
 	research_cost = 2500
 	export_price = 10000
+	hidden = TRUE
 
 /*
 /datum/design/borg_syndicate_module
