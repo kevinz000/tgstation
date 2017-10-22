@@ -81,6 +81,7 @@
 	returned.available_nodes = available_nodes.Copy()
 	returned.researched_designs = researched_designs.Copy()
 	returned.hidden_nodes = hidden_nodes.Copy()
+	return returned
 
 /datum/techweb/proc/get_visible_nodes()			//The way this is set up is shit but whatever.
 	return visible_nodes - hidden_nodes
@@ -163,6 +164,8 @@
 	researched_nodes -= node.id
 	available_nodes -= node.id
 	visible_nodes -= node.id
+	if(hidden_nodes[node.id])	//Hidden.
+		return
 	if(researched)
 		researched_nodes[node.id] = node
 		for(var/i in node.designs)
