@@ -163,7 +163,7 @@ SUBSYSTEM_DEF(shuttle)
 		var/mob/M = I
 		if(M.stat != DEAD)
 			++alive
-	
+
 	var/total = GLOB.joined_player_list.len
 
 	if(alive / total <= threshold)
