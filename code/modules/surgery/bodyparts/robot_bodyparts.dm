@@ -189,9 +189,3 @@
 	icon = 'icons/mob/augmentation/surplus_augments.dmi'
 	icon_state = "r_leg"
 	max_damage = 20
-
-/obj/item/bodypart/head/robot/hologram
-	name = "holographic head"
-	desc = "A head made out of a hologram made corporeal by hardlight technology."
-	icon = 'icons/mob/human_parts.dmi'
-	icon_state = "hologram_head"
