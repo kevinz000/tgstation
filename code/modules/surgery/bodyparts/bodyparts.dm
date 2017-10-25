@@ -181,8 +181,6 @@
 		return 1
 	return 0
 
-
-
 //Change organ status
 /obj/item/bodypart/proc/change_bodypart_status(new_limb_status, heal_limb, change_icon_to_default)
 	status = new_limb_status
@@ -197,6 +195,8 @@
 			icon = DEFAULT_BODYPART_ICON_ORGANIC
 		else if(status == BODYPART_ROBOTIC)
 			icon = DEFAULT_BODYPART_ICON_ROBOTIC
+		//else if(status == BODYPART_HOLOGRAPHIC)
+		//	icon = DEFAULT_BODYPART_ICON_HOLOGRAPHIC
 
 	if(owner)
 		owner.updatehealth()
@@ -539,8 +539,38 @@
 	dismemberable = 0
 	max_damage = 5000
 	animal_origin = DEVIL_BODYPART
+/*
+/obj/item/bodypart/head/holographic
+	status = BODYPART_HOLOGRAPHIC
+	dismemberable = FALSE
+	name = "holographic head"
+	icon_state = "hologram_head"
 
+/obj/item/bodypart/chest/holographic
+	status = BODYPART_HOLOGRAPHIC
+	dismemberable = FALSE
+	name = "holographic chest"
 
+/obj/item/bodypart/r_arm/holographic
+	status = BODYPART_HOLOGRAPHIC
+	dismemberable = FALSE
+	name = "holographic right arm"
+
+/obj/item/bodypart/l_arm/holographic
+	status = BODYPART_HOLOGRAPHIC
+	dismemberable = FALSE
+	name = "holographic left arm"
+
+/obj/item/bodypart/r_leg/holographic
+	status = BODYPART_HOLOGRAPHIC
+	dismemberable = FALSE
+	name = "holographic right leg"
+
+/obj/item/bodypart/l_leg/holographic
+	status = BODYPART_HOLOGRAPHIC
+	dismemberable = FALSE
+	name = "holographic left leg"
+*/
 /////////////////////////////////////////////////////////////////////////
 
 /obj/item/severedtail

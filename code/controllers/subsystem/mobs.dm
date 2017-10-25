@@ -5,10 +5,10 @@ SUBSYSTEM_DEF(mobs)
 	runlevels = RUNLEVEL_GAME | RUNLEVEL_POSTGAME
 
 	var/list/currentrun = list()
+	var/icon/icon_default_human_holographic_parts
 
 /datum/controller/subsystem/mobs/stat_entry()
 	..("P:[GLOB.mob_list.len]")
-
 
 /datum/controller/subsystem/mobs/fire(resumed = 0)
 	var/seconds = wait * 0.1
