@@ -5,8 +5,8 @@
 /obj/vehicle
 	name = "generic vehicle"
 	desc = "Yell at coderbus."
-	icon = ''
-	icon_state = ""
+	icon = 'icons/obj/vehicles.dmi'
+	icon_state = "fuckyou"
 	var/list/mob/passengers		//LAZYLIST!
 	var/list/mob/controllers	//mob = bitflags of their control level.
 	var/movedelay = 2
