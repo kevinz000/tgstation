@@ -1,43 +1,8 @@
-
-#define MECH_MALFUNCTION_FIRE 1
-#define MECH_MALFUNCTION_TEMP_CONTROL 2
-#define MECH_MALFUNCTION_SHORT_CIRCUIT 4
-#define MECH_MALFUNCTION_TANK_BREACH 8
-#define MECH_MALFUNCTION_CONTROL_LOST 16
-
-#define MECH_PART_CHASSIS "chassis"
-#define MECH_PART_HEAD "head"
-#define MECH_PART_TORSO "body"
-#define MECH_PART_LEFT_ARM "larm"
-#define MECH_PART_RIGHT_ARM "rarm"
-#define MECH_PART_LEFT_LEG "lleg"
-#define MECH_PART_RIGHT_LEG "rleg"
-
-
-/obj/mecha
-	name = "mechanical exosuit"
-	desc = "A basic exosuit that you shouldn't see"
-	icon = 'icons/mecha/mecha.dmi'
-	density = TRUE
-	opacity = TRUE
-	anchored = TRUE
-	resistance_flags = FIRE_PROOF | ACID_PROOF
-	layer = BELOW_MOB_LAYER
-	force = 0
-	flags_1 = HEAR_1
-	var/list/mob/living/controllers
-	var/list/mob/living/occupants
-	var/list/obj/mech_part/parts
-
-/obj/mecha/Initialize()
-	. = ..()
-	controllers = list()
-	occupants = list()
-	create_parts()
-
-/obj/mecha/proc/create_parts()
-
-
+#define MECHA_INT_FIRE 1
+#define MECHA_INT_TEMP_CONTROL 2
+#define MECHA_INT_SHORT_CIRCUIT 4
+#define MECHA_INT_TANK_BREACH 8
+#define MECHA_INT_CONTROL_LOST 16
 
 #define MELEE 1
 #define RANGED 2
@@ -47,6 +12,17 @@
 #define BACK_ARMOUR 3
 
 
+/obj/mecha
+	name = "mecha"
+	desc = "Exosuit"
+	icon = 'icons/mecha/mecha.dmi'
+	density = TRUE //Dense. To raise the heat.
+	opacity = 1 ///opaque. Menacing.
+	anchored = TRUE //no pulling around.
+	resistance_flags = FIRE_PROOF | ACID_PROOF
+	layer = BELOW_MOB_LAYER//icon draw layer
+	infra_luminosity = 15 //byond implementation is bugged.
+	force = 5
 	flags_1 = HEAR_1
 	var/can_move = 1
 	var/mob/living/carbon/occupant = null
