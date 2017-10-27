@@ -85,6 +85,8 @@
 	var/datum/action/innate/deploy_last_shell/redeploy_action = new
 	var/chnotify = 0
 
+	var/mob/living/carbon/human/holoshell		//try to not limit this to humans incase we add more but for the time being it's being typecast because only human with species of hologram will work.
+
 /mob/living/silicon/ai/Initialize(mapload, datum/ai_laws/L, mob/target_ai)
 	. = ..()
 	if(!target_ai) //If there is no player/brain inside.
@@ -995,3 +997,59 @@
 	. = ..()
 	if(!target_ai)
 		target_ai = src //cheat! just give... ourselves as the spawned AI, because that's technically correct
+
+/mob/living/silicon/ai/proc/owns_holo_avatar(mob/M)
+	if(holoshell != M)
+		return FALSE
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.dna && H.dna.species)
+		var/datum/species/S = H.dna.species
+		if(S.id == "hologram")
+			var/datum/species/hologram/HG = S
+			if(HG.mainframe == src)
+				return TRUE
+
+/mob/living/silicon/ai/proc/can_deploy_holo_avatar(turf/T)
+	return TRUE	//DEBUGGING
+
+/mob/living/silicon/ai/proc/get_holoshell()
+	var/needs_generation = FALSE
+	if(QDELETED(holoshell))
+		needs_generation = TRUE
+	else
+		if(!istype(holoshell) || !holoshell.dna || !holoshell.dna.species || !holoshell.dna.species.id == "hologram")
+			needs_generation = TRUE
+	if(!needs_generation)
+		return holoshell
+	else
+		var/mob/living/carbon/human/H = new
+		H.set_species(/datum/species/hologram)
+		H.dna.species.mainframe = src
+		initialize_holoshell(H)
+		return holoshell
+
+/mob/living/silicon/ai/proc/initialize_holoshell(mob/living/carbon/human/HS)
+	if(QDELETED(HS) || !HS.dna || !HS.dna.species || !HS.dna.species.id == "hologram")
+		return FALSE
+	HS.dna.species.bind_to_ai(src)
+	update_holoshell_appearance()
+
+/mob/living/silicon/ai/proc/deploy_holoshell(turf/T)
+	var/retval = can_deploy_holo_avatar(T)
+	if(!retval)
+		to_chat(src, "<span class='boldwarning'>[T] is not valid for holoshell placement!</span>")
+		return FALSE
+	var/mob/living/carbon/human/HS = get_holoshell()
+	HS.forceMove(T)
+	reset_perspective(HS)
+	HS.dna.species.deployed = TRUE
+
+/mob/living/silicon/ai/proc/cancel_holoshell()
+	if(QDELETED(holoshell) || !holoshell.dna.species.deployed)
+		return FALSE
+	holoshell.forceMove(src)
+	reset_perspective(eyeObj)
+	holoshell.dna.species.deployed = FALSE
+
+

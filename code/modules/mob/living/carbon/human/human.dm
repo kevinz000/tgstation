@@ -28,6 +28,10 @@
 
 	. = ..()
 
+/mob/living/carbon/human/Hear(message, atom/movable/speaker, datum/language/message_language, raw_message, radio_freq, list/spans, message_mode)
+	if(!dna.species.onHear(message, speaker, message_language, raw_message, radio_freq, spans, message_mode))
+		return ..()
+
 /mob/living/carbon/human/OpenCraftingMenu()
 	handcrafting.ui_interact(src)
 

@@ -27,6 +27,9 @@
 		return
 	next_click = world.time + 1
 
+//	if(active_holoshell)
+//		return active_holoshell.recieve_click_from_mainframe(A, params)
+
 	if(client.click_intercept)
 		if(call(client.click_intercept, "InterceptClickOn")(src, params, A))
 			return

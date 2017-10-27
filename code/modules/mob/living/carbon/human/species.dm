@@ -49,6 +49,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	var/punchdamagelow = 0       //lowest possible punch damage
 	var/punchdamagehigh = 9      //highest possible punch damage
 	var/punchstunthreshold = 9//damage at which punches from this race will stun //yes it should be to the attacked race but it's not useful that way even if it's logical
+	var/punch_damage_type = BRUTE
 	var/siemens_coeff = 1 //base electrocution coefficient
 	var/damage_overlay_type = "human" //what kind of damage overlays (if any) appear on our species when wounded?
 	var/fixed_mut_color = "" //to use MUTCOLOR with a fixed color that's independent of dna.feature["mcolor"]
@@ -64,6 +65,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	//Breathing!
 	var/obj/item/organ/lungs/mutantlungs = null
 	var/breathid = "o2"
+	var/force_cpr = FALSE
 
 	var/obj/item/organ/brain/mutant_brain = /obj/item/organ/brain
 	var/obj/item/organ/eyes/mutanteyes = /obj/item/organ/eyes
@@ -1113,7 +1115,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 		var/we_breathe = (!(NOBREATH in user.dna.species.species_traits))
 		var/we_lung = user.getorganslot(ORGAN_SLOT_LUNGS)
 
-		if(we_breathe && we_lung)
+		if((we_breathe && we_lung) || force_cpr)
 			user.do_cpr(target)
 		else if(we_breathe && !we_lung)
 			to_chat(user, "<span class='warning'>You have no lungs to breathe with, so you cannot peform CPR.</span>")
@@ -1169,14 +1171,14 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 
 		var/armor_block = target.run_armor_check(affecting, "melee")
 
-		playsound(target.loc, user.dna.species.attack_sound, 25, 1, -1)
+		playsound(target, user.dna.species.attack_sound, 25, 1, -1)
 
 		target.visible_message("<span class='danger'>[user] has [atk_verb]ed [target]!</span>", \
 					"<span class='userdanger'>[user] has [atk_verb]ed [target]!</span>", null, COMBAT_MESSAGE_RANGE)
 
 		if(user.limb_destroyer)
 			target.dismembering_strike(user, affecting.body_zone)
-		target.apply_damage(damage, BRUTE, affecting, armor_block)
+		target.apply_damage(damage, punch_damage_type, affecting, armor_block)
 		add_logs(user, target, "punched")
 		if((target.stat != DEAD) && damage >= user.dna.species.punchstunthreshold)
 			target.visible_message("<span class='danger'>[user] has knocked  [target] down!</span>", \
@@ -1596,6 +1598,11 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 /datum/species/proc/negates_gravity(mob/living/carbon/human/H)
 	return 0
 
+///////
+//HEARING OVERRIDES
+///////
+/datum/species/proc/onHear(message, atom/movable/speaker, datum/language/message_language, raw_message, radio_freq, list/spans, message_mode)
+	return FALSE	//return TRUE to block default hearing behavior!
 
 #undef HEAT_DAMAGE_LEVEL_1
 #undef HEAT_DAMAGE_LEVEL_2
