@@ -147,7 +147,7 @@
 	if(!boosted_nodes[N])
 		boosted_nodes[N] = boost
 		if(N.autounlock_by_boost)
-			hidden_nodes -= N
+			hidden_nodes -= N.id
 	return TRUE
 
 /datum/techweb/proc/update_node_status(datum/techweb_node/node, autoupdate_consoles = TRUE)

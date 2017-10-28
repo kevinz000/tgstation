@@ -140,20 +140,21 @@
 		if(istype(loaded_item,/obj/item/relic))
 			dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_DISCOVER]'>Discover</A></b>"
 		dat += "<b><a href='byond://?src=\ref[src];function=eject'>Eject</A>"
-		var/list/input = techweb_item_boost_check(src)
-		if(input)
+		var/list/listin = techweb_item_boost_check(src)
+		if(listin)
 			var/list/output = list("<b><font color='purple'>Research Boost Data:</font></b>")
 			var/list/res = list("<b><font color='blue'>Already researched:</font></b>")
 			var/list/boosted = list("<b><font color='red'>Already boosted:</font></b>")
-			for(var/datum/techweb_node/N in input)
-				var/str = "<b>[N.display_name]</b>: [input[N]] points.</b>"
+			for(var/node_id in listin)
+				var/datum/techweb_node/N = get_techweb_node_by_id(node_id)
+				var/str = "<b>[N.display_name]</b>: [listin[N]] points.</b>"
 				if(SSresearch.science_tech.researched_nodes[N])
 					res += str
 				else if(SSresearch.science_tech.boosted_nodes[N])
 					boosted += str
 				if(SSresearch.science_tech.visible_nodes[N])	//JOY OF DISCOVERY!
 					output += str
-			output = output + boosted + res
+			output += boosted + res
 			dat += output
 	else
 		dat += "<b>Nothing loaded.</b>"

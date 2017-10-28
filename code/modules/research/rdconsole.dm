@@ -522,12 +522,13 @@ doesn't have toxins access.
 		l += "Name: [linked_destroy.loaded_item.name]"
 		l += "Select a node to boost by deconstructing this item."
 		l += "This item is able to boost:"
-		var/list/input = techweb_item_boost_check(linked_destroy.loaded_item)
-		for(var/datum/techweb_node/N in input)
+		var/list/listin = techweb_item_boost_check(linked_destroy.loaded_item)
+		for(var/node_id in listin)
+			var/datum/techweb_node/N = get_techweb_node_by_id(node_id)
 			if(!stored_research.researched_nodes[N.id] && !stored_research.boosted_nodes[N.id])
-				l += "<A href='?src=\ref[src];deconstruct=[N.id]'>[N.display_name]: [input[N]] points</A>"
+				l += "<A href='?src=\ref[src];deconstruct=[N.id]'>[N.display_name]: [listin[N]? 0 : listin[N]] points</A>"
 			else
-				l += "<span class='linkOff>[N.display_name]: [input[N]] points</span>"
+				l += "<span class='linkOff>[N.display_name]: [listin[N]] points</span>"
 		var/point_value = techweb_item_point_check(linked_destroy.loaded_item)
 		if(point_value && !stored_research.deconstructed_items[linked_destroy.loaded_item.type])
 			l += "<A href='?src=\ref[src];deconstruct=0'>Generic Point Deconstruction - [point_value] points</A>"
@@ -554,7 +555,10 @@ doesn't have toxins access.
 	l += "<h2>Technology Nodes:</h2>[RDSCREEN_NOBREAK]"
 	l += "<div><h3>Available for Research:</h3>"
 	for(var/datum/techweb_node/N in avail)
-		l += "<A href='?src=\ref[src];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>"
+		var/not_unlocked = (stored_research.available_nodes[N.id] && !stored_research.researched_nodes[N.id])
+		var/has_points = (stored_research.research_points >= N.get_price(stored_research))
+		var/research_href = not_unlocked? (has_points? "<h3><A href='?src=\ref[src];research_node=[N.id]'>Research</A></h3>" : "<h3><span class='linkOff bad'>Not Enough Points</span></h3>") : null
+		l += "<A href='?src=\ref[src];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>[research_href]"
 	l += "</div><div><h3>Locked Nodes:</h3>"
 	for(var/datum/techweb_node/N in unavail)
 		l += "<A href='?src=\ref[src];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>"
@@ -571,6 +575,13 @@ doesn't have toxins access.
 	l += "Description: [selected_node.description]"
 	l += "Status: [stored_research.researched_nodes[selected_node.id]? "<font color='green'><b>Researched</b></font>" : "<span class='bad'>Locked</span>"]"
 	l += "Point Cost: [selected_node.get_price(stored_research)]. </div>[RDSCREEN_NOBREAK]"
+	if(stored_research.available_nodes[selected_node.id] && !stored_research.researched_nodes[selected_node.id])
+		if(stored_research.research_points >= selected_node.get_price(stored_research))
+			l += "<h3><A href='?src=\ref[src];research_node=[selected_node.id]'>Research</A></h3>[RDSCREEN_NOBREAK]"
+		else
+			l += "<h3><span class='linkOff bad'>Not Enough Points</span></h3>[RDSCREEN_NOBREAK]"
+	else
+		l += "<h3><span class='linkOff'>Already Researched</span></h3>[RDSCREEN_NOBREAK]"
 	l += "<div><h3>Designs:</h3>[RDSCREEN_NOBREAK]"
 	for(var/i in selected_node.designs)
 		var/datum/design/D = selected_node.designs[i]
@@ -592,13 +603,7 @@ doesn't have toxins access.
 	for(var/i in selected_node.unlocks)
 		var/datum/techweb_node/unlock = selected_node.unlocks[i]
 		l += "<A href='?src=\ref[src];view_node=[i]'>[unlock.display_name]</A>"
-	if(stored_research.available_nodes[selected_node.id] && !stored_research.researched_nodes[selected_node.id])
-		if(stored_research.research_points >= selected_node.get_price(stored_research))
-			l += "<h3><A href='?src=\ref[src];research_node=[selected_node.id]'>Research</A></h3>[RDSCREEN_NOBREAK]"
-		else
-			l += "<h3><span class='linkOff bad'>Not Enough Points</span></h3>[RDSCREEN_NOBREAK]"
-	else
-		l += "<h3><span class='linkOff'>Already Researched</span></h3>[RDSCREEN_NOBREAK]"
+
 	l += "</div>[RDSCREEN_NOBREAK]"
 	return l
 

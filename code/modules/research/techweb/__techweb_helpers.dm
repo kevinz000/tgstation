@@ -10,6 +10,10 @@
 		if(isnull(initial(TN.id)))
 			continue
 		TN = new path
+		if(returned[initial(TN.id)])
+			stack_trace("WARNING: Techweb node ID clash with ID [initial(TN.id)] detected!")
+			SSresearch.errored_datums[TN] = initial(TN.id)
+			continue
 		returned[initial(TN.id)] = TN
 		if(TN.starting_node)
 			SSresearch.techweb_nodes_starting[TN.id] = TN
@@ -31,6 +35,7 @@
 		DN = new path
 		if(returned[initial(DN.id)])
 			stack_trace("WARNING: Design ID clash with ID [initial(DN.id)] detected!")
+			SSresearch.errored_datums[DN] = initial(DN.id)
 			continue
 		returned[initial(DN.id)] = DN
 	SSresearch.techweb_designs = returned
@@ -120,6 +125,7 @@
 		if(!istype(D))
 			stack_trace("WARNING: Invalid research design with ID [d] detected and removed.")
 			SSresearch.techweb_designs -= d
+		CHECK_TICK
 
 /proc/calculate_techweb_nodes()
 	for(var/node_id in SSresearch.techweb_nodes)
@@ -154,7 +160,10 @@
 		for(var/path in node.boost_item_paths)
 			if(!ispath(path))
 				continue
-			SSresearch.techweb_boost_items[path] = list(node = node.boost_item_paths[path])
+			if(length(SSresearch.techweb_boost_items[path]))
+				SSresearch.techweb_boost_items[path] += list(node.id = node.boost_item_paths[path])
+			else
+				SSresearch.techweb_boost_items[path] = list(node.id = node.boost_item_paths[path])
 		CHECK_TICK
 
 /proc/techweb_item_boost_check(obj/item/I)			//Returns an associative list of techweb node datums with values of the boost it gives.	var/list/returned = list()

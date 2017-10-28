@@ -72,7 +72,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 		addtimer(CALLBACK(src, .proc/reset_busy), 24)
 		use_power(250)
 		update_icon()
-		var/list/food = GetAllContents(thing)
+		var/list/food = thing.GetAllContents()
 		for(var/obj/item/innerthing in food)
 			destroy_item(innerthing, TRUE)
 	reclaim_materials_from(thing)
@@ -96,7 +96,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 		if(!istype(TN))
 			return FALSE
 		var/list/pos1 = techweb_item_boost_check(loaded_item)
-		if(!pos1[TN])
+		if(!pos1[id])
 			return FALSE
 		var/dpath = loaded_item.type
 		if(!TN.boost_item_paths[dpath])
