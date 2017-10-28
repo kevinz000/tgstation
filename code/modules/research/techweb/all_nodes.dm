@@ -479,7 +479,7 @@
 	description = "Our researchers have found new to weaponize just about everything now."
 	prereq_ids = list("engineering")
 	design_ids = list("pin_testing")
-	research_cost = 2500
+	research_cost = 10000
 	export_price = 10000
 
 /datum/techweb_node/adv_weaponry
@@ -488,7 +488,7 @@
 	description = "Our weapons are breaking the rules of reality by now."
 	prereq_ids = list("adv_engi", "weaponry")
 	design_ids = list("pin_loyalty")
-	research_cost = 2500
+	research_cost = 10000
 	export_price = 10000
 
 /datum/techweb_node/electric_weapons
@@ -522,7 +522,7 @@
 	id = "beam_weapons"
 	display_name = "Beam Weaponry"
 	description = "Various basic beam weapons"
-	prereq_ids = list("weaponry")
+	prereq_ids = list("adv_weaponry")
 	design_ids = list("beamrifle", "ioncarbine")
 	research_cost = 2500
 	export_price = 10000
@@ -539,7 +539,7 @@
 /datum/techweb_node/explosive_weapons
 	id = "explosive_weapons"
 	display_name = "Explosive & Pyrotechnical Weaponry"
-	description = "If the light stuff just wont do it."
+	description = "If the light stuff just won't do it."
 	prereq_ids = list("adv_weaponry")
 	design_ids = list("temp_gun", "large_Grenade", "pyro_Grenade", "adv_Grenade")
 	research_cost = 2500
@@ -548,7 +548,7 @@
 /datum/techweb_node/ballistic_weapons
 	id = "ballistic_weapons"
 	display_name = "Ballistic Weaponry"
-	description = "This isn't research..This is reverse-engineering!"
+	description = "This isn't research.. This is reverse-engineering!"
 	prereq_ids = list("weaponry")
 	design_ids = list("mag_oldsmg", "mag_oldsmg_ap", "mag_oldsmg_ic")
 	research_cost = 2500
@@ -771,7 +771,7 @@
 	id = "mech_taser"
 	display_name =  "Exosuit Weapon (PBT \"Pacifier\" Mounted Taser)"
 	description = "A basic piece of mech weaponry"
-	prereq_ids = list("mecha", "weaponry")
+	prereq_ids = list("mecha", "adv_weaponry")
 	design_ids = list("mech_taser")
 	research_cost = 2500
 	export_price = 10000
@@ -800,6 +800,9 @@
 	display_name = "Alien Technology"
 	description = "Things used by the greys."
 	prereq_ids = list("base")
+	boost_item_paths = (/obj/item/gun/energy/alien = 0, /obj/item/scalpel/alien = 0, /obj/item/hemostat/alien = 0, /obj/item/retractor/alien = 0, /obj/item/circular_saw/alien = 0,
+	/obj/item/cautery/alien = 0, /obj/item/surgicaldrill/alien = 0, /obj/item/screwdriver/abductor = 0, /obj/item/wrench/abductor = 0, /obj/item/crowbar/abductor = 0, /obj/item/device/multitool/abductor = 0,
+	/obj/item/weldingtool/abductor = 0, /obj/item/wirecutters/abductor = 0, /obj/item/circuitboard/machine/abductor = 0, /obj/item/abductor_baton = 0, /obj/item/device/abductor = 0)
 	research_cost = 2500
 	export_price = 10000
 	hidden = TRUE
@@ -811,6 +814,9 @@
 	description = "Advanced biological tools."
 	prereq_ids = list("alientech", "biotech")
 	design_ids = list("alien_scalpel", "alien_hemostat", "alien_retractor", "alien_saw", "alien_drill", "alien_cautery")
+	boost_item_paths = (/obj/item/gun/energy/alien = 0, /obj/item/scalpel/alien = 0, /obj/item/hemostat/alien = 0, /obj/item/retractor/alien = 0, /obj/item/circular_saw/alien = 0,
+	/obj/item/cautery/alien = 0, /obj/item/surgicaldrill/alien = 0, /obj/item/screwdriver/abductor = 0, /obj/item/wrench/abductor = 0, /obj/item/crowbar/abductor = 0, /obj/item/device/multitool/abductor = 0,
+	/obj/item/weldingtool/abductor = 0, /obj/item/wirecutters/abductor = 0, /obj/item/circuitboard/machine/abductor = 0, /obj/item/abductor_baton = 0, /obj/item/device/abductor = 0)
 	research_cost = 2500
 	export_price = 10000
 	hidden = TRUE
@@ -820,10 +826,21 @@
 	display_name = "Alien Engineering"
 	description = "Alien engineering tools"
 	prereq_ids = list("alientech", "adv_engi")
+	boost_item_paths = list(/obj/item/screwdriver/abductor = 0, /obj/item/wrench/abductor = 0, /obj/item/crowbar/abductor = 0, /obj/item/device/multitool/abductor = 0,
+	/obj/item/weldingtool/abductor = 0, /obj/item/wirecutters/abductor = 0, /obj/item/circuitboard/machine/abductor = 0, /obj/item/abductor_baton = 0, /obj/item/device/abductor = 0)
 	design_ids = list("alien_wrench", "alien_wirecutters", "alien_screwdriver", "alien_crowbar", "alien_welder", "alien_multitool")
 	research_cost = 2500
 	export_price = 10000
 	hidden = TRUE
+
+/proc/total_techweb_points()
+	var/list/datum/techweb_node/processing = list()
+	for(var/i in subtypesof(/datum/techweb_node))
+		processing += new i
+	. = 0
+	for(var/i in processing)
+		var/datum/techweb_node/TN = i
+		. += TN.research_cost
 
 /*
 /datum/design/borg_syndicate_module

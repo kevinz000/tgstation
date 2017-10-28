@@ -146,6 +146,8 @@
 	var/boost = N.boost_item_paths[itempath]
 	if(!boosted_nodes[N])
 		boosted_nodes[N] = boost
+		if(N.autounlock_by_boost)
+			hidden_nodes -= N
 	return TRUE
 
 /datum/techweb/proc/update_node_status(datum/techweb_node/node, autoupdate_consoles = TRUE)
