@@ -12,6 +12,7 @@
 	density = TRUE
 	anchored = FALSE
 	var/list/mob/occupants				//mob = bitflags of their control level.
+	var/default_occupant_control_flags = VEHICLE_CONTROL_DRIVE		//for simple vehicles.
 	var/movedelay = 2
 	var/lastmove = 0
 	var/canmove = TRUE
@@ -24,7 +25,7 @@
 /obj/vehicle/proc/is_occupant(mob/M)
 	return !isnull(occupants[M])
 
-/obj/vehicle/proc/add_occupant(mob/M, control_flags)
+/obj/vehicle/proc/add_occupant(mob/M, control_flags = default_occupant_control_flags)
 	if(!istype(M) || occupants[M])
 		return FALSE
 	occupants[M] = NONE
@@ -39,7 +40,7 @@
 	return TRUE
 
 /obj/vehicle/relaymove(mob/user, direction)
-	if(is_occupant(M) && (occupants[user] & VEHICLE_CONTROL_DRIVE]))
+	if(is_occupant(M) && (occupants[user] & VEHICLE_CONTROL_DRIVE))
 		return driver_move(user, direction)
 	return FALSE
 
