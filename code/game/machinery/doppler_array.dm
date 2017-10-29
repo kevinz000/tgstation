@@ -126,7 +126,7 @@ GLOBAL_LIST_EMPTY(doppler_arrays)
 	if(!istype(linked_techweb))
 		say("Warning: No linked research system!")
 		return
-	var/point_gain = max((orig_light - 20 - linked_techweb.max_bomb_value) * SSresearch.bomb_research_point_scaling, 0)	//Only get points if you go past maxcap!
+	var/point_gain = techweb_scale_bomb(orig_light - 20)
 	if(!point_gain)
 		return
 	linked_techweb.max_bomb_value = orig_light - 20
@@ -138,3 +138,6 @@ GLOBAL_LIST_EMPTY(doppler_arrays)
 /obj/machinery/doppler_array/research/science/Initialize()
 	. = ..()
 	linked_techweb = SSresearch.science_tech
+
+/proc/techweb_scale_bomb(lightradius)
+	return (lightradius ** 0.5) * 10000
