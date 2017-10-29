@@ -17,8 +17,10 @@
 	check_riders()
 
 /obj/vehicle/ridden/proc/check_riders()
-	for(var/mob/living/carbon/C in occupants)
-		if(C.get_num_legs() <
+	for(var/mob/living/carbon/C in occupants)		//carp always get to ride scooters!
+		if(C.get_num_legs() < legs_required || C.get_num_arms() < arms_required)
+			if(unbuckle_mob(C))
+				C.visible_message("<span class='warning'[C] falls off of [src]!</span>")
 
 /obj/vehicle/ridden/proc/process_occupant_offsets()
 

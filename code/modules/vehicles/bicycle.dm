@@ -7,9 +7,6 @@
 	var/static/list/bike_music = list('sound/misc/bike1.mid',
 								'sound/misc/bike2.mid',
 								'sound/misc/bike3.mid')
-/obj/vehicle/bicycle/Initialize()
-	. = ..()
-	riding_datum = new/datum/riding/bicycle
 
 /obj/vehicle/bicycle/buckle_mob(mob/living/M, force = 0, check_loc = 1)
 	if(prob(easter_egg_chance) || (SSevents.holidays && SSevents.holidays[APRIL_FOOLS]))
