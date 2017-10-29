@@ -7,6 +7,9 @@
 		mob_try_enter(M)
 
 /obj/vehicle/entered/proc/mob_try_enter(mob/M)
+	if(occupants.len >= max_passengers)
+		to_chat(user, "There seems to be no place for another passenger")
+		return
 	if(do_after(M, get_enter_delay(M), FALSE, src, TRUE))
 		mob_enter(M)
 		return TRUE
@@ -31,10 +34,3 @@
 
 /obj/vehicle/entered/proc/exit_location(M)
 	return drop_location()
-
-
-
-
-
-
-

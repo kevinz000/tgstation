@@ -12,6 +12,8 @@
 	density = TRUE
 	anchored = FALSE
 	var/list/mob/occupants				//mob = bitflags of their control level.
+	var/max_drivers = 1 //Amount of people that can drive the vehicle
+	var/max_passengers = 1 //Amount of people that fit in the car, including the driver.
 	var/movedelay = 2
 	var/lastmove = 0
 	var/canmove = TRUE
@@ -28,7 +30,10 @@
 	if(!istype(M) || occupants[M])
 		return FALSE
 	occupants[M] = NONE
-	add_control_flags(M, control_flags)
+	if(control_flags)
+		add_control_flags(M, control_flags)
+	else
+		select_control_flags(M)
 	return TRUE
 
 /obj/vehicle/proc/remove_occupant(mob/M)
@@ -39,7 +44,7 @@
 	return TRUE
 
 /obj/vehicle/relaymove(mob/user, direction)
-	if(is_occupant(M) && (occupants[user] & VEHICLE_CONTROL_DRIVE]))
+	if(is_occupant(M) && (occupants[user] & VEHICLE_CONTROL_DRIVE))
 		return driver_move(user, direction)
 	return FALSE
 
@@ -64,10 +69,18 @@
 	occupants[controller] &= ~flags
 	return TRUE
 
+/obj/vehicle/select_control_flags(mob/controller)
+	var/drivercount
+	for(var/i in occupants)
+		if(is_occupant(i) && (occupants[i] & VEHICLE_CONTROL_DRIVE))
+			drivercount++
+	if(drivercount < max_drivers)
+		add_control_flags(controller, VEHICLE_CONTROL_DRIVE)
+
+
 /obj/vehicle/Collide(atom/movable/M)
 	. = ..()
 	if(emulate_door_bumps)
 		if(istype(M, /obj/machinery/door) && has_buckled_mobs())
 			for(var/m in occupants)
 				M.CollidedWith(m)
-
