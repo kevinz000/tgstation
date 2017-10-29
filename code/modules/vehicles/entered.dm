@@ -3,10 +3,15 @@
 	var/enter_delay = 20
 
 /obj/vehicle/entered/MouseDrop_T(atom/dropping, mob/M)
+	if(!istype(dropping) || !istype(M))
+		return ..()
 	if(M == dropping)
 		mob_try_enter(M)
+	return ..()
 
 /obj/vehicle/entered/proc/mob_try_enter(mob/M)
+	if(!istype(M))
+		return FALSE
 	if(occupants.len >= max_passengers)
 		to_chat(user, "There seems to be no place for another passenger")
 		return
@@ -19,6 +24,8 @@
 	return enter_delay
 
 /obj/vehicle/entered/proc/mob_enter(mob/M, silent = FALSE)
+	if(!istype(M))
+		return FALSE
 	if(!silent)
 		M.visible_message("<span class='boldnotice'>[M] climbs into \the [src]!</span>")
 	M.forceMove(src)
@@ -26,6 +33,8 @@
 	return TRUE
 
 /obj/vehicle/entered/proc/mob_exit(mob/M, silent = FALSE)
+	if(!istype(M))
+		return FALSE
 	remove_occupant(M)
 	M.forceMove(exit_location(M))
 	if(!silent)
