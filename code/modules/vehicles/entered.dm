@@ -19,11 +19,11 @@
 	if(!silent)
 		M.visible_message("<span class='boldnotice'>[M] climbs into \the [src]!</span>")
 	M.forceMove(src)
-	LAZYADD(passengers, M)
+	add_occupant(M)
 	return TRUE
 
 /obj/vehicle/entered/proc/mob_exit(mob/M, silent = FALSE)
-	LAZYREMOVE(passengers, M)
+	remove_occupant(M)
 	M.forceMove(exit_location(M))
 	if(!silent)
 		M.visible_message("<span class='boldnotice'>[M] drops out of \the [src]!</span>")

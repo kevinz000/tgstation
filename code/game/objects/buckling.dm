@@ -83,7 +83,7 @@
 		buckled_mob.clear_alert("buckled")
 		buckled_mobs -= buckled_mob
 
-		post_buckle_mob(.)
+		post_unbuckle_mob(.)
 
 /atom/movable/proc/unbuckle_all_mobs(force=FALSE)
 	if(!has_buckled_mobs())
@@ -91,15 +91,16 @@
 	for(var/m in buckled_mobs)
 		unbuckle_mob(m, force)
 
-//Handle any extras after buckling/unbuckling
-//Called on buckle_mob() and unbuckle_mob()
+//Handle any extras after buckling
+//Called on buckle_mob()
 /atom/movable/proc/post_buckle_mob(mob/living/M)
-	return
 
+//same but for unbuckle
+/atom/movable/proc/post_unbuckle_mob(mob/living/M)
 
 //Wrapper procs that handle sanity and user feedback
 /atom/movable/proc/user_buckle_mob(mob/living/M, mob/user, check_loc = TRUE)
-	if(!in_range(user, src) || user.stat || user.restrained())
+	if(!in_range(user, src) || user.incapacitated())
 		return FALSE
 
 	add_fingerprint(user)
