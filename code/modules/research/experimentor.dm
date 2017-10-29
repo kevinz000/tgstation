@@ -131,15 +131,15 @@
 		dat += "<b>Loaded Item:</b> [loaded_item]"
 
 		dat += "<div>Available tests:"
-		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_POKE]'>Poke</A></b>"
-		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_IRRADIATE];'>Irradiate</A></b>"
-		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_GAS]'>Gas</A></b>"
-		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_HEAT]'>Burn</A></b>"
-		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_COLD]'>Freeze</A></b>"
-		dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_OBLITERATE]'>Destroy</A></b></div>"
+		dat += "<b><a href='byond://?src=[REF[src]];item=[REF[loaded_item]];function=[SCANTYPE_POKE]'>Poke</A></b>"
+		dat += "<b><a href='byond://?src=[REF[src]];item=[REF[loaded_item]];function=[SCANTYPE_IRRADIATE];'>Irradiate</A></b>"
+		dat += "<b><a href='byond://?src=[REF[src]];item=[REF[loaded_item]=[REF[loaded_item]];function=[SCANTYPE_GAS]'>Gas</A></b>"
+		dat += "<b><a href='byond://?src=[REF[src]];item=[REF[loaded_item]];function=[SCANTYPE_HEAT]'>Burn</A></b>"
+		dat += "<b><a href='byond://?src=[REF[src]];item==[REF[loaded_item]];function=[SCANTYPE_COLD]'>Freeze</A></b>"
+		dat += "<b><a href='byond://?src=[REF[src]];item==[REF[loaded_item]];function=[SCANTYPE_OBLITERATE]'>Destroy</A></b></div>"
 		if(istype(loaded_item,/obj/item/relic))
-			dat += "<b><a href='byond://?src=\ref[src];item=\ref[loaded_item];function=[SCANTYPE_DISCOVER]'>Discover</A></b>"
-		dat += "<b><a href='byond://?src=\ref[src];function=eject'>Eject</A>"
+			dat += "<b><a href='byond://?src=[REF[src]];item==[REF[loaded_item]];function=[SCANTYPE_DISCOVER]'>Discover</A></b>"
+		dat += "<b><a href='byond://?src=[REF[src]];function=eject'>Eject</A>"
 		var/list/listin = techweb_item_boost_check(src)
 		if(listin)
 			var/list/output = list("<b><font color='purple'>Research Boost Data:</font></b>")

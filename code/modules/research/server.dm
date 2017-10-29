@@ -142,6 +142,7 @@
 				dat += "<BR>"
 
 		//Mining status here
+
 	user << browse("<TITLE>R&D Server Control</TITLE><HR>[dat]", "window=server_control;size=575x400")
 	onclose(user, "server_control")
 	return
