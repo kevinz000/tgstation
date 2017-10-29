@@ -197,7 +197,7 @@ doesn't have toxins access.
 			l += "</tr><tr>"
 			line_length = 1
 
-		l += "<td><A href='?src=\ref[src];category=[C];switch_screen=[menu_num]'>[C]</A></td>"
+		l += "<td><A href='?src=[REF(src)];category=[C];switch_screen=[menu_num]'>[C]</A></td>"
 		line_length++
 
 	l += "</tr></table></div>"
@@ -211,47 +211,47 @@ doesn't have toxins access.
 	l += "Security protocols: [emagged? "<font color='red'>Disabled</font>" : "<font color='green'>Enabled</font>"]"
 	l += "Design Disk: [d_disk? "<font color='green'>Loaded</font>" : "<font color='red'>Not Loaded</font>"] | \
 	 Technology Disk: [t_disk? "<font color='green'>Loaded</font>" : "<font color='red'>Not Loaded</font>"]</b>"
-	l += "<a href='?src=\ref[src];switch_screen=[RDSCREEN_MENU]'>Main Menu</a> | <a href='?src=\ref[src];switch_screen=[back]'>Back</a></div>[RDSCREEN_NOBREAK]"
+	l += "<a href='?src=[REF(src)];switch_screen=[RDSCREEN_MENU]'>Main Menu</a> | <a href='?src=[REF(src)];switch_screen=[back]'>Back</a></div>[RDSCREEN_NOBREAK]"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_main_menu()
 	var/list/l = list()
-	l += "<H2><a href='?src=\ref[src];switch_screen=[RDSCREEN_TECHWEB]'>Technology</a>"
-	l += "<hr><a href='?src=\ref[src];switch_screen=[RDSCREEN_DESIGNDISK]'>Design Disk</a>"
-	l += "<hr><a href='?src=\ref[src];switch_screen=[RDSCREEN_TECHDISK]'>Tech Disk</a>"
-	l += "<hr><a href='?src=\ref[src];switch_screen=[RDSCREEN_DECONSTRUCT]'>Deconstructive Analyzer</a>"
-	l += "<hr><a href='?src=\ref[src];switch_screen=[RDSCREEN_PROTOLATHE]'>Protolathe</a>"
-	l += "<hr><a href='?src=\ref[src];switch_screen=[RDSCREEN_IMPRINTER]'>Circuit Imprinter</a>"
-	l += "<hr><a href='?src=\ref[src];switch_screen=[RDSCREEN_SETTINGS]'>Settings</a></H2>"
+	l += "<H2><a href='?src=[REF(src)];switch_screen=[RDSCREEN_TECHWEB]'>Technology</a>"
+	l += "<hr><a href='?src=[REF(src)];switch_screen=[RDSCREEN_DESIGNDISK]'>Design Disk</a>"
+	l += "<hr><a href='?src=[REF(src)];switch_screen=[RDSCREEN_TECHDISK]'>Tech Disk</a>"
+	l += "<hr><a href='?src=[REF(src)];switch_screen=[RDSCREEN_DECONSTRUCT]'>Deconstructive Analyzer</a>"
+	l += "<hr><a href='?src=[REF(src)];switch_screen=[RDSCREEN_PROTOLATHE]'>Protolathe</a>"
+	l += "<hr><a href='?src=[REF(src)];switch_screen=[RDSCREEN_IMPRINTER]'>Circuit Imprinter</a>"
+	l += "<hr><a href='?src=[REF(src)];switch_screen=[RDSCREEN_SETTINGS]'>Settings</a></H2>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_locked()
-	return list("<h3><a href='?src=\ref[src];switch_screen=[RDSCREEN_MENU];unlock_console=1'>SYSTEM LOCKED</a></h3></br>")
+	return list("<h3><a href='?src=[REF(src)];switch_screen=[RDSCREEN_MENU];unlock_console=1'>SYSTEM LOCKED</a></h3></br>")
 
 /obj/machinery/computer/rdconsole/proc/ui_settings()
 	var/list/l = list()
 	l += "<div class='statusDisplay'><h3>R&D Console Settings:</h3>"
-	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_DEVICE_LINKING]'>Device Linkage Menu</A>"
-	l += "<A href='?src=\ref[src];lock_console=1'>Lock Console</A></div>"
+	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_DEVICE_LINKING]'>Device Linkage Menu</A>"
+	l += "<A href='?src=[REF(src)];lock_console=1'>Lock Console</A></div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_device_linking()
 	var/list/l = list()
-	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_SETTINGS]'>Settings Menu</A><div class='statusDisplay'>"
+	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_SETTINGS]'>Settings Menu</A><div class='statusDisplay'>"
 	l += "<h3>R&D Console Device Linkage Menu:</h3>"
-	l += "<A href='?src=\ref[src];find_device=1'>Re-sync with Nearby Devices</A>"
+	l += "<A href='?src=[REF(src)];find_device=1'>Re-sync with Nearby Devices</A>"
 	l += "<h3>Linked Devices:</h3>"
-	l += linked_destroy? "* Destructive Analyzer <A href='?src=\ref[src];disconnect=destroy'>Disconnect</A>" : "* No Destructive Analyzer Linked"
-	l += linked_lathe? "* Protolathe <A href='?src=\ref[src];disconnect=lathe'>Disconnect</A>" : "* No Protolathe Linked"
-	l += linked_imprinter? "* Circuit Imprinter <A href='?src=\ref[src];disconnect=imprinter'>Disconnect</A>" : "* No Circuit Imprinter Linked"
+	l += linked_destroy? "* Destructive Analyzer <A href='?src=[REF(src)];disconnect=destroy'>Disconnect</A>" : "* No Destructive Analyzer Linked"
+	l += linked_lathe? "* Protolathe <A href='?src=[REF(src)];disconnect=lathe'>Disconnect</A>" : "* No Protolathe Linked"
+	l += linked_imprinter? "* Circuit Imprinter <A href='?src=[REF(src)];disconnect=imprinter'>Disconnect</A>" : "* No Circuit Imprinter Linked"
 	l += "</div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_protolathe_header()
 	var/list/l = list()
-	l += "<div class='statusDisplay'><A href='?src=\ref[src];switch_screen=[RDSCREEN_PROTOLATHE]'>Protolathe Menu</A>"
-	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_PROTOLATHE_MATERIALS]'><B>Material Amount:</B> [linked_lathe.materials.total_amount] / [linked_lathe.materials.max_amount]</A>"
-	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_PROTOLATHE_CHEMICALS]'><B>Chemical volume:</B> [linked_lathe.reagents.total_volume] / [linked_lathe.reagents.maximum_volume]</A></div>"
+	l += "<div class='statusDisplay'><A href='?src=[REF(src)];switch_screen=[RDSCREEN_PROTOLATHE]'>Protolathe Menu</A>"
+	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_PROTOLATHE_MATERIALS]'><B>Material Amount:</B> [linked_lathe.materials.total_amount] / [linked_lathe.materials.max_amount]</A>"
+	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_PROTOLATHE_CHEMICALS]'><B>Chemical volume:</B> [linked_lathe.reagents.total_volume] / [linked_lathe.reagents.maximum_volume]</A></div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_protolathe_category_view()	//Legacy code
@@ -279,11 +279,11 @@ doesn't have toxins access.
 			c = min(c,t)
 
 		if (c >= 1)
-			l += "<A href='?src=\ref[src];build=[D.id];amount=1'>[D.name]</A>[RDSCREEN_NOBREAK]"
+			l += "<A href='?src=[REF(src)];build=[D.id];amount=1'>[D.name]</A>[RDSCREEN_NOBREAK]"
 			if(c >= 5)
-				l += "<A href='?src=\ref[src];build=[D.id];amount=5'>x5</A>[RDSCREEN_NOBREAK]"
+				l += "<A href='?src=[REF(src)];build=[D.id];amount=5'>x5</A>[RDSCREEN_NOBREAK]"
 			if(c >= 10)
-				l += "<A href='?src=\ref[src];build=[D.id];amount=10'>x10</A>[RDSCREEN_NOBREAK]"
+				l += "<A href='?src=[REF(src)];build=[D.id];amount=10'>x10</A>[RDSCREEN_NOBREAK]"
 			l += "[temp_material][RDSCREEN_NOBREAK]"
 		else
 			l += "<span class='linkOff'>[D.name]</span>[temp_material][RDSCREEN_NOBREAK]"
@@ -296,8 +296,8 @@ doesn't have toxins access.
 	var/list/l = list()
 	l += ui_protolathe_header()
 
-	l += "<form name='search' action='?src=\ref[src]'>\
-	<input type='hidden' name='src' value='\ref[src]'>\
+	l += "<form name='search' action='?src=[REF(src)]'>\
+	<input type='hidden' name='src' value='[REF(src)]'>\
 	<input type='hidden' name='search' value='to_search'>\
 	<input type='hidden' name='type' value='proto'>\
 	<input type='text' name='to_search'>\
@@ -328,11 +328,11 @@ doesn't have toxins access.
 			c = min(c,t)
 
 		if (c >= 1)
-			l += "<A href='?src=\ref[src];build=[D.id];amount=1'>[D.name]</A>[RDSCREEN_NOBREAK]"
+			l += "<A href='?src=[REF(src)];build=[D.id];amount=1'>[D.name]</A>[RDSCREEN_NOBREAK]"
 			if(c >= 5)
-				l += "<A href='?src=\ref[src];build=[D.id];amount=5'>x5</A>[RDSCREEN_NOBREAK]"
+				l += "<A href='?src=[REF(src)];build=[D.id];amount=5'>x5</A>[RDSCREEN_NOBREAK]"
 			if(c >= 10)
-				l += "<A href='?src=\ref[src];build=[D.id];amount=10'>x10</A>[RDSCREEN_NOBREAK]"
+				l += "<A href='?src=[REF(src)];build=[D.id];amount=10'>x10</A>[RDSCREEN_NOBREAK]"
 			l += "[temp_material][RDSCREEN_NOBREAK]"
 		else
 			l += "<span class='linkOff'>[D.name]</span>[temp_material][RDSCREEN_NOBREAK]"
@@ -348,9 +348,9 @@ doesn't have toxins access.
 	for(var/mat_id in linked_lathe.materials.materials)
 		var/datum/material/M = linked_lathe.materials.materials[mat_id]
 		l += "* [M.amount] of [M.name]: "
-		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=\ref[src];ejectsheet=[M.id];eject_amt=1'>Eject</A> [RDSCREEN_NOBREAK]"
-		if(M.amount >= MINERAL_MATERIAL_AMOUNT*5) l += "<A href='?src=\ref[src];ejectsheet=[M.id];eject_amt=5'>5x</A> [RDSCREEN_NOBREAK]"
-		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=\ref[src];ejectsheet=[M.id];eject_amt=50'>All</A>[RDSCREEN_NOBREAK]"
+		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=[REF(src)];ejectsheet=[M.id];eject_amt=1'>Eject</A> [RDSCREEN_NOBREAK]"
+		if(M.amount >= MINERAL_MATERIAL_AMOUNT*5) l += "<A href='?src=[REF(src)];ejectsheet=[M.id];eject_amt=5'>5x</A> [RDSCREEN_NOBREAK]"
+		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=[REF(src)];ejectsheet=[M.id];eject_amt=50'>All</A>[RDSCREEN_NOBREAK]"
 		l += ""
 	l += "</div>[RDSCREEN_NOBREAK]"
 	return l
@@ -359,19 +359,19 @@ doesn't have toxins access.
 	RDSCREEN_UI_LATHE_CHECK
 	var/list/l = list()
 	l += ui_protolathe_header()
-	l += "<div class='statusDisplay'><A href='?src=\ref[src];disposeallP=1'>Disposal All Chemicals in Storage</A>"
+	l += "<div class='statusDisplay'><A href='?src=[REF(src)];disposeallP=1'>Disposal All Chemicals in Storage</A>"
 	l += "<h3>Chemical Storage:</h3>"
 	for(var/datum/reagent/R in linked_lathe.reagents.reagent_list)
 		l += "[R.name]: [R.volume]"
-		l += "<A href='?src=\ref[src];disposeP=[R.id]'>Purge</A>"
+		l += "<A href='?src=[REF(src)];disposeP=[R.id]'>Purge</A>"
 	l += "</div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_circuit_header()		//Legacy Code
 	var/list/l = list()
-	l += "<div class='statusDisplay'><A href='?src=\ref[src];switch_screen=[RDSCREEN_IMPRINTER]'>Circuit Imprinter Menu</A>"
-	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_IMPRINTER_MATERIALS]'><B>Material Amount:</B> [linked_imprinter.materials.total_amount] / [linked_imprinter.materials.max_amount]</A>"
-	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_IMPRINTER_CHEMICALS]'><B>Chemical volume:</B> [linked_imprinter.reagents.total_volume] / [linked_imprinter.reagents.maximum_volume]</A></div>"
+	l += "<div class='statusDisplay'><A href='?src=[REF(src)];switch_screen=[RDSCREEN_IMPRINTER]'>Circuit Imprinter Menu</A>"
+	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_IMPRINTER_MATERIALS]'><B>Material Amount:</B> [linked_imprinter.materials.total_amount] / [linked_imprinter.materials.max_amount]</A>"
+	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_IMPRINTER_CHEMICALS]'><B>Chemical volume:</B> [linked_imprinter.reagents.total_volume] / [linked_imprinter.reagents.maximum_volume]</A></div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_circuit()		//Legacy code
@@ -380,8 +380,8 @@ doesn't have toxins access.
 	l += ui_circuit_header()
 	l += "<h3>Circuit Imprinter Menu:</h3>"
 
-	l += "<form name='search' action='?src=\ref[src]'>\
-	<input type='hidden' name='src' value='\ref[src]'>\
+	l += "<form name='search' action='?src=[REF(src)]'>\
+	<input type='hidden' name='src' value='[REF(src)]'>\
 	<input type='hidden' name='search' value='to_search'>\
 	<input type='hidden' name='type' value='imprint'>\
 	<input type='text' name='to_search'>\
@@ -415,7 +415,7 @@ doesn't have toxins access.
 			else
 				temp_materials += " [all_materials[M]/coeff] [CallMaterialName(M)]"
 		if (check_materials)
-			l += "<A href='?src=\ref[src];imprint=[D.id]'>[D.name]</A>[temp_materials]"
+			l += "<A href='?src=[REF(src)];imprint=[D.id]'>[D.name]</A>[temp_materials]"
 		else
 			l += "<span class='linkOff'>[D.name]</span>[temp_materials]"
 	l += "</div>"
@@ -440,7 +440,7 @@ doesn't have toxins access.
 			else
 				temp_materials += " [all_materials[M]/coeff] [CallMaterialName(M)]"
 		if (check_materials)
-			l += "<A href='?src=\ref[src];imprint=[D.id]'>[D.name]</A>[temp_materials]"
+			l += "<A href='?src=[REF(src)];imprint=[D.id]'>[D.name]</A>[temp_materials]"
 		else
 			l += "<span class='linkOff'>[D.name]</span>[temp_materials]"
 	l += "</div>"
@@ -450,11 +450,11 @@ doesn't have toxins access.
 	RDSCREEN_UI_IMPRINTER_CHECK
 	var/list/l = list()
 	l += ui_circuit_header()
-	l += "<A href='?src=\ref[src];disposeallI=1'>Disposal All Chemicals in Storage</A><div class='statusDisplay'>"
+	l += "<A href='?src=[REF(src)];disposeallI=1'>Disposal All Chemicals in Storage</A><div class='statusDisplay'>"
 	l += "<h3>Chemical Storage:</h3>"
 	for(var/datum/reagent/R in linked_imprinter.reagents.reagent_list)
 		l += "[R.name]: [R.volume]"
-		l += "<A href='?src=\ref[src];disposeI=[R.id]'>Purge</A>"
+		l += "<A href='?src=[REF(src)];disposeI=[R.id]'>Purge</A>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_circuit_materials()	//Legacy code!
@@ -465,49 +465,49 @@ doesn't have toxins access.
 	for(var/mat_id in linked_imprinter.materials.materials)
 		var/datum/material/M = linked_imprinter.materials.materials[mat_id]
 		l += "* [M.amount] of [M.name]: "
-		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=\ref[src];imprinter_ejectsheet=[M.id];eject_amt=1'>Eject</A> [RDSCREEN_NOBREAK]"
-		if(M.amount >= MINERAL_MATERIAL_AMOUNT*5) l += "<A href='?src=\ref[src];imprinter_ejectsheet=[M.id];eject_amt=5'>5x</A> [RDSCREEN_NOBREAK]"
-		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=\ref[src];imprinter_ejectsheet=[M.id];eject_amt=50'>All</A>[RDSCREEN_NOBREAK]</div>"
+		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=[REF(src)];imprinter_ejectsheet=[M.id];eject_amt=1'>Eject</A> [RDSCREEN_NOBREAK]"
+		if(M.amount >= MINERAL_MATERIAL_AMOUNT*5) l += "<A href='?src=[REF(src)];imprinter_ejectsheet=[M.id];eject_amt=5'>5x</A> [RDSCREEN_NOBREAK]"
+		if(M.amount >= MINERAL_MATERIAL_AMOUNT) l += "<A href='?src=[REF(src)];imprinter_ejectsheet=[M.id];eject_amt=50'>All</A>[RDSCREEN_NOBREAK]</div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_techdisk()		//Legacy code
 	RDSCREEN_UI_TDISK_CHECK
 	var/list/l = list()
-	l += "<div class='statusDisplay'>Disk Operations: <A href='?src=\ref[src];clear_tech=0'>Clear Disk</A>"
-	l += "<A href='?src=\ref[src];eject_tech=1'>Eject Disk</A>"
-	l += "<A href='?src=\ref[src];updt_tech=0'>Upload All</A>"
-	l += "<A href='?src=\ref[src];copy_tech=1'>Load Technology to Disk</A></div>"
+	l += "<div class='statusDisplay'>Disk Operations: <A href='?src=[REF(src)];clear_tech=0'>Clear Disk</A>"
+	l += "<A href='?src=[REF(src)];eject_tech=1'>Eject Disk</A>"
+	l += "<A href='?src=[REF(src)];updt_tech=0'>Upload All</A>"
+	l += "<A href='?src=[REF(src)];copy_tech=1'>Load Technology to Disk</A></div>"
 	l += "<div class='statusDisplay'><h3>Stored Technology Nodes:</h3>"
 	for(var/i in t_disk.stored_research.researched_nodes)
 		var/datum/techweb_node/N = t_disk.stored_research.researched_nodes[i]
-		l += "<A href='?src=\ref[src];view_node=[i];back_screen=[screen]'>[N.display_name]</A>"
+		l += "<A href='?src=[REF(src)];view_node=[i];back_screen=[screen]'>[N.display_name]</A>"
 	l += "</div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_designdisk()		//Legacy code
 	RDSCREEN_UI_DDISK_CHECK
 	var/list/l = list()
-	l += "Disk Operations: <A href='?src=\ref[src];clear_design=0'>Clear Disk</A><A href='?src=\ref[src];updt_design=0'>Upload All</A><A href='?src=\ref[src];eject_design=1'>Eject Disk</A>"
+	l += "Disk Operations: <A href='?src=[REF(src)];clear_design=0'>Clear Disk</A><A href='?src=[REF(src)];updt_design=0'>Upload All</A><A href='?src=[REF(src)];eject_design=1'>Eject Disk</A>"
 	for(var/i in 1 to d_disk.max_blueprints)
 		l += "<div class='statusDisplay'>"
 		if(d_disk.blueprints[i])
 			var/datum/design/D = d_disk.blueprints[i]
-			l += "<A href='?src=\ref[src];view_design=[D.id]'>[D.name]</A>"
-			l += "Operations: <A href='?src=\ref[src];updt_design=[i]'>Upload to database</A> <A href='?src=\ref[src];clear_design=[i]'>Clear Slot</A>"
+			l += "<A href='?src=[REF(src)];view_design=[D.id]'>[D.name]</A>"
+			l += "Operations: <A href='?src=[REF(src)];updt_design=[i]'>Upload to database</A> <A href='?src=[REF(src)];clear_design=[i]'>Clear Slot</A>"
 		else
-			l += "Empty Slot Operations: <A href='?src=\ref[src];switch_screen=[RDSCREEN_DESIGNDISK_UPLOAD];disk_slot=[i]'>Load Design to Slot</A>"
+			l += "Empty Slot Operations: <A href='?src=[REF(src)];switch_screen=[RDSCREEN_DESIGNDISK_UPLOAD];disk_slot=[i]'>Load Design to Slot</A>"
 		l += "</div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_designdisk_upload()	//Legacy code
 	RDSCREEN_UI_DDISK_CHECK
 	var/list/l = list()
-	l += "<A href='?src=\ref[src];switch_screen=[RDSCREEN_DESIGNDISK];back_screen=[screen]'>Return to Disk Operations</A><div class='statusDisplay'>"
+	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_DESIGNDISK];back_screen=[screen]'>Return to Disk Operations</A><div class='statusDisplay'>"
 	l += "<h3>Load Design to Disk:</h3>"
 	for(var/v in stored_research.researched_designs)
 		var/datum/design/D = stored_research.researched_designs[v]
 		l += "[D.name] "
-		l += "<A href='?src=\ref[src];copy_design=[disk_slot_selected];copy_design_ID=[D.id]'>Copy to Disk</A>"
+		l += "<A href='?src=[REF(src)];copy_design=[disk_slot_selected];copy_design_ID=[D.id]'>Copy to Disk</A>"
 	l += "</div>"
 	return l
 
@@ -518,7 +518,7 @@ doesn't have toxins access.
 		l += "<div class='statusDisplay'>No Item Loaded. Standing-by...</div>"
 	else
 		l += "<div class='statusDisplay'><h3>Deconstruction Menu</h3>"
-		l += "<A href='?src=\ref[src];eject_item=1'>Eject Item</A>"
+		l += "<A href='?src=[REF(src)];eject_item=1'>Eject Item</A>"
 		l += "Name: [linked_destroy.loaded_item.name]"
 		l += "Select a node to boost by deconstructing this item."
 		l += "This item is able to boost:"
@@ -527,13 +527,13 @@ doesn't have toxins access.
 			var/datum/techweb_node/N = get_techweb_node_by_id(node_id)
 			var/worth = listin[N.id]
 			if(!stored_research.researched_nodes[N.id] && !stored_research.boosted_nodes[N.id])
-				l += "<A href='?src=\ref[src];deconstruct=[N.id]'>[N.display_name]: [worth] points</A>"
+				l += "<A href='?src=[REF(src)];deconstruct=[N.id]'>[N.display_name]: [worth] points</A>"
 			else
 				l += "<span class='linkOff>[N.display_name]: [worth] points</span>"
 		var/point_value = techweb_item_point_check(linked_destroy.loaded_item)
 		if(point_value && isnull(stored_research.deconstructed_items[linked_destroy.loaded_item.type]))
-			l += "<A href='?src=\ref[src];deconstruct=0'>Generic Point Deconstruction - [point_value] points</A>"
-		l += "<A href='?src=\ref[src];deconstruct=0'>Material Reclaimation Deconstruction</A>"
+			l += "<A href='?src=[REF(src)];deconstruct=0'>Generic Point Deconstruction - [point_value] points</A>"
+		l += "<A href='?src=[REF(src)];deconstruct=0'>Material Reclaimation Deconstruction</A>"
 		l += "</div>"
 	return l
 
@@ -557,14 +557,14 @@ doesn't have toxins access.
 	for(var/datum/techweb_node/N in avail)
 		var/not_unlocked = (stored_research.available_nodes[N.id] && !stored_research.researched_nodes[N.id])
 		var/has_points = (stored_research.research_points >= N.get_price(stored_research))
-		var/research_href = not_unlocked? (has_points? "<A href='?src=\ref[src];research_node=[N.id]'>Research</A>" : "<span class='linkOff bad'>Not Enough Points</span>") : null
-		l += "<A href='?src=\ref[src];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>[research_href]"
+		var/research_href = not_unlocked? (has_points? "<A href='?src=[REF(src)];research_node=[N.id]'>Research</A>" : "<span class='linkOff bad'>Not Enough Points</span>") : null
+		l += "<A href='?src=[REF(src)];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>[research_href]"
 	l += "</div><div><h3>Locked Nodes:</h3>"
 	for(var/datum/techweb_node/N in unavail)
-		l += "<A href='?src=\ref[src];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>"
+		l += "<A href='?src=[REF(src)];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>"
 	l += "</div><div><h3>Researched Nodes:</h3>"
 	for(var/datum/techweb_node/N in res)
-		l += "<A href='?src=\ref[src];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>"
+		l += "<A href='?src=[REF(src)];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>"
 	l += "</div>[RDSCREEN_NOBREAK]"
 	return l
 
@@ -577,7 +577,7 @@ doesn't have toxins access.
 	l += "Point Cost: [selected_node.get_price(stored_research)]. </div>[RDSCREEN_NOBREAK]"
 	if(stored_research.available_nodes[selected_node.id] && !stored_research.researched_nodes[selected_node.id])
 		if(stored_research.research_points >= selected_node.get_price(stored_research))
-			l += "<h3><A href='?src=\ref[src];research_node=[selected_node.id]'>Research</A></h3>[RDSCREEN_NOBREAK]"
+			l += "<h3><A href='?src=[REF(src)];research_node=[selected_node.id]'>Research</A></h3>[RDSCREEN_NOBREAK]"
 		else
 			l += "<h3><span class='linkOff bad'>Not Enough Points</span></h3>[RDSCREEN_NOBREAK]"
 	else
@@ -585,7 +585,7 @@ doesn't have toxins access.
 	l += "<div><h3>Designs:</h3>[RDSCREEN_NOBREAK]"
 	for(var/i in selected_node.designs)
 		var/datum/design/D = selected_node.designs[i]
-		l += "<A href='?src=\ref[src];view_design=[i]'>[D.name]</A>"
+		l += "<A href='?src=[REF(src)];view_design=[i]'>[D.name]</A>"
 	l += "</div><div><h3>Prerequisites:</h3>[RDSCREEN_NOBREAK]"
 	for(var/i in selected_node.prerequisites)
 		var/datum/techweb_node/prereq = selected_node.prerequisites[i]
@@ -598,11 +598,11 @@ doesn't have toxins access.
 		else
 			begin = "<span class='bad'>"
 			end = "</span>"
-		l += "<A href='?src=\ref[src];view_node=[i]'>[begin][prereq.display_name][end]</A>"
+		l += "<A href='?src=[REF(src)];view_node=[i]'>[begin][prereq.display_name][end]</A>"
 	l += "</div><div><h3>Unlocks:</h3>[RDSCREEN_NOBREAK]"
 	for(var/i in selected_node.unlocks)
 		var/datum/techweb_node/unlock = selected_node.unlocks[i]
-		l += "<A href='?src=\ref[src];view_node=[i]'>[unlock.display_name]</A>"
+		l += "<A href='?src=[REF(src)];view_node=[i]'>[unlock.display_name]</A>"
 
 	l += "</div>[RDSCREEN_NOBREAK]"
 	return l
