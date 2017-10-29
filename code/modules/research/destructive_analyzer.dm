@@ -71,8 +71,10 @@ Note: Must be placed within 3 tiles of the R&D Console
 		busy = TRUE
 		addtimer(CALLBACK(src, .proc/reset_busy), 24)
 		use_power(250)
+		if(thing == loaded_item)
+			loaded_item = null
 		update_icon()
-		var/list/food = thing.GetAllContents()
+		var/list/food = thing.GetAllContents() - thing
 		for(var/obj/item/innerthing in food)
 			destroy_item(innerthing, TRUE)
 	reclaim_materials_from(thing)
@@ -91,19 +93,21 @@ Note: Must be placed within 3 tiles of the R&D Console
 /obj/machinery/rnd/destructive_analyzer/proc/user_try_decon_id(id, mob/user)
 	if(!istype(loaded_item) || !istype(linked_console))
 		return FALSE
-	if(id && !id == "0")
+	if(id && !(id == "0"))
 		var/datum/techweb_node/TN = get_techweb_node_by_id(id)
 		if(!istype(TN))
 			return FALSE
 		var/list/pos1 = techweb_item_boost_check(loaded_item)
-		if(!pos1[id])
+		if(isnull(pos1[id]))
 			return FALSE
 		var/dpath = loaded_item.type
-		if(!TN.boost_item_paths[dpath])
+		if(isnull(TN.boost_item_paths[dpath]))
 			return FALSE
 		var/dboost = TN.boost_item_paths[dpath]
-		var/choice = input("Are you sure you want to destroy [loaded_item.name] for a boost of [dboost] in node [TN.display_name]") in list("Proceed", "Cancel")
+		var/choice = input("Are you sure you want to destroy [loaded_item.name] for a boost of [dboost? 0 : dboost] in node [TN.display_name]") in list("Proceed", "Cancel")
 		if(choice == "Cancel")
+			return FALSE
+		if(QDELETED(loaded_item) || QDELETED(linked_console) || !user.Adjacent(linked_console) || QDELETED(src))
 			return FALSE
 		SSblackbox.add_details("item_deconstructed","[loaded_item.type] - [TN.id]")
 		if(destroy_item(loaded_item))
@@ -115,12 +119,12 @@ Note: Must be placed within 3 tiles of the R&D Console
 		var/choice = input("Are you sure you want to destroy [loaded_item.name] for [point_value? "[point_value] points" : "material reclaimation"]?") in list("Proceed", "Cancel")
 		if(choice == "Cancel")
 			return FALSE
-		else
-			if(QDELETED(loaded_item) || QDELETED(linked_console) || !user.Adjacent(linked_console) || QDELETED(src))
-				return FALSE
-			if(destroy_item(loaded_item))
-				linked_console.stored_research.research_points += point_value
-				linked_console.stored_research.deconstructed_items[loaded_item.type] = point_value
+		if(QDELETED(loaded_item) || QDELETED(linked_console) || !user.Adjacent(linked_console) || QDELETED(src))
+			return FALSE
+		var/dtype = loaded_item.type
+		if(destroy_item(loaded_item))
+			linked_console.stored_research.research_points += point_value
+			linked_console.stored_research.deconstructed_items[dtype] = point_value
 	return TRUE
 
 /obj/machinery/rnd/destructive_analyzer/proc/unload_item()

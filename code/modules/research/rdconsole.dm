@@ -217,12 +217,12 @@ doesn't have toxins access.
 /obj/machinery/computer/rdconsole/proc/ui_main_menu()
 	var/list/l = list()
 	l += "<H2><a href='?src=\ref[src];switch_screen=[RDSCREEN_TECHWEB]'>Technology</a>"
-	l += "<a href='?src=\ref[src];switch_screen=[RDSCREEN_DESIGNDISK]'>Design Disk</a>"
-	l += "<a href='?src=\ref[src];switch_screen=[RDSCREEN_TECHDISK]'>Tech Disk</a>"
-	l += "<a href='?src=\ref[src];switch_screen=[RDSCREEN_DECONSTRUCT]'>Deconstructive Analyzer</a>"
-	l += "<a href='?src=\ref[src];switch_screen=[RDSCREEN_PROTOLATHE]'>Protolathe</a>"
-	l += "<a href='?src=\ref[src];switch_screen=[RDSCREEN_IMPRINTER]'>Circuit Imprinter</a>"
-	l += "<a href='?src=\ref[src];switch_screen=[RDSCREEN_SETTINGS]'>Settings</a></H2>"
+	l += "<hr><a href='?src=\ref[src];switch_screen=[RDSCREEN_DESIGNDISK]'>Design Disk</a>"
+	l += "<hr><a href='?src=\ref[src];switch_screen=[RDSCREEN_TECHDISK]'>Tech Disk</a>"
+	l += "<hr><a href='?src=\ref[src];switch_screen=[RDSCREEN_DECONSTRUCT]'>Deconstructive Analyzer</a>"
+	l += "<hr><a href='?src=\ref[src];switch_screen=[RDSCREEN_PROTOLATHE]'>Protolathe</a>"
+	l += "<hr><a href='?src=\ref[src];switch_screen=[RDSCREEN_IMPRINTER]'>Circuit Imprinter</a>"
+	l += "<hr><a href='?src=\ref[src];switch_screen=[RDSCREEN_SETTINGS]'>Settings</a></H2>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_locked()
@@ -525,15 +525,15 @@ doesn't have toxins access.
 		var/list/listin = techweb_item_boost_check(linked_destroy.loaded_item)
 		for(var/node_id in listin)
 			var/datum/techweb_node/N = get_techweb_node_by_id(node_id)
+			var/worth = listin[N.id]
 			if(!stored_research.researched_nodes[N.id] && !stored_research.boosted_nodes[N.id])
-				l += "<A href='?src=\ref[src];deconstruct=[N.id]'>[N.display_name]: [listin[N]? 0 : listin[N]] points</A>"
+				l += "<A href='?src=\ref[src];deconstruct=[N.id]'>[N.display_name]: [worth] points</A>"
 			else
-				l += "<span class='linkOff>[N.display_name]: [listin[N]] points</span>"
+				l += "<span class='linkOff>[N.display_name]: [worth] points</span>"
 		var/point_value = techweb_item_point_check(linked_destroy.loaded_item)
-		if(point_value && !stored_research.deconstructed_items[linked_destroy.loaded_item.type])
+		if(point_value && isnull(stored_research.deconstructed_items[linked_destroy.loaded_item.type]))
 			l += "<A href='?src=\ref[src];deconstruct=0'>Generic Point Deconstruction - [point_value] points</A>"
-		else
-			l += "<A href='?src=\ref[src];deconstruct=0'>Material Reclaimation Deconstruction</A>"
+		l += "<A href='?src=\ref[src];deconstruct=0'>Material Reclaimation Deconstruction</A>"
 		l += "</div>"
 	return l
 
@@ -557,7 +557,7 @@ doesn't have toxins access.
 	for(var/datum/techweb_node/N in avail)
 		var/not_unlocked = (stored_research.available_nodes[N.id] && !stored_research.researched_nodes[N.id])
 		var/has_points = (stored_research.research_points >= N.get_price(stored_research))
-		var/research_href = not_unlocked? (has_points? "<h3><A href='?src=\ref[src];research_node=[N.id]'>Research</A></h3>" : "<h3><span class='linkOff bad'>Not Enough Points</span></h3>") : null
+		var/research_href = not_unlocked? (has_points? "<A href='?src=\ref[src];research_node=[N.id]'>Research</A>" : "<span class='linkOff bad'>Not Enough Points</span>") : null
 		l += "<A href='?src=\ref[src];view_node=[N.id];back_screen=[screen]'>[N.display_name]</A>[research_href]"
 	l += "</div><div><h3>Locked Nodes:</h3>"
 	for(var/datum/techweb_node/N in unavail)
