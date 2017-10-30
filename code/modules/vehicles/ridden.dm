@@ -53,5 +53,8 @@
 		if(A.density)
 			if(A != src && A != M)
 				return
+	if(occupants.len >= max_passengers)
+		to_chat(user, "There seems to be no place for another passenger")
+		return
 	M.forceMove(get_turf(src))
 	return ..()
