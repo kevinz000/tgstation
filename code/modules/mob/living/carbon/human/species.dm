@@ -1065,7 +1065,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 		else if(istype(T) && T.allow_thrust(0.01, H))
 			. -= 2
 		else if(flightpack && F.allow_thrust(0.01, src))
-			. -= 2
+			. -= 1
 
 	if(flightpack && F.boost)
 		. -= F.boost_speed
@@ -1110,7 +1110,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 		target.help_shake_act(user)
 		if(target != user)
 			add_logs(user, target, "shaked")
-		return 1
+		return TRUE
 	else
 		var/we_breathe = (!(NOBREATH in user.dna.species.species_traits))
 		var/we_lung = user.getorganslot(ORGAN_SLOT_LUNGS)
@@ -1125,23 +1125,19 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 /datum/species/proc/grab(mob/living/carbon/human/user, mob/living/carbon/human/target, datum/martial_art/attacker_style)
 	if(target.check_block())
 		target.visible_message("<span class='warning'>[target] blocks [user]'s grab attempt!</span>")
-		return 0
+		return FALSE
 	if(attacker_style && attacker_style.grab_act(user,target))
-		return 1
+		return TRUE
 	else
 		target.grabbedby(user)
-		return 1
-
-
-
-
+		return TRUE
 
 /datum/species/proc/harm(mob/living/carbon/human/user, mob/living/carbon/human/target, datum/martial_art/attacker_style)
 	if(target.check_block())
 		target.visible_message("<span class='warning'>[target] blocks [user]'s attack!</span>")
-		return 0
+		return FALSE
 	if(attacker_style && attacker_style.harm_act(user,target))
-		return 1
+		return TRUE
 	else
 
 		var/atk_verb = user.dna.species.attack_verb
@@ -1166,7 +1162,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 			playsound(target.loc, user.dna.species.miss_sound, 25, 1, -1)
 			target.visible_message("<span class='danger'>[user] has attempted to [atk_verb] [target]!</span>",\
 			"<span class='userdanger'>[user] has attempted to [atk_verb] [target]!</span>", null, COMBAT_MESSAGE_RANGE)
-			return 0
+			return FALSE
 
 
 		var/armor_block = target.run_armor_check(affecting, "melee")
@@ -1188,14 +1184,12 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 		else if(target.lying)
 			target.forcesay(GLOB.hit_appends)
 
-
-
 /datum/species/proc/disarm(mob/living/carbon/human/user, mob/living/carbon/human/target, datum/martial_art/attacker_style)
 	if(target.check_block())
 		target.visible_message("<span class='warning'>[target] blocks [user]'s disarm attempt!</span>")
-		return 0
+		return FALSE
 	if(attacker_style && attacker_style.disarm_act(user,target))
-		return 1
+		return TRUE
 	else
 		user.do_attack_animation(target, ATTACK_EFFECT_DISARM)
 
@@ -1228,12 +1222,9 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 			add_logs(user, target, "disarmed", "[I ? " removing \the [I]" : ""]")
 			return
 
-
 		playsound(target, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		target.visible_message("<span class='danger'>[user] attempted to disarm [target]!</span>", \
 						"<span class='userdanger'>[user] attemped to disarm [target]!</span>", null, COMBAT_MESSAGE_RANGE)
-
-
 
 /datum/species/proc/spec_hitby(atom/movable/AM, mob/living/carbon/human/H)
 	return
@@ -1269,10 +1260,10 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	// Allows you to put in item-specific reactions based on species
 	if(user != H)
 		if(H.check_shields(I, I.force, "the [I.name]", MELEE_ATTACK, I.armour_penetration))
-			return 0
+			return FALSE
 	if(H.check_block())
 		H.visible_message("<span class='warning'>[H] blocks [I]!</span>")
-		return 0
+		return FALSE
 
 	var/hit_area
 	if(!affecting) //Something went wrong. Maybe the limb is missing?
