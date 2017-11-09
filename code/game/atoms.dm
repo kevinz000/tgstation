@@ -93,9 +93,6 @@
 			var/datum/atom_hud/alternate_appearance/AA = alternate_appearances[K]
 			AA.remove_from_hud(src)
 
-	if(reagents)
-		qdel(reagents)
-
 	LAZYCLEARLIST(overlays)
 	LAZYCLEARLIST(priority_overlays)
 	//SSoverlays.processing -= src	//we COULD do this, but it's better to just let it fall out of the processing queue
@@ -163,8 +160,7 @@
 /atom/proc/CheckParts(list/parts_list)
 	for(var/A in parts_list)
 		if(istype(A, /datum/reagent))
-			if(!reagents)
-				reagents = new()
+			var/datum/component/reagents/reagents = LoadComponent(/datum/component/reagents)
 			reagents.reagent_list.Add(A)
 			reagents.conditional_update()
 		else if(ismovableatom(A))
@@ -259,7 +255,7 @@
 		to_chat(user, desc)
 	// *****RM
 	//to_chat(user, "[name]: Dn:[density] dir:[dir] cont:[contents] icon:[icon] is:[icon_state] loc:[loc]")
-
+	var/datum/component/reagents/reagents = GetComponent(/datum/component/reagents)
 	if(reagents && (is_open_container() || is_transparent())) //is_open_container() isn't really the right proc for this, but w/e
 		to_chat(user, "It contains:")
 		if(reagents.reagent_list.len)
@@ -508,17 +504,21 @@ GLOBAL_LIST_EMPTY(blood_splatter_icons)
 		// Make toxins vomit look different
 		if(toxvomit)
 			V.icon_state = "vomittox_[pick(1,4)]"
-		if(M.reagents)
+		var/datum/component/reagents/other_reagents = M.GetComponent(/datum/component/reagents)
+		if(other_reagents)
 			clear_reagents_to_vomit_pool(M,V)
 
 /atom/proc/clear_reagents_to_vomit_pool(mob/living/carbon/M, obj/effect/decal/cleanable/vomit/V)
-	M.reagents.trans_to(V, M.reagents.total_volume / 10)
-	for(var/datum/reagent/R in M.reagents.reagent_list)                //clears the stomach of anything that might be digested as food
+	var/datum/component/reagents/Mreagents = M.GetComponent(/datum/component/reagents)
+	if(!Mreagents)
+		return FALSE
+	Mreagents.trans_to(V, Mreagents.total_volume / 10)
+	for(var/datum/reagent/R in Mreagents.reagent_list)                //clears the stomach of anything that might be digested as food
 		if(istype(R, /datum/reagent/consumable))
 			var/datum/reagent/consumable/nutri_check = R
 			if(nutri_check.nutriment_factor >0)
-				M.reagents.remove_reagent(R.id,R.volume)
-
+				Mreagents.remove_reagent(R.id,R.volume)
+	return TRUE
 
 //Hook for running code when a dir change occurs
 /atom/proc/setDir(newdir)
