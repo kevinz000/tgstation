@@ -1,31 +1,31 @@
-/datum/computer_file/program/ntnet_dos
+/datum/computer_file/program/exonet_dos
 	filename = "ntn_dos"
 	filedesc = "DoS Traffic Generator"
 	program_icon_state = "hostile"
-	extended_desc = "This advanced script can perform denial of service attacks against NTNet quantum relays. The system administrator will probably notice this. Multiple devices can run this program together against same relay for increased effect"
+	extended_desc = "This advanced script can perform denial of service attacks against exonet quantum relays. The system administrator will probably notice this. Multiple devices can run this program together against same relay for increased effect"
 	size = 20
-	requires_ntnet = 1
-	available_on_ntnet = 0
+	requires_exonet = 1
+	available_on_exonet = 0
 	available_on_syndinet = 1
 	tgui_id = "ntos_net_dos"
 	ui_style = "syndicate"
 	ui_x = 400
 	ui_y = 250
 
-	var/obj/machinery/ntnet_relay/target = null
+	var/obj/machinery/exonet_relay/target = null
 	var/dos_speed = 0
 	var/error = ""
 	var/executed = 0
 
-/datum/computer_file/program/ntnet_dos/process_tick()
+/datum/computer_file/program/exonet_dos/process_tick()
 	dos_speed = 0
-	switch(ntnet_status)
+	switch(exonet_status)
 		if(1)
-			dos_speed = NTNETSPEED_LOWSIGNAL * 10
+			dos_speed = exonetSPEED_LOWSIGNAL * 10
 		if(2)
-			dos_speed = NTNETSPEED_HIGHSIGNAL * 10
+			dos_speed = exonetSPEED_HIGHSIGNAL * 10
 		if(3)
-			dos_speed = NTNETSPEED_ETHERNET * 10
+			dos_speed = exonetSPEED_ETHERNET * 10
 	if(target && executed)
 		target.dos_overload += dos_speed
 		if(!target.is_operational())
@@ -33,7 +33,7 @@
 			target = null
 			error = "Connection to destination relay lost."
 
-/datum/computer_file/program/ntnet_dos/kill_program(forced = FALSE)
+/datum/computer_file/program/exonet_dos/kill_program(forced = FALSE)
 	if(target)
 		target.dos_sources.Remove(src)
 	target = null
@@ -41,12 +41,12 @@
 
 	..()
 
-/datum/computer_file/program/ntnet_dos/ui_act(action, params)
+/datum/computer_file/program/exonet_dos/ui_act(action, params)
 	if(..())
 		return 1
 	switch(action)
 		if("PRG_target_relay")
-			for(var/obj/machinery/ntnet_relay/R in GLOB.ntnet_global.relays)
+			for(var/obj/machinery/exonet_relay/R in GLOB.exonet_global.relays)
 				if("[R.uid]" == params["targid"])
 					target = R
 			return 1
@@ -61,14 +61,14 @@
 			if(target)
 				executed = 1
 				target.dos_sources.Add(src)
-				if(GLOB.ntnet_global.intrusion_detection_enabled)
+				if(GLOB.exonet_global.intrusion_detection_enabled)
 					var/obj/item/computer_hardware/network_card/network_card = computer.all_components[MC_NET]
-					GLOB.ntnet_global.add_log("IDS WARNING - Excess traffic flood targeting relay [target.uid] detected from device: [network_card.get_network_tag()]")
-					GLOB.ntnet_global.intrusion_detection_alarm = 1
+					GLOB.exonet_global.add_log("IDS WARNING - Excess traffic flood targeting relay [target.uid] detected from device: [network_card.get_network_tag()]")
+					GLOB.exonet_global.intrusion_detection_alarm = 1
 			return 1
 
-/datum/computer_file/program/ntnet_dos/ui_data(mob/user)
-	if(!GLOB.ntnet_global)
+/datum/computer_file/program/exonet_dos/ui_data(mob/user)
+	if(!GLOB.exonet_global)
 		return
 
 	var/list/data = list()
@@ -93,7 +93,7 @@
 			data["dos_strings"] += list(list("nums" = string))
 	else
 		data["relays"] = list()
-		for(var/obj/machinery/ntnet_relay/R in GLOB.ntnet_global.relays)
+		for(var/obj/machinery/exonet_relay/R in GLOB.exonet_global.relays)
 			data["relays"] += list(list("id" = R.uid))
 		data["focus"] = target ? target.uid : null
 

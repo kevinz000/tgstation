@@ -4,10 +4,10 @@
 	extended_desc = "This program allows for simple file transfer via direct peer to peer connection."
 	program_icon_state = "comm_logs"
 	size = 7
-	requires_ntnet = 1
-	requires_ntnet_feature = NTNET_PEERTOPEER
+	requires_exonet = 1
+	requires_exonet_feature = exonet_PEERTOPEER
 	network_destination = "other device via P2P tunnel"
-	available_on_ntnet = 1
+	available_on_exonet = 1
 	tgui_id = "ntos_net_transfer"
 
 	var/error = ""										// Error screen
@@ -55,13 +55,13 @@
 
 /datum/computer_file/program/nttransfer/proc/update_netspeed()
 	download_netspeed = 0
-	switch(ntnet_status)
+	switch(exonet_status)
 		if(1)
-			download_netspeed = NTNETSPEED_LOWSIGNAL
+			download_netspeed = exonetSPEED_LOWSIGNAL
 		if(2)
-			download_netspeed = NTNETSPEED_HIGHSIGNAL
+			download_netspeed = exonetSPEED_HIGHSIGNAL
 		if(3)
-			download_netspeed = NTNETSPEED_ETHERNET
+			download_netspeed = exonetSPEED_ETHERNET
 
 // Finishes download and attempts to store the file on HDD
 /datum/computer_file/program/nttransfer/proc/finish_download()
@@ -88,7 +88,7 @@
 		return 1
 	switch(action)
 		if("PRG_downloadfile")
-			for(var/datum/computer_file/program/nttransfer/P in GLOB.ntnet_global.fileservers)
+			for(var/datum/computer_file/program/nttransfer/P in GLOB.exonet_global.fileservers)
 				if("[P.unique_token]" == params["id"])
 					remote = P
 					break
@@ -106,8 +106,8 @@
 			error = ""
 			upload_menu = 0
 			finalize_download()
-			if(src in GLOB.ntnet_global.fileservers)
-				GLOB.ntnet_global.fileservers.Remove(src)
+			if(src in GLOB.exonet_global.fileservers)
+				GLOB.exonet_global.fileservers.Remove(src)
 			for(var/datum/computer_file/program/nttransfer/T in connected_clients)
 				T.crash_download("Remote server has forcibly closed the connection")
 			provided_file = null
@@ -133,7 +133,7 @@
 						if(!P.can_run(usr,transfer = 1))
 							error = "Access Error: Insufficient rights to upload file."
 					provided_file = F
-					GLOB.ntnet_global.fileservers.Add(src)
+					GLOB.exonet_global.fileservers.Add(src)
 					return
 			error = "I/O Error: Unable to locate file on hard drive."
 			return 1
@@ -171,7 +171,7 @@
 		data["upload_filelist"] = all_files
 	else
 		var/list/all_servers[0]
-		for(var/datum/computer_file/program/nttransfer/P in GLOB.ntnet_global.fileservers)
+		for(var/datum/computer_file/program/nttransfer/P in GLOB.exonet_global.fileservers)
 			all_servers.Add(list(list(
 			"uid" = P.unique_token,
 			"filename" = "[P.provided_file.filename].[P.provided_file.filetype]",

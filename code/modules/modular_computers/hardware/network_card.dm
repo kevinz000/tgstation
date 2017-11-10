@@ -1,16 +1,16 @@
 /obj/item/computer_hardware/network_card
 	name = "network card"
-	desc = "A basic wireless network card for usage with standard NTNet frequencies."
+	desc = "A basic wireless network card for usage with standard exonet frequencies."
 	power_usage = 50
 	origin_tech = "programming=2;engineering=1"
 	icon_state = "radio_mini"
 	var/identification_id = null	// Identification ID. Technically MAC address of this device. Can't be changed by user.
 	var/identification_string = "" 	// Identification string, technically nickname seen in the network. Can be set by user.
 	var/long_range = 0
-	var/ethernet = 0 // Hard-wired, therefore always on, ignores NTNet wireless checks.
+	var/ethernet = 0 // Hard-wired, therefore always on, ignores exonet wireless checks.
 	malfunction_probability = 1
 	device_type = MC_NET
-	var/global/ntnet_card_uid = 1
+	var/global/exonet_card_uid = 1
 
 /obj/item/computer_hardware/network_card/diagnostics(var/mob/user)
 	..()
@@ -25,7 +25,7 @@
 
 /obj/item/computer_hardware/network_card/New(var/l)
 	..()
-	identification_id = ntnet_card_uid++
+	identification_id = exonet_card_uid++
 
 // Returns a string identifier of this network card
 /obj/item/computer_hardware/network_card/proc/get_network_tag()
@@ -42,7 +42,7 @@
 	if(ethernet) // Computer is connected via wired connection.
 		return 3
 
-	if(!GLOB.ntnet_global || !GLOB.ntnet_global.check_function(specific_action)) // NTNet is down and we are not connected via wired connection. No signal.
+	if(!GLOB.exonet_global || !GLOB.exonet_global.check_function(specific_action)) // exonet is down and we are not connected via wired connection. No signal.
 		return 0
 
 	if(holder)
@@ -63,7 +63,7 @@
 
 /obj/item/computer_hardware/network_card/advanced
 	name = "advanced network card"
-	desc = "An advanced network card for usage with standard NTNet frequencies. Its transmitter is strong enough to connect even off-station."
+	desc = "An advanced network card for usage with standard exonet frequencies. Its transmitter is strong enough to connect even off-station."
 	long_range = 1
 	origin_tech = "programming=4;engineering=2"
 	power_usage = 100 // Better range but higher power usage.
@@ -74,7 +74,7 @@
 
 /obj/item/computer_hardware/network_card/wired
 	name = "wired network card"
-	desc = "An advanced network card for usage with standard NTNet frequencies. This one also supports wired connection."
+	desc = "An advanced network card for usage with standard exonet frequencies. This one also supports wired connection."
 	ethernet = 1
 	origin_tech = "programming=5;engineering=3"
 	power_usage = 100 // Better range but higher power usage.

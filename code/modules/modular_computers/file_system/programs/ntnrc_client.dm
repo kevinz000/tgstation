@@ -4,16 +4,16 @@
 	program_icon_state = "command"
 	extended_desc = "This program allows communication over NTNRC network"
 	size = 8
-	requires_ntnet = 1
-	requires_ntnet_feature = NTNET_COMMUNICATION
+	requires_exonet = 1
+	requires_exonet_feature = exonet_COMMUNICATION
 	network_destination = "NTNRC server"
 	ui_header = "ntnrc_idle.gif"
-	available_on_ntnet = 1
+	available_on_exonet = 1
 	tgui_id = "ntos_net_chat"
 
 	var/last_message = null				// Used to generate the toolbar icon
 	var/username
-	var/datum/ntnet_conversation/channel = null
+	var/datum/exonet_conversation/channel = null
 	var/operator_mode = 0		// Channel operator mode
 	var/netadmin_mode = 0		// Administrator mode (invisible to other users + bypasses passwords)
 
@@ -38,8 +38,8 @@
 
 		if("PRG_joinchannel")
 			. = 1
-			var/datum/ntnet_conversation/C
-			for(var/datum/ntnet_conversation/chan in GLOB.ntnet_global.chat_channels)
+			var/datum/exonet_conversation/C
+			for(var/datum/exonet_conversation/chan in GLOB.exonet_global.chat_channels)
 				if(chan.id == text2num(params["id"]))
 					C = chan
 					break
@@ -71,7 +71,7 @@
 			var/channel_title = reject_bad_text(input(user,"Enter channel name or leave blank to cancel:"))
 			if(!channel_title)
 				return
-			var/datum/ntnet_conversation/C = new/datum/ntnet_conversation()
+			var/datum/exonet_conversation/C = new/datum/exonet_conversation()
 			C.add_client(src)
 			C.operator = src
 			channel = C
@@ -183,7 +183,7 @@
 	..()
 
 /datum/computer_file/program/chatclient/ui_data(mob/user)
-	if(!GLOB.ntnet_global || !GLOB.ntnet_global.chat_channels)
+	if(!GLOB.exonet_global || !GLOB.exonet_global.chat_channels)
 		return
 
 	var/list/data = list()
@@ -212,8 +212,8 @@
 
 	else // Channel selection screen
 		var/list/all_channels[0]
-		for(var/C in GLOB.ntnet_global.chat_channels)
-			var/datum/ntnet_conversation/conv = C
+		for(var/C in GLOB.exonet_global.chat_channels)
+			var/datum/exonet_conversation/conv = C
 			if(conv && conv.title)
 				all_channels.Add(list(list(
 					"chan" = conv.title,

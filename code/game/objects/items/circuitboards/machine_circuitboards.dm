@@ -481,9 +481,9 @@
 	name = "Golem Ship Equipment Vendor (Machine Board)"
 	build_path = /obj/machinery/mineral/equipment_vendor/golem
 
-/obj/item/circuitboard/machine/ntnet_relay
-	name = "NTNet Relay (Machine Board)"
-	build_path = /obj/machinery/ntnet_relay
+/obj/item/circuitboard/machine/exonet_relay
+	name = "exonet Relay (Machine Board)"
+	build_path = /obj/machinery/exonet_relay
 	origin_tech = "programming=3;bluespace=3;magnets=2"
 	req_components = list(
 		/obj/item/stack/cable_coil = 2,

@@ -124,8 +124,8 @@
 				to_chat(user, "<span class='danger'>\The [src] displays a \"Maximal CPU load reached. Unable to run another program.\" error.</span>")
 				return
 
-			if(P.requires_ntnet && !get_ntnet_status(P.requires_ntnet_feature)) // The program requires NTNet connection, but we are not connected to NTNet.
-				to_chat(user, "<span class='danger'>\The [src]'s screen shows \"Unable to connect to NTNet. Please retry. If problem persists contact your system administrator.\" warning.</span>")
+			if(P.requires_exonet && !get_exonet_status(P.requires_exonet_feature)) // The program requires exonet connection, but we are not connected to exonet.
+				to_chat(user, "<span class='danger'>\The [src]'s screen shows \"Unable to connect to exonet. Please retry. If problem persists contact your system administrator.\" warning.</span>")
 				return
 			if(P.run_program(user))
 				active_program = P

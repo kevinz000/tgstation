@@ -4,10 +4,10 @@
 	program_icon_state = "generic"
 	extended_desc = "This program is capable of reconstructing damaged AI systems. Requires direct AI connection via intellicard slot."
 	size = 12
-	requires_ntnet = 0
+	requires_exonet = 0
 	usage_flags = PROGRAM_CONSOLE
 	transfer_access = ACCESS_HEADS
-	available_on_ntnet = 1
+	available_on_exonet = 1
 	tgui_id = "ntos_ai_restorer"
 	ui_x = 600
 	ui_y = 400

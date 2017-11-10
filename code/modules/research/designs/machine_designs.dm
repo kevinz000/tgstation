@@ -411,12 +411,12 @@
 	build_path = /obj/item/circuitboard/machine/plantgenes
 	category = list ("Misc. Machinery")
 
-/datum/design/board/ntnet_relay
-	name = "Machine Design (NTNet Relay Board)"
+/datum/design/board/exonet_relay
+	name = "Machine Design (exonet Relay Board)"
 	desc = "The circuit board for a wireless network relay."
-	id = "ntnet_relay"
+	id = "exonet_relay"
 	req_tech = list("programming" = 2, "engineering" = 2, "bluespace" = 2)
-	build_path = /obj/item/circuitboard/machine/ntnet_relay
+	build_path = /obj/item/circuitboard/machine/exonet_relay
 	category = list("Subspace Telecomms")
 
 /datum/design/board/limbgrower

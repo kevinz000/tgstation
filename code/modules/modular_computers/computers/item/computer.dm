@@ -251,18 +251,18 @@
 		shutdown_computer()
 		return 0
 
-	if(active_program && active_program.requires_ntnet && !get_ntnet_status(active_program.requires_ntnet_feature))
-		active_program.event_networkfailure(0) // Active program requires NTNet to run but we've just lost connection. Crash.
+	if(active_program && active_program.requires_exonet && !get_exonet_status(active_program.requires_exonet_feature))
+		active_program.event_networkfailure(0) // Active program requires exonet to run but we've just lost connection. Crash.
 
 	for(var/I in idle_threads)
 		var/datum/computer_file/program/P = I
-		if(P.requires_ntnet && !get_ntnet_status(P.requires_ntnet_feature))
+		if(P.requires_exonet && !get_exonet_status(P.requires_exonet_feature))
 			P.event_networkfailure(1)
 
 	if(active_program)
 		if(active_program.program_state != PROGRAM_STATE_KILLED)
 			active_program.process_tick()
-			active_program.ntnet_status = get_ntnet_status()
+			active_program.exonet_status = get_exonet_status()
 		else
 			active_program = null
 
@@ -270,7 +270,7 @@
 		var/datum/computer_file/program/P = I
 		if(P.program_state != PROGRAM_STATE_KILLED)
 			P.process_tick()
-			P.ntnet_status = get_ntnet_status()
+			P.exonet_status = get_exonet_status()
 		else
 			idle_threads.Remove(P)
 
@@ -308,15 +308,15 @@
 	if(recharger && recharger.enabled && recharger.check_functionality() && recharger.use_power(0))
 		data["PC_apclinkicon"] = "charging.gif"
 
-	switch(get_ntnet_status())
+	switch(get_exonet_status())
 		if(0)
-			data["PC_ntneticon"] = "sig_none.gif"
+			data["PC_exoneticon"] = "sig_none.gif"
 		if(1)
-			data["PC_ntneticon"] = "sig_low.gif"
+			data["PC_exoneticon"] = "sig_low.gif"
 		if(2)
-			data["PC_ntneticon"] = "sig_high.gif"
+			data["PC_exoneticon"] = "sig_high.gif"
 		if(3)
-			data["PC_ntneticon"] = "sig_lan.gif"
+			data["PC_exoneticon"] = "sig_lan.gif"
 
 	if(idle_threads.len)
 		var/list/program_headers = list()
@@ -346,7 +346,7 @@
 	update_icon()
 
 // Returns 0 for No Signal, 1 for Low Signal and 2 for Good Signal. 3 is for wired connection (always-on)
-/obj/item/device/modular_computer/proc/get_ntnet_status(specific_action = 0)
+/obj/item/device/modular_computer/proc/get_exonet_status(specific_action = 0)
 	var/obj/item/computer_hardware/network_card/network_card = all_components[MC_NET]
 	if(network_card)
 		return network_card.get_signal(specific_action)
@@ -354,10 +354,10 @@
 		return 0
 
 /obj/item/device/modular_computer/proc/add_log(text)
-	if(!get_ntnet_status())
+	if(!get_exonet_status())
 		return FALSE
 	var/obj/item/computer_hardware/network_card/network_card = all_components[MC_NET]
-	return GLOB.ntnet_global.add_log(text, network_card)
+	return GLOB.exonet_global.add_log(text, network_card)
 
 /obj/item/device/modular_computer/proc/shutdown_computer(loud = 1)
 	kill_program(forced = TRUE)

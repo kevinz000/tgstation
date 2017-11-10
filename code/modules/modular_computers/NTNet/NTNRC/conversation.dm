@@ -1,4 +1,4 @@
-/datum/ntnet_conversation
+/datum/exonet_conversation
 	var/id = null
 	var/title = "Untitled Conversation"
 	var/datum/computer_file/program/chatclient/operator // "Administrator" of this channel. Creator starts as channel's operator,
@@ -7,32 +7,32 @@
 	var/password
 	var/static/ntnrc_uid = 0
 
-/datum/ntnet_conversation/New()
+/datum/exonet_conversation/New()
 	id = ntnrc_uid++
-	if(GLOB.ntnet_global)
-		GLOB.ntnet_global.chat_channels.Add(src)
+	if(GLOB.exonet_global)
+		GLOB.exonet_global.chat_channels.Add(src)
 	..()
 
-/datum/ntnet_conversation/Destroy()
-	if(GLOB.ntnet_global)
-		GLOB.ntnet_global.chat_channels.Remove(src)
+/datum/exonet_conversation/Destroy()
+	if(GLOB.exonet_global)
+		GLOB.exonet_global.chat_channels.Remove(src)
 	return ..()
 
-/datum/ntnet_conversation/proc/add_message(message, username)
+/datum/exonet_conversation/proc/add_message(message, username)
 	message = "[worldtime2text()] [username]: [message]"
 	messages.Add(message)
 	trim_message_list()
 
-/datum/ntnet_conversation/proc/add_status_message(message)
+/datum/exonet_conversation/proc/add_status_message(message)
 	messages.Add("[worldtime2text()] -!- [message]")
 	trim_message_list()
 
-/datum/ntnet_conversation/proc/trim_message_list()
+/datum/exonet_conversation/proc/trim_message_list()
 	if(messages.len <= 50)
 		return
 	messages = messages.Copy(messages.len-50 ,0)
 
-/datum/ntnet_conversation/proc/add_client(datum/computer_file/program/chatclient/C)
+/datum/exonet_conversation/proc/add_client(datum/computer_file/program/chatclient/C)
 	if(!istype(C))
 		return
 	clients.Add(C)
@@ -41,7 +41,7 @@
 	if(!operator)
 		changeop(C)
 
-/datum/ntnet_conversation/proc/remove_client(datum/computer_file/program/chatclient/C)
+/datum/exonet_conversation/proc/remove_client(datum/computer_file/program/chatclient/C)
 	if(!istype(C) || !(C in clients))
 		return
 	clients.Remove(C)
@@ -55,12 +55,12 @@
 			changeop(newop)
 
 
-/datum/ntnet_conversation/proc/changeop(datum/computer_file/program/chatclient/newop)
+/datum/exonet_conversation/proc/changeop(datum/computer_file/program/chatclient/newop)
 	if(istype(newop))
 		operator = newop
 		add_status_message("Channel operator status transferred to [newop.username].")
 
-/datum/ntnet_conversation/proc/change_title(newtitle, datum/computer_file/program/chatclient/client)
+/datum/exonet_conversation/proc/change_title(newtitle, datum/computer_file/program/chatclient/client)
 	if(operator != client)
 		return FALSE // Not Authorised
 
