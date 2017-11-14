@@ -1,8 +1,5 @@
-GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
-
-
 // This is the NTNet datum. There can be only one NTNet datum in game at once. Modular computers read data from this.
-/datum/ntnet
+/datum/exonet
 	var/list/relays = list()
 	var/list/logs = list()
 	var/list/available_station_software = list()
@@ -25,9 +22,7 @@ GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
 
 
 // If new NTNet datum is spawned, it replaces the old one.
-/datum/ntnet/New()
-	if(GLOB.ntnet_global && (GLOB.ntnet_global != src))
-		GLOB.ntnet_global = src // There can be only one.
+/datum/exonet/New()
 	for(var/obj/machinery/ntnet_relay/R in GLOB.machines)
 		relays.Add(R)
 		R.NTNet = src
@@ -35,7 +30,7 @@ GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
 	add_log("NTNet logging system activated.")
 
 // Simplified logging: Adds a log. log_string is mandatory parameter, source is optional.
-/datum/ntnet/proc/add_log(log_string, obj/item/computer_hardware/network_card/source = null)
+/datum/exonet/proc/add_log(log_string, obj/item/computer_hardware/network_card/source = null)
 	var/log_text = "[worldtime2text()] - "
 	if(source)
 		log_text += "[source.get_network_tag()] - "
@@ -51,7 +46,7 @@ GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
 
 
 // Checks whether NTNet operates. If parameter is passed checks whether specific function is enabled.
-/datum/ntnet/proc/check_function(specific_action = 0)
+/datum/exonet/proc/check_function(specific_action = 0)
 	if(!relays || !relays.len) // No relays found. NTNet is down
 		return FALSE
 
@@ -79,7 +74,7 @@ GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
 	return operating
 
 // Builds lists that contain downloadable software.
-/datum/ntnet/proc/build_software_lists()
+/datum/exonet/proc/build_software_lists()
 	available_station_software = list()
 	available_antag_software = list()
 	for(var/F in typesof(/datum/computer_file/program))
@@ -94,7 +89,7 @@ GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
 			available_antag_software.Add(prog)
 
 // Attempts to find a downloadable file according to filename var
-/datum/ntnet/proc/find_ntnet_file_by_name(filename)
+/datum/exonet/proc/find_ntnet_file_by_name(filename)
 	for(var/N in available_station_software)
 		var/datum/computer_file/program/P = N
 		if(filename == P.filename)
@@ -105,20 +100,20 @@ GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
 			return P
 
 // Resets the IDS alarm
-/datum/ntnet/proc/resetIDS()
+/datum/exonet/proc/resetIDS()
 	intrusion_detection_alarm = 0
 
-/datum/ntnet/proc/toggleIDS()
+/datum/exonet/proc/toggleIDS()
 	resetIDS()
 	intrusion_detection_enabled = !intrusion_detection_enabled
 
 // Removes all logs
-/datum/ntnet/proc/purge_logs()
+/datum/exonet/proc/purge_logs()
 	logs = list()
 	add_log("-!- LOGS DELETED BY SYSTEM OPERATOR -!-")
 
 // Updates maximal amount of stored logs. Use this instead of setting the number, it performs required checks.
-/datum/ntnet/proc/update_max_log_count(lognumber)
+/datum/exonet/proc/update_max_log_count(lognumber)
 	if(!lognumber)
 		return FALSE
 	// Trim the value if necessary
@@ -126,7 +121,7 @@ GLOBAL_DATUM_INIT(ntnet_global, /datum/ntnet, new)
 	setting_maxlogcount = lognumber
 	add_log("Configuration Updated. Now keeping [setting_maxlogcount] logs in system memory.")
 
-/datum/ntnet/proc/toggle_function(function)
+/datum/exonet/proc/toggle_function(function)
 	if(!function)
 		return
 	function = text2num(function)
