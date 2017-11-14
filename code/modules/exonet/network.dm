@@ -1,4 +1,4 @@
-// This is the NTNet datum. There can be only one NTNet datum in game at once. Modular computers read data from this.
+// This is the Exonet datum. There can be only one Exonet datum in game at once. Modular computers read data from this.
 /datum/exonet
 	var/list/relays = list()
 	var/list/logs = list()
@@ -10,7 +10,7 @@
 	// High values make displaying logs much laggier.
 	var/setting_maxlogcount = 100
 
-	// These only affect wireless. LAN (consoles) are unaffected since it would be possible to create scenario where someone turns off NTNet, and is unable to turn it back on since it refuses connections
+	// These only affect wireless. LAN (consoles) are unaffected since it would be possible to create scenario where someone turns off Exonet, and is unable to turn it back on since it refuses connections
 	var/setting_softwaredownload = 1
 	var/setting_peertopeer = 1
 	var/setting_communication = 1
@@ -21,13 +21,10 @@
 	var/intrusion_detection_alarm = 0			// Set when there is an IDS warning due to malicious (antag) software.
 
 
-// If new NTNet datum is spawned, it replaces the old one.
+// If new Exonet datum is spawned, it replaces the old one.
 /datum/exonet/New()
-	for(var/obj/machinery/ntnet_relay/R in GLOB.machines)
-		relays.Add(R)
-		R.NTNet = src
 	build_software_lists()
-	add_log("NTNet logging system activated.")
+	add_log("Exonet logging system activated.")
 
 // Simplified logging: Adds a log. log_string is mandatory parameter, source is optional.
 /datum/exonet/proc/add_log(log_string, obj/item/computer_hardware/network_card/source = null)
@@ -45,16 +42,16 @@
 		logs = logs.Copy(logs.len-setting_maxlogcount,0)
 
 
-// Checks whether NTNet operates. If parameter is passed checks whether specific function is enabled.
+// Checks whether Exonet operates. If parameter is passed checks whether specific function is enabled.
 /datum/exonet/proc/check_function(specific_action = 0)
-	if(!relays || !relays.len) // No relays found. NTNet is down
+	if(!relays || !relays.len) // No relays found. Exonet is down
 		return FALSE
 
 	var/operating = FALSE
 
 	// Check all relays. If we have at least one working relay, network is up.
 	for(var/M in relays)
-		var/obj/machinery/ntnet_relay/R = M
+		var/obj/machinery/Exonet_relay/R = M
 		if(R.is_operational())
 			operating = TRUE
 			break
@@ -63,13 +60,13 @@
 		return FALSE
 
 	switch(specific_action)
-		if(NTNET_SOFTWAREDOWNLOAD)
+		if(Exonet_SOFTWAREDOWNLOAD)
 			return (operating && setting_softwaredownload)
-		if(NTNET_PEERTOPEER)
+		if(Exonet_PEERTOPEER)
 			return (operating && setting_peertopeer)
-		if(NTNET_COMMUNICATION)
+		if(Exonet_COMMUNICATION)
 			return (operating && setting_communication)
-		if(NTNET_SYSTEMCONTROL)
+		if(Exonet_SYSTEMCONTROL)
 			return (operating && setting_systemcontrol)
 	return operating
 
@@ -83,13 +80,13 @@
 		if(!prog || prog.filename == "UnknownProgram" || prog.filetype != "PRG")
 			continue
 		// Check whether the program should be available for station/antag download, if yes, add it to lists.
-		if(prog.available_on_ntnet)
+		if(prog.available_on_Exonet)
 			available_station_software.Add(prog)
 		if(prog.available_on_syndinet)
 			available_antag_software.Add(prog)
 
 // Attempts to find a downloadable file according to filename var
-/datum/exonet/proc/find_ntnet_file_by_name(filename)
+/datum/exonet/proc/find_Exonet_file_by_name(filename)
 	for(var/N in available_station_software)
 		var/datum/computer_file/program/P = N
 		if(filename == P.filename)
@@ -117,7 +114,7 @@
 	if(!lognumber)
 		return FALSE
 	// Trim the value if necessary
-	lognumber = max(MIN_NTNET_LOGS, min(lognumber, MAX_NTNET_LOGS))
+	lognumber = max(MIN_Exonet_LOGS, min(lognumber, MAX_Exonet_LOGS))
 	setting_maxlogcount = lognumber
 	add_log("Configuration Updated. Now keeping [setting_maxlogcount] logs in system memory.")
 
@@ -126,15 +123,15 @@
 		return
 	function = text2num(function)
 	switch(function)
-		if(NTNET_SOFTWAREDOWNLOAD)
+		if(Exonet_SOFTWAREDOWNLOAD)
 			setting_softwaredownload = !setting_softwaredownload
 			add_log("Configuration Updated. Wireless network firewall now [setting_softwaredownload ? "allows" : "disallows"] connection to software repositories.")
-		if(NTNET_PEERTOPEER)
+		if(Exonet_PEERTOPEER)
 			setting_peertopeer = !setting_peertopeer
 			add_log("Configuration Updated. Wireless network firewall now [setting_peertopeer ? "allows" : "disallows"] peer to peer network traffic.")
-		if(NTNET_COMMUNICATION)
+		if(Exonet_COMMUNICATION)
 			setting_communication = !setting_communication
 			add_log("Configuration Updated. Wireless network firewall now [setting_communication ? "allows" : "disallows"] instant messaging and similar communication services.")
-		if(NTNET_SYSTEMCONTROL)
+		if(Exonet_SYSTEMCONTROL)
 			setting_systemcontrol = !setting_systemcontrol
 			add_log("Configuration Updated. Wireless network firewall now [setting_systemcontrol ? "allows" : "disallows"] remote control of station's systems.")
