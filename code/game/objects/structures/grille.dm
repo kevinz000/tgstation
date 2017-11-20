@@ -134,7 +134,7 @@
 
 /obj/structure/grille/attackby(obj/item/W, mob/user, params)
 	user.changeNext_move(CLICK_CD_MELEE)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(istype(W, /obj/item/wirecutters))
 		if(!shock(user, 100))
 			playsound(src, W.usesound, 100, 1)

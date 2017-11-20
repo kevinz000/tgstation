@@ -704,7 +704,7 @@ doesn't have toxins access.
 /obj/machinery/computer/rdconsole/Topic(raw, ls)
 	if(..())
 		return
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	usr.set_machine(src)
 	if(ls["switch_screen"])
 		back = screen

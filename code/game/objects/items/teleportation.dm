@@ -218,7 +218,7 @@ Frequency:
 	var/obj/effect/portal/c1 = created[1]
 	var/obj/effect/portal/c2 = created[2]
 	investigate_log("was used by [key_name(user)] at [COORD(user)] to create a portal pair with destinations [COORD(c1)] and [COORD(c2)].", INVESTIGATE_PORTAL)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 /obj/item/hand_tele/proc/on_portal_destroy(obj/effect/portal/P)
 	active_portal_pairs -= P	//If this portal pair is made by us it'll be erased along with the other portal by the portal.

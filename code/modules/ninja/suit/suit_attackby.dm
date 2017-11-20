@@ -21,7 +21,7 @@
 				var/obj/item/stock_parts/cell/old_cell = cell
 				old_cell.charge = 0
 				U.put_in_hands(old_cell)
-				old_cell.add_fingerprint(U)
+				old_cell.add_fingerprint_from_mob(U)
 				old_cell.corrupt()
 				old_cell.update_icon()
 				cell = CELL

@@ -72,7 +72,7 @@ field_generator power level display
 				turn_on()
 				investigate_log("<font color='green'>activated</font> by [user.key].", INVESTIGATE_SINGULO)
 
-				add_fingerprint(user)
+				add_fingerprint_from_mob(user)
 	else
 		to_chat(user, "<span class='warning'>[src] needs to be firmly secured to the floor first!</span>")
 

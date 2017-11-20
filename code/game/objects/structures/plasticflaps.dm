@@ -18,7 +18,7 @@
 			to_chat(user, "<span class='notice'>[src] are no longer <i>screwed</i> to the floor, and the flaps can be <b>cut</b> apart.</span>")
 
 /obj/structure/plasticflaps/attackby(obj/item/W, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(istype(W, /obj/item/screwdriver))
 		if(state == PLASTIC_FLAPS_NORMAL)
 			playsound(src.loc, W.usesound, 100, 1)
@@ -47,7 +47,7 @@
 					return
 				to_chat(user, "<span class='notice'>You cut apart [src].</span>")
 				var/obj/item/stack/sheet/plastic/five/P = new(loc)
-				P.add_fingerprint(user)
+				P.add_fingerprint_from_mob(user)
 				qdel(src)
 	else
 		. = ..()

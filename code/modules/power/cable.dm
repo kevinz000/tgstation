@@ -141,7 +141,7 @@ By design, d1 is the smallest direction and d2 is the highest
 		if (shock(user, 50))
 			return
 		user.visible_message("[user] cuts the cable.", "<span class='notice'>You cut the cable.</span>")
-		stored.add_fingerprint(user)
+		stored.add_fingerprint_from_mob(user)
 		investigate_log("was cut by [key_name(usr, usr.client)] in [get_area(T)]", INVESTIGATE_WIRES)
 		deconstruct()
 		return
@@ -166,7 +166,7 @@ By design, d1 is the smallest direction and d2 is the highest
 			to_chat(user, "<span class='danger'>The cable is not powered.</span>")
 		shock(user, 5, 0.2)
 
-	src.add_fingerprint(user)
+	src.add_fingerprint_from_mob(user)
 
 // Items usable on a cable :
 //   - Wirecutters : cut it duh !
@@ -594,7 +594,7 @@ GLOBAL_LIST_INIT(cable_coil_recipes, list (new/datum/stack_recipe("cable restrai
 	//set up the new cable
 	C.d1 = 0 //it's a O-X node cable
 	C.d2 = dirn
-	C.add_fingerprint(user)
+	C.add_fingerprint_from_mob(user)
 	C.update_icon()
 
 	//create a new powernet with the cable, if needed it will be merged later
@@ -664,7 +664,7 @@ GLOBAL_LIST_INIT(cable_coil_recipes, list (new/datum/stack_recipe("cable restrai
 
 			NC.d1 = 0
 			NC.d2 = fdirn
-			NC.add_fingerprint()
+			NC.add_fingerprint_from_mob(user)
 			NC.update_icon()
 
 			//create a new powernet with the cable, if needed it will be merged later
@@ -715,7 +715,7 @@ GLOBAL_LIST_INIT(cable_coil_recipes, list (new/datum/stack_recipe("cable restrai
 		//updates the stored cable coil
 		C.update_stored(2, item_color)
 
-		C.add_fingerprint()
+		C.add_fingerprint_from_mob(user)
 		C.update_icon()
 
 

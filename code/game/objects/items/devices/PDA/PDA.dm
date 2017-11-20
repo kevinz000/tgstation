@@ -360,7 +360,7 @@ GLOBAL_LIST_EMPTY(PDAs)
 	//Looking for master was kind of pointless since PDAs don't appear to have one.
 
 	if(usr.canUseTopic(src) && !href_list["close"])
-		add_fingerprint(U)
+		add_fingerprint_from_mob(U)
 		U.set_machine(src)
 
 		switch(href_list["choice"])
@@ -837,7 +837,7 @@ GLOBAL_LIST_EMPTY(PDAs)
 			if(1)
 				C.visible_message("<span class='alert'>[user] has analyzed [C]'s vitals!</span>")
 				healthscan(user, C, 1)
-				add_fingerprint(user)
+				add_fingerprint_from_mob(user)
 
 			if(2)
 				// Unused

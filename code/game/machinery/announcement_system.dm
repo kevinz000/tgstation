@@ -140,7 +140,7 @@ GLOBAL_LIST_EMPTY(announcement_systems)
 		arrivalToggle = !arrivalToggle
 		update_icon()
 
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	interact(usr)
 
 /obj/machinery/announcement_system/attack_robot(mob/living/silicon/user)

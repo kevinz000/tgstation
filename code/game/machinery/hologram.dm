@@ -159,7 +159,7 @@ Possible to do for anyone motivated enough:
 /obj/machinery/holopad/Topic(href, href_list)
 	if(..() || isAI(usr))
 		return
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	if(!is_operational())
 		return
 	if (href_list["AIrequest"])

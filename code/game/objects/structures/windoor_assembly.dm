@@ -88,7 +88,7 @@
 
 /obj/structure/windoor_assembly/attackby(obj/item/W, mob/user, params)
 	//I really should have spread this out across more states but thin little windoors are hard to sprite.
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	switch(state)
 		if("01")
 			if(istype(W, /obj/item/weldingtool) && !anchored )
@@ -102,10 +102,10 @@
 							return
 						to_chat(user, "<span class='notice'>You disassemble the windoor assembly.</span>")
 						var/obj/item/stack/sheet/rglass/RG = new (get_turf(src), 5)
-						RG.add_fingerprint(user)
+						RG.add_fingerprint_from_mob(user)
 						if(secure)
 							var/obj/item/stack/rods/R = new (get_turf(src), 4)
-							R.add_fingerprint(user)
+							R.add_fingerprint_from_mob(user)
 						qdel(src)
 				else
 					return

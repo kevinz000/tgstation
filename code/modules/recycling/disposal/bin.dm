@@ -79,7 +79,7 @@
 	trunk_check()
 
 /obj/machinery/disposal/attackby(obj/item/I, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(!pressure_charging && !full_pressure && !flush)
 		if(istype(I, /obj/item/screwdriver))
 			panel_open = !panel_open
@@ -126,7 +126,7 @@
 	if(target.mob_size > MOB_SIZE_HUMAN)
 		to_chat(user, "<span class='warning'>[target] doesn't fit inside [src]!</span>")
 		return
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(user == target)
 		user.visible_message("[user] starts climbing into [src].", "<span class='notice'>You start climbing into [src]...</span>")
 	else

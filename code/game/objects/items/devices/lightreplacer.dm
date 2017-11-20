@@ -232,7 +232,7 @@
 	update_icon()
 
 /obj/item/device/lightreplacer/proc/CanUse(mob/living/user)
-	src.add_fingerprint(user)
+	src.add_fingerprint_from_mob(user)
 	if(uses > 0)
 		return 1
 	else

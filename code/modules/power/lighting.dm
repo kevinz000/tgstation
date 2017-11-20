@@ -66,7 +66,7 @@
 			to_chat(user, "The casing is closed.")
 
 /obj/structure/light_construct/attackby(obj/item/W, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	switch(stage)
 		if(1)
 			if(istype(W, /obj/item/wrench))
@@ -319,13 +319,13 @@
 		if(status == LIGHT_OK)
 			to_chat(user, "<span class='warning'>There is a [fitting] already inserted!</span>")
 		else
-			src.add_fingerprint(user)
+			src.add_fingerprint_from_mob(user)
 			var/obj/item/light/L = W
 			if(istype(L, light_type))
 				if(!user.temporarilyRemoveItemFromInventory(L))
 					return
 
-				src.add_fingerprint(user)
+				src.add_fingerprint_from_mob(user)
 				if(status != LIGHT_EMPTY)
 					drop_light_tube(user)
 					to_chat(user, "<span class='notice'>You replace [L].</span>")
@@ -450,7 +450,7 @@
 
 /obj/machinery/light/attack_hand(mob/living/carbon/human/user)
 	user.changeNext_move(CLICK_CD_MELEE)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 	if(status == LIGHT_EMPTY)
 		to_chat(user, "There is no [fitting] in this light.")
@@ -500,7 +500,7 @@
 	L.forceMove(loc)
 
 	if(user) //puts it in our active hand
-		L.add_fingerprint(user)
+		L.add_fingerprint_from_mob(user)
 		user.put_in_active_hand(L)
 
 	status = LIGHT_EMPTY

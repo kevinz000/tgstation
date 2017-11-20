@@ -173,7 +173,7 @@
 	if(usr.stat || !usr.canmove || usr.restrained())
 		return
 	src.empty()
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	return
 
 /obj/machinery/processor/proc/empty()

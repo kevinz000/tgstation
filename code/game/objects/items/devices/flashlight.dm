@@ -45,7 +45,7 @@
 
 
 /obj/item/device/flashlight/attack(mob/living/carbon/M, mob/living/carbon/human/user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(istype(M) && on && user.zone_selected in list("eyes", "mouth"))
 
 		if((user.disabilities & CLUMSY || user.getBrainLoss() >= 60) && prob(50))	//too dumb to use flashlight properly

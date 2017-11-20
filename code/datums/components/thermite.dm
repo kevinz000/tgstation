@@ -46,7 +46,7 @@
 		master = master.ChangeTurf(master.baseturf)
 		master.burn_tile()
 		if(user)
-			master.add_hiddenprint(user)
+			master.add_hiddenprint_from_mob(user)
 		QDEL_IN(fakefire, burning_time)
 	else
 		QDEL_IN(fakefire, 50)

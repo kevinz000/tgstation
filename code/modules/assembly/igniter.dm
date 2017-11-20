@@ -27,10 +27,10 @@
 
 /obj/item/device/assembly/igniter/attack_self(mob/user)
 	activate()
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 /obj/item/device/assembly/igniter/ignition_effect(atom/A, mob/user)
 	. = "<span class='notice'>[user] fiddles with [src], and manages to \
 		light [A].</span>"
 	activate()
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)

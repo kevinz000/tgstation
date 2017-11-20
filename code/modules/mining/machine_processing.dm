@@ -35,7 +35,7 @@
 	if(..())
 		return
 	usr.set_machine(src)
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 	if(href_list["material"])
 		machine.selected_material = href_list["material"]

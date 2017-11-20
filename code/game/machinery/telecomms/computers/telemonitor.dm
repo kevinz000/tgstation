@@ -70,7 +70,7 @@
 		return
 
 
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	usr.set_machine(src)
 
 	if(href_list["viewmachine"])

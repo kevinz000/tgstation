@@ -352,7 +352,7 @@
 			to_chat(user, "<span class='danger'>Access denied.</span>")
 
 	else
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 		return ..()
 
 /obj/machinery/shieldwallgen/attack_hand(mob/user)
@@ -378,7 +378,7 @@
 			"<span class='italics'>You hear heavy droning.</span>")
 		active = ACTIVE_SETUPFIELDS
 		update_activity()
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 /obj/machinery/shieldwallgen/emag_act(mob/user)
 	if(emagged)

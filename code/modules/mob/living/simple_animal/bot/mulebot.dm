@@ -90,7 +90,7 @@
 		visible_message("[user] inserts a cell into [src].",
 						"<span class='notice'>You insert the new cell into [src].</span>")
 	else if(istype(I, /obj/item/crowbar) && open && cell)
-		cell.add_fingerprint(usr)
+		cell.add_fingerprint_from_mob(usr)
 		cell.loc = loc
 		cell = null
 		visible_message("[user] crowbars out the power cell from [src].",
@@ -473,8 +473,7 @@
 				if(isturf(next))
 					if(bloodiness)
 						var/obj/effect/decal/cleanable/blood/tracks/B = new(loc)
-						if(blood_DNA && blood_DNA.len)
-							B.blood_DNA |= blood_DNA.Copy()
+						B.add_blood_DNA(return_blood_DNA())
 						var/newdir = get_dir(next, loc)
 						if(newdir == dir)
 							B.setDir(newdir)
@@ -656,8 +655,7 @@
 	T.add_mob_blood(H)
 
 	var/list/blood_dna = H.get_blood_dna_list()
-	if(blood_dna)
-		transfer_blood_dna(blood_dna)
+	add_blood_DNA(blood_dna)
 	bloodiness += 4
 
 // player on mulebot attempted to move

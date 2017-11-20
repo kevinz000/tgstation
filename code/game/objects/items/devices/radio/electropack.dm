@@ -51,7 +51,7 @@
 		A.part2 = src
 
 		user.put_in_hands(A)
-		A.add_fingerprint(user)
+		A.add_fingerprint_from_mob(user)
 		if(src.flags_1 & NODROP_1)
 			A.flags_1 |= NODROP_1
 	else

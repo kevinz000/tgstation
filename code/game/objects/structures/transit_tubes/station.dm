@@ -52,7 +52,7 @@
 		return //no fun allowed
 	var/obj/structure/transit_tube_pod/TP = new(loc)
 	R.transfer_fingerprints_to(TP)
-	TP.add_fingerprint(user)
+	TP.add_fingerprint_from_mob(user)
 	TP.setDir(turn(src.dir, -90))
 	user.visible_message("[user] inserts [R].", "<span class='notice'>You insert [R].</span>")
 	qdel(R)

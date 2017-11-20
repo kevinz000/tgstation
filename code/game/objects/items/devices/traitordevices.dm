@@ -164,7 +164,7 @@ effective or pretty fucking useless.
 		wavelength = max(0,(min(120,amount)))
 
 	attack_self(usr)
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	return
 
 /obj/item/device/shadowcloak

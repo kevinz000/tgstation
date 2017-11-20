@@ -317,7 +317,7 @@
 	if(throwing || incapacitated())
 		return FALSE
 
-	AM.add_fingerprint(src)
+	AM.add_fingerprint_from_mob(src)
 
 	// If we're pulling something then drop what we're currently pulling and pull this instead.
 	if(pulling)

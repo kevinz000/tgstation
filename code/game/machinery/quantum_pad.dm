@@ -93,7 +93,7 @@
 	if(linked_pad.stat & NOPOWER)
 		to_chat(user, "<span class='warning'>Linked pad is not responding to ping.</span>")
 		return
-	src.add_fingerprint(user)
+	src.add_fingerprint_from_mob(user)
 	doteleport(user)
 
 /obj/machinery/quantumpad/proc/sparks()

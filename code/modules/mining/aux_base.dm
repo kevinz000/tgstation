@@ -33,7 +33,7 @@ interface with the mining shuttle at the landing site if a mobile beacon is also
 /obj/machinery/computer/auxillary_base/attack_hand(mob/user)
 	if(..(user))
 		return
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 	var/list/options = params2list(possible_destinations)
 	var/obj/docking_port/mobile/M = SSshuttle.getShuttle(shuttleId)
@@ -80,7 +80,7 @@ interface with the mining shuttle at the landing site if a mobile beacon is also
 	if(..())
 		return
 	usr.set_machine(src)
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	if(!allowed(usr))
 		to_chat(usr, "<span class='danger'>Access denied.</span>")
 		return

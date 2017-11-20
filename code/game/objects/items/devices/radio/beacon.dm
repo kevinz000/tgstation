@@ -32,7 +32,7 @@
 		src.code = t
 	if (!( src.code ))
 		src.code = "beacon"
-	src.add_fingerprint(usr)
+	src.add_fingerprint_from_mob(usr)
 	return
 
 /*

@@ -1210,7 +1210,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 		user.do_attack_animation(target, ATTACK_EFFECT_DISARM)
 
 		if(target.w_uniform)
-			target.w_uniform.add_fingerprint(user)
+			target.w_uniform.add_fingerprint_from_mob(user)
 		var/obj/item/bodypart/affecting = target.get_bodypart(ran_zone(user.zone_selected))
 		var/randn = rand(1, 100)
 		if(randn <= 25)

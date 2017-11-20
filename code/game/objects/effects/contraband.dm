@@ -105,7 +105,7 @@
 	var/obj/structure/sign/poster/ripped/R = new(loc)
 	R.pixel_y = pixel_y
 	R.pixel_x = pixel_x
-	R.add_fingerprint(user)
+	R.add_fingerprint_from_mob(user)
 	qdel(src)
 
 /obj/structure/sign/poster/proc/roll_and_drop(loc)

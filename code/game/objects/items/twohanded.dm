@@ -291,7 +291,7 @@
 		icon_state = "dualsaber[item_color][wielded]"
 	else
 		icon_state = "dualsaber0"
-	clean_blood()//blood overlays get weird otherwise, because the sprite changes.
+	SendSignal(COMSIG_COMPONENT_CLEAN_ACT, CLEAN_STRENGTH_BLOOD)
 
 /obj/item/twohanded/dualsaber/attack(mob/target, mob/living/carbon/human/user)
 	if(user.has_dna())
@@ -374,7 +374,7 @@
 			in_mouth = ", barely missing their nose"
 	. = "<span class='warning'>[user] swings [user.p_their()] [src][in_mouth]. [user.p_they()] light[user.p_s()] [A] in the process.</span>"
 	playsound(loc, hitsound, get_clamped_volume(), 1, -1)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	// Light your candles while spinning around the room
 	INVOKE_ASYNC(src, .proc/jedi_spin, user)
 

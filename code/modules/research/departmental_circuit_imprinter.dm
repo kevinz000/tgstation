@@ -180,7 +180,7 @@
 /obj/machinery/rnd/circuit_imprinter/department/Topic(raw, ls)
 	if(..())
 		return
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	usr.set_machine(src)
 	if(ls["switch_screen"])
 		screen = text2num(ls["switch_screen"])

@@ -222,7 +222,7 @@
 		usr.unset_machine()
 		return
 
-	instrumentObj.add_fingerprint(usr)
+	instrumentObj.add_fingerprint_from_mob(usr)
 
 	if(href_list["newsong"])
 		lines = new()

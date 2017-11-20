@@ -67,19 +67,13 @@
 
 		//Make our lists
 		var/list/fingerprints = list()
-		var/list/blood = list()
-		var/list/fibers = list()
+		var/list/blood = A.return_blood_DNA()
+		var/list/fibers = A.return_fibers()
 		var/list/reagents = list()
 
 		var/target_name = A.name
 
 		// Start gathering
-
-		if(A.blood_DNA && A.blood_DNA.len)
-			blood = A.blood_DNA.Copy()
-
-		if(A.suit_fibers && A.suit_fibers.len)
-			fibers = A.suit_fibers.Copy()
 
 		if(ishuman(A))
 
@@ -89,8 +83,7 @@
 
 		else if(!ismob(A))
 
-			if(A.fingerprints && A.fingerprints.len)
-				fingerprints = A.fingerprints.Copy()
+			fingerprints = A.return_fingerprints()
 
 			// Only get reagents from non-mobs.
 			if(A.reagents && A.reagents.reagent_list.len)

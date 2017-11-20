@@ -219,7 +219,7 @@ Class Procs:
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 /obj/machinery/interact(mob/user, special_state)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(special_state)
 		ui_interact(user, state = special_state)
 	else
@@ -231,7 +231,7 @@ Class Procs:
 	return UI_CLOSE
 
 /obj/machinery/ui_act(action, params)
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	return ..()
 
 /obj/machinery/Topic(href, href_list)
@@ -240,7 +240,7 @@ Class Procs:
 		return 1
 	if(!usr.canUseTopic(src))
 		return 1
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	return 0
 
 
@@ -281,7 +281,7 @@ Class Procs:
 	if(set_machine)
 		user.set_machine(src)
 	interact(user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	return 0
 
 /obj/machinery/CheckParts(list/parts_list)

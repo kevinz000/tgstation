@@ -30,7 +30,7 @@
 			to_chat(user, "<span class='notice'>[src] is disassembled! You probably shouldn't be able to see this examine message.</span>")
 
 /obj/structure/girder/attackby(obj/item/W, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 	if(istype(W, /obj/item/gun/energy/plasmacutter))
 		to_chat(user, "<span class='notice'>You start slicing apart the girder...</span>")
@@ -38,7 +38,7 @@
 		if(do_after(user, 40*W.toolspeed, target = src))
 			to_chat(user, "<span class='notice'>You slice apart the girder.</span>")
 			var/obj/item/stack/sheet/metal/M = new (loc, 2)
-			M.add_fingerprint(user)
+			M.add_fingerprint_from_mob(user)
 			qdel(src)
 
 	else if(istype(W, /obj/item/pickaxe/drill/jackhammer))
@@ -199,7 +199,7 @@
 					qdel(src)
 				return
 
-		add_hiddenprint(user)
+		add_hiddenprint_from_mob(user)
 
 	else if(istype(W, /obj/item/pipe))
 		var/obj/item/pipe/P = W
@@ -224,7 +224,7 @@
 			state = GIRDER_DISASSEMBLED
 			to_chat(user, "<span class='notice'>You disassemble the girder.</span>")
 			var/obj/item/stack/sheet/metal/M = new (loc, 2)
-			M.add_fingerprint(user)
+			M.add_fingerprint_from_mob(user)
 			qdel(src)
 			return TRUE
 
@@ -345,7 +345,7 @@
 	can_displace = FALSE
 
 /obj/structure/girder/cult/attackby(obj/item/W, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(istype(W, /obj/item/tome) && iscultist(user)) //Cultists can demolish cult girders instantly with their tomes
 		user.visible_message("<span class='warning'>[user] strikes [src] with [W]!</span>", "<span class='notice'>You demolish [src].</span>")
 		var/obj/item/stack/sheet/runed_metal/R = new(get_turf(src))

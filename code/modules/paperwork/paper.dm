@@ -101,7 +101,7 @@
 	var/n_name = stripped_input(usr, "What would you like to label the paper?", "Paper Labelling", null, MAX_NAME_LEN)
 	if((loc == usr && usr.stat == CONSCIOUS))
 		name = "paper[(n_name ? text("- '[n_name]'") : null)]"
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 
 /obj/item/paper/suicide_act(mob/user)
@@ -333,7 +333,7 @@
 		fire_act()
 
 
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 /obj/item/paper/fire_act(exposed_temperature, exposed_volume)
 	..()

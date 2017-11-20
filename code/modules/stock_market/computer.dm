@@ -325,5 +325,5 @@ a.updated {
 		if (vmode > 1)
 			vmode = 0
 
-	src.add_fingerprint(usr)
+	src.add_fingerprint_from_mob(usr)
 	src.updateUsrDialog()

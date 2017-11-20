@@ -445,7 +445,7 @@
 				var/obj/screen/inventory/hand/H = over_object
 				M.putItemFromInventoryInHandIfPossible(src, H.held_index)
 
-			add_fingerprint(usr)
+			add_fingerprint_from_mob(usr)
 
 
 

@@ -135,7 +135,7 @@
 
 /obj/item/roller/proc/deploy_roller(mob/user, atom/location)
 	var/obj/structure/bed/roller/R = new /obj/structure/bed/roller(location)
-	R.add_fingerprint(user)
+	R.add_fingerprint_from_mob(user)
 	qdel(src)
 
 /obj/item/roller/robo //ROLLER ROBO DA!

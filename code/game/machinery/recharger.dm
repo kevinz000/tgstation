@@ -76,7 +76,7 @@
 	if(issilicon(user))
 		return
 
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(charging)
 		charging.update_icon()
 		charging.loc = loc

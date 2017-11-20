@@ -216,7 +216,7 @@
 			visible_message("<span class='danger'>[icon2html(src, viewers(loc))] [timer_set] seconds until detonation, please clear the area.</span>")
 			activate()
 			update_icon()
-			add_fingerprint(user)
+			add_fingerprint_from_mob(user)
 
 			var/turf/bombturf = get_turf(src)
 			var/area/A = get_area(bombturf)

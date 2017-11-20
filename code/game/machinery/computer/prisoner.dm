@@ -140,6 +140,6 @@
 				to_chat(R, "<span class='italics'>You hear a voice in your head saying: '[warning]'</span>")
 				log_talk(usr,"[key_name(usr)] sent an implant message to [R]/[R.ckey]: '[warning]'",LOGSAY)
 
-		src.add_fingerprint(usr)
+		src.add_fingerprint_from_mob(usr)
 	src.updateUsrDialog()
 	return

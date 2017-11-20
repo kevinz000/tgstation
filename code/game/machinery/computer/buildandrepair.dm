@@ -4,7 +4,7 @@
 	state = 0
 
 /obj/structure/frame/computer/attackby(obj/item/P, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	switch(state)
 		if(0)
 			if(istype(P, /obj/item/wrench))
@@ -28,7 +28,7 @@
 						return
 					to_chat(user, "<span class='notice'>You deconstruct the frame.</span>")
 					var/obj/item/stack/sheet/metal/M = new (drop_location(), 5)
-					M.add_fingerprint(user)
+					M.add_fingerprint_from_mob(user)
 					qdel(src)
 				return
 		if(1)
@@ -47,7 +47,7 @@
 				to_chat(user, "<span class='notice'>You place [P] inside the frame.</span>")
 				icon_state = "1"
 				circuit = P
-				circuit.add_fingerprint(user)
+				circuit.add_fingerprint_from_mob(user)
 				return
 
 			else if(istype(P, /obj/item/circuitboard) && !circuit)
@@ -65,7 +65,7 @@
 				state = 1
 				icon_state = "0"
 				circuit.forceMove(drop_location())
-				circuit.add_fingerprint(user)
+				circuit.add_fingerprint_from_mob(user)
 				circuit = null
 				return
 		if(2)
@@ -97,7 +97,7 @@
 				icon_state = "2"
 				var/obj/item/stack/cable_coil/A = new (drop_location())
 				A.amount = 5
-				A.add_fingerprint(user)
+				A.add_fingerprint_from_mob(user)
 				return
 
 			if(istype(P, /obj/item/stack/sheet/glass))
@@ -121,8 +121,8 @@
 				to_chat(user, "<span class='notice'>You remove the glass panel.</span>")
 				state = 3
 				icon_state = "3"
-				var/obj/item/stack/sheet/glass/G = new (drop_location(), 2)
-				G.add_fingerprint(user)
+				var/obj/item/stack/sheet/glass/G = new(drop_location(), 2)
+				G.add_fingerprint_from_mob(user)
 				return
 			if(istype(P, /obj/item/screwdriver))
 				playsound(src, P.usesound, 50, 1)

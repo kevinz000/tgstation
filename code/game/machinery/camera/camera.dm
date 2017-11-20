@@ -298,7 +298,7 @@
 	if(displaymessage)
 		if(user)
 			visible_message("<span class='danger'>[user] [change_msg] [src]!</span>")
-			add_hiddenprint(user)
+			add_hiddenprint_from_mob(user)
 		else
 			visible_message("<span class='danger'>\The [src] [change_msg]!</span>")
 

@@ -25,10 +25,10 @@
 	if(case && user.is_holding(src))
 		user.put_in_active_hand(case)
 
-		case.add_fingerprint(user)
+		case.add_fingerprint_from_mob(user)
 		case = null
 
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 		update_icon()
 	else
 		return ..()
@@ -72,6 +72,6 @@
 			for(var/mob/M in viewers(1, src))
 				if(M.client)
 					attack_self(M)
-		add_fingerprint(usr)
+		add_fingerprint_from_mob(usr)
 	else
 		usr << browse(null, "window=implantpad")

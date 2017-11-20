@@ -76,7 +76,7 @@ Please wait until completion...</TT><BR>
 		return
 
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	src.add_fingerprint_from_mob(usr)
 
 	if (href_list["make"])
 		if (!src.operating)

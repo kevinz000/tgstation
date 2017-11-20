@@ -58,7 +58,7 @@
 				var/obj/screen/inventory/hand/H = over_object
 				M.putItemFromInventoryInHandIfPossible(src, H.held_index)
 
-			add_fingerprint(usr)
+			add_fingerprint_from_mob(usr)
 
 
 /obj/item/storage/MouseDrop_T(atom/movable/O, mob/user)
@@ -344,7 +344,7 @@
 				if(observe.client && observe.s_active != src)
 					observe.client.screen -= W
 
-		add_fingerprint(usr)
+		add_fingerprint_from_mob(usr)
 		if(rustle_jimmies && !prevent_warning)
 			playsound(src.loc, "rustle", 50, 1, -5)
 
@@ -463,7 +463,7 @@
 		for(var/mob/M in range(1))
 			if(M.s_active == src)
 				close(M)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 /obj/item/storage/attack_paw(mob/user)
 	return attack_hand(user)

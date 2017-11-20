@@ -53,11 +53,11 @@
 	return
 
 /mob/living/silicon/robot/attack_hand(mob/living/carbon/human/user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(opened && !wiresexposed && !issilicon(user))
 		if(cell)
 			cell.update_icon()
-			cell.add_fingerprint(user)
+			cell.add_fingerprint_from_mob(user)
 			user.put_in_active_hand(cell)
 			to_chat(user, "<span class='notice'>You remove \the [cell].</span>")
 			cell = null

@@ -17,10 +17,10 @@
 	if(istype(O, /obj/item/wirecutters))
 		var/obj/item/stack/cable_coil/CC = new (user.loc)
 		CC.amount = 5
-		CC.add_fingerprint(user)
+		CC.add_fingerprint_from_mob(user)
 		amount--
 		var/obj/item/stack/sheet/glass/G = new (user.loc)
-		G.add_fingerprint(user)
+		G.add_fingerprint_from_mob(user)
 		if(amount <= 0)
 			qdel(src)
 
@@ -30,7 +30,7 @@
 			use(1)
 			var/obj/item/L = new /obj/item/stack/tile/light(user.loc)
 			to_chat(user, "<span class='notice'>You make a light tile.</span>")
-			L.add_fingerprint(user)
+			L.add_fingerprint_from_mob(user)
 		else
 			to_chat(user, "<span class='warning'>You need one metal sheet to finish the light tile!</span>")
 	else

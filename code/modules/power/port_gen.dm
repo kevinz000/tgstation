@@ -252,7 +252,7 @@
 	if(..())
 		return
 
-	src.add_fingerprint(usr)
+	src.add_fingerprint_from_mob(usr)
 	if(href_list["action"])
 		if(href_list["action"] == "enable")
 			if(!active && HasFuel() && !crit_fail)

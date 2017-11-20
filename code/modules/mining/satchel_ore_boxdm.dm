@@ -69,7 +69,7 @@
 		return
 
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	src.add_fingerprint_from_mob(usr)
 	if(href_list["removeall"])
 		dump_box_contents()
 		to_chat(usr, "<span class='notice'>You open the release hatch on the box..</span>")
@@ -78,6 +78,6 @@
 /obj/structure/ore_box/deconstruct(disassembled = TRUE, mob/user)
 	var/obj/item/stack/sheet/mineral/wood/WD = new (loc, 4)
 	if(user)
-		WD.add_fingerprint(user)
+		WD.add_fingerprint_from_mob(user)
 	dump_box_contents()
 	qdel(src)

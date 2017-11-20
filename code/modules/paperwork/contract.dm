@@ -173,7 +173,7 @@
 		info += "<i>[signature]</i>"
 
 /obj/item/paper/contract/infernal/attackby(obj/item/P, mob/living/carbon/human/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(istype(P, /obj/item/pen) || istype(P, /obj/item/toy/crayon))
 		attempt_signature(user)
 	else if(istype(P, /obj/item/stamp))
@@ -184,7 +184,7 @@
 		return ..()
 
 /obj/item/paper/contract/infernal/attack(mob/M, mob/living/user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(M == user && target == M.mind && M.mind.soulOwner != owner && attempt_signature(user, 1))
 		user.visible_message("<span class='danger'>[user] slices [user.p_their()] wrist with [src], and scrawls [user.p_their()] name in blood.</span>", "<span class='danger'>You slice your wrist open and scrawl your name in blood.</span>")
 		user.blood_volume = max(user.blood_volume - 100, 0)

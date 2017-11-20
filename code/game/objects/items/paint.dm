@@ -75,7 +75,7 @@
 		if("black")
 			item_color = "333333"
 	icon_state = "paint_[t1]"
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 
 /obj/item/paint/afterattack(turf/target, mob/user, proximity)

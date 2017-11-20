@@ -73,7 +73,7 @@
 			to_chat(user, "<span class='warning'>Your fingers can't press the button!</span>")
 			return
 
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 	//nothing happens if the battery is drained
 	if(recharge_locked)

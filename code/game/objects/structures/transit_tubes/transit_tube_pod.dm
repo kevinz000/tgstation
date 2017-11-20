@@ -44,7 +44,7 @@
 		var/atom/location = get_turf(src)
 		if(user)
 			location = user.loc
-			add_fingerprint(user)
+			add_fingerprint_from_mob(user)
 			user.visible_message("[user] removes [src].", "<span class='notice'>You remove [src].</span>")
 		var/obj/structure/c_transit_tube_pod/R = new/obj/structure/c_transit_tube_pod(location)
 		transfer_fingerprints_to(R)

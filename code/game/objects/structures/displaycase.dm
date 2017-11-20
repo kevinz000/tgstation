@@ -175,7 +175,7 @@
 	if (showpiece && (broken || open))
 		to_chat(user, "<span class='notice'>You deactivate the hover field built into the case.</span>")
 		dump()
-		src.add_fingerprint(user)
+		src.add_fingerprint_from_mob(user)
 		update_icon()
 		return
 	else

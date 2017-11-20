@@ -147,7 +147,7 @@
 
 /mob/living/carbon/human/grippedby(mob/living/user)
 	if(w_uniform)
-		w_uniform.add_fingerprint(user)
+		w_uniform.add_fingerprint_from_mob(user)
 	..()
 
 
@@ -235,7 +235,7 @@
 	if(..())
 		if(M.a_intent == INTENT_HARM)
 			if (w_uniform)
-				w_uniform.add_fingerprint(M)
+				w_uniform.add_fingerprint_from_mob(M)
 			var/damage = prob(90) ? 20 : 0
 			if(!damage)
 				playsound(loc, 'sound/weapons/slashmiss.ogg', 50, 1, -1)
@@ -681,9 +681,9 @@
 					to_chat(src, "<span class='info'>You feel fatigued.</span>")
 		else
 			if(wear_suit)
-				wear_suit.add_fingerprint(M)
+				wear_suit.add_fingerprint_from_mob(M)
 			else if(w_uniform)
-				w_uniform.add_fingerprint(M)
+				w_uniform.add_fingerprint_from_mob(M)
 
 			..()
 

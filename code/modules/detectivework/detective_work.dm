@@ -1,119 +1,140 @@
 //CONTAINS: Suit fibers and Detective's Scanning Computer
 
-/atom/var/list/suit_fibers
-
-/atom/proc/add_fibers(mob/living/carbon/human/M)
-	if(M.gloves && istype(M.gloves, /obj/item/clothing/))
-		var/obj/item/clothing/gloves/G = M.gloves
-		if(G.transfer_blood > 1) //bloodied gloves transfer blood to touched objects
-			if(add_blood(G.blood_DNA)) //only reduces the bloodiness of our gloves if the item wasn't already bloody
-				G.transfer_blood--
-	else if(M.bloody_hands > 1)
-		if(add_blood(M.blood_DNA))
-			M.bloody_hands--
-	if(!suit_fibers)
-		suit_fibers = list()
-	var/fibertext
-	var/item_multiplier = isitem(src)?1.2:1
-	if(M.wear_suit)
-		fibertext = "Material from \a [M.wear_suit]."
-		if(prob(10*item_multiplier) && !(fibertext in suit_fibers))
-			suit_fibers += fibertext
-		if(!(M.wear_suit.body_parts_covered & CHEST))
-			if(M.w_uniform)
-				fibertext = "Fibers from \a [M.w_uniform]."
-				if(prob(12*item_multiplier) && !(fibertext in suit_fibers)) //Wearing a suit means less of the uniform exposed.
-					suit_fibers += fibertext
-		if(!(M.wear_suit.body_parts_covered & HANDS))
-			if(M.gloves)
-				fibertext = "Material from a pair of [M.gloves.name]."
-				if(prob(20*item_multiplier) && !(fibertext in suit_fibers))
-					suit_fibers += fibertext
-	else if(M.w_uniform)
-		fibertext = "Fibers from \a [M.w_uniform]."
-		if(prob(15*item_multiplier) && !(fibertext in suit_fibers))
-			// "Added fibertext: [fibertext]"
-			suit_fibers += fibertext
-		if(M.gloves)
-			fibertext = "Material from a pair of [M.gloves.name]."
-			if(prob(20*item_multiplier) && !(fibertext in suit_fibers))
-				suit_fibers += "Material from a pair of [M.gloves.name]."
-	else if(M.gloves)
-		fibertext = "Material from a pair of [M.gloves.name]."
-		if(prob(20*item_multiplier) && !(fibertext in suit_fibers))
-			suit_fibers += "Material from a pair of [M.gloves.name]."
 
 
-/atom/proc/add_hiddenprint(mob/living/M)
-	if(!M || !M.key)
-		return
+/atom/proc/return_fingerprints()
+	GET_COMPONENT(D, /datum/component/forensics)
+	return D? D.return_fingerprints() : list()
 
-	if(!fingerprintshidden) //Add the list if it does not exist
-		fingerprintshidden = list()
+/atom/proc/return_hiddenprints()
+	GET_COMPONENT(D, /datum/component/forensics)
+	return D? D.return_hiddenprints() : list()
 
-	var/hasgloves = ""
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(H.gloves)
-			hasgloves = "(gloves)"
+/atom/proc/return_blood_DNA()
+	GET_COMPONENT(D, /datum/component/forensics)
+	return D? D.return_blood_DNA() : list()
 
-	var/current_time = time_stamp()
-	if(!fingerprintshidden[M.key])
-		fingerprintshidden[M.key] = "First: [M.real_name]\[[current_time]\][hasgloves]. Ckey: [M.ckey]"
-	else
-		var/laststamppos = findtext(fingerprintshidden[M.key], " Last: ")
-		if(laststamppos)
-			fingerprintshidden[M.key] = copytext(fingerprintshidden[M.key], 1, laststamppos)
-		fingerprintshidden[M.key] += " Last: [M.real_name]\[[current_time]\][hasgloves]. Ckey: [M.ckey]"
+/atom/proc/return_fibers()
+	GET_COMPONENT(D, /datum/component/forensics)
+	return D? D.return_fibers() : list()
 
-	fingerprintslast = M.ckey
+/atom/proc/has_fingerprints()
+	GET_COMPONENT(D, /datum/component/forensics)
+	return D.has_fingerprints()
 
+/atom/proc/has_hiddenprints()
+	GET_COMPONENT(D, /datum/component/forensics)
+	return D.has_hiddenprints()
+
+/atom/proc/has_blood_DNA()
+	GET_COMPONENT(D, /datum/component/forensics)
+	return D.has_blood_DNA()
+
+/atom/proc/has_fibers()
+	GET_COMPONENT(D, /datum/component/forensics)
+	return D.has_fibers()
+
+/atom/proc/_wipe_fingerprints()
+	GET_COMPONENT(D, /datum/component/forensics)
+	return D? D.wipe_fingerprints() : TRUE
+
+/atom/proc/wipe_hiddenrprints()
+	GET_COMPONENT(D, /datum/component/forensics)
+	return D? D.wipe_fingerprints() : TRUE
+
+/atom/proc/_wipe_blood_DNA()
+	GET_COMPONENT(D, /datum/component/forensics)
+	return D? D.wipe_blood_DNA() : TRUE
+
+/atom/proc/_wipe_fibers()
+	GET_COMPONENT(D, /datum/component/forensics)
+	return D? D.wipe_fibers() : TRUE
+
+/atom/proc/add_fingerprints(list/fingerprints)
+	if(length(fingerprints))
+		var/datum/component/forensics/D = LoadComponent(/datum/component/forensics)
+		. = D.add_fingerprints(fingerprints)
 
 //Set ignoregloves to add prints irrespective of the mob having gloves on.
-/atom/proc/add_fingerprint(mob/living/M, ignoregloves = 0)
-	if(!M || !M.key)
-		return
+/atom/proc/add_fingerprint_from_mob(mob/living/M, ignoregloves = FALSE)
+	var/datum/component/forensics/D = LoadComponent(/datum/component/forensics)
+	. = D.add_fingerprint_from_mob(M, ignoregloves)
 
-	add_hiddenprint(M)
+/atom/proc/add_fibers(list/fibertext)
+	if(length(fibertext))
+		var/datum/component/forensics/D = LoadComponent(/datum/component/forensics)
+		. = D.add_fibers(fibertext)
 
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
+/atom/proc/add_fibers_from_mob(mob/living/carbon/human/M)
+	var/old = 0
+	if(M.gloves && istype(M.gloves, /obj/item/clothing))
+		var/obj/item/clothing/gloves/G = M.gloves
+		old = length(G.return_blood_DNA())
+		if(G.transfer_blood > 1) //bloodied gloves transfer blood to touched objects
+			if(add_blood_DNA(G.return_blood_DNA()) && length(G.return_blood_DNA()) > old) //only reduces the bloodiness of our gloves if the item wasn't already bloody
+				G.transfer_blood--
+	else if(M.bloody_hands > 1)
+		old = length(M.return_blood_DNA())
+		if(add_blood_DNA(M.return_blood_DNA()) && length(M.return_blood_DNA()) > old)
+			M.bloody_hands--
+	var/datum/component/forensics/D = LoadComponent(/datum/component/forensics)
+	. = D.add_fibers_from_mob(M)
 
-		add_fibers(H)
+/atom/proc/add_hiddenprints(list/hiddenprints)	//NOTE: THIS IS FOR ADMINISTRATION FINGERPRINTS, YOU MUST CUSTOM SET THIS TO INCLUDE CKEY/REAL NAMES!
+	if(length(hiddenprints))
+		var/datum/component/forensics/D = LoadComponent(/datum/component/forensics)
+		. = D.add_hiddenprints(hiddenprints)
 
-		if(H.gloves) //Check if the gloves (if any) hide fingerprints
-			var/obj/item/clothing/gloves/G = H.gloves
-			if(G.transfer_prints)
-				ignoregloves = 1
+/atom/proc/add_hiddenprint_from_mob(mob/living/M)
+	var/datum/component/forensics/D = LoadComponent(/datum/component/forensics)
+	. = D.add_hiddenprint_from_mob(M)
 
-			if(!ignoregloves)
-				H.gloves.add_fingerprint(H, 1) //ignoregloves = 1 to avoid infinite loop.
-				return
+/atom/proc/add_blood_DNA(list/dna)
+	return FALSE
 
-		if(!fingerprints) //Add the list if it does not exist
-			fingerprints = list()
-		var/full_print = md5(H.dna.uni_identity)
-		fingerprints[full_print] = full_print
+/obj/add_blood_DNA(list/dna)
+	. = ..()
+	if(length(dna))
+		var/datum/component/forensics/D = LoadComponent(/datum/component/forensics)
+		. = D.add_blood_DNA(dna)
 
+/obj/item/add_blood_DNA(list/blood_dna, list/datum/disease/diseases)
+	. = ..()
+	if(!.)
+		return FALSE
+	if(has_blood_DNA())
+		LoadComponent(/datum/component/decal/blood)
+	return TRUE	//we applied blood to the item
 
+/obj/item/clothing/gloves/add_blood_DNA(list/blood_dna, list/datum/disease/diseases)
+	. = ..()
+	transfer_blood = rand(2, 4)
 
+/turf/add_blood_DNA(list/blood_dna, list/datum/disease/diseases)
+	var/obj/effect/decal/cleanable/blood/splatter/B = locate() in src
+	if(!B)
+		B = new /obj/effect/decal/cleanable/blood/splatter(src, diseases)
+	B.add_blood_DNA(blood_dna) //give blood info to the blood decal.
+	return TRUE //we bloodied the floor
+
+/mob/living/carbon/human/add_blood_DNA(list/blood_dna, list/datum/disease/diseases)
+	if(wear_suit)
+		wear_suit.add_blood_DNA(blood_dna)
+		update_inv_wear_suit()
+	else if(w_uniform)
+		w_uniform.add_blood_DNA(blood_dna)
+		update_inv_w_uniform()
+	if(gloves)
+		var/obj/item/clothing/gloves/G = gloves
+		G.add_blood_DNA(blood_dna)
+	else if(length(blood_dna))
+		var/datum/component/forensics/D = LoadComponent(/datum/component/forensics)
+		. = D.add_blood_DNA(dna)
+		bloody_hands = rand(2, 4)
+	update_inv_gloves()	//handles bloody hands overlays and updating
+	return TRUE
 
 /atom/proc/transfer_fingerprints_to(atom/A)
-
-	// Make sure everything are lists.
-	if(!islist(A.fingerprints))
-		A.fingerprints = list()
-	if(!islist(A.fingerprintshidden))
-		A.fingerprintshidden = list()
-
-	if(!islist(fingerprints))
-		fingerprints = list()
-	if(!islist(fingerprintshidden))
-		fingerprintshidden = list()
-
-	// Transfer
-	if(fingerprints)
-		A.fingerprints |= fingerprints.Copy()            //detective
-	if(fingerprintshidden)
-		A.fingerprintshidden |= fingerprintshidden.Copy()    //admin
+	A.add_fingerprints(return_fingerprints())
+	A.add_hiddenprints(return_hiddenprints())
 	A.fingerprintslast = fingerprintslast

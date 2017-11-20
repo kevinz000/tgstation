@@ -169,7 +169,7 @@
 	return
 
 /obj/item/device/destTagger/Topic(href, href_list)
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	if(href_list["nextTag"])
 		var/n = text2num(href_list["nextTag"])
 		currTag = n

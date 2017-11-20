@@ -56,7 +56,7 @@
 		var/obj/screen/inventory/hand/H = over_object
 		M.putItemFromInventoryInHandIfPossible(src, H.held_index)
 
-	add_fingerprint(M)
+	add_fingerprint_from_mob(M)
 
 
 /obj/item/paper_bin/attack_paw(mob/user)
@@ -96,7 +96,7 @@
 	else
 		to_chat(user, "<span class='warning'>[src] is empty!</span>")
 
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 
 /obj/item/paper_bin/attackby(obj/item/I, mob/user, params)

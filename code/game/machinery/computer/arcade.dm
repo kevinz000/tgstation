@@ -216,7 +216,7 @@
 			Reset()
 			emagged = FALSE
 
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	updateUsrDialog()
 	return
 
@@ -741,7 +741,7 @@
 							last_spaceport_action = "Traded Food for Fuel"
 							event()
 
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	updateUsrDialog()
 	busy = FALSE
 	return

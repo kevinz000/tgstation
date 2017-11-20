@@ -26,13 +26,13 @@
 		part2 = null
 		qdel(src)
 		return
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	return
 
 /obj/item/assembly/shock_kit/attack_self(mob/user)
 	part1.attack_self(user)
 	part2.attack_self(user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	return
 
 /obj/item/assembly/shock_kit/receive_signal()

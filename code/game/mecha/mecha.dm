@@ -844,7 +844,7 @@
 	if(H && H.client && H in range(1))
 		occupant = H
 		H.forceMove(src)
-		add_fingerprint(H)
+		add_fingerprint_from_mob(H)
 		GrantActions(H, human_occupant=1)
 		forceMove(loc)
 		log_append_to_last("[H] moved in as pilot.")

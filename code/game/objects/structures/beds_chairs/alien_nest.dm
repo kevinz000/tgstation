@@ -20,7 +20,7 @@
 
 			if(user.getorgan(/obj/item/organ/alien/plasmavessel))
 				unbuckle_mob(M)
-				add_fingerprint(user)
+				add_fingerprint_from_mob(user)
 				return
 
 			if(M != user)
@@ -45,7 +45,7 @@
 					"<span class='italics'>You hear squelching...</span>")
 
 			unbuckle_mob(M)
-			add_fingerprint(user)
+			add_fingerprint_from_mob(user)
 
 /obj/structure/bed/nest/user_buckle_mob(mob/living/M, mob/living/user)
 	if ( !ismob(M) || (get_dist(src, user) > 1) || (M.loc != src.loc) || user.incapacitated() || M.buckled )

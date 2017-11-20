@@ -339,7 +339,7 @@ GLOBAL_LIST_INIT(disposal_pipe_recipes, list(
 					F.flipped = queued_p_flipped
 
 				P.update()
-				P.add_fingerprint(usr)
+				P.add_fingerprint_from_mob(usr)
 				if(!isnull(temp_piping_layer))
 					P.setPipingLayer(temp_piping_layer)
 				else
@@ -377,7 +377,7 @@ GLOBAL_LIST_INIT(disposal_pipe_recipes, list(
 
 				activate()
 
-				C.add_fingerprint(usr)
+				C.add_fingerprint_from_mob(usr)
 				C.update_icon()
 				return
 

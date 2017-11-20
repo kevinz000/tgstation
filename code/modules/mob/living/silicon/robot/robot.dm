@@ -380,7 +380,7 @@
 
 			adjustBruteLoss(-30)
 			updatehealth()
-			add_fingerprint(user)
+			add_fingerprint_from_mob(user)
 			visible_message("<span class='notice'>[user] has fixed some of the dents on [src].</span>")
 			return
 		else

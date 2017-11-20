@@ -44,7 +44,7 @@
 
 /obj/item/storage/lockbox/MouseDrop(over_object, src_location, over_location)
 	if (locked)
-		src.add_fingerprint(usr)
+		src.add_fingerprint_from_mob(usr)
 		to_chat(usr, "<span class='warning'>It's locked!</span>")
 		return 0
 	..()

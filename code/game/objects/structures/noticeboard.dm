@@ -70,7 +70,7 @@
 		if(istype(P) && P.loc == src)
 			var/obj/item/I = usr.is_holding_item_of_type(/obj/item/pen)
 			if(I)
-				add_fingerprint(usr)
+				add_fingerprint_from_mob(usr)
 				P.attackby(I, usr)
 			else
 				to_chat(usr, "<span class='notice'>You'll need something to write with!</span>")

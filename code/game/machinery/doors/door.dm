@@ -110,7 +110,7 @@
 /obj/machinery/door/proc/bumpopen(mob/user)
 	if(operating)
 		return
-	src.add_fingerprint(user)
+	src.add_fingerprint_from_mob(user)
 	if(!src.requiresID())
 		user = null
 
@@ -135,7 +135,7 @@
 	..()
 
 /obj/machinery/door/proc/try_to_activate_door(mob/user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(operating || emagged)
 		return
 	if(!requiresID())

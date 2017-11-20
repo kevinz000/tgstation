@@ -67,8 +67,8 @@
 		if(use(1))
 			var/obj/item/smallDelivery/P = new /obj/item/smallDelivery(get_turf(I.loc))
 			if(user.Adjacent(I))
-				P.add_fingerprint(user)
-				I.add_fingerprint(user)
+				P.add_fingerprint_from_mob(user)
+				I.add_fingerprint_from_mob(user)
 				user.put_in_hands(P)
 			I.forceMove(P)
 			var/size = round(I.w_class)
@@ -88,8 +88,8 @@
 			var/obj/structure/bigDelivery/P = new /obj/structure/bigDelivery(get_turf(O.loc))
 			P.icon_state = O.delivery_icon
 			O.forceMove(P)
-			P.add_fingerprint(user)
-			O.add_fingerprint(user)
+			P.add_fingerprint_from_mob(user)
+			O.add_fingerprint_from_mob(user)
 		else
 			to_chat(user, "<span class='warning'>You need more paper!</span>")
 			return

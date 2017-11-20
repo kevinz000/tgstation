@@ -153,7 +153,7 @@
 			if(href_list["experiment"])
 				flash = Experiment(occupant,href_list["experiment"])
 	updateUsrDialog()
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 /obj/machinery/abductor/experiment/proc/Experiment(mob/occupant,type)
 	LAZYINITLIST(history)

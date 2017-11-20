@@ -196,7 +196,7 @@
 		else
 			target.visible_message("<span class='warning'>[user] pushes [target] into [src] and shuts its door!<span>", "<span class='userdanger'>[user] shoves you into [src] and shuts the door!</span>")
 		close_machine(target)
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 
 /obj/machinery/suit_storage_unit/proc/cook()
 	if(uv_cycles)
@@ -210,7 +210,7 @@
 				mob_occupant.adjustFireLoss(rand(20, 36))
 			else
 				mob_occupant.adjustFireLoss(rand(10, 16))
-			mob_occupant.emote("scream") 
+			mob_occupant.emote("scream")
 		addtimer(CALLBACK(src, .proc/cook), 50)
 	else
 		uv_cycles = initial(uv_cycles)
@@ -236,8 +236,7 @@
 				visible_message("<span class='warning'>[src]'s door slides open, barraging you with the nauseating smell of charred flesh.</span>")
 			playsound(src, 'sound/machines/airlockclose.ogg', 25, 1)
 			for(var/obj/item/I in src) //Scorches away blood and forensic evidence, although the SSU itself is unaffected
-				I.clean_blood()
-				I.fingerprints = list()
+				I.SendSignal(COMSIG_COMPONENT_CLEAN_ACT, CLEAN_STRONG)
 				var/datum/component/radioactive/contamination = I.GetComponent(/datum/component/radioactive)
 				if(contamination)
 					qdel(contamination)
@@ -280,7 +279,7 @@
 		open_machine()
 		dump_contents()
 
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(locked)
 		visible_message("<span class='notice'>You see [user] kicking against the doors of [src]!</span>", \
 			"<span class='notice'>You start kicking against the doors...</span>")

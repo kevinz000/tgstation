@@ -723,7 +723,7 @@ What a mess.*/
 					else
 						temp = "This function does not appear to be working at the moment. Our apologies."
 
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	updateUsrDialog()
 	return
 

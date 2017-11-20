@@ -756,7 +756,7 @@ Pass a positive integer as an argument to override a bot's default speed.
 	if(topic_denied(usr))
 		to_chat(usr, "<span class='warning'>[src]'s interface is not responding!</span>")
 		return 1
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 	if((href_list["power"]) && (bot_core.allowed(usr) || !locked))
 		if(on)

@@ -75,7 +75,7 @@
 			return
 
 		user.visible_message("<span class='danger'>[user] starts to put [C] into the gibber!</span>")
-		src.add_fingerprint(user)
+		src.add_fingerprint_from_mob(user)
 		if(do_after(user, gibtime, target = src))
 			if(C && user.pulling == C && !C.buckled && !C.has_buckled_mobs() && !occupant)
 				user.visible_message("<span class='danger'>[user] stuffs [C] into the gibber!</span>")
@@ -113,7 +113,7 @@
 	if(usr.incapacitated())
 		return
 	src.go_out()
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	return
 
 /obj/machinery/gibber/proc/go_out()

@@ -43,7 +43,7 @@
 
 /obj/item/gun/medbeam/process_fire(atom/target as mob|obj|turf, mob/living/user as mob|obj, message = 1, params, zone_override)
 	if(isliving(user))
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 
 	if(current_target)
 		LoseTarget()

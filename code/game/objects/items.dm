@@ -228,14 +228,14 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 	return message
 
 /obj/item/interact(mob/user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(hidden_uplink && hidden_uplink.active)
 		hidden_uplink.interact(user)
 		return 1
 	ui_interact(user)
 
 /obj/item/ui_act(action, params)
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	return ..()
 
 /obj/item/attack_hand(mob/user)
@@ -281,7 +281,7 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 			return
 
 	pickup(user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(!user.put_in_active_hand(src))
 		dropped(user)
 
@@ -303,7 +303,7 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 			return
 
 	pickup(user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(!user.put_in_active_hand(src))
 		dropped(user)
 
@@ -503,7 +503,7 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 		to_chat(user, "<span class='danger'>You cannot locate any organic eyes on this brain!</span>")
 		return
 
-	src.add_fingerprint(user)
+	src.add_fingerprint_from_mob(user)
 
 	playsound(loc, src.hitsound, 30, 1, -1)
 
@@ -548,20 +548,6 @@ GLOBAL_VAR_INIT(rpg_loot_items, FALSE)
 		if (prob(eyes.eye_damage - 10 + 1))
 			if(M.become_blind())
 				to_chat(M, "<span class='danger'>You go blind!</span>")
-
-/obj/item/clean_blood()
-	. = ..()
-	if(.)
-		if(initial(icon) && initial(icon_state))
-			var/index = blood_splatter_index()
-			var/icon/blood_splatter_icon = GLOB.blood_splatter_icons[index]
-			if(blood_splatter_icon)
-				cut_overlay(blood_splatter_icon)
-
-/obj/item/clothing/gloves/clean_blood()
-	. = ..()
-	if(.)
-		transfer_blood = 0
 
 /obj/item/singularity_pull(S, current_size)
 	..()

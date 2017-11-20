@@ -144,7 +144,7 @@
 /obj/structure/disposalconstruct/attackby(obj/item/I, mob/user, params)
 	var/ispipe = is_pipe() // Indicates if we should change the level of this pipe
 
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 	var/turf/T = get_turf(src)
 	if(T.intact && isfloorturf(T))

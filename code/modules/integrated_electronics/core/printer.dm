@@ -147,7 +147,7 @@
 	if(..())
 		return TRUE
 	var/sc = 0
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 	if(href_list["category"])
 		current_category = href_list["category"]

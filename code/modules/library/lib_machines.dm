@@ -107,7 +107,7 @@
 	if(href_list["back"])
 		screenstate = 0
 
-	src.add_fingerprint(usr)
+	src.add_fingerprint_from_mob(usr)
 	src.updateUsrDialog()
 	return
 
@@ -490,7 +490,7 @@ GLOBAL_LIST(cachedbooks) // List of our cached book datums
 			cooldown = world.time + PRINTER_COOLDOWN
 		else
 			say("Printer currently unavailable, please wait a moment.")
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	updateUsrDialog()
 
 /*
@@ -544,7 +544,7 @@ GLOBAL_LIST(cachedbooks) // List of our cached book datums
 	if(href_list["eject"])
 		for(var/obj/item/book/B in contents)
 			B.loc = src.loc
-	src.add_fingerprint(usr)
+	src.add_fingerprint_from_mob(usr)
 	src.updateUsrDialog()
 	return
 

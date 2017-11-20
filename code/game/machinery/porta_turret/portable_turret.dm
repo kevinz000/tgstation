@@ -184,7 +184,7 @@
 	if(..())
 		return
 	usr.set_machine(src)
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 	if(href_list["power"] && !locked)
 		if(anchored)	//you can't turn a turret on/off if it's not anchored/secured

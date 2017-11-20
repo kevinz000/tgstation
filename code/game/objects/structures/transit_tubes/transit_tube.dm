@@ -48,7 +48,7 @@
 				var/obj/structure/c_transit_tube/R = new tube_construction(loc)
 				R.setDir(dir)
 				transfer_fingerprints_to(R)
-				R.add_fingerprint(user)
+				R.add_fingerprint_from_mob(user)
 				qdel(src)
 	else if(istype(W, /obj/item/crowbar))
 		for(var/obj/structure/transit_tube_pod/pod in src.loc)

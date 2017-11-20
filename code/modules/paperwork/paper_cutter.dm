@@ -68,7 +68,7 @@
 
 
 /obj/item/papercutter/attack_hand(mob/user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(!storedcutter)
 		to_chat(user, "<span class='notice'>The cutting blade is gone! You can't use [src] now.</span>")
 		return
@@ -100,7 +100,7 @@
 	else if(istype(over_object, /obj/screen/inventory/hand))
 		var/obj/screen/inventory/hand/H = over_object
 		M.putItemFromInventoryInHandIfPossible(src, H.held_index)
-	add_fingerprint(M)
+	add_fingerprint_from_mob(M)
 
 
 /obj/item/paperslip

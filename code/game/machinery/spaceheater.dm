@@ -134,7 +134,7 @@
 	..(severity)
 
 /obj/machinery/space_heater/attackby(obj/item/I, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(istype(I, /obj/item/stock_parts/cell))
 		if(panel_open)
 			if(cell)
@@ -143,7 +143,7 @@
 			else if(!user.transferItemToLoc(I, src))
 				return
 			cell = I
-			I.add_fingerprint(usr)
+			I.add_fingerprint_from_mob(usr)
 
 			user.visible_message("\The [user] inserts a power cell into \the [src].", "<span class='notice'>You insert the power cell into \the [src].</span>")
 			SStgui.update_uis(src)

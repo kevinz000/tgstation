@@ -242,7 +242,7 @@
 	else
 		to_chat(user, "<span class='notice'>[src] can now be attached, modified, and refuelled.</span>")
 		container_type = OPENCONTAINER_1
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 /obj/item/weldingtool/proc/flamethrower_rods(obj/item/I, mob/user)
 	if(!status)
@@ -252,7 +252,7 @@
 			if(!remove_item_from_storage(F))
 				user.transferItemToLoc(src, F, TRUE)
 			F.weldtool = src
-			add_fingerprint(user)
+			add_fingerprint_from_mob(user)
 			to_chat(user, "<span class='notice'>You add a rod to a welder, starting to build a flamethrower.</span>")
 			user.put_in_hands(F)
 		else

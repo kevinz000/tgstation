@@ -238,7 +238,7 @@
 	return TRUE
 
 /obj/item/gun/proc/process_fire(atom/target as mob|obj|turf, mob/living/user as mob|obj, message = TRUE, params, zone_override, bonus_spread = 0)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 	if(semicd)
 		return

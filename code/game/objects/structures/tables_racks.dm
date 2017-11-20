@@ -518,6 +518,6 @@
 		var/obj/structure/rack/R = new /obj/structure/rack(user.loc)
 		user.visible_message("<span class='notice'>[user] assembles \a [R].\
 			</span>", "<span class='notice'>You assemble \a [R].</span>")
-		R.add_fingerprint(user)
+		R.add_fingerprint_from_mob(user)
 		qdel(src)
 	building = FALSE

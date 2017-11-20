@@ -148,7 +148,7 @@
 /obj/structure/window/attack_tk(mob/user)
 	user.changeNext_move(CLICK_CD_MELEE)
 	user.visible_message("<span class='notice'>Something knocks on [src].</span>")
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	playsound(src, 'sound/effects/Glassknock.ogg', 50, 1)
 
 /obj/structure/window/attack_hulk(mob/living/carbon/human/user, does_attack_animation = 0)
@@ -161,7 +161,7 @@
 		return
 	user.changeNext_move(CLICK_CD_MELEE)
 	user.visible_message("[user] knocks on [src].")
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	playsound(src, 'sound/effects/Glassknock.ogg', 50, 1)
 
 /obj/structure/window/attack_paw(mob/user)
@@ -177,7 +177,7 @@
 	if(!can_be_reached(user))
 		return 1 //skip the afterattack
 
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(istype(I, /obj/item/weldingtool) && user.a_intent == INTENT_HELP)
 		var/obj/item/weldingtool/WT = I
 		if(obj_integrity < max_integrity)
@@ -231,7 +231,7 @@
 			to_chat(user, "<span class='notice'> You begin to disassemble [src]...</span>")
 			if(do_after(user, decon_speed*I.toolspeed, target = src, extra_checks = CALLBACK(src, .proc/check_state_and_anchored, state, anchored)))
 				var/obj/item/stack/sheet/G = new glass_type(user.loc, glass_amount)
-				G.add_fingerprint(user)
+				G.add_fingerprint_from_mob(user)
 				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You successfully disassemble [src].</span>")
 				qdel(src)
@@ -313,7 +313,7 @@
 	setDir(target_dir)
 	air_update_turf(1)
 	ini_dir = dir
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	return TRUE
 
 /obj/structure/window/verb/revrotate()
@@ -336,7 +336,7 @@
 
 	setDir(target_dir)
 	ini_dir = dir
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	return TRUE
 
 /obj/structure/window/AltClick(mob/user)
@@ -733,7 +733,7 @@
 	update_icon()
 
 /obj/structure/window/paperframe/attack_hand(mob/user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(user.a_intent != INTENT_HARM)
 		user.changeNext_move(CLICK_CD_MELEE)
 		user.visible_message("[user] knocks on [src].")

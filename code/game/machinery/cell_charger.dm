@@ -75,7 +75,7 @@
 		return
 
 	user.put_in_hands(charging)
-	charging.add_fingerprint(user)
+	charging.add_fingerprint_from_mob(user)
 
 	user.visible_message("[user] removes [charging] from [src].", "<span class='notice'>You remove [charging] from [src].</span>")
 

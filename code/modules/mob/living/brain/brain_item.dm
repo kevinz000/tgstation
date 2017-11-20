@@ -102,7 +102,7 @@
 	if(!istype(C))
 		return ..()
 
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 	if(user.zone_selected != "head")
 		return ..()

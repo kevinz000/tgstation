@@ -70,7 +70,7 @@
 			if(!user.transferItemToLoc(O, src))
 				return
 			storedpart = O
-			O.add_fingerprint(user)
+			O.add_fingerprint_from_mob(user)
 			update_icon()
 
 	else if(istype(O, /obj/item/weldingtool) && user.a_intent != INTENT_HARM)
@@ -102,7 +102,7 @@
 
 /obj/machinery/aug_manipulator/attack_hand(mob/user)
 	if(!..())
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 
 		if(storedpart)
 			var/augstyle = input(user, "Select style.", "Augment Custom Fitting") as null|anything in style_list_icons

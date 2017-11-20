@@ -80,7 +80,7 @@
 	//loc.loc check is for making possible renaming photos in clipboards
 	if((loc == usr || loc.loc && loc.loc == usr) && usr.stat == CONSCIOUS && usr.canmove && !usr.restrained())
 		name = "photo[(n_name ? text("- '[n_name]'") : null)]"
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 /obj/item/photo/proc/photocreate(inicon, inimg, indesc, inblueprints)
 	icon = inicon

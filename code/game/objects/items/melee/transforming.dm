@@ -60,7 +60,7 @@
 		icon_state = initial(icon_state)
 		w_class = initial(w_class)
 	transform_messages(user, supress_message_text)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	return TRUE
 
 /obj/item/melee/transforming/proc/nemesis_effects(mob/living/user, mob/living/target)

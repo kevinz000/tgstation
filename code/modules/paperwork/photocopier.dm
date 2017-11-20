@@ -323,7 +323,7 @@
 	check_ass() //Just to make sure that you can re-drag somebody onto it after they moved off.
 	if (!istype(target) || target.anchored || target.buckled || !Adjacent(user) || !Adjacent(target) || !user.canUseTopic(src, 1) || target == ass || copier_blocked())
 		return
-	src.add_fingerprint(user)
+	src.add_fingerprint_from_mob(user)
 	if(target == user)
 		user.visible_message("[user] starts climbing onto the photocopier!", "<span class='notice'>You start climbing onto the photocopier...</span>")
 	else

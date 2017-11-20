@@ -115,7 +115,7 @@
 
 
 /obj/machinery/power/emitter/attack_hand(mob/user)
-	src.add_fingerprint(user)
+	src.add_fingerprint_from_mob(user)
 	if(state == 2)
 		if(!powernet)
 			to_chat(user, "<span class='warning'>The emitter isn't connected to a wire!</span>")

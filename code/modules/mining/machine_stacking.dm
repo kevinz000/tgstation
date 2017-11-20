@@ -41,7 +41,7 @@
 	if(..())
 		return
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	src.add_fingerprint_from_mob(usr)
 	if(href_list["release"])
 		if(!(text2path(href_list["release"]) in machine.stack_list))
 			return //someone tried to spawn materials by spoofing hrefs

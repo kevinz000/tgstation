@@ -105,7 +105,7 @@
 			attached_device.attack_self(usr)
 
 	attack_self(usr)
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 /obj/item/device/transfer_valve/proc/process_activation(obj/item/device/D)
 	if(toggle)

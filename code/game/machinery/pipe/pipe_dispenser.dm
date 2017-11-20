@@ -39,14 +39,14 @@
 		usr << browse(null, "window=pipedispenser")
 		return 1
 	usr.set_machine(src)
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	if(href_list["makepipe"])
 		if(wait < world.time)
 			var/p_type = text2path(href_list["makepipe"])
 			var/p_dir = text2num(href_list["dir"])
 			var/obj/item/pipe/P = new (loc, p_type, p_dir)
 			P.setPipingLayer(piping_layer)
-			P.add_fingerprint(usr)
+			P.add_fingerprint_from_mob(usr)
 			wait = world.time + 10
 	if(href_list["makemeter"])
 		if(wait < world.time )
@@ -59,7 +59,7 @@
 	return
 
 /obj/machinery/pipedispenser/attackby(obj/item/W, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if (istype(W, /obj/item/pipe) || istype(W, /obj/item/pipe_meter))
 		to_chat(usr, "<span class='notice'>You put [W] back into [src].</span>")
 		qdel(W)
@@ -69,7 +69,7 @@
 			playsound(src, W.usesound, 50, 1)
 			to_chat(user, "<span class='notice'>You begin to fasten \the [src] to the floor...</span>")
 			if (do_after(user, 40*W.toolspeed, target = src))
-				add_fingerprint(user)
+				add_fingerprint_from_mob(user)
 				user.visible_message( \
 					"[user] fastens \the [src].", \
 					"<span class='notice'>You fasten \the [src]. Now it can dispense pipes.</span>", \
@@ -82,7 +82,7 @@
 			playsound(src, W.usesound, 50, 1)
 			to_chat(user, "<span class='notice'>You begin to unfasten \the [src] from the floor...</span>")
 			if (do_after(user, 20*W.toolspeed, target = src))
-				add_fingerprint(user)
+				add_fingerprint_from_mob(user)
 				user.visible_message( \
 					"[user] unfastens \the [src].", \
 					"<span class='notice'>You unfasten \the [src]. Now it can be pulled somewhere else.</span>", \
@@ -144,7 +144,7 @@
 	if(..())
 		return 1
 	usr.set_machine(src)
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	if(href_list["dmake"])
 		if(wait < world.time)
 			var/p_type = text2path(href_list["dmake"])
@@ -154,12 +154,9 @@
 				to_chat(usr, "<span class='warning'>There's not enough room to build that here!</span>")
 				qdel(C)
 				return
-
-
 			if(href_list["dir"])
 				C.setDir(text2num(href_list["dir"]))
-
-			C.add_fingerprint(usr)
+			C.add_fingerprint_from_mob(usr)
 			C.update_icon()
 			wait = world.time + 15
 	return
@@ -199,7 +196,7 @@
 	if(..())
 		return 1
 	usr.set_machine(src)
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	if(wait < world.time)
 		if(href_list["tube"])
 			var/tube_type = text2num(href_list["tube"])
@@ -224,6 +221,6 @@
 				if(TRANSIT_TUBE_POD)
 					C = new /obj/structure/c_transit_tube_pod(loc)
 			if(C)
-				C.add_fingerprint(usr)
+				C.add_fingerprint_from_mob(usr)
 			wait = world.time + 15
 	return

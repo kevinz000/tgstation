@@ -266,7 +266,7 @@ GLOBAL_LIST_EMPTY(allConsoles)
 	if(..())
 		return
 	usr.set_machine(src)
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 	if(reject_bad_text(href_list["write"]))
 		dpt = ckey(href_list["write"]) //write contains the string of the receiving department's name

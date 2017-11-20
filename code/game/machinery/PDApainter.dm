@@ -74,7 +74,7 @@
 		else if(!user.transferItemToLoc(O, src))
 			return
 		storedpda = O
-		O.add_fingerprint(user)
+		O.add_fingerprint_from_mob(user)
 		update_icon()
 
 	else if(istype(O, /obj/item/weldingtool) && user.a_intent != INTENT_HARM)
@@ -106,7 +106,7 @@
 
 /obj/machinery/pdapainter/attack_hand(mob/user)
 	if(!..())
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 
 		if(storedpda)
 			var/obj/item/device/pda/P

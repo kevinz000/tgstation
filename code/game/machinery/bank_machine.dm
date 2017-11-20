@@ -58,7 +58,7 @@
 /obj/machinery/computer/bank_machine/attack_hand(mob/user)
 	if(..())
 		return
-	src.add_fingerprint(usr)
+	src.add_fingerprint_from_mob(usr)
 	var/dat = "[world.name] secure vault. Authorized personnel only.<br>"
 	dat += "Current Balance: [SSshuttle.points] credits.<br>"
 	if(!siphoning)

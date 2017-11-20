@@ -204,7 +204,7 @@
 	M.lastattacker = user.real_name
 	M.lastattackerckey = user.ckey
 	M.attacked_by(src, user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 /obj/item/gun_control/afterattack(atom/targeted_atom, mob/user, flag, params)
 	..()

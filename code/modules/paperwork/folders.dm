@@ -49,7 +49,7 @@
 		dat += "<A href='?src=[REF(src)];remove=[REF(I)]'>Remove</A> - <A href='?src=[REF(src)];read=[REF(I)]'>[I.name]</A><BR>"
 	user << browse(dat, "window=folder")
 	onclose(user, "folder")
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 
 /obj/item/folder/Topic(href, href_list)

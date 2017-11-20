@@ -14,7 +14,7 @@
 	CanAtmosPass = ATMOS_PASS_DENSITY
 
 /obj/structure/statue/attackby(obj/item/W, mob/living/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	user.changeNext_move(CLICK_CD_MELEE)
 	if(istype(W, /obj/item/wrench))
 		if(anchored)
@@ -77,7 +77,7 @@
 
 /obj/structure/statue/attack_hand(mob/living/user)
 	user.changeNext_move(CLICK_CD_MELEE)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	user.visible_message("[user] rubs some dust off from the [name]'s surface.", \
 						 "<span class='notice'>You rub some dust off from the [name]'s surface.</span>")
 

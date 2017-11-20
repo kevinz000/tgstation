@@ -220,7 +220,7 @@
 /obj/item/briefcase_launchpad/attack_self(mob/user)
 	if(!isturf(user.loc)) //no setting up in a locker
 		return
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	user.visible_message("<span class='notice'>[user] starts setting down [src]...", "You start setting up [pad]...</span>")
 	if(do_after(user, 30, target = user))
 		pad.forceMove(get_turf(src))

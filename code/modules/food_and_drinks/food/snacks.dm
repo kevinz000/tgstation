@@ -345,7 +345,7 @@
 			return 0
 		to_chat(user, "<span class='notice'>You slip [W] inside [src].</span>")
 		user.transferItemToLoc(W, src)
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 		contents += W
 		stored_item = 1
 		return 1 // no afterattack here

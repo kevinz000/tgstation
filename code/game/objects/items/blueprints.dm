@@ -11,7 +11,7 @@
 	var/fluffnotice = "Nobody's gonna read this stuff!"
 
 /obj/item/areaeditor/attack_self(mob/user)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	. = "<BODY><HTML><head><title>[src]</title></head> \
 				<h2>[station_name()] [src.name]</h2> \
 				<small>[fluffnotice]</small><hr>"

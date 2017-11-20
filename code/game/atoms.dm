@@ -5,10 +5,6 @@
 
 	var/flags_1 = 0
 	var/flags_2 = 0
-
-	var/list/fingerprints
-	var/list/fingerprintshidden
-	var/list/blood_DNA
 	var/container_type = NONE
 	var/admin_spawned = 0	//was this spawned by an admin? used for stat tracking stuff.
 	var/datum/reagents/reagents = null
@@ -246,7 +242,7 @@
 /atom/proc/examine(mob/user)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
-	if(src.blood_DNA && !istype(src, /obj/effect/decal))
+	if(length(return_blood_DNA()) && !istype(src, /obj/effect/decal))
 		if(gender == PLURAL)
 			f_name = "some "
 		else
@@ -334,48 +330,21 @@ GLOBAL_LIST_EMPTY(blood_splatter_icons)
 	// Returns 0 if we have that blood already
 	var/new_blood_dna = L.get_blood_dna_list()
 	if(!new_blood_dna)
-		return 0
-	if(!blood_DNA)	//if our list of DNA doesn't exist yet, initialise it.
-		blood_DNA = list()
-	var/old_length = blood_DNA.len
-	blood_DNA |= new_blood_dna
-	if(blood_DNA.len == old_length)
-		return 0
-	return 1
-
-//to add blood dna info to the object's blood_DNA list
-/atom/proc/transfer_blood_dna(list/blood_dna)
-	if(!blood_DNA)
-		blood_DNA = list()
-	var/old_length = blood_DNA.len
-	blood_DNA |= blood_dna
-	if(blood_DNA.len > old_length)
-		return 1//some new blood DNA was added
-
+		return FALSE
+	var/old_length = length(return_blood_DNA())
+	add_blood_DNA(new_blood_dna)
+	if(length(return_blood_DNA()) == old_length)
+		return FALSE
+	return TRUE
 
 //to add blood from a mob onto something, and transfer their dna info
 /atom/proc/add_mob_blood(mob/living/M)
 	var/list/blood_dna = M.get_blood_dna_list()
 	if(!blood_dna)
-		return 0
-	return add_blood(blood_dna)
+		return FALSE
+	return add_blood_DNA(blood_dna)
 
-//to add blood onto something, with blood dna info to include.
-/atom/proc/add_blood(list/blood_dna)
-	return 0
-
-/obj/add_blood(list/blood_dna)
-	return transfer_blood_dna(blood_dna)
-
-/obj/item/add_blood(list/blood_dna)
-	var/blood_count = !blood_DNA ? 0 : blood_DNA.len
-	if(!..())
-		return 0
-	if(!blood_count)//apply the blood-splatter overlay if it isn't already in there
-		add_blood_overlay()
-	return 1 //we applied blood to the item
-
-/obj/item/proc/add_blood_overlay()
+/obj/item/proc/_add_blood_overlay()
 	if(initial(icon) && initial(icon_state))
 		//try to find a pre-processed blood-splatter. otherwise, make a new one
 		var/index = blood_splatter_index()
@@ -388,40 +357,8 @@ GLOBAL_LIST_EMPTY(blood_splatter_icons)
 			GLOB.blood_splatter_icons[index] = blood_splatter_icon
 		add_overlay(blood_splatter_icon)
 
-/obj/item/clothing/gloves/add_blood(list/blood_dna)
-	. = ..()
-	transfer_blood = rand(2, 4)
-
-/turf/add_blood(list/blood_dna, list/datum/disease/diseases)
-	var/obj/effect/decal/cleanable/blood/splatter/B = locate() in src
-	if(!B)
-		B = new /obj/effect/decal/cleanable/blood/splatter(src, diseases)
-	B.transfer_blood_dna(blood_dna) //give blood info to the blood decal.
-	return 1 //we bloodied the floor
-
-/mob/living/carbon/human/add_blood(list/blood_dna)
-	if(wear_suit)
-		wear_suit.add_blood(blood_dna)
-		update_inv_wear_suit()
-	else if(w_uniform)
-		w_uniform.add_blood(blood_dna)
-		update_inv_w_uniform()
-	if(gloves)
-		var/obj/item/clothing/gloves/G = gloves
-		G.add_blood(blood_dna)
-	else
-		transfer_blood_dna(blood_dna)
-		bloody_hands = rand(2, 4)
-	update_inv_gloves()	//handles bloody hands overlays and updating
-	return 1
-
-/atom/proc/clean_blood()
-	if(islist(blood_DNA))
-		blood_DNA = null
-		return 1
-
 /atom/proc/wash_cream()
-	return 1
+	return TRUE
 
 /atom/proc/get_global_map_pos()
 	if(!islist(GLOB.global_map) || isemptylist(GLOB.global_map))
@@ -437,13 +374,13 @@ GLOBAL_LIST_EMPTY(blood_splatter_icons)
 	if(cur_x && cur_y)
 		return list("x"=cur_x,"y"=cur_y)
 	else
-		return 0
+		return FALSE
 
 /atom/proc/isinspace()
 	if(isspaceturf(get_turf(src)))
-		return 1
+		return TRUE
 	else
-		return 0
+		return FALSE
 
 /atom/proc/handle_fall()
 	return

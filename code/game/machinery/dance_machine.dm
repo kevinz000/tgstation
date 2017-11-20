@@ -115,7 +115,7 @@
 /obj/machinery/disco/Topic(href, href_list)
 	if(..())
 		return
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	switch(href_list["action"])
 		if("toggle")
 			if (QDELETED(src))

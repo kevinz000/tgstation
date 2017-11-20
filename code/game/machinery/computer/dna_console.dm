@@ -318,7 +318,7 @@
 	if(current_screen == "working")
 		return
 
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	usr.set_machine(src)
 
 	var/mob/living/carbon/viable_occupant = get_viable_occupant()

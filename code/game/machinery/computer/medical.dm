@@ -554,7 +554,7 @@
 					P.info += "</TT>"
 					src.printing = null
 
-	src.add_fingerprint(usr)
+	src.add_fingerprint_from_mob(usr)
 	src.updateUsrDialog()
 	return
 

@@ -62,7 +62,7 @@
 
 /obj/item/storage/secure/MouseDrop(over_object, src_location, over_location)
 	if (locked)
-		src.add_fingerprint(usr)
+		src.add_fingerprint_from_mob(usr)
 		to_chat(usr, "<span class='warning'>It's locked!</span>")
 		return 0
 	..()
@@ -107,7 +107,7 @@
 				src.code += text("[]", sanitize_text(href_list["type"]))
 				if (length(src.code) > 5)
 					src.code = "ERROR"
-		src.add_fingerprint(usr)
+		src.add_fingerprint_from_mob(usr)
 		for(var/mob/M in viewers(1, src.loc))
 			if ((M.client && M.machine == src))
 				src.attack_self(M)
@@ -153,7 +153,7 @@
 /obj/item/storage/secure/briefcase/attack_hand(mob/user)
 	if ((src.loc == user) && (src.locked == 1))
 		to_chat(usr, "<span class='warning'>[src] is locked and cannot be opened!</span>")
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 	else
 		..()
 

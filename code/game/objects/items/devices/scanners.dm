@@ -103,7 +103,7 @@ MASS SPECTROMETER
 	else if(scanmode == 1)
 		chemscan(user, M)
 
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 
 // Used by the PDA medical scanner too
@@ -328,7 +328,7 @@ MASS SPECTROMETER
 
 /obj/item/device/analyzer/attack_self(mob/user)
 
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 	if (user.stat || user.eye_blind)
 		return

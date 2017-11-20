@@ -285,7 +285,7 @@
 		return
 	var/turf/T = get_turf(src)
 	var/list/targets = list(O, src)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	user.visible_message("<span class='warning'>[user] [actuallyismob ? "tries to ":""]stuff [O] into [src].</span>", \
 				 	 	"<span class='warning'>You [actuallyismob ? "try to ":""]stuff [O] into [src].</span>", \
 				 	 	"<span class='italics'>You hear clanging.</span>")
@@ -405,7 +405,7 @@
 	if(secure && !broken)
 		if(allowed(user))
 			if(iscarbon(user))
-				add_fingerprint(user)
+				add_fingerprint_from_mob(user)
 			locked = !locked
 			user.visible_message("<span class='notice'>[user] [locked ? null : "un"]locks [src].</span>",
 							"<span class='notice'>You [locked ? null : "un"]lock [src].</span>")

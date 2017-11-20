@@ -73,7 +73,7 @@
 		return
 
 	toggle_open()
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 /obj/machinery/recharge_station/proc/toggle_open()
 	if(state_open)
@@ -91,7 +91,7 @@
 			R.forceMove(src)
 			occupant = R
 			use_power = ACTIVE_POWER_USE
-			add_fingerprint(R)
+			add_fingerprint_from_mob(R)
 			break
 		state_open = FALSE
 		density = TRUE

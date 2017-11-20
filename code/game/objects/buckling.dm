@@ -102,7 +102,7 @@
 	if(!in_range(user, src) || user.stat || user.restrained())
 		return FALSE
 
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	. = buckle_mob(M, check_loc = check_loc)
 	if(.)
 		if(M == user)
@@ -129,5 +129,5 @@
 				"<span class='notice'>[M] unbuckles [M.p_them()]self from [src].</span>",\
 				"<span class='notice'>You unbuckle yourself from [src].</span>",\
 				"<span class='italics'>You hear metal clanking.</span>")
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 	return M

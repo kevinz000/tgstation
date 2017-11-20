@@ -71,8 +71,7 @@
 
 /obj/structure/ladder/proc/travel(going_up, mob/user, is_ghost, obj/structure/ladder/ladder)
 	if(!is_ghost)
-		show_fluff_message(going_up, user)
-		ladder.add_fingerprint(user)
+		ladder.add_fingerprint_from_mob(user)
 
 	var/turf/T = get_turf(ladder)
 	var/atom/movable/AM
@@ -106,7 +105,7 @@
 		to_chat(user, "<span class='warning'>[src] doesn't seem to lead anywhere!</span>")
 
 	if(!is_ghost)
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 
 /obj/structure/ladder/attack_hand(mob/user)
 	use(user)

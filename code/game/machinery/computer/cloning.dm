@@ -149,7 +149,7 @@
 
 /obj/machinery/computer/cloning/interact(mob/user)
 	user.set_machine(src)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 	if(..())
 		return
@@ -427,7 +427,7 @@
 		src.menu = text2num(href_list["menu"])
 		playsound(src, "terminal_type", 25, 0)
 
-	src.add_fingerprint(usr)
+	src.add_fingerprint_from_mob(usr)
 	src.updateUsrDialog()
 	return
 

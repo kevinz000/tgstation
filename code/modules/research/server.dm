@@ -125,7 +125,7 @@
 	if(..())
 		return
 
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	usr.set_machine(src)
 	if(!src.allowed(usr) && !emagged)
 		to_chat(usr, "<span class='danger'>You do not have the required access level.</span>")

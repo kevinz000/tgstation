@@ -102,7 +102,7 @@
 					if(state == 1)
 						to_chat(user, "<span class='notice'>You disassemble the frame.</span>")
 						var/obj/item/stack/sheet/metal/M = new (loc, 5)
-						M.add_fingerprint(user)
+						M.add_fingerprint_from_mob(user)
 						qdel(src)
 				return
 			if(istype(P, /obj/item/wrench))

@@ -147,7 +147,7 @@
 			. = TRUE
 
 /obj/machinery/firealarm/attackby(obj/item/W, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 	if(istype(W, /obj/item/screwdriver) && buildstage == 2)
 		playsound(src.loc, W.usesound, 50, 1)

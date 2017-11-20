@@ -95,7 +95,7 @@
 				investigate_log("has been turned off by [key_name(usr)].", INVESTIGATE_EXONET)
 			. = TRUE
 	update_icon()
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 // Proc: get_exonet_node()
 // Parameters: None

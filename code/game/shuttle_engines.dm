@@ -35,7 +35,7 @@
 			state = ENGINE_UNWRENCHED
 
 /obj/structure/shuttle/engine/attackby(obj/item/I, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(default_unfasten_wrench(user, I))
 		return
 	else if(istype(I, /obj/item/weldingtool))

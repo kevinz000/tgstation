@@ -63,7 +63,7 @@
 	else
 		dat += "<BR>\n<A href = '?src=[REF(src)];door=1'>Toggle Outer Door</A><BR>"
 	dat += "<BR><BR><A href='?src=[REF(user)];mach_close=computer'>Close</A>"
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	var/datum/browser/popup = new(user, "computer", title, 400, 500)
 	popup.set_content(dat)
 	popup.set_title_image(user.browse_rsc_icon(icon, icon_state))

@@ -105,7 +105,7 @@
 		else
 			to_chat(user, "<span class='warning'>[src] is out of charge.</span>")
 	update_icon()
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 /obj/item/melee/baton/attack(mob/M, mob/living/carbon/human/user)
 	if(status && user.disabilities & CLUMSY && prob(50))

@@ -178,7 +178,7 @@
 
 		if (isitem(O))
 			usr.put_in_hands(O)
-		O.add_fingerprint(usr)
+		O.add_fingerprint_from_mob(usr)
 
 		//BubbleWrap - so newly formed boxes are empty
 		if ( istype(O, /obj/item/storage) )
@@ -295,8 +295,8 @@
 	. = F
 	F.copy_evidences(src)
 	user.put_in_hands(F)
-	add_fingerprint(user)
-	F.add_fingerprint(user)
+	add_fingerprint_from_mob(user)
+	F.add_fingerprint_from_mob(user)
 	use(amount, TRUE)
 
 
@@ -310,9 +310,9 @@
 		. = ..()
 
 /obj/item/stack/proc/copy_evidences(obj/item/stack/from as obj)
-	blood_DNA = from.blood_DNA
-	fingerprints  = from.fingerprints
-	fingerprintshidden  = from.fingerprintshidden
+	add_blood_DNA(from.return_blood_DNA())
+	add_fingerprints(from.return_fingerprints())
+	add_hiddenprints(from.return_hiddenprints())
 	fingerprintslast  = from.fingerprintslast
 	//TODO bloody overlay
 

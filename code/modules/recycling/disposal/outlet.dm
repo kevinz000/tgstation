@@ -71,7 +71,7 @@
 
 
 /obj/structure/disposaloutlet/attackby(obj/item/I, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(istype(I, /obj/item/weldingtool))
 		var/obj/item/weldingtool/W = I
 		if(W.remove_fuel(0,user))

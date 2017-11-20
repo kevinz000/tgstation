@@ -36,7 +36,7 @@ GLOBAL_LIST_INIT(glass_recipes, list ( \
 	return ..()
 
 /obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(istype(W, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/CC = W
 		if (get_amount() < 1 || CC.get_amount() < 5)
@@ -46,12 +46,12 @@ GLOBAL_LIST_INIT(glass_recipes, list ( \
 		use(1)
 		to_chat(user, "<span class='notice'>You attach wire to the [name].</span>")
 		var/obj/item/stack/light_w/new_tile = new(user.loc)
-		new_tile.add_fingerprint(user)
+		new_tile.add_fingerprint_from_mob(user)
 	else if(istype(W, /obj/item/stack/rods))
 		var/obj/item/stack/rods/V = W
 		if (V.get_amount() >= 1 && get_amount() >= 1)
 			var/obj/item/stack/sheet/rglass/RG = new (get_turf(user))
-			RG.add_fingerprint(user)
+			RG.add_fingerprint_from_mob(user)
 			var/replace = user.get_inactive_held_item()==src
 			V.use(1)
 			use(1)
@@ -88,13 +88,13 @@ GLOBAL_LIST_INIT(pglass_recipes, list ( \
 	return ..()
 
 /obj/item/stack/sheet/plasmaglass/attackby(obj/item/W, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 	if(istype(W, /obj/item/stack/rods))
 		var/obj/item/stack/rods/V = W
 		if (V.get_amount() >= 1 && get_amount() >= 1)
 			var/obj/item/stack/sheet/plasmarglass/RG = new (get_turf(user))
-			RG.add_fingerprint(user)
+			RG.add_fingerprint_from_mob(user)
 			var/replace = user.get_inactive_held_item()==src
 			V.use(1)
 			use(1)
@@ -130,7 +130,7 @@ GLOBAL_LIST_INIT(reinforced_glass_recipes, list ( \
 	merge_type = /obj/item/stack/sheet/rglass
 
 /obj/item/stack/sheet/rglass/attackby(obj/item/W, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	..()
 
 /obj/item/stack/sheet/rglass/cyborg

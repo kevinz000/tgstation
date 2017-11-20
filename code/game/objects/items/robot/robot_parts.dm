@@ -331,5 +331,5 @@
 	else if(href_list["Panel"])
 		panel_locked = !panel_locked
 
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 	Interact(usr)

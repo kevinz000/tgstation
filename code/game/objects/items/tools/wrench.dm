@@ -95,7 +95,7 @@
 		user.dropItemToGround(W)
 
 	var/obj/item/wrench/medical/W = new /obj/item/wrench/medical(loc)
-	W.add_fingerprint(user)
+	W.add_fingerprint_from_mob(user)
 	W.desc += " For some reason, it reminds you of [user.name]."
 
 	if(!user)

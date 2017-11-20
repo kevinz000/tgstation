@@ -123,7 +123,7 @@
 /obj/machinery/button/attack_hand(mob/user)
 	if(!initialized_button)
 		setup_device()
-	src.add_fingerprint(user)
+	src.add_fingerprint_from_mob(user)
 	if(panel_open)
 		if(device || board)
 			if(device)

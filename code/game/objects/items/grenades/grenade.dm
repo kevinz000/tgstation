@@ -56,7 +56,7 @@
 	var/turf/T = get_turf(src)
 	log_grenade(user, T) //Inbuilt admin procs already handle null users
 	if(user)
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 		if(iscarbon(user))
 			var/mob/living/carbon/C = user
 			C.throw_mode_on()
@@ -90,7 +90,7 @@
 			if ("50")
 				det_time = 1
 				to_chat(user, "<span class='notice'>You set the [name] for instant detonation.</span>")
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 	else
 		return ..()
 

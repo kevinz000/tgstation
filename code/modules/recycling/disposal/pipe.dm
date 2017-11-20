@@ -144,7 +144,7 @@
 //attack by item
 //weldingtool: unfasten and convert to obj/disposalconstruct
 /obj/structure/disposalpipe/attackby(obj/item/I, mob/user, params)
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 	if(istype(I, /obj/item/weldingtool))
 		if(!can_be_deconstructed(user))
 			return

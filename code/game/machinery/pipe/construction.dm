@@ -152,7 +152,7 @@ Buildable meters
 		return ..()
 	if (!isturf(loc))
 		return TRUE
-	add_fingerprint(user)
+	add_fingerprint_from_mob(user)
 
 	fixdir()
 

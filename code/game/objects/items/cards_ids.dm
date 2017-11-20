@@ -42,7 +42,7 @@
 		src.name = "data disk- '[t]'"
 	else
 		src.name = "data disk"
-	src.add_fingerprint(usr)
+	src.add_fingerprint_from_mob(usr)
 	return
 
 /*
@@ -106,7 +106,7 @@
 /obj/item/card/id/attack_self(mob/user)
 	user.visible_message("<span class='notice'>[user] shows you: [icon2html(src, viewers(user))] [src.name].</span>", \
 					"<span class='notice'>You show \the [src.name].</span>")
-	src.add_fingerprint(user)
+	src.add_fingerprint_from_mob(user)
 	return
 
 /obj/item/card/id/examine(mob/user)

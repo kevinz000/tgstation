@@ -172,15 +172,15 @@
 /obj/machinery/power/apc/AICtrlClick() // turns off/on APCs.
 	if(can_use(usr, 1))
 		toggle_breaker()
-		add_fingerprint(usr)
+		add_fingerprint_from_mob(usr)
 
 /* AI Turrets */
 /obj/machinery/turretid/AIAltClick() //toggles lethal on turrets
 	toggle_lethal()
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 /obj/machinery/turretid/AICtrlClick() //turns off/on Turrets
 	toggle_on()
-	add_fingerprint(usr)
+	add_fingerprint_from_mob(usr)
 
 //
 // Override TurfAdjacent for AltClicking

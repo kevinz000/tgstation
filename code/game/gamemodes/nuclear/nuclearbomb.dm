@@ -109,7 +109,7 @@
 		if(!user.transferItemToLoc(I, src))
 			return
 		auth = I
-		add_fingerprint(user)
+		add_fingerprint_from_mob(user)
 		return
 
 	switch(deconstruction_state)
