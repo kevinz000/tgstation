@@ -25,7 +25,7 @@
 	else if(istype(I, /obj/item/ore))
 		amount *= 0.8 // Station's ore redemption equipment is really goddamn good.
 
-	return round(amount/MINERAL_MATERIAL_AMOUNT)
+	return 0
 
 // Materials. Nothing but plasma is really worth selling. Better leave it all to RnD and sell some plasma instead.
 
