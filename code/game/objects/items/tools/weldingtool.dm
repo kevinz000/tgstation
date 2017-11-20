@@ -34,7 +34,7 @@
 
 /obj/item/weldingtool/Initialize()
 	. = ..()
-	create_reagents(max_fuel)
+	var/datum/component/reagents/reagents = create_reagents(max_fuel)
 	reagents.add_reagent("welding_fuel", max_fuel)
 	update_icon()
 
@@ -120,6 +120,7 @@
 /obj/item/weldingtool/afterattack(atom/O, mob/user, proximity)
 	if(!proximity)
 		return
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!status && istype(O, /obj/item/reagent_containers) && O.is_open_container())
 		reagents.trans_to(O, reagents.total_volume)
 		to_chat(user, "<span class='notice'>You empty [src]'s fuel tank into [O].</span>")
@@ -139,18 +140,19 @@
 
 
 /obj/item/weldingtool/attack_self(mob/user)
-	if(src.reagents.has_reagent("plasma"))
+	GET_COMPONENT(reagents, /datum/component/reagents)
+	if(reagents.has_reagent("plasma"))
 		message_admins("[key_name_admin(user)] activated a rigged welder.")
 		explode()
 	switched_on(user)
 	if(welding)
 		set_light(light_intensity)
-
 	update_icon()
 
 
 //Returns the amount of fuel in the welder
 /obj/item/weldingtool/proc/get_fuel()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	return reagents.get_reagent_amount("welding_fuel")
 
 
@@ -160,6 +162,7 @@
 		return 0
 	if(amount)
 		burned_fuel_for = 0
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(get_fuel() >= amount)
 		reagents.remove_reagent("welding_fuel", amount)
 		check_fuel()

@@ -86,6 +86,7 @@
 	..()
 
 /obj/item/integrated_circuit/passive/power/chemical_cell/on_reagent_change()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	set_pin_data(IC_OUTPUT, 1, reagents.total_volume)
 	push_data()
 

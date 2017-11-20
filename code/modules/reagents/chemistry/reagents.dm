@@ -18,7 +18,7 @@
 	var/glass_desc = "You can't really tell what this is."
 	var/glass_icon_state = null // Otherwise just sets the icon to a normal glass with the mixture of the reagents in the glass.
 	var/shot_glass_icon_state = null
-	var/datum/reagents/holder = null
+	var/datum/component/reagents/holder = null
 	var/reagent_state = LIQUID
 	var/list/data
 	var/current_cycle = 0

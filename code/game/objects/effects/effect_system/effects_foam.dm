@@ -172,17 +172,15 @@
 
 /datum/effect_system/foam_spread/New()
 	..()
-	chemholder = new /obj()
-	var/datum/reagents/R = new/datum/reagents(1000)
-	chemholder.reagents = R
-	R.my_atom = chemholder
+	var/obj/chemholder = new
+	chemholder.LoadComponent(/datum/component/reagents, 1000)
 
 /datum/effect_system/foam_spread/Destroy()
 	qdel(chemholder)
 	chemholder = null
 	return ..()
 
-/datum/effect_system/foam_spread/set_up(amt=5, loca, datum/reagents/carry = null)
+/datum/effect_system/foam_spread/set_up(amt=5, loca, datum/component/reagents/carry = null)
 	if(isturf(loca))
 		location = loca
 	else

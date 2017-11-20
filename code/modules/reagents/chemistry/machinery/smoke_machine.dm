@@ -15,7 +15,7 @@
 	var/setting = 3
 	var/list/possible_settings = list(3,6,9)
 
-/datum/effect_system/smoke_spread/chem/smoke_machine/set_up(datum/reagents/carry, setting = 3, efficiency = 10, loc)
+/datum/effect_system/smoke_spread/chem/smoke_machine/set_up(datum/component/reagents/carry, setting = 3, efficiency = 10, loc)
 	amount = setting
 	carry.copy_to(chemholder, 20)
 	carry.remove_any(setting * 16 / efficiency)

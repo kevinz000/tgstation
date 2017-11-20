@@ -47,11 +47,13 @@
 	return
 
 /obj/item/reagent_containers/syringe/afterattack(atom/target, mob/user , proximity)
+	GET_COMPONENT(reagents, /datum/component/reagents)
+	GET_COMPONENT_FROM(their_reagents, /datum/component/reagents, target)
 	if(busy)
 		return
 	if(!proximity)
 		return
-	if(!target.reagents)
+	if(!their_reagents)
 		return
 
 	var/mob/living/L
@@ -91,7 +93,7 @@
 					to_chat(user, "<span class='warning'>You are unable to draw any blood from [L]!</span>")
 
 			else //if not mob
-				if(!target.reagents.total_volume)
+				if(!their_reagents.total_volume)
 					to_chat(user, "<span class='warning'>[target] is empty!</span>")
 					return
 
@@ -99,7 +101,7 @@
 					to_chat(user, "<span class='warning'>You cannot directly remove reagents from [target]!</span>")
 					return
 
-				var/trans = target.reagents.trans_to(src, amount_per_transfer_from_this) // transfer from, transfer to - who cares?
+				var/trans = their_reagents.trans_to(src, amount_per_transfer_from_this) // transfer from, transfer to - who cares?
 
 				to_chat(user, "<span class='notice'>You fill [src] with [trans] units of the solution.</span>")
 			if (reagents.total_volume >= reagents.maximum_volume)
@@ -122,7 +124,7 @@
 				to_chat(user, "<span class='warning'>You cannot directly fill [target]!</span>")
 				return
 
-			if(target.reagents.total_volume >= target.reagents.maximum_volume)
+			if(their_reagents.total_volume >= their_reagents.maximum_volume)
 				to_chat(user, "<span class='notice'>[target] is full.</span>")
 				return
 
@@ -157,6 +159,7 @@
 
 
 /obj/item/reagent_containers/syringe/update_icon()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/rounded_vol = Clamp(round((reagents.total_volume / volume * 15),5), 0, 15)
 	cut_overlays()
 	if(ismob(loc))
@@ -246,6 +249,7 @@
 
 /obj/item/reagent_containers/syringe/noreact/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.set_reacting(FALSE)
 
 /obj/item/reagent_containers/syringe/piercing

@@ -51,6 +51,7 @@
 /obj/item/toy/balloon/afterattack(atom/A as mob|obj, mob/user, proximity)
 	if(!proximity)
 		return
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if (istype(A, /obj/structure/reagent_dispensers))
 		var/obj/structure/reagent_dispensers/RD = A
 		if(RD.reagents.total_volume <= 0)
@@ -85,6 +86,7 @@
 		balloon_burst(hit_atom)
 
 /obj/item/toy/balloon/proc/balloon_burst(atom/AT)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.total_volume >= 1)
 		var/turf/T
 		if(AT)
@@ -99,7 +101,8 @@
 		qdel(src)
 
 /obj/item/toy/balloon/update_icon()
-	if(src.reagents.total_volume >= 1)
+	GET_COMPONENT(reagents, /datum/component/reagents)
+	if(reagents.total_volume >= 1)
 		icon_state = "waterballoon"
 		item_state = "balloon"
 	else

@@ -25,6 +25,7 @@
 	if(!..()) //was it caught by a mob?
 		var/turf/T = get_turf(hit_atom)
 		new/obj/effect/decal/cleanable/egg_smudge(T)
+		GET_COMPONENT(reagents, /datum/component/reagents)
 		reagents.reaction(hit_atom, TOUCH)
 		qdel(src)
 
@@ -117,6 +118,7 @@
 	foodtype = MEAT
 
 /obj/item/reagent_containers/food/snacks/omelette/attackby(obj/item/W, mob/user, params)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(istype(W, /obj/item/kitchen/fork))
 		var/obj/item/kitchen/fork/F = W
 		if(F.forkload)

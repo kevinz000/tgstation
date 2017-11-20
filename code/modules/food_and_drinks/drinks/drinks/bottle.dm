@@ -372,6 +372,7 @@
 
 /obj/item/reagent_containers/food/drinks/bottle/molotov/throw_impact(atom/target,mob/thrower)
 	var/firestarter = 0
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	for(var/datum/reagent/R in reagents.reagent_list)
 		for(var/A in accelerants)
 			if(istype(R,A))

@@ -42,6 +42,7 @@
 
 //Second link in a breath chain, calls check_breath()
 /mob/living/carbon/proc/breathe()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.has_reagent("lexorin"))
 		return
 	if(istype(loc, /obj/machinery/atmospherics/components/unary/cryo_cell))
@@ -101,6 +102,7 @@
 
 //Third link in a breath chain, calls handle_breath_temperature()
 /mob/living/carbon/proc/check_breath(datum/gas_mixture/breath)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if((status_flags & GODMODE))
 		return
 
@@ -431,6 +433,7 @@
 		L.damage += d
 
 /mob/living/carbon/proc/liver_failure()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.get_reagent_amount("corazone"))//corazone is processed here an not in the liver because a failing liver can't metabolize reagents
 		reagents.remove_reagent("corazone", 0.4) //corazone slowly deletes itself.
 		return

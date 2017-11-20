@@ -21,7 +21,8 @@
 	return 1
 
 /obj/item/ammo_casing/proc/ready_proj(atom/target, mob/living/user, quiet, zone_override)
-	if (!BB)
+	GET_COMPONENT(reagents, /datum/component/reagents)
+	if(!BB)
 		return
 	BB.original = target
 	BB.firer = user

@@ -15,35 +15,34 @@
 
 /obj/item/reagent_containers/pill/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!icon_state)
 		icon_state = "pill[rand(1,20)]"
 	if(reagents.total_volume && roundstart)
 		name += " ([reagents.total_volume]u)"
 
-
 /obj/item/reagent_containers/pill/attack_self(mob/user)
 	return
 
-
 /obj/item/reagent_containers/pill/attack(mob/M, mob/user, def_zone)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!canconsume(M, user))
-		return 0
+		return FALSE
 
 	if(M == user)
 		M.visible_message("<span class='notice'>[user] attempts to [apply_method] [src].</span>")
 		if(self_delay)
 			if(!do_mob(user, M, self_delay))
-				return 0
+				return FALSE
 		to_chat(M, "<span class='notice'>You [apply_method] [src].</span>")
 
 	else
 		M.visible_message("<span class='danger'>[user] attempts to force [M] to [apply_method] [src].</span>", \
 							"<span class='userdanger'>[user] attempts to force [M] to [apply_method] [src].</span>")
 		if(!do_mob(user, M))
-			return 0
+			return FALSE
 		M.visible_message("<span class='danger'>[user] forces [M] to [apply_method] [src].</span>", \
 							"<span class='userdanger'>[user] forces [M] to [apply_method] [src].</span>")
-
 
 	add_logs(user, M, "fed", reagentlist(src))
 	if(reagents.total_volume)

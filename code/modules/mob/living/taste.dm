@@ -15,7 +15,7 @@
 		. = 101 // can't taste anything without a tongue
 
 // non destructively tastes a reagent container
-/mob/living/proc/taste(datum/reagents/from)
+/mob/living/proc/taste(datum/component/reagents/from)
 	if(last_taste_time + 50 < world.time)
 		var/taste_sensitivity = get_taste_sensitivity()
 		var/text_output = from.generate_taste_message(taste_sensitivity)

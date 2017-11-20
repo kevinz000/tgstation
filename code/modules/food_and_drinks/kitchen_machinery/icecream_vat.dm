@@ -184,10 +184,11 @@
 
 /obj/item/reagent_containers/food/snacks/icecream/Initialize()
 	. = ..()
-	create_reagents(20)
+	var/datum/component/reagents/reagents = create_reagents(20)
 	reagents.add_reagent("nutriment", 4)
 
 /obj/item/reagent_containers/food/snacks/icecream/proc/set_cone_type(var/cone_name)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	cone_type = cone_name
 	icon_state = "icecream_cone_[cone_name]"
 	switch (cone_type)
@@ -200,8 +201,9 @@
 
 
 /obj/item/reagent_containers/food/snacks/icecream/proc/add_ice_cream(var/flavour_name)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	name = "[flavour_name] icecream"
-	src.add_overlay("icecream_[flavour_name]")
+	add_overlay("icecream_[flavour_name]")
 	switch (flavour_name) // adding the actual reagents advertised in the ingredient list
 		if ("vanilla")
 			desc = "A delicious [cone_type] cone filled with vanilla ice cream. All the other ice creams take content from it."

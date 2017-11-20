@@ -194,7 +194,7 @@
 	icon_state = "tube-empty"
 
 /obj/machinery/light/built/Initialize()
-	. = ..()	
+	. = ..()
 	status = LIGHT_EMPTY
 	update(0)
 

@@ -15,6 +15,7 @@
 
 
 /obj/item/implantcase/update_icon()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(imp)
 		icon_state = "implantcase-[imp.item_color]"
 		reagents = imp.reagents

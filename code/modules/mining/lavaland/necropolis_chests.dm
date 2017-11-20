@@ -540,6 +540,7 @@
 	list_reagents = list("flightpotion" = 5)
 
 /obj/item/reagent_containers/glass/bottle/potion/update_icon()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.total_volume)
 		icon_state = "potionflask"
 	else

@@ -100,6 +100,7 @@
 	return TRUE
 
 /obj/item/projectile/proc/on_hit(atom/target, blocked = FALSE)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/turf/target_loca = get_turf(target)
 
 	var/hitx

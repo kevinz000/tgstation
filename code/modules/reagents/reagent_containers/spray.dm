@@ -24,6 +24,7 @@
 
 
 /obj/item/reagent_containers/spray/afterattack(atom/A as mob|obj, mob/user)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(istype(A, /obj/structure/sink) || istype(A, /obj/structure/janitorialcart) || istype(A, /obj/machinery/hydroponics))
 		return
 
@@ -64,6 +65,7 @@
 
 
 /obj/item/reagent_containers/spray/proc/spray(atom/A)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/range = max(min(current_range, get_dist(src, A)), 1)
 	var/obj/effect/decal/chempuff/D = new /obj/effect/decal/chempuff(get_turf(src))
 	D.create_reagents(amount_per_transfer_from_this)
@@ -124,6 +126,7 @@
 	to_chat(user, "<span class='notice'>You switch the nozzle setting to [stream_mode ? "\"stream\"":"\"spray\""]. You'll now use [amount_per_transfer_from_this] units per use.</span>")
 
 /obj/item/reagent_containers/spray/attackby(obj/item/I, mob/user, params)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/hotness = I.is_hot()
 	if(hotness && reagents)
 		reagents.expose_temperature(hotness)
@@ -134,6 +137,7 @@
 	set name = "Empty Spray Bottle"
 	set category = "Object"
 	set src in usr
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(usr.incapacitated())
 		return
 	if (alert(usr, "Are you sure you want to empty that?", "Empty Bottle:", "Yes", "No") != "Yes")
@@ -141,7 +145,7 @@
 	if(isturf(usr.loc) && src.loc == usr)
 		to_chat(usr, "<span class='notice'>You empty \the [src] onto the floor.</span>")
 		reagents.reaction(usr.loc)
-		src.reagents.clear_reagents()
+		reagents.clear_reagents()
 
 //space cleaner
 /obj/item/reagent_containers/spray/cleaner
@@ -235,6 +239,7 @@
 	var/turf/T2 = get_step(T,turn(direction, -90))
 	var/list/the_targets = list(T,T1,T2)
 
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	for(var/i=1, i<=3, i++) // intialize sprays
 		if(reagents.total_volume < 1)
 			return

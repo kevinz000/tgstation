@@ -9,6 +9,7 @@
 	container_type = TRANSPARENT_1
 
 /obj/item/reagent_containers/dropper/afterattack(obj/target, mob/user , proximity)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!proximity)
 		return
 	if(!target.reagents)
@@ -91,6 +92,7 @@
 		update_icon()
 
 /obj/item/reagent_containers/dropper/update_icon()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	cut_overlays()
 	if(reagents.total_volume)
 		var/mutable_appearance/filling = mutable_appearance('icons/obj/reagentfillings.dmi', "dropper")

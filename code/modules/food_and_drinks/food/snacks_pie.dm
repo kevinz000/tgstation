@@ -34,6 +34,7 @@
 		splat(hit_atom)
 
 /obj/item/reagent_containers/food/snacks/pie/cream/proc/splat(atom/movable/hit_atom)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(isliving(loc)) //someone caught us!
 		return
 	var/turf/T = get_turf(hit_atom)
@@ -114,6 +115,7 @@
 
 /obj/item/reagent_containers/food/snacks/pie/plump_pie/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/fey = prob(10)
 	if(fey)
 		name = "exceptional plump pie"

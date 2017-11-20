@@ -40,9 +40,10 @@
 	imp_in.lying = 0
 	imp_in.update_canmove()
 
-	imp_in.reagents.add_reagent("synaptizine", 10)
-	imp_in.reagents.add_reagent("omnizine", 10)
-	imp_in.reagents.add_reagent("stimulants", 10)
+	GET_COMPONENT_FROM(IR, /datum/component/reagents, imp_in)
+	IR.add_reagent("synaptizine", 10)
+	IR.add_reagent("omnizine", 10)
+	IR.add_reagent("stimulants", 10)
 	if(!uses)
 		qdel(src)
 

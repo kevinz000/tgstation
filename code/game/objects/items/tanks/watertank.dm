@@ -116,11 +116,12 @@
 	var/obj/item/watertank/tank
 
 /obj/item/reagent_containers/spray/mister/New(parent_tank)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	..()
 	if(check_tank_exists(parent_tank, src))
 		tank = parent_tank
 		reagents = tank.reagents	//This mister is really just a proxy for the tank's reagents
-		loc = tank
+		forceMove(tank)
 	return
 
 /obj/item/reagent_containers/spray/mister/dropped(mob/user)
@@ -156,8 +157,9 @@
 	icon_state = "waterbackpackjani"
 	item_state = "waterbackpackjani"
 
-/obj/item/watertank/janitor/New()
-	..()
+/obj/item/watertank/janitor/Initialize()
+	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("cleaner", 500)
 
 /obj/item/reagent_containers/spray/mister/janitor
@@ -192,8 +194,9 @@
 	volume = 200
 	slowdown = 0
 
-/obj/item/watertank/atmos/New()
-	..()
+/obj/item/watertank/atmos/Initialize()
+	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("water", 200)
 
 /obj/item/watertank/atmos/make_noz()
@@ -277,7 +280,7 @@
 	if(nozzle_mode == RESIN_LAUNCHER)
 		if(Adj)
 			return //Safety check so you don't blast yourself trying to refill your tank
-		var/datum/reagents/R = reagents
+		GET_COMPONENT(reagents, /datum/component/reagents)
 		if(R.total_volume < 100)
 			to_chat(user, "<span class='warning'>You need at least 100 units of water to use the resin launcher!</span>")
 			return
@@ -373,6 +376,7 @@
 
 //Todo : cache these.
 /obj/item/reagent_containers/chemtank/proc/update_filling()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	cut_overlays()
 
 	if(reagents.total_volume)
@@ -391,6 +395,7 @@
 		add_overlay(filling)
 
 /obj/item/reagent_containers/chemtank/worn_overlays(var/isinhands = FALSE) //apply chemcolor and level
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	. = list()
 	//inhands + reagent_filling
 	if(!isinhands && reagents.total_volume)
@@ -421,6 +426,7 @@
 		to_chat(loc, "<span class='notice'>[src] turns off.</span>")
 
 /obj/item/reagent_containers/chemtank/process()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!ishuman(loc))
 		turn_off()
 		return
@@ -450,6 +456,7 @@
 
 /obj/item/watertank/op/New()
 	..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("mutagen",350)
 	reagents.add_reagent("napalm",125)
 	reagents.add_reagent("welding_fuel",125)

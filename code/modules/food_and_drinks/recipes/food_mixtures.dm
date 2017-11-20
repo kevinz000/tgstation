@@ -15,8 +15,8 @@
 	required_catalysts = list("enzyme" = 5)
 	mob_react = FALSE
 
-/datum/chemical_reaction/tofu/on_reaction(datum/reagents/holder, created_volume)
-	var/location = get_turf(holder.my_atom)
+/datum/chemical_reaction/tofu/on_reaction(datum/component/reagents/holder, created_volume)
+	var/location = get_turf(holder.parent)
 	for(var/i = 1, i <= created_volume, i++)
 		new /obj/item/reagent_containers/food/snacks/tofu(location)
 	return
@@ -26,8 +26,8 @@
 	id = "chocolate_bar"
 	required_reagents = list("soymilk" = 2, "cocoa" = 2, "sugar" = 2)
 
-/datum/chemical_reaction/chocolate_bar/on_reaction(datum/reagents/holder, created_volume)
-	var/location = get_turf(holder.my_atom)
+/datum/chemical_reaction/chocolate_bar/on_reaction(datum/component/reagents/holder, created_volume)
+	var/location = get_turf(holder.parent)
 	for(var/i = 1, i <= created_volume, i++)
 		new /obj/item/reagent_containers/food/snacks/chocolatebar(location)
 	return
@@ -39,8 +39,8 @@
 	required_reagents = list("chocolate_milk" = 4, "sugar" = 2)
 	mob_react = FALSE
 
-/datum/chemical_reaction/chocolate_bar2/on_reaction(datum/reagents/holder, created_volume)
-	var/location = get_turf(holder.my_atom)
+/datum/chemical_reaction/chocolate_bar2/on_reaction(datum/component/reagents/holder, created_volume)
+	var/location = get_turf(holder.parent)
 	for(var/i = 1, i <= created_volume, i++)
 		new /obj/item/reagent_containers/food/snacks/chocolatebar(location)
 	return
@@ -82,8 +82,8 @@
 	required_reagents = list("milk" = 40)
 	required_catalysts = list("enzyme" = 5)
 
-/datum/chemical_reaction/cheesewheel/on_reaction(datum/reagents/holder, created_volume)
-	var/location = get_turf(holder.my_atom)
+/datum/chemical_reaction/cheesewheel/on_reaction(datum/component/reagents/holder, created_volume)
+	var/location = get_turf(holder.parent)
 	for(var/i = 1, i <= created_volume, i++)
 		new /obj/item/reagent_containers/food/snacks/store/cheesewheel(location)
 
@@ -93,8 +93,8 @@
 	required_reagents = list("blood" = 5, "cryoxadone" = 1)
 	mob_react = FALSE
 
-/datum/chemical_reaction/synthmeat/on_reaction(datum/reagents/holder, created_volume)
-	var/location = get_turf(holder.my_atom)
+/datum/chemical_reaction/synthmeat/on_reaction(datum/component/reagents/holder, created_volume)
+	var/location = get_turf(holder.parent)
 	for(var/i = 1, i <= created_volume, i++)
 		new /obj/item/reagent_containers/food/snacks/meat/slab/synthmeat(location)
 
@@ -117,11 +117,11 @@
 	required_container = /obj/item/reagent_containers/food/snacks/tofu
 	mix_message = "The mixture becomes similar to carp meat."
 
-/datum/chemical_reaction/imitationcarpmeat/on_reaction(datum/reagents/holder)
-	var/location = get_turf(holder.my_atom)
+/datum/chemical_reaction/imitationcarpmeat/on_reaction(datum/component/reagents/holder)
+	var/location = get_turf(holder.parent)
 	new /obj/item/reagent_containers/food/snacks/carpmeat/imitation(location)
-	if(holder && holder.my_atom)
-		qdel(holder.my_atom)
+	if(holder && holder.parent)
+		qdel(holder.parent)
 
 /datum/chemical_reaction/dough
 	name = "Dough"
@@ -129,8 +129,8 @@
 	required_reagents = list("water" = 10, "flour" = 15)
 	mix_message = "The ingredients form a dough."
 
-/datum/chemical_reaction/dough/on_reaction(datum/reagents/holder, created_volume)
-	var/location = get_turf(holder.my_atom)
+/datum/chemical_reaction/dough/on_reaction(datum/component/reagents/holder, created_volume)
+	var/location = get_turf(holder.parent)
 	for(var/i = 1, i <= created_volume, i++)
 		new /obj/item/reagent_containers/food/snacks/dough(location)
 
@@ -140,8 +140,8 @@
 	required_reagents = list("eggyolk" = 15, "flour" = 15, "sugar" = 5)
 	mix_message = "The ingredients form a cake batter."
 
-/datum/chemical_reaction/cakebatter/on_reaction(datum/reagents/holder, created_volume)
-	var/location = get_turf(holder.my_atom)
+/datum/chemical_reaction/cakebatter/on_reaction(datum/component/reagents/holder, created_volume)
+	var/location = get_turf(holder.parent)
 	for(var/i = 1, i <= created_volume, i++)
 		new /obj/item/reagent_containers/food/snacks/cakebatter(location)
 
@@ -156,8 +156,8 @@
 	required_container = /obj/item/reagent_containers/glass/bowl
 	mix_message = "The rice absorbs the water."
 
-/datum/chemical_reaction/ricebowl/on_reaction(datum/reagents/holder)
-	var/location = get_turf(holder.my_atom)
+/datum/chemical_reaction/ricebowl/on_reaction(datum/component/reagents/holder)
+	var/location = get_turf(holder.parent)
 	new /obj/item/reagent_containers/food/snacks/salad/ricebowl(location)
-	if(holder && holder.my_atom)
-		qdel(holder.my_atom)
+	if(holder && holder.parent)
+		qdel(holder.parent)

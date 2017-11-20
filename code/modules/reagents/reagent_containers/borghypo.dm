@@ -25,7 +25,7 @@ Borg Hypospray
 	var/recharge_time = 5 //Time it takes for shots to recharge (in seconds)
 	var/bypass_protection = 0 //If the hypospray can go through armor or thick material
 
-	var/list/datum/reagents/reagent_list = list()
+	var/list/datum/component/reagents/reagent_list = list()
 	var/list/reagent_ids = list("dexalin", "kelotane", "bicaridine", "antitoxin", "epinephrine", "spaceacillin", "salglu_solution")
 	var/accepts_reagent_upgrades = TRUE //If upgrades can increase number of reagents dispensed.
 	var/list/modes = list() //Basically the inverse of reagent_ids. Instead of having numbers as "keys" and strings as values it has strings as keys and numbers as values.
@@ -58,11 +58,11 @@ Borg Hypospray
 // Use this to add more chemicals for the borghypo to produce.
 /obj/item/reagent_containers/borghypo/proc/add_reagent(reagent)
 	reagent_ids |= reagent
-	var/datum/reagents/RG = new(30)
-	RG.my_atom = src
+	var/datum/component/reagents/RG = new(30, null, TRUE)
+	RG.parent = src
 	reagent_list += RG
 
-	var/datum/reagents/R = reagent_list[reagent_list.len]
+	var/datum/component/reagents/R = reagent_list[reagent_list.len]
 	R.add_reagent(reagent, 30)
 
 	modes[reagent] = modes.len + 1
@@ -72,13 +72,13 @@ Borg Hypospray
 		var/mob/living/silicon/robot/R = src.loc
 		if(R && R.cell)
 			for(var/i in 1 to reagent_ids.len)
-				var/datum/reagents/RG = reagent_list[i]
+				var/datum/component/reagents/RG = reagent_list[i]
 				if(RG.total_volume < RG.maximum_volume) 	//Don't recharge reagents and drain power if the storage is full.
 					R.cell.use(charge_cost) 					//Take power from borg...
 					RG.add_reagent(reagent_ids[i], 5)		//And fill hypo with reagent.
 
 /obj/item/reagent_containers/borghypo/attack(mob/living/carbon/M, mob/user)
-	var/datum/reagents/R = reagent_list[mode]
+	var/datum/component/reagents/R = reagent_list[mode]
 	if(!R.total_volume)
 		to_chat(user, "<span class='notice'>The injector is empty.</span>")
 		return
@@ -116,7 +116,7 @@ Borg Hypospray
 /obj/item/reagent_containers/borghypo/proc/DescribeContents()
 	var/empty = 1
 
-	for(var/datum/reagents/RS in reagent_list)
+	for(var/datum/component/reagents/RS in reagent_list)
 		var/datum/reagent/R = locate() in RS.reagent_list
 		if(R)
 			to_chat(usr, "<span class='notice'>It currently has [R.volume] unit\s of [R.name] stored.</span>")
@@ -159,12 +159,12 @@ Borg Shaker
 	return //Can't inject stuff with a shaker, can we? //not with that attitude
 
 /obj/item/reagent_containers/borghypo/borgshaker/regenerate_reagents()
-	if(iscyborg(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
+	if(iscyborg(loc))
+		var/mob/living/silicon/robot/R = loc
 		if(R && R.cell)
 			for(var/i in modes) //Lots of reagents in this one, so it's best to regenrate them all at once to keep it from being tedious.
 				var/valueofi = modes[i]
-				var/datum/reagents/RG = reagent_list[valueofi]
+				var/datum/component/reagents/RG = reagent_list[valueofi]
 				if(RG.total_volume < RG.maximum_volume)
 					R.cell.use(charge_cost)
 					RG.add_reagent(reagent_ids[valueofi], 5)
@@ -189,7 +189,7 @@ Borg Shaker
 /obj/item/reagent_containers/borghypo/borgshaker/DescribeContents()
 	var/empty = 1
 
-	var/datum/reagents/RS = reagent_list[mode]
+	var/datum/component/reagents/RS = reagent_list[mode]
 	var/datum/reagent/R = locate() in RS.reagent_list
 	if(R)
 		to_chat(usr, "<span class='notice'>It currently has [R.volume] unit\s of [R.name] stored.</span>")

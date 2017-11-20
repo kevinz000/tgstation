@@ -31,6 +31,7 @@
 
 /obj/item/implant/chem/trigger(emote, mob/source)
 	if(emote == "deathgasp")
+		GET_COMPONENT(reagents, /datum/component/reagents)
 		activate(reagents.total_volume)
 
 /obj/item/implant/chem/activate(cause)
@@ -38,6 +39,7 @@
 		return 0
 	var/mob/living/carbon/R = imp_in
 	var/injectamount = null
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if (cause == "action_button")
 		injectamount = reagents.total_volume
 	else

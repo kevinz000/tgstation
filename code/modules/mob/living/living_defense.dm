@@ -291,7 +291,7 @@
 		return shock_damage
 
 /mob/living/emp_act(severity)
-	var/list/L = src.get_contents()
+	var/list/L = get_contents()
 	for(var/obj/O in L)
 		O.emp_act(severity)
 	..()
@@ -303,6 +303,7 @@
 	return(gain)
 
 /mob/living/narsie_act()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(status_flags & GODMODE)
 		return
 

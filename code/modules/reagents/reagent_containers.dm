@@ -16,7 +16,7 @@
 	. = ..()
 	if(isnum(vol) && vol > 0)
 		volume = vol
-	create_reagents(volume)
+	var/datum/component/reagents/reagents = create_reagents(volume)
 	if(spawned_disease)
 		var/datum/disease/F = new spawned_disease(0)
 		var/list/data = list("viruses"= list(F))
@@ -25,6 +25,7 @@
 	add_initial_reagents()
 
 /obj/item/reagent_containers/proc/add_initial_reagents()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(list_reagents)
 		reagents.add_reagent_list(list_reagents)
 
@@ -73,6 +74,7 @@
 	return 1
 
 /obj/item/reagent_containers/ex_act()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents)
 		for(var/datum/reagent/R in reagents.reagent_list)
 			R.on_ex_act()
@@ -80,6 +82,7 @@
 		..()
 
 /obj/item/reagent_containers/fire_act(exposed_temperature, exposed_volume)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.expose_temperature(exposed_temperature)
 	..()
 
@@ -88,6 +91,7 @@
 	SplashReagents(target, TRUE)
 
 /obj/item/reagent_containers/proc/SplashReagents(atom/target, thrown = FALSE)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!reagents || !reagents.total_volume || !spillable)
 		return
 
@@ -123,9 +127,11 @@
 	reagents.clear_reagents()
 
 /obj/item/reagent_containers/microwave_act(obj/machinery/microwave/M)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(is_open_container())
 		reagents.expose_temperature(1000)
 	..()
 
 /obj/item/reagent_containers/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.expose_temperature(exposed_temperature)

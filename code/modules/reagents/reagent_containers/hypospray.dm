@@ -19,6 +19,7 @@
 	return attack_hand(user)
 
 /obj/item/reagent_containers/hypospray/attack(mob/living/M, mob/user)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!reagents.total_volume)
 		to_chat(user, "<span class='warning'>[src] is empty!</span>")
 		return
@@ -93,6 +94,7 @@
 	list_reagents = list("epinephrine" = 10)
 
 /obj/item/reagent_containers/hypospray/medipen/attack(mob/M, mob/user)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!reagents.total_volume)
 		to_chat(user, "<span class='warning'>[src] is empty!</span>")
 		return
@@ -104,6 +106,7 @@
 	addtimer(CALLBACK(src, .proc/cyborg_recharge, user), 80)
 
 /obj/item/reagent_containers/hypospray/medipen/proc/cyborg_recharge(mob/living/silicon/robot/user)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!reagents.total_volume && iscyborg(user))
 		var/mob/living/silicon/robot/R = user
 		if(R.cell.use(100))
@@ -111,6 +114,7 @@
 			update_icon()
 
 /obj/item/reagent_containers/hypospray/medipen/update_icon()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.total_volume > 0)
 		icon_state = initial(icon_state)
 	else
@@ -118,6 +122,7 @@
 
 /obj/item/reagent_containers/hypospray/medipen/examine()
 	..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents && reagents.reagent_list.len)
 		to_chat(usr, "<span class='notice'>It is currently loaded.</span>")
 	else

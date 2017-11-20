@@ -130,6 +130,7 @@
 	..()
 
 /mob/living/simple_animal/slime/movement_delay()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(bodytemperature >= 330.23) // 135 F or 57.08 C
 		return -1	// slimes become supercharged at high temperatures
 

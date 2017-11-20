@@ -17,14 +17,14 @@
 	var/mix_message = "The solution begins to bubble." //The message shown to nearby people upon mixing, if applicable
 	var/mix_sound = 'sound/effects/bubbles.ogg' //The sound played upon mixing, if applicable
 
-/datum/chemical_reaction/proc/on_reaction(datum/reagents/holder, created_volume)
+/datum/chemical_reaction/proc/on_reaction(datum/component/reagents/holder, created_volume)
 	return
 	//I recommend you set the result amount to the total volume of all components.
 
-/datum/chemical_reaction/proc/chemical_mob_spawn(datum/reagents/holder, amount_to_spawn, reaction_name, mob_faction = "chemicalsummon")
+/datum/chemical_reaction/proc/chemical_mob_spawn(datum/component/reagents/holder, amount_to_spawn, reaction_name, mob_faction = "chemicalsummon")
 	var/static/list/chemical_mob_spawn_meancritters = list() // list of possible hostile mobs
 	var/static/list/chemical_mob_spawn_nicecritters = list() // and possible friendly mobs
-	if(holder && holder.my_atom)
+	if(holder && holder.parent)
 		if (chemical_mob_spawn_meancritters.len <= 0 || chemical_mob_spawn_nicecritters.len <= 0)
 			for (var/T in typesof(/mob/living/simple_animal))
 				var/mob/living/simple_animal/SA = T
@@ -33,7 +33,7 @@
 						chemical_mob_spawn_meancritters += T
 					if(2)
 						chemical_mob_spawn_nicecritters += T
-		var/atom/A = holder.my_atom
+		var/atom/A = holder.parent
 		var/turf/T = get_turf(A)
 		var/area/my_area = get_area(T)
 		var/message = "A [reaction_name] reaction has occurred in [my_area.name] [ADMIN_COORDJMP(T)]"
@@ -47,9 +47,9 @@
 
 		message_admins(message, 0, 1)
 
-		playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+		playsound(get_turf(holder.parent), 'sound/effects/phasein.ogg', 100, 1)
 
-		for(var/mob/living/carbon/C in viewers(get_turf(holder.my_atom), null))
+		for(var/mob/living/carbon/C in viewers(get_turf(holder.parent), null))
 			C.flash_act()
 		for(var/i = 1, i <= amount_to_spawn, i++)
 			var/chosen
@@ -57,7 +57,7 @@
 				chosen = pick(chemical_mob_spawn_nicecritters)
 			else
 				chosen = pick(chemical_mob_spawn_meancritters)
-			var/spawnloc = get_turf(holder.my_atom)
+			var/spawnloc = get_turf(holder.parent)
 			var/mob/living/simple_animal/C = new chosen(spawnloc)
 			C.faction |= mob_faction
 			if(prob(50))

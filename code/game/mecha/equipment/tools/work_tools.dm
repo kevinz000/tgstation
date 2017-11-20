@@ -137,6 +137,7 @@
 	if(!action_checks(target) || get_dist(chassis, target)>3)
 		return
 
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(istype(target, /obj/structure/reagent_dispensers/watertank) && get_dist(chassis,target) <= 1)
 		var/obj/structure/reagent_dispensers/watertank/WT = target
 		WT.reagents.trans_to(src, 1000)

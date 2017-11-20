@@ -28,7 +28,7 @@
 	var/originalname = "condiment" //Can't use initial(name) for this. This stores the name set by condimasters.
 
 /obj/item/reagent_containers/food/condiment/attack(mob/M, mob/user, def_zone)
-
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!reagents || !reagents.total_volume)
 		to_chat(user, "<span class='warning'>None of [src] left, oh no!</span>")
 		return 0
@@ -51,14 +51,16 @@
 	reagents.reaction(M, INGEST, fraction)
 	reagents.trans_to(M, 10)
 	playsound(M.loc,'sound/items/drink.ogg', rand(10,50), 1)
-	return 1
+	return TRUE
 
 /obj/item/reagent_containers/food/condiment/afterattack(obj/target, mob/user , proximity)
+	GET_COMPONENT(reagents, /datum/component/reagents)
+	GET_COMPONENT_FROM(their_reagents, /datum/component/reagents, target)
 	if(!proximity)
 		return
 	if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
 
-		if(!target.reagents.total_volume)
+		if(!their_reagents.total_volume)
 			to_chat(user, "<span class='warning'>[target] is empty!</span>")
 			return
 
@@ -66,7 +68,7 @@
 			to_chat(user, "<span class='warning'>[src] is full!</span>")
 			return
 
-		var/trans = target.reagents.trans_to(src, amount_per_transfer_from_this)
+		var/trans = their_reagents.trans_to(src, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You fill [src] with [trans] units of the contents of [target].</span>")
 
 	//Something like a glass or a food item. Player probably wants to transfer TO it.
@@ -74,13 +76,14 @@
 		if(!reagents.total_volume)
 			to_chat(user, "<span class='warning'>[src] is empty!</span>")
 			return
-		if(target.reagents.total_volume >= target.reagents.maximum_volume)
+		if(their_reagents.total_volume >= their_reagents.maximum_volume)
 			to_chat(user, "<span class='warning'>you can't add anymore to [target]!</span>")
 			return
-		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
+		var/trans = reagents.trans_to(target, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the condiment to [target].</span>")
 
 /obj/item/reagent_containers/food/condiment/on_reagent_change()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!possible_states.len)
 		return
 	if(reagents.reagent_list.len > 0)
@@ -127,6 +130,7 @@
 	possible_states = list()
 
 /obj/item/reagent_containers/food/condiment/saltshaker/on_reagent_change()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.reagent_list.len == 0)
 		icon_state = "emptyshaker"
 	else
@@ -142,6 +146,7 @@
 	return (TOXLOSS)
 
 /obj/item/reagent_containers/food/condiment/saltshaker/afterattack(obj/target, mob/living/user, proximity)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!proximity)
 		return
 	if(isturf(target))
@@ -165,6 +170,7 @@
 	possible_states = list()
 
 /obj/item/reagent_containers/food/condiment/peppermill/on_reagent_change()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.reagent_list.len == 0)
 		icon_state = "emptyshaker"
 	else
@@ -237,6 +243,8 @@
 	return
 
 /obj/item/reagent_containers/food/condiment/pack/afterattack(obj/target, mob/user , proximity)
+	GET_COMPONENT(reagents, /datum/component/reagents)
+	GET_COMPONENT_FROM(their_reagents, /datum/component/reagents, target)
 	if(!proximity)
 		return
 
@@ -246,16 +254,17 @@
 			to_chat(user, "<span class='warning'>You tear open [src], but there's nothing in it.</span>")
 			qdel(src)
 			return
-		if(target.reagents.total_volume >= target.reagents.maximum_volume)
+		if(their_reagents.total_volume >= their_reagents.maximum_volume)
 			to_chat(user, "<span class='warning'>You tear open [src], but [target] is stacked so high that it just drips off!</span>" )
 			qdel(src)
 			return
 		else
 			to_chat(user, "<span class='notice'>You tear open [src] above [target] and the condiments drip onto it.</span>")
-			src.reagents.trans_to(target, amount_per_transfer_from_this)
+			reagents.trans_to(target, amount_per_transfer_from_this)
 			qdel(src)
 
 /obj/item/reagent_containers/food/condiment/pack/on_reagent_change()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.reagent_list.len > 0)
 		var/main_reagent = reagents.get_master_reagent_id()
 		if(main_reagent in possible_states)

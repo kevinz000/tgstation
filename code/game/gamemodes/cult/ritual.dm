@@ -31,16 +31,18 @@ This file contains the arcane tome files.
 		to_chat(user, "<span class='cult'>Striking a noncultist, however, will sear their flesh.</span>")
 
 /obj/item/tome/attack(mob/living/M, mob/living/user)
+	GET_COMPONENT_FROM(reagents, /datum/component/reagents, M)
 	if(!istype(M))
 		return
 	if(!iscultist(user))
 		return ..()
 	if(iscultist(M))
-		if(M.reagents && M.reagents.has_reagent("holywater")) //allows cultists to be rescued from the clutches of ordained religion
+		GET_COMPONENT_FROM(MR, /datum/component/reagents, M)
+		if(MR && MR.has_reagent("holywater")) //allows cultists to be rescued from the clutches of ordained religion
 			to_chat(user, "<span class='cult'>You remove the taint from [M].</span>" )
-			var/holy2unholy = M.reagents.get_reagent_amount("holywater")
-			M.reagents.del_reagent("holywater")
-			M.reagents.add_reagent("unholywater",holy2unholy)
+			var/holy2unholy = MR.get_reagent_amount("holywater")
+			MR.del_reagent("holywater")
+			MR.add_reagent("unholywater",holy2unholy)
 			add_logs(user, M, "smacked", src, " removing the holy water from them")
 		return
 	M.take_bodypart_damage(0, 15) //Used to be a random between 5 and 20

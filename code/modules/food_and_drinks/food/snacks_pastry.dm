@@ -16,6 +16,7 @@
 
 /obj/item/reagent_containers/food/snacks/donut/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(prob(30))
 		icon_state = "donut2"
 		name = "frosted donut"
@@ -31,6 +32,7 @@
 
 /obj/item/reagent_containers/food/snacks/donut/chaos/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	extra_reagent = pick("nutriment", "capsaicin", "frostoil", "krokodil", "plasma", "cocoa", "slimejelly", "banana", "berryjuice", "omnizine")
 	reagents.add_reagent("[extra_reagent]", 3)
 	bonus_reagents = list("[extra_reagent]" = 3, "sugar" = 1)
@@ -51,6 +53,7 @@
 	foodtype = JUNKFOOD | GRAIN | FRIED | FRUIT | SUGAR
 
 /obj/item/reagent_containers/food/snacks/donut/jelly/Initialize()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	. = ..()
 	if(extra_reagent)
 		reagents.add_reagent("[extra_reagent]", 3)
@@ -230,6 +233,7 @@
 	foodtype = GRAIN | VEGETABLES
 
 /obj/item/reagent_containers/food/snacks/plumphelmetbiscuit/Initialize()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/fey = prob(10)
 	if(fey)
 		name = "exceptional plump helmet biscuit"
@@ -422,6 +426,7 @@
 /obj/item/reagent_containers/food/snacks/pancakes/attackby(obj/item/I, mob/living/user, params)
 	if(istype(I, /obj/item/reagent_containers/food/snacks/pancakes/))
 		var/obj/item/reagent_containers/food/snacks/pancakes/P = I
+		GET_COMPONENT(reagents, /datum/component/reagents)
 		if((contents.len >= PANCAKE_MAX_STACK) || ((P.contents.len + contents.len) > PANCAKE_MAX_STACK) || (reagents.total_volume >= volume))
 			to_chat(user, "<span class='warning'>You can't add that many pancakes to [src]!</span>")
 		else

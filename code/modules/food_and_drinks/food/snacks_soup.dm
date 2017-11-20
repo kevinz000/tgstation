@@ -20,6 +20,7 @@
 	tastes = list("wishes" = 1)
 
 /obj/item/reagent_containers/food/snacks/soup/wish/Initialize()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	. = ..()
 	var/wish_true = prob(25)
 	if(wish_true)
@@ -101,6 +102,7 @@
 
 /obj/item/reagent_containers/food/snacks/soup/mystery/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	extra_reagent = pick("capsaicin", "frostoil", "omnizine", "banana", "blood", "slimejelly", "toxin", "banana", "carbon", "oculine")
 	bonus_reagents = list("[extra_reagent]" = 5, "nutriment" = 6)
 	reagents.add_reagent("[extra_reagent]", 5)

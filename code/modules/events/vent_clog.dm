@@ -33,8 +33,7 @@
 			vent = pick_n_take(vents)
 
 		if(vent && vent.loc)
-			var/datum/reagents/R = new/datum/reagents(50)
-			R.my_atom = vent
+			var/datum/component/reagents/R = vent.LoadComponent(/datum/component/reagents, 50)
 			R.add_reagent(pick(gunk), 50)
 
 			var/datum/effect_system/smoke_spread/chem/smoke = new

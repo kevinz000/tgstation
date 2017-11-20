@@ -29,6 +29,7 @@
 /obj/item/integrated_circuit/reagent/smoke/on_reagent_change()
 	//reset warning
 	notified = FALSE
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	set_pin_data(IC_OUTPUT, 1, reagents.total_volume)
 	push_data()
 
@@ -107,6 +108,8 @@
 /obj/item/integrated_circuit/reagent/injector/do_work()
 	set waitfor = FALSE // Don't sleep in a proc that is called by a processor without this set, otherwise it'll delay the entire thing
 	var/atom/movable/AM = get_pin_data_as_type(IC_INPUT, 1, /atom/movable)
+	GET_COMPONENT(reagents, /datum/component/reagents)
+	GET_COMPONENT_FROM(their_reagents, /datum/component/reagents, AM)
 	if(!istype(AM)||!Adjacent(AM)||busy)
 		activate_pin(3)
 		return
@@ -114,7 +117,7 @@
 		inject_tray(AM,src,transfer_amount)
 		activate_pin(2)
 		return
-	if(!AM.reagents)
+	if(!their_reagents)
 		activate_pin(3)
 		return
 	if(direction_mode == SYRINGE_INJECT)
@@ -122,7 +125,7 @@
 			activate_pin(3)
 			return
 		if(AM.is_injectable())
-			if(AM.reagents.total_volume>=AM.reagents.maximum_volume)
+			if(their_reagents.total_volume>=their_reagents.maximum_volume)
 				activate_pin(3)
 				return
 			if(isliving(AM))
@@ -174,10 +177,10 @@
 					return
 			busy = FALSE
 		else
-			if(!AM.reagents.total_volume || !AM.is_drawable())
+			if(!their_reagents.total_volume || !AM.is_drawable())
 				activate_pin(3)
 				return
-			AM.reagents.trans_to(src, tramount)
+			their_reagents.trans_to(src, tramount)
 	activate_pin(2)
 
 

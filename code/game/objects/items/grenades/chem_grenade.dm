@@ -159,9 +159,10 @@
 	if(stage != READY)
 		return
 
-	var/list/datum/reagents/reactants = list()
+	var/list/datum/component/reagents/reactants = list()
 	for(var/obj/item/reagent_containers/glass/G in beakers)
-		reactants += G.reagents
+		GET_COMPONENT_FROM(reacting_r, /datum/component/reagents, G)
+		reactants += reacting_r
 
 	if(!chem_splash(get_turf(src), affected_area, reactants, ignition_temp, threatscale) && !no_splash)
 		playsound(loc, 'sound/items/screwdriver2.ogg', 50, 1)
@@ -206,16 +207,18 @@
 	for(var/obj/item/slime_extract/S in beakers)
 		if(S.Uses)
 			for(var/obj/item/reagent_containers/glass/G in beakers)
-				G.reagents.trans_to(S, G.reagents.total_volume)
+				GET_COMPONENT_FROM(G_reagents, /datum/component/reagents, G)
+				G_reagents.trans_to(S, G_reagents.total_volume)
 
 			//If there is still a core (sometimes it's used up)
 			//and there are reagents left, behave normally,
 			//otherwise drop it on the ground for timed reactions like gold.
 
 			if(S)
-				if(S.reagents && S.reagents.total_volume)
+				GET_COMPONENT_FROM(S_reagents, /datum/component/reagents, S)
+				if(S_reagents && S.reagents.total_volume)
 					for(var/obj/item/reagent_containers/glass/G in beakers)
-						S.reagents.trans_to(G, S.reagents.total_volume)
+						S_reagents.trans_to(G, S_reagents.total_volume)
 				else
 					S.forceMove(get_turf(src))
 					no_splash = TRUE
@@ -272,7 +275,8 @@
 
 	var/total_volume = 0
 	for(var/obj/item/reagent_containers/RC in beakers)
-		total_volume += RC.reagents.total_volume
+		GET_COMPONENT_FROM(RCR, /datum/component/reagents, RC)
+		total_volume += RCR.total_volume
 	if(!total_volume)
 		qdel(src)
 		qdel(nadeassembly)
@@ -281,7 +285,8 @@
 	var/datum/reagents/reactants = new(unit_spread)
 	reactants.my_atom = src
 	for(var/obj/item/reagent_containers/RC in beakers)
-		RC.reagents.trans_to(reactants, RC.reagents.total_volume*fraction, threatscale, 1, 1)
+		GET_COMPONENT_FROM(RCR, /datum/component/reagents, RC)
+		RCR.trans_to(reactants, RCR.total_volume*fraction, threatscale, 1, 1)
 	chem_splash(get_turf(src), affected_area, list(reactants), ignition_temp, threatscale)
 
 	if(nadeassembly)

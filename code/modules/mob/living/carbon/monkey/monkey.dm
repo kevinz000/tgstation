@@ -48,6 +48,7 @@
 	..()
 
 /mob/living/carbon/monkey/movement_delay()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents)
 		if(reagents.has_reagent("morphine"))
 			return -1
@@ -62,7 +63,7 @@
 
 	if (bodytemperature < 283.222)
 		. += (283.222 - bodytemperature) / 10 * 1.75
-		
+
 	var/static/config_monkey_delay
 	if(isnull(config_monkey_delay))
 		config_monkey_delay = CONFIG_GET(number/monkey_delay)

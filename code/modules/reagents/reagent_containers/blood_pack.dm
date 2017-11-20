@@ -9,11 +9,13 @@
 
 /obj/item/reagent_containers/blood/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(blood_type != null)
 		reagents.add_reagent("blood", 200, list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null))
 		update_icon()
 
 /obj/item/reagent_containers/blood/on_reagent_change()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents)
 		var/datum/reagent/blood/B = reagents.has_reagent("blood")
 		if(B && B.data && B.data["blood_type"])
@@ -31,6 +33,7 @@
 			name = "blood pack"
 
 /obj/item/reagent_containers/blood/update_icon()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/percent = round((reagents.total_volume / volume) * 100)
 	switch(percent)
 		if(0 to 9)

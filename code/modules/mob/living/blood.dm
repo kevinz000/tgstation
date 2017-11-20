@@ -157,6 +157,7 @@
 	return
 
 /mob/living/carbon/get_blood_data(blood_id)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(blood_id == "blood") //actual blood reagent
 		var/blood_data = list()
 		//set the blood data

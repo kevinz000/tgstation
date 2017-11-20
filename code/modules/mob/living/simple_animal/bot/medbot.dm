@@ -342,7 +342,7 @@
 	//Time to see if they need medical help!
 	if(C.stat == DEAD || (C.status_flags & FAKEDEATH))
 		return FALSE	//welp too late for them!
-	
+
 	if(!(loc == C.loc) && !(isturf(C.loc) && isturf(loc)))
 		return FALSE
 
@@ -355,26 +355,28 @@
 	if(declare_crit && C.health <= 0) //Critical condition! Call for help!
 		declare(C)
 
+	GET_COMPONENT_FROM(their_reagents, /datum/component/reagents, C)
+
 	//If they're injured, we're using a beaker, and don't have one of our WONDERCHEMS.
 	if((reagent_glass) && (use_beaker) && ((C.getBruteLoss() >= heal_threshold) || (C.getToxLoss() >= heal_threshold) || (C.getToxLoss() >= heal_threshold) || (C.getOxyLoss() >= (heal_threshold + 15))))
 		for(var/datum/reagent/R in reagent_glass.reagents.reagent_list)
-			if(!C.reagents.has_reagent(R.id))
+			if(!their_reagents.has_reagent(R.id))
 				return TRUE
 
 	//They're injured enough for it!
-	if((!C.reagents.has_reagent(treatment_brute_avoid)) && (C.getBruteLoss() >= heal_threshold) && (!C.reagents.has_reagent(treatment_brute)))
+	if((!their_reagents.has_reagent(treatment_brute_avoid)) && (C.getBruteLoss() >= heal_threshold) && (!their_reagents.has_reagent(treatment_brute)))
 		return TRUE //If they're already medicated don't bother!
 
-	if((!C.reagents.has_reagent(treatment_oxy_avoid)) && (C.getOxyLoss() >= (15 + heal_threshold)) && (!C.reagents.has_reagent(treatment_oxy)))
+	if((!their_reagents.has_reagent(treatment_oxy_avoid)) && (C.getOxyLoss() >= (15 + heal_threshold)) && (!their_reagents.has_reagent(treatment_oxy)))
 		return TRUE
 
-	if((!C.reagents.has_reagent(treatment_fire_avoid)) && (C.getFireLoss() >= heal_threshold) && (!C.reagents.has_reagent(treatment_fire)))
+	if((!their_reagents.has_reagent(treatment_fire_avoid)) && (C.getFireLoss() >= heal_threshold) && (!their_reagents.has_reagent(treatment_fire)))
 		return TRUE
 
-	if((!C.reagents.has_reagent(treatment_tox_avoid)) && (C.getToxLoss() >= heal_threshold) && (!C.reagents.has_reagent(treatment_tox)))
+	if((!their_reagents.has_reagent(treatment_tox_avoid)) && (C.getToxLoss() >= heal_threshold) && (!their_reagents.has_reagent(treatment_tox)))
 		return TRUE
 
-	if(treat_virus && !C.reagents.has_reagent(treatment_virus_avoid) && !C.reagents.has_reagent(treatment_virus))
+	if(treat_virus && !their_reagents.has_reagent(treatment_virus_avoid) && !their_reagents.has_reagent(treatment_virus))
 		for(var/thing in C.viruses)
 			var/datum/disease/D = thing
 			//the medibot can't detect viruses that are undetectable to Health Analyzers or Pandemic machines.
@@ -418,7 +420,7 @@
 		oldpatient = patient
 		soft_reset()
 		return
-
+	GET_COMPONENT_FROM(their_reagents, /datum/component/reagents, C)
 	var/reagent_id = null
 
 	if(emagged == 2) //Emagged! Time to poison everybody.
@@ -436,29 +438,29 @@
 							virus = 1
 
 			if(!reagent_id && (virus))
-				if(!C.reagents.has_reagent(treatment_virus) && !C.reagents.has_reagent(treatment_virus_avoid))
+				if(!their_reagents.has_reagent(treatment_virus) && !their_reagents.has_reagent(treatment_virus_avoid))
 					reagent_id = treatment_virus
 
 		if(!reagent_id && (C.getBruteLoss() >= heal_threshold))
-			if(!C.reagents.has_reagent(treatment_brute) && !C.reagents.has_reagent(treatment_brute_avoid))
+			if(!their_reagents.has_reagent(treatment_brute) && !their_reagents.has_reagent(treatment_brute_avoid))
 				reagent_id = treatment_brute
 
 		if(!reagent_id && (C.getOxyLoss() >= (15 + heal_threshold)))
-			if(!C.reagents.has_reagent(treatment_oxy) && !C.reagents.has_reagent(treatment_oxy_avoid))
+			if(!their_reagents.has_reagent(treatment_oxy) && !their_reagents.has_reagent(treatment_oxy_avoid))
 				reagent_id = treatment_oxy
 
 		if(!reagent_id && (C.getFireLoss() >= heal_threshold))
-			if(!C.reagents.has_reagent(treatment_fire) && !C.reagents.has_reagent(treatment_fire_avoid))
+			if(!their_reagents.has_reagent(treatment_fire) && !their_reagents.has_reagent(treatment_fire_avoid))
 				reagent_id = treatment_fire
 
 		if(!reagent_id && (C.getToxLoss() >= heal_threshold))
-			if(!C.reagents.has_reagent(treatment_tox) && !C.reagents.has_reagent(treatment_tox_avoid))
+			if(!their_reagents.has_reagent(treatment_tox) && !their_reagents.has_reagent(treatment_tox_avoid))
 				reagent_id = treatment_tox
 
 		//If the patient is injured but doesn't have our special reagent in them then we should give it to them first
 		if(reagent_id && use_beaker && reagent_glass && reagent_glass.reagents.total_volume)
 			for(var/datum/reagent/R in reagent_glass.reagents.reagent_list)
-				if(!C.reagents.has_reagent(R.id))
+				if(!their_reagents.has_reagent(R.id))
 					reagent_id = "internal_beaker"
 					break
 
@@ -487,7 +489,7 @@
 						reagent_glass.reagents.reaction(patient, INJECT, fraction)
 						reagent_glass.reagents.trans_to(patient,injection_amount) //Inject from beaker instead.
 				else
-					patient.reagents.add_reagent(reagent_id,injection_amount)
+					their_reagents.add_reagent(reagent_id,injection_amount)
 				C.visible_message("<span class='danger'>[src] injects [patient] with its syringe!</span>", \
 					"<span class='userdanger'>[src] injects you with its syringe!</span>")
 			else
@@ -508,7 +510,8 @@
 	var/datum/reagent/R  = GLOB.chemical_reagents_list[reagent_id]
 	if(!R.overdose_threshold) //Some chems do not have an OD threshold
 		return FALSE
-	var/current_volume = patient.reagents.get_reagent_amount(reagent_id)
+	GET_COMPONENT_FROM(PR, /datum/component/reagents, patient)
+	var/current_volume = PR.get_reagent_amount(reagent_id)
 	if(current_volume + injection_amount > R.overdose_threshold)
 		return TRUE
 	return FALSE

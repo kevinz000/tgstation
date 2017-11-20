@@ -287,8 +287,7 @@
 /obj/item/ammo_casing/shotgun/dart/Initialize()
 	. = ..()
 	container_type |= OPENCONTAINER_1
-	create_reagents(30)
-	reagents.set_reacting(TRUE)
+	create_reagents(30, TRUE)
 
 /obj/item/ammo_casing/shotgun/dart/attackby()
 	return
@@ -298,6 +297,7 @@
 
 /obj/item/ammo_casing/shotgun/dart/bioterror/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("neurotoxin", 6)
 	reagents.add_reagent("spore", 6)
 	reagents.add_reagent("mutetoxin", 6) //;HELP OPS IN MAINT

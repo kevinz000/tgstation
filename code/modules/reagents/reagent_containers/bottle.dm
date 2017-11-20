@@ -20,6 +20,7 @@
 
 /obj/item/reagent_containers/glass/bottle/update_icon()
 	cut_overlays()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.total_volume)
 		var/mutable_appearance/filling = mutable_appearance('icons/obj/reagentfillings.dmi', "[icon_state]-10")
 
@@ -138,6 +139,7 @@
 /obj/item/reagent_containers/glass/bottle/traitor/Initialize()
 	. = ..()
 	extra_reagent = pick("polonium", "histamine", "formaldehyde", "venom", "neurotoxin2", "cyanide")
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("[extra_reagent]", 3)
 
 /obj/item/reagent_containers/glass/bottle/polonium

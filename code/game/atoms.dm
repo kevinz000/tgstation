@@ -94,9 +94,6 @@
 			var/datum/atom_hud/alternate_appearance/AA = alternate_appearances[K]
 			AA.remove_from_hud(src)
 
-	if(reagents)
-		qdel(reagents)
-
 	LAZYCLEARLIST(overlays)
 	LAZYCLEARLIST(priority_overlays)
 

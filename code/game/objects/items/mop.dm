@@ -24,6 +24,7 @@
 
 
 /obj/item/mop/proc/clean(turf/A)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.has_reagent("water", 1) || reagents.has_reagent("holywater", 1) || reagents.has_reagent("vodka", 1) || reagents.has_reagent("cleaner", 1))
 		A.clean_blood()
 		A.SendSignal(COMSIG_COMPONENT_CLEAN_ACT, CLEAN_MEDIUM)
@@ -102,7 +103,7 @@
 	playsound(user, 'sound/machines/click.ogg', 30, 1)
 
 /obj/item/mop/advanced/process()
-
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.total_volume < mopcap)
 		reagents.add_reagent(refill_reagent, refill_rate)
 

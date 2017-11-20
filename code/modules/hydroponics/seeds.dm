@@ -157,14 +157,15 @@
 
 
 /obj/item/seeds/proc/prepare_result(var/obj/item/reagent_containers/food/snacks/grown/T)
-	if(T.reagents)
+	GET_COMPONENT_FROM(Treagents, /datum/component/reagents, T)
+	if(Treagents)
 		for(var/reagent_id in reagents_add)
 			if(reagent_id == "blood") // Hack to make blood in plants always O-
-				T.reagents.add_reagent(reagent_id, 1 + round(potency * reagents_add[reagent_id], 1), list("blood_type"="O-"))
+				Treagents.add_reagent(reagent_id, 1 + round(potency * reagents_add[reagent_id], 1), list("blood_type"="O-"))
 				continue
 
-			T.reagents.add_reagent(reagent_id, 1 + round(potency * reagents_add[reagent_id],1))
-		return 1
+			Treagents.add_reagent(reagent_id, 1 + round(potency * reagents_add[reagent_id],1))
+		return TRUE
 
 
 /// Setters procs ///

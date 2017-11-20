@@ -89,6 +89,7 @@
 	else
 		charges_left = charges
 
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!reagents)
 		create_reagents(charges_left * volume_multiplier)
 	reagents.clear_reagents()
@@ -252,6 +253,7 @@
 	if(!is_type_in_list(target,validSurfaces))
 		return
 
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/drawing = drawtype
 	switch(drawtype)
 		if(RANDOM_LETTER)
@@ -360,6 +362,7 @@
 		var/eaten = use_charges(user, 5, FALSE)
 		if(check_empty(user)) //Prevents divsion by zero
 			return
+		GET_COMPONENT(reagents, /datum/component/reagents)
 		var/fraction = min(eaten / reagents.total_volume, 1)
 		reagents.reaction(M, INGEST, fraction * volume_multiplier)
 		reagents.trans_to(M, eaten, volume_multiplier)
@@ -518,6 +521,7 @@
 		user.say("MEDIOCRE!!")
 		return SHAME
 	else
+		GET_COMPONENT(reagents, /datum/component/reagents)
 		user.visible_message("<span class='suicide'>[user] shakes up [src] with a rattle and lifts it to [user.p_their()] mouth, spraying paint across [user.p_their()] teeth!</span>")
 		user.say("WITNESS ME!!")
 		if(pre_noise || post_noise)
@@ -564,6 +568,7 @@
 	if(check_empty(user))
 		return
 
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(iscarbon(target))
 		if(pre_noise || post_noise)
 			playsound(user.loc, 'sound/effects/spray.ogg', 25, 1, 5)

@@ -33,6 +33,7 @@
 
 /obj/item/reagent_containers/spray/weedspray/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("weedkiller", 100)
 
 /obj/item/reagent_containers/spray/weedspray/suicide_act(mob/user)
@@ -57,6 +58,7 @@
 
 /obj/item/reagent_containers/spray/pestspray/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("pestkiller", 100)
 
 /obj/item/reagent_containers/spray/pestspray/suicide_act(mob/user)
@@ -172,6 +174,7 @@
 
 /obj/item/reagent_containers/glass/bottle/nutrient/ez/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("eznutriment", 50)
 
 /obj/item/reagent_containers/glass/bottle/nutrient/l4z
@@ -181,6 +184,7 @@
 
 /obj/item/reagent_containers/glass/bottle/nutrient/l4z/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("left4zednutriment", 50)
 
 /obj/item/reagent_containers/glass/bottle/nutrient/rh
@@ -190,6 +194,7 @@
 
 /obj/item/reagent_containers/glass/bottle/nutrient/rh/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("robustharvestnutriment", 50)
 
 /obj/item/reagent_containers/glass/bottle/nutrient/empty
@@ -211,6 +216,7 @@
 
 /obj/item/reagent_containers/glass/bottle/killer/weedkiller/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("weedkiller", 50)
 
 /obj/item/reagent_containers/glass/bottle/killer/pestkiller
@@ -220,4 +226,5 @@
 
 /obj/item/reagent_containers/glass/bottle/killer/pestkiller/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("pestkiller", 50)

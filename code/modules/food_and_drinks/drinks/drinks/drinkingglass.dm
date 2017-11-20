@@ -14,6 +14,7 @@
 
 /obj/item/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	cut_overlays()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.reagent_list.len)
 		var/datum/reagent/R = reagents.get_master_reagent()
 		name = R.glass_name
@@ -47,6 +48,7 @@
 	materials = list(MAT_GLASS=100)
 
 /obj/item/reagent_containers/food/drinks/drinkingglass/shotglass/on_reagent_change()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	cut_overlays()
 
 	if (gulp_size < 15)
@@ -91,6 +93,7 @@
 	list_reagents = list("nuka_cola" = 50)
 
 /obj/item/reagent_containers/food/drinks/drinkingglass/attackby(obj/item/I, mob/user, params)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(istype(I, /obj/item/reagent_containers/food/snacks/egg)) //breaking eggs
 		var/obj/item/reagent_containers/food/snacks/egg/E = I
 		if(reagents)
@@ -105,6 +108,7 @@
 		..()
 
 /obj/item/reagent_containers/food/drinks/drinkingglass/attack(obj/target, mob/user)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(user.a_intent == INTENT_HARM && ismob(target) && target.reagents && reagents.total_volume)
 		target.visible_message("<span class='danger'>[user] splashes the contents of [src] onto [target]!</span>", \
 						"<span class='userdanger'>[user] splashes the contents of [src] onto [target]!</span>")
@@ -115,6 +119,7 @@
 	..()
 
 /obj/item/reagent_containers/food/drinks/drinkingglass/afterattack(obj/target, mob/user, proximity)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if((!proximity) || !check_allowed_items(target,target_self=1))
 		return
 

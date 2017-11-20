@@ -255,21 +255,20 @@
 
 /datum/effect_system/smoke_spread/chem/New()
 	..()
-	chemholder = new /obj()
-	var/datum/reagents/R = new/datum/reagents(500)
-	chemholder.reagents = R
-	R.my_atom = chemholder
+	var/obj/chemholder = new
+	var/datum/component/reagents/R = chemholder.LoadComponent(/datum/component/reagents, 500)
 
 /datum/effect_system/smoke_spread/chem/Destroy()
 	qdel(chemholder)
 	chemholder = null
 	return ..()
 
-/datum/effect_system/smoke_spread/chem/set_up(datum/reagents/carry = null, radius = 1, loca, silent = 0)
+/datum/effect_system/smoke_spread/chem/set_up(datum/component/reagents/carry = null, radius = 1, loca, silent = 0)
 	if(isturf(loca))
 		location = loca
 	else
 		location = get_turf(loca)
+	var/atom/A = carry.parent
 	amount = radius
 	carry.copy_to(chemholder, 4*carry.total_volume) //The smoke holds 4 times the total reagents volume for balance purposes.
 
@@ -284,13 +283,13 @@
 		var/where = "[A.name] | [location.x], [location.y]"
 		var/whereLink = "<A HREF='?_src_=holder;[HrefToken()];adminplayerobservecoodjump=1;X=[location.x];Y=[location.y];Z=[location.z]'>[where]</a>"
 
-		if(carry.my_atom.fingerprintslast)
-			var/mob/M = get_mob_by_key(carry.my_atom.fingerprintslast)
+		if(A.fingerprintslast)
+			var/mob/M = get_mob_by_key(A.fingerprintslast)
 			var/more = ""
 			if(M)
 				more = "(<A HREF='?_src_=holder;[HrefToken()];adminmoreinfo=[REF(M)]'>?</a>) (<A HREF='?_src_=holder;[HrefToken()];adminplayerobservefollow=[REF(M)]'>FLW</A>) "
-			message_admins("Smoke: ([whereLink])[contained]. Key: [carry.my_atom.fingerprintslast][more].", 0, 1)
-			log_game("A chemical smoke reaction has taken place in ([where])[contained]. Last associated key is [carry.my_atom.fingerprintslast].")
+			message_admins("Smoke: ([whereLink])[contained]. Key: [A.fingerprintslast][more].", 0, 1)
+			log_game("A chemical smoke reaction has taken place in ([where])[contained]. Last associated key is [A.fingerprintslast].")
 		else
 			message_admins("Smoke: ([whereLink])[contained]. No associated key.", 0, 1)
 			log_game("A chemical smoke reaction has taken place in ([where])[contained]. No associated key.")

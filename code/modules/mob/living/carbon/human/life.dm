@@ -346,7 +346,7 @@
 
 	if(!undergoing_cardiac_arrest())
 		return
-
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	// Cardiac arrest, unless corazone
 	if(reagents.get_reagent_amount("corazone"))
 		return

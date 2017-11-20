@@ -366,10 +366,11 @@
 
 /obj/item/projectile/bullet/dart/Initialize()
 	. = ..()
-	create_reagents(50)
+	var/datum/component/reagents/reagents = create_reagents(50)
 	reagents.set_reacting(FALSE)
 
 /obj/item/projectile/bullet/dart/on_hit(atom/target, blocked = FALSE)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(iscarbon(target))
 		var/mob/living/carbon/M = target
 		if(blocked != 100) // not completely blocked
@@ -390,6 +391,7 @@
 
 /obj/item/projectile/bullet/dart/metalfoam/Initialize()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.add_reagent("aluminium", 15)
 	reagents.add_reagent("foaming_agent", 5)
 	reagents.add_reagent("facid", 5)

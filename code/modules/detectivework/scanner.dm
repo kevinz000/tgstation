@@ -93,9 +93,10 @@
 				fingerprints = A.fingerprints.Copy()
 
 			// Only get reagents from non-mobs.
-			if(A.reagents && A.reagents.reagent_list.len)
+			GET_COMPONENT_FROM(AR, /datum/component/reagents, A)
+			if(AR && AR.reagent_list.len)
 
-				for(var/datum/reagent/R in A.reagents.reagent_list)
+				for(var/datum/reagent/R in AR.reagent_list)
 					reagents[R.name] = R.volume
 
 					// Get blood data from the blood reagent.

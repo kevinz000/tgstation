@@ -24,6 +24,7 @@
 	return (OXYLOSS)
 
 /obj/item/reagent_containers/glass/rag/afterattack(atom/A as obj|turf|area, mob/user,proximity)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!proximity)
 		return
 	if(iscarbon(A) && A.reagents && reagents.total_volume)

@@ -42,6 +42,7 @@
 
 
 /obj/item/reagent_containers/food/snacks/grown/proc/add_juice()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents)
 		if(bitesize_mod)
 			bitesize = 1 + round(reagents.total_volume / bitesize_mod)
@@ -57,7 +58,8 @@
 
 /obj/item/reagent_containers/food/snacks/grown/attackby(obj/item/O, mob/user, params)
 	..()
-	if (istype(O, /obj/item/device/plant_analyzer))
+	GET_COMPONENT(reagents, /datum/component/reagents)
+	if(istype(O, /obj/item/device/plant_analyzer))
 		var/msg = "<span class='info'>*---------*\n This is \a <span class='name'>[src]</span>.\n"
 		if(seed)
 			msg += seed.get_analyzer_text()
@@ -109,6 +111,7 @@
 	if(seed)
 		for(var/datum/plant_gene/trait/trait in seed.genes)
 			trait.on_squash(src, target)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 
 	reagents.reaction(T)
 	for(var/A in T)

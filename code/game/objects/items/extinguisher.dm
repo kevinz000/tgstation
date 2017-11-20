@@ -39,9 +39,9 @@
 	sprite_name = "miniFE"
 	dog_fashion = null
 
-/obj/item/extinguisher/New()
-	..()
-	create_reagents(max_water)
+/obj/item/extinguisher/Initialize()
+	. = ..()
+	var/datum/component/reagents/reagents = create_reagents(max_water)
 	reagents.add_reagent("water", max_water)
 
 /obj/item/extinguisher/attack_self(mob/user)
@@ -66,6 +66,7 @@
 
 /obj/item/extinguisher/examine(mob/user)
 	..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.total_volume)
 		to_chat(user, "It contains [round(reagents.total_volume)] unit\s.")
 		to_chat(user, "<span class='notice'>Alt-click to empty it.</span>")
@@ -73,6 +74,7 @@
 		to_chat(user, "It is empty.")
 
 /obj/item/extinguisher/proc/AttemptRefill(atom/target, mob/user)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(istype(target, /obj/structure/reagent_dispensers/watertank) && target.Adjacent(user))
 		var/safety_save = safety
 		safety = TRUE
@@ -162,7 +164,7 @@
 				R.my_atom = W
 				if(!W || !src)
 					return
-				src.reagents.trans_to(W,1)
+				reagents.trans_to(W,1)
 				for(var/b=0, b<power, b++)
 					step_towards(W,my_target)
 					if(!W || !W.reagents)
@@ -183,6 +185,7 @@
 	EmptyExtinguisher(user)
 
 /obj/item/extinguisher/proc/EmptyExtinguisher(var/mob/user)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(loc == user && reagents.total_volume)
 		reagents.clear_reagents()
 

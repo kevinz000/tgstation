@@ -71,9 +71,9 @@
 	var/species_traits = list()
 	if(H && H.dna && H.dna.species && H.dna.species.species_traits)
 		species_traits = H.dna.species.species_traits
-
+	GET_COMPONENT_FROM(HR, /datum/component/reagents, H)
 	if(!breath || (breath.total_moles() == 0))
-		if(H.reagents.has_reagent(crit_stabilizing_reagent))
+		if(HR.has_reagent(crit_stabilizing_reagent))
 			return
 		if(H.health >= HEALTH_THRESHOLD_CRIT)
 			H.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
@@ -275,14 +275,14 @@
 			H.adjustFireLoss(nitryl_pp/4)
 		gas_breathed = breath_gases[/datum/gas/nitryl][MOLES]
 		if (gas_breathed > GAS_STIM_MINIMUM)
-			H.reagents.add_reagent("nitryl_gas",1)
+			HR.add_reagent("nitryl_gas",1)
 
 		breath_gases[/datum/gas/nitryl][MOLES]-=gas_breathed
 		gas_breathed = 0
 	// Stimulum
 		gas_breathed = breath_gases[/datum/gas/stimulum][MOLES]
 		if (gas_breathed > GAS_STIM_MINIMUM)
-			H.reagents.add_reagent("stimulum",1)
+			HR.add_reagent("stimulum",1)
 		breath_gases[/datum/gas/stimulum][MOLES]-=gas_breathed
 		handle_breath_temperature(breath, H)
 		breath.garbage_collect()

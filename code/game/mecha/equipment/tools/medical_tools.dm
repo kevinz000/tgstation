@@ -171,8 +171,9 @@
 				"}
 
 /obj/item/mecha_parts/mecha_equipment/medical/sleeper/proc/get_patient_reagents()
-	if(patient.reagents)
-		for(var/datum/reagent/R in patient.reagents.reagent_list)
+	GET_COMPONENT_FROM(patient_reagents, /datum/component/reagents, patient)
+	if(patient_reagents)
+		for(var/datum/reagent/R in patient_reagents.reagent_list)
 			if(R.volume > 0)
 				. += "[R]: [round(R.volume,0.01)]<br />"
 	return . || "None"
@@ -180,8 +181,9 @@
 /obj/item/mecha_parts/mecha_equipment/medical/sleeper/proc/get_available_reagents()
 	var/output
 	var/obj/item/mecha_parts/mecha_equipment/medical/syringe_gun/SG = locate(/obj/item/mecha_parts/mecha_equipment/medical/syringe_gun) in chassis
-	if(SG && SG.reagents && islist(SG.reagents.reagent_list))
-		for(var/datum/reagent/R in SG.reagents.reagent_list)
+	GET_COMPONENT_FROM(SGR, /datum/component/reagents, SG)
+	if(SG && SGR && islist(SGR.reagent_list))
+		for(var/datum/reagent/R in SGR.reagent_list)
 			if(R.volume > 0)
 				output += "<a href=\"?src=[REF(src)];inject=[REF(R)];source=[REF(SG)]\">Inject [R.name]</a><br />"
 	return output
@@ -257,8 +259,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/medical/syringe_gun/New()
 	..()
-	create_reagents(max_volume)
-	reagents.set_reacting(FALSE)
+	create_reagents(max_volume, FALSE)
 	syringes = new
 	known_reagents = list("epinephrine"="Epinephrine","charcoal"="Charcoal")
 	processed_reagents = new
@@ -273,6 +274,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/medical/syringe_gun/critfail()
 	..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents)
 		reagents.set_reacting(TRUE)
 
@@ -283,12 +285,14 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/medical/syringe_gun/get_equip_info()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/output = ..()
 	if(output)
 		return "[output] \[<a href=\"?src=[REF(src)];toggle_mode=1\">[mode? "Analyze" : "Launch"]</a>\]<br />\[Syringes: [syringes.len]/[max_syringes] | Reagents: [reagents.total_volume]/[reagents.maximum_volume]\]<br /><a href='?src=[REF(src)];show_reagents=1'>Reagents list</a>"
 	return
 
 /obj/item/mecha_parts/mecha_equipment/medical/syringe_gun/action(atom/movable/target)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!action_checks(target))
 		return
 	if(istype(target, /obj/item/reagent_containers/syringe))
@@ -320,6 +324,7 @@
 		for(var/i=0, i<6, i++)
 			if(!mechsyringe)
 				break
+			GET_COMPONENT_FROM(MR, /datum/component/reagents, mechsyringe)
 			if(step_towards(mechsyringe,trg))
 				var/list/mobs = new
 				for(var/mob/living/carbon/M in mechsyringe.loc)
@@ -329,14 +334,14 @@
 					var/R
 					mechsyringe.visible_message("<span class=\"attack\"> [M] was hit by the syringe!</span>")
 					if(M.can_inject(null, 1))
-						if(mechsyringe.reagents)
-							for(var/datum/reagent/A in mechsyringe.reagents.reagent_list)
+						if(MR)
+							for(var/datum/reagent/A in MR.reagent_list)
 								R += A.id + " ("
 								R += num2text(A.volume) + "),"
 						mechsyringe.icon_state = initial(mechsyringe.icon_state)
 						mechsyringe.icon = initial(mechsyringe.icon)
-						mechsyringe.reagents.reaction(M, INJECT)
-						mechsyringe.reagents.trans_to(M, mechsyringe.reagents.total_volume)
+						MR.reaction(M, INJECT)
+						MR.trans_to(M, MR.total_volume)
 						M.take_bodypart_damage(2)
 						add_logs(originaloccupant, M, "shot", "syringegun")
 					break
@@ -356,6 +361,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/medical/syringe_gun/Topic(href,href_list)
 	..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/datum/topic_input/afilter = new (href,href_list)
 	if(afilter.get("toggle_mode"))
 		mode = !mode
@@ -444,6 +450,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/medical/syringe_gun/proc/get_current_reagents()
 	var/output
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	for(var/datum/reagent/R in reagents.reagent_list)
 		if(R.volume > 0)
 			output += "[R]: [round(R.volume,0.001)] - <a href=\"?src=[REF(src)];purge_reagent=[R.id]\">Purge Reagent</a><br />"
@@ -457,11 +464,11 @@
 			occupant_message("The syringe is too far away.")
 			return 0
 		for(var/obj/structure/D in S.loc)//Basic level check for structures in the way (Like grilles and windows)
-			if(!(D.CanPass(S,src.loc)))
+			if(!(D.CanPass(S,loc)))
 				occupant_message("Unable to load syringe.")
 				return 0
 		for(var/obj/machinery/door/D in S.loc)//Checks for doors
-			if(!(D.CanPass(S,src.loc)))
+			if(!(D.CanPass(S,loc)))
 				occupant_message("Unable to load syringe.")
 				return 0
 		S.reagents.trans_to(src, S.reagents.total_volume)
@@ -477,11 +484,12 @@
 	if(get_dist(src,A) >= 4)
 		occupant_message("The object is too far away.")
 		return 0
-	if(!A.reagents || ismob(A))
+	GET_COMPONENT_FROM(AR, /datum/component/reagents, A)
+	if(!AR || ismob(A))
 		occupant_message("<span class=\"alert\">No reagent info gained from [A].</span>")
 		return 0
 	occupant_message("Analyzing reagents...")
-	for(var/datum/reagent/R in A.reagents.reagent_list)
+	for(var/datum/reagent/R in AR.reagent_list)
 		if(R.can_synth && add_known_reagent(R.id,R.name))
 			occupant_message("Reagent analyzed, identified as [R.name] and added to database.")
 			send_byjax(chassis.occupant,"msyringegun.browser","reagents_form",get_reagents_form())
@@ -511,6 +519,7 @@
 /obj/item/mecha_parts/mecha_equipment/medical/syringe_gun/process()
 	if(..())
 		return
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!processed_reagents.len || reagents.total_volume >= reagents.maximum_volume || !chassis.has_charge(energy_drain))
 		occupant_message("<span class=\"alert\">Reagent processing stopped.</a>")
 		log_message("Reagent processing stopped.")

@@ -408,12 +408,14 @@ MASS SPECTROMETER
 	create_reagents(5)
 
 /obj/item/device/mass_spectrometer/on_reagent_change()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.total_volume)
 		icon_state = initial(icon_state) + "_s"
 	else
 		icon_state = initial(icon_state)
 
 /obj/item/device/mass_spectrometer/attack_self(mob/user)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if (user.stat || user.eye_blind)
 		return
 	if (!user.IsAdvancedToolUser())

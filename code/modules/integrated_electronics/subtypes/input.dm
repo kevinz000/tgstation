@@ -278,9 +278,10 @@
 		set_pin_data(IC_OUTPUT, 5, sqrt((H.x-T.x)*(H.x-T.x)+ (H.y-T.y)*(H.y-T.y)))
 		var/mr = 0
 		var/tr = 0
-		if(H.reagents)
-			mr = H.reagents.maximum_volume
-			tr = H.reagents.total_volume
+		GET_COMPONENT_FROM(HR, /datum/component/reagents, H)
+		if(HR)
+			mr = HR.maximum_volume
+			tr = HR.total_volume
 		set_pin_data(IC_OUTPUT, 6, mr)
 		set_pin_data(IC_OUTPUT, 7, tr)
 		push_data()

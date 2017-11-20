@@ -18,20 +18,21 @@
 	if (gulp_size < 5)
 		gulp_size = 5
 	else
+		GET_COMPONENT(reagents, /datum/component/reagents)
 		gulp_size = max(round(reagents.total_volume / 5), 5)
 
 /obj/item/reagent_containers/food/drinks/attack(mob/M, mob/user, def_zone)
-
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!reagents || !reagents.total_volume)
 		to_chat(user, "<span class='warning'>[src] is empty!</span>")
-		return 0
+		return FALSE
 
 	if(!canconsume(M, user))
-		return 0
+		return FALSE
 
 	if (!is_open_container())
 		to_chat(user, "<span class='warning'>[src]'s lid hasn't been opened!</span>")
-		return 0
+		return FALSE
 
 	if(M == user)
 		to_chat(M, "<span class='notice'>You swallow a gulp of [src].</span>")
@@ -50,9 +51,10 @@
 	reagents.reaction(M, INGEST, fraction)
 	reagents.trans_to(M, gulp_size)
 	playsound(M.loc,'sound/items/drink.ogg', rand(10,50), 1)
-	return 1
+	return TRUE
 
 /obj/item/reagent_containers/food/drinks/afterattack(obj/target, mob/user , proximity)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!proximity)
 		return
 	if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
@@ -87,9 +89,10 @@
 		if(iscyborg(user)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
 			var/mob/living/silicon/robot/bro = user
 			bro.cell.use(30)
-			addtimer(CALLBACK(reagents, /datum/reagents.proc/add_reagent, refill, trans), 600)
+			addtimer(CALLBACK(reagents, /datum/component/reagents.proc/add_reagent, refill, trans), 600)
 
 /obj/item/reagent_containers/food/drinks/attackby(obj/item/I, mob/user, params)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/hotness = I.is_hot()
 	if(hotness && reagents)
 		reagents.expose_temperature(hotness)
@@ -184,6 +187,7 @@
 	spillable = 1
 
 /obj/item/reagent_containers/food/drinks/mug/on_reagent_change()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.total_volume)
 		icon_state = "tea"
 	else
@@ -234,6 +238,7 @@
 	spillable = 1
 
 /obj/item/reagent_containers/food/drinks/sillycup/on_reagent_change()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.total_volume)
 		icon_state = "water_cup"
 	else
@@ -246,7 +251,8 @@
 	volume = 15 //I figure if you have to craft these it should at least be slightly better than something you can get for free from a watercooler
 
 /obj/item/reagent_containers/food/drinks/sillycup/smallcarton/on_reagent_change()
-	if (reagents.reagent_list.len)
+	GET_COMPONENT(reagents, /datum/component/reagents)
+	if(reagents.reagent_list.len)
 		switch(reagents.get_master_reagent_id())
 			if("orangejuice")
 				icon_state = "orangebox"

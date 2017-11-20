@@ -37,6 +37,7 @@
 	to_chat(user, "It contains [ingredients.len?"[ingredients_listed]":"no ingredient, "]making a [size]-sized [initial(name)].")
 
 /obj/item/reagent_containers/food/snacks/customizable/attackby(obj/item/I, mob/user, params)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!istype(I, /obj/item/reagent_containers/food/snacks/customizable) && istype(I, /obj/item/reagent_containers/food/snacks))
 		var/obj/item/reagent_containers/food/snacks/S = I
 		if(I.w_class > WEIGHT_CLASS_SMALL)
@@ -303,6 +304,7 @@
 		else if(contents.len >= 20)
 			to_chat(user, "<span class='warning'>You can't add more ingredients to [src]!</span>")
 		else
+			GET_COMPONENT(reagents, /datum/component/reagents)
 			if(reagents.has_reagent("water", 10)) //are we starting a soup or a salad?
 				var/obj/item/reagent_containers/food/snacks/customizable/A = new/obj/item/reagent_containers/food/snacks/customizable/soup(get_turf(src))
 				A.initialize_custom_food(src, S, user)
@@ -319,6 +321,7 @@
 
 /obj/item/reagent_containers/glass/bowl/update_icon()
 	cut_overlays()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents && reagents.total_volume)
 		var/mutable_appearance/filling = mutable_appearance('icons/obj/food/soupsalad.dmi', "fullbowl")
 		filling.color = mix_color_from_reagents(reagents.reagent_list)
