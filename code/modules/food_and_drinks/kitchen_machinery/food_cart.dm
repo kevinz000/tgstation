@@ -38,6 +38,7 @@
 	dat += "<br><b>STORED INGREDIENTS AND DRINKS</b><br><div class='statusDisplay'>"
 	dat += "Remaining glasses: [glasses]<br>"
 	dat += "Portion: <a href='?src=[REF(src)];portion=1'>[portion]</a><br>"
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	for(var/datum/reagent/R in reagents.reagent_list)
 		dat += "[R.name]: [R.volume] "
 		dat += "<a href='?src=[REF(src)];disposeI=[R.id]'>Purge</a>"
@@ -130,18 +131,22 @@
 			to_chat(usr, "<span class='warning'>There are no glasses left!</span>")
 			glasses = 0
 		else
+			GET_COMPONENT(reagents, /datum/component/reagents)
 			var/obj/item/reagent_containers/food/drinks/drinkingglass/DG = new(loc)
 			if(href_list["pour"])
 				reagents.trans_id_to(DG, href_list["pour"], portion)
 			if(href_list["m_pour"])
-				mixer.reagents.trans_id_to(DG, href_list["m_pour"], portion)
+				GET_COMPONENT_FROM(mixerreagents, /datum/component/reagents, mixer)
+				mixerreagents.trans_id_to(DG, href_list["m_pour"], portion)
 
 	if(href_list["mix"])
+		GET_COMPONENT(reagents, /datum/component/reagents)
 		if(reagents.trans_id_to(mixer, href_list["mix"], portion) == 0)
 			to_chat(usr, "<span class='warning'>[mixer] is full!</span>")
 
 	if(href_list["transfer"])
-		if(mixer.reagents.trans_id_to(src, href_list["transfer"], portion) == 0)
+		GET_COMPONENT_FROM(mixerreagents, /datum/component/reagents, mixer)
+		if(mixerreagents.trans_id_to(src, href_list["transfer"], portion) == 0)
 			to_chat(usr, "<span class='warning'>[src] is full!</span>")
 
 	updateDialog()

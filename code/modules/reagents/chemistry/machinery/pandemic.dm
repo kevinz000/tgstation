@@ -26,9 +26,10 @@
 	return ..()
 
 /obj/machinery/computer/pandemic/proc/get_by_index(thing, index)
-	if(!beaker || !beaker.reagents)
+	GET_COMPONENT_FROM(beakerreagents, /datum/component/reagents, beaker)
+	if(!beaker || !beakerreagents)
 		return
-	var/datum/reagent/blood/B = locate() in beaker.reagents.reagent_list
+	var/datum/reagent/blood/B = locate() in beakerreagents.reagent_list
 	if(B && B.data[thing])
 		return B.data[thing][index]
 
@@ -135,13 +136,14 @@
 	var/list/data = list()
 	data["is_ready"] = !wait
 	data["mode"] = mode
+	GET_COMPONENT_FROM(beakerreagents, /datum/component/reagents, beaker)
 	switch(mode)
 		if(MAIN_SCREEN)
 			if(beaker)
 				data["has_beaker"] = TRUE
-				if(!beaker.reagents.total_volume || !beaker.reagents.reagent_list)
+				if(!beakerreagents.total_volume || !beakerreagents.reagent_list)
 					data["beaker_empty"] = TRUE
-				var/datum/reagent/blood/B = locate() in beaker.reagents.reagent_list
+				var/datum/reagent/blood/B = locate() in beakerreagents.reagent_list
 				if(B)
 					data["has_blood"] = TRUE
 					data["blood"] = list()
@@ -157,6 +159,7 @@
 /obj/machinery/computer/pandemic/ui_act(action, params)
 	if(..())
 		return
+	GET_COMPONENT_FROM(beakerreagents, /datum/component/reagents, beaker)
 	switch(action)
 		if("eject_beaker")
 			if(beaker)
@@ -164,11 +167,11 @@
 			. = TRUE
 		if("empty_beaker")
 			if(beaker)
-				beaker.reagents.clear_reagents()
+				beakerreagents.clear_reagents()
 			. = TRUE
 		if("empty_eject_beaker")
 			if(beaker)
-				beaker.reagents.clear_reagents()
+				beakerreagents.clear_reagents()
 				eject_beaker()
 			. = TRUE
 		if("rename_disease")

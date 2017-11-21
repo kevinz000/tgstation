@@ -44,6 +44,7 @@
 	var/datum/effect_system/smoke_spread/chem/S = new
 	S.attach(location)
 	playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(S)
 		S.set_up(reagents, smoke_radius, location, notified)
 		if(!notified)
@@ -83,6 +84,7 @@
 
 
 /obj/item/integrated_circuit/reagent/injector/on_reagent_change()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	set_pin_data(IC_OUTPUT, 1, reagents.total_volume)
 	push_data()
 
@@ -98,12 +100,13 @@
 		transfer_amount = new_amount
 
 /obj/item/integrated_circuit/reagent/proc/inject_tray(var/obj/machinery/hydroponics/H,var/atom/movable/SO,var/A)
-		var/datum/reagents/S = new /datum/reagents() //This is a strange way, but I don't know of a better one so I can't fix it at the moment...
-		S.my_atom = H
-		SO.reagents.trans_to(S,A)
-		H.applyChemicals(S)
-		S.clear_reagents()
-		qdel(S)
+	var/datum/component/reagents/S = new(null,null,TRUE)
+	GET_COMPONENT_FROM(AMR, /datum/component/reagents, SO)
+	S.parent = H
+	AMR.trans_to(S,A)
+	H.applyChemicals(S)
+	S.clear_reagents()
+	qdel(S)
 
 /obj/item/integrated_circuit/reagent/injector/do_work()
 	set waitfor = FALSE // Don't sleep in a proc that is called by a processor without this set, otherwise it'll delay the entire thing
@@ -183,9 +186,6 @@
 			their_reagents.trans_to(src, tramount)
 	activate_pin(2)
 
-
-
-
 /obj/item/integrated_circuit/reagent/pump
 	name = "reagent pump"
 	desc = "Moves liquids safely inside a machine, or even nearby it."
@@ -218,29 +218,31 @@
 /obj/item/integrated_circuit/reagent/pump/do_work()
 	var/atom/movable/source = get_pin_data_as_type(IC_INPUT, 1, /atom/movable)
 	var/atom/movable/target = get_pin_data_as_type(IC_INPUT, 2, /atom/movable)
+	GET_COMPONENT_FROM(source_reagents, /datum/component/reagents, source)
+	GET_COMPONENT_FROM(target_reagents, /datum/component/reagents, target)
 
-	if(!istype(source) || !istype(target) || !source.reagents) //Invalid input
+	if(!istype(source) || !istype(target) || !source_reagents) //Invalid input
 		return
 	if(Adjacent(source) && Adjacent(target))
-		if(istype(target,/obj/machinery/hydroponics)&&(source.reagents.total_volume))//injection into tray.
+		if(istype(target,/obj/machinery/hydroponics)&&(source_reagents.total_volume))//injection into tray.
 			inject_tray(target,source,transfer_amount)
 			activate_pin(2)
 			return
 
-		if(!target.reagents)
+		if(!target_reagents)
 			return
 		if(ismob(source) || ismob(target))
 			return
 		if(!source.is_open_container() || !target.is_open_container())
 			return
 		if(direction_mode)
-			if(target.reagents.maximum_volume - target.reagents.total_volume <= 0) //full
+			if(target_reagents.maximum_volume - target_reagents.total_volume <= 0) //full
 				return
-			source.reagents.trans_to(target, transfer_amount)
+			source_reagents.trans_to(target, transfer_amount)
 		else
-			if(source.reagents.maximum_volume - source.reagents.total_volume <= 0)
+			if(source_reagents.maximum_volume - source_reagents.total_volume <= 0)
 				return
-			target.reagents.trans_to(source, transfer_amount)
+			target_reagents.trans_to(source, transfer_amount)
 		activate_pin(2)
 
 /obj/item/integrated_circuit/reagent/storage
@@ -263,6 +265,7 @@
 	..()
 
 /obj/item/integrated_circuit/reagent/storage/on_reagent_change()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	set_pin_data(IC_OUTPUT, 1, reagents.total_volume)
 	push_data()
 
@@ -277,6 +280,7 @@
 
 /obj/item/integrated_circuit/reagent/storage/cryo/New()
 	. = ..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.set_reacting(FALSE)
 
 /obj/item/integrated_circuit/reagent/storage/big
@@ -302,6 +306,7 @@
 
 /obj/item/integrated_circuit/reagent/storage/scan/do_work()
 	var/cont[0]
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	for(var/datum/reagent/RE in reagents.reagent_list)
 		cont += RE.id
 	set_pin_data(IC_OUTPUT, 3, cont)
@@ -342,25 +347,27 @@
 	var/atom/movable/source = get_pin_data_as_type(IC_INPUT, 1, /atom/movable)
 	var/atom/movable/target = get_pin_data_as_type(IC_INPUT, 2, /atom/movable)
 	var/list/demand = get_pin_data(IC_INPUT, 4)
+	GET_COMPONENT_FROM(source_reagents, /datum/component/reagents, source)
+	GET_COMPONENT_FROM(target_reagents, /datum/component/reagents, target)
 	if(!istype(source) || !istype(target)) //Invalid input
 		return
 	var/turf/T = get_turf(src)
 	if(source.Adjacent(T) && target.Adjacent(T))
-		if(!source.reagents || !target.reagents)
+		if(!source_reagents || !target_reagents)
 			return
 		if(ismob(source) || ismob(target))
 			return
 		if(!source.is_open_container() || !target.is_open_container())
 			return
-		if(target.reagents.maximum_volume - target.reagents.total_volume <= 0)
+		if(target_reagents.maximum_volume - target_reagents.total_volume <= 0)
 			return
-		for(var/datum/reagent/G in source.reagents.reagent_list)
+		for(var/datum/reagent/G in source_reagents.reagent_list)
 			if (!direction_mode)
 				if(G.id in demand)
-					source.reagents.trans_id_to(target, G.id, transfer_amount)
+					source_reagents.trans_id_to(target, G.id, transfer_amount)
 			else
 				if(!(G.id in demand))
-					source.reagents.trans_id_to(target, G.id, transfer_amount)
+					source_reagents.trans_id_to(target, G.id, transfer_amount)
 		activate_pin(2)
 		push_data()
 

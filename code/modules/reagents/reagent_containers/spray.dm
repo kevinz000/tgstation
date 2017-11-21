@@ -25,11 +25,12 @@
 
 /obj/item/reagent_containers/spray/afterattack(atom/A as mob|obj, mob/user)
 	GET_COMPONENT(reagents, /datum/component/reagents)
+	GET_COMPONENT_FROM(AR, /datum/component/reagents, A)
 	if(istype(A, /obj/structure/sink) || istype(A, /obj/structure/janitorialcart) || istype(A, /obj/machinery/hydroponics))
 		return
 
 	if(istype(A, /obj/structure/reagent_dispensers) && get_dist(src,A) <= 1) //this block copypasted from reagent_containers/glass, for lack of a better solution
-		if(!A.reagents.total_volume && A.reagents)
+		if(!AR.total_volume && A.reagents)
 			to_chat(user, "<span class='notice'>\The [A] is empty.</span>")
 			return
 
@@ -37,7 +38,7 @@
 			to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 			return
 
-		var/trans = A.reagents.trans_to(src, 50) //transfer 50u , using the spray's transfer amount would take too long to refill
+		var/trans = AR.trans_to(src, 50) //transfer 50u , using the spray's transfer amount would take too long to refill
 		to_chat(user, "<span class='notice'>You fill \the [src] with [trans] units of the contents of \the [A].</span>")
 		return
 

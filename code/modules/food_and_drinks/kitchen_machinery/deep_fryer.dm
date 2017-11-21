@@ -51,7 +51,7 @@ God bless America.
 
 /obj/machinery/deepfryer/Initialize()
 	. = ..()
-	create_reagents(50)
+	var/datum/component/reagents/reagents = create_reagents(50)
 	reagents.add_reagent("cooking_oil", 25)
 	component_parts = list()
 	component_parts += new /obj/item/circuitboard/machine/deep_fryer(null)
@@ -72,12 +72,14 @@ God bless America.
 		to_chat(usr, "You can make out \a [frying] in the oil.")
 
 /obj/machinery/deepfryer/attackby(obj/item/I, mob/user)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(istype(I, /obj/item/reagent_containers/pill))
+		GET_COMPONENT_FROM(Ireagents, /datum/component/reagents, I)
 		if(!reagents.total_volume)
 			to_chat(user, "<span class='warning'>There's nothing to dissolve [I] in!</span>")
 			return
 		user.visible_message("<span class='notice'>[user] drops [I] into [src].</span>", "<span class='notice'>You dissolve [I] in [src].</span>")
-		I.reagents.trans_to(src, I.reagents.total_volume)
+		Ireagents.trans_to(src, Ireagents.total_volume)
 		qdel(I)
 		return
 	if(!reagents.has_reagent("cooking_oil"))
@@ -103,6 +105,7 @@ God bless America.
 
 /obj/machinery/deepfryer/process()
 	..()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/datum/reagent/consumable/cooking_oil/C = reagents.has_reagent("cooking_oil")
 	if(!C)
 		return
@@ -139,6 +142,7 @@ God bless America.
 		if(user.grab_state < GRAB_AGGRESSIVE)
 			to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 			return
+		GET_COMPONENT(reagents, /datum/component/reagents)
 		var/mob/living/carbon/C = user.pulling
 		user.visible_message("<span class = 'danger'>[user] dunks [C]'s face in [src]!</span>")
 		reagents.reaction(C, TOUCH)

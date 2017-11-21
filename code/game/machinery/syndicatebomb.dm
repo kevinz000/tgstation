@@ -408,8 +408,8 @@
 			return
 
 		var/fraction = time_release/total_volume
-		var/datum/reagents/reactants = new(time_release)
-		reactants.my_atom = src
+		var/datum/component/reagents/reactants = new(time_release, null, TRUE)
+		reactants.parent = src
 		for(var/obj/item/reagent_containers/RC in beakers)
 			GET_COMPONENT_FROM(RCR, /datum/component/reagents, RC)
 			RCR.trans_to(reactants, RCR.total_volume*fraction, 1, 1, 1)

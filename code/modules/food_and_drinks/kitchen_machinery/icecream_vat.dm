@@ -64,8 +64,7 @@
 	. = ..()
 	while(product_types.len < 6)
 		product_types.Add(5)
-	create_reagents()
-	reagents.set_reacting(FALSE)
+	var/datum/component/reagents/reagents = create_reagents(null, null, FALSE)
 	for(var/reagent in icecream_vat_reagents)
 		reagents.add_reagent(reagent, icecream_vat_reagents[reagent])
 
@@ -102,11 +101,12 @@
 			if(product_types[dispense_flavour] > 0)
 				visible_message("[icon2html(src, viewers(src))] <span class='info'>[user] scoops delicious [flavour_name] ice cream into [I].</span>")
 				product_types[dispense_flavour] -= 1
+				GET_COMPONENT_FROM(IR, /datum/component/reagents, I)
 				I.add_ice_cream(flavour_name)
 			//	if(beaker)
 			//		beaker.reagents.trans_to(I, 10)
-				if(I.reagents.total_volume < 10)
-					I.reagents.add_reagent("sugar", 10 - I.reagents.total_volume)
+				if(IR.total_volume < 10)
+					IR.add_reagent("sugar", 10 - I.reagents.total_volume)
 			else
 				to_chat(user, "<span class='warning'>There is not enough ice cream left!</span>")
 		else
@@ -118,6 +118,7 @@
 		return ..()
 
 /obj/machinery/icecream_vat/proc/make(mob/user, make_type, amount)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	for(var/R in get_ingredient_list(make_type))
 		if(reagents.has_reagent(R, amount))
 			continue

@@ -65,7 +65,7 @@
 		L.Remove(user)
 
 		// make some colorful reagent, and apply it to the lungs
-		L.create_reagents(10)
+		var/datum/component/reagents/reagents = L.create_reagents(10)
 		L.reagents.add_reagent("colorful_reagent", 10)
 		L.reagents.reaction(L, TOUCH, 1)
 

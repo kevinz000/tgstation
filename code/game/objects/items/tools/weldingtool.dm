@@ -95,6 +95,7 @@
 
 /obj/item/weldingtool/proc/explode()
 	var/turf/T = get_turf(loc)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/plasmaAmount = reagents.get_reagent_amount("plasma")
 	dyn_explosion(T, plasmaAmount/5)//20 plasma in a standard welder has a 4 power explosion. no breaches, but enough to kill/dismember holder
 	qdel(src)
@@ -306,6 +307,7 @@
 
 /obj/item/weldingtool/abductor/process()
 	if(get_fuel() <= max_fuel)
+		GET_COMPONENT(reagents, /datum/component/reagents)
 		reagents.add_reagent("welding_fuel", 1)
 	..()
 
@@ -338,10 +340,10 @@
 	icon_state = "brasswelder"
 	item_state = "brasswelder"
 
-
 /obj/item/weldingtool/experimental/process()
 	..()
 	if(get_fuel() < max_fuel && nextrefueltick < world.time)
+		GET_COMPONENT(reagents, /datum/component/reagents)
 		nextrefueltick = world.time + 10
 		reagents.add_reagent("welding_fuel", 1)
 

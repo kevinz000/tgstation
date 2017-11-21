@@ -115,8 +115,9 @@
 
 	var/beakerContents[0]
 	var/beakerCurrentVolume = 0
-	if(beaker && beaker.reagents && beaker.reagents.reagent_list.len)
-		for(var/datum/reagent/R in beaker.reagents.reagent_list)
+	GET_COMPONENT_FROM(beakerreagents, /datum/component/reagents, beaker)
+	if(beaker && beakerreagents && beakerreagents.reagent_list.len)
+		for(var/datum/reagent/R in beakerreagents.reagent_list)
 			beakerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
 			beakerCurrentVolume += R.volume
 	data["beakerContents"] = beakerContents
@@ -147,6 +148,7 @@
 /obj/machinery/chem_dispenser/ui_act(action, params)
 	if(..())
 		return
+	GET_COMPONENT_FROM(beakerreagents, /datum/component/reagents, beaker)
 	switch(action)
 		if("amount")
 			var/target = text2num(params["target"])
@@ -156,7 +158,7 @@
 		if("dispense")
 			var/reagent = params["reagent"]
 			if(beaker && dispensable_reagents.Find(reagent))
-				var/datum/reagents/R = beaker.reagents
+				var/datum/reagents/R = beakerreagents
 				var/free = R.maximum_volume - R.total_volume
 				var/actual = min(amount, (cell.charge * powerefficiency)*10, free)
 
@@ -166,7 +168,7 @@
 		if("remove")
 			var/amount = text2num(params["amount"])
 			if(beaker && amount in beaker.possible_transfer_amounts)
-				beaker.reagents.remove_all(amount)
+				beakerreagents.remove_all(amount)
 				. = TRUE
 		if("eject")
 			if(beaker)
@@ -205,17 +207,18 @@
 	return cell
 
 /obj/machinery/chem_dispenser/emp_act(severity)
-	var/list/datum/reagents/R = list()
+	var/list/datum/component/reagents/R = list()
 	var/total = min(rand(7,15), Floor(cell.charge*powerefficiency))
-	var/datum/reagents/Q = new(total*10)
-	if(beaker && beaker.reagents)
-		R += beaker.reagents
+	var/datum/componnent/reagents/Q = new(total*10, null, TRUE)
+	GET_COMPONENT_FROM(beakerreagents, /datum/component/reagents, beaker)
+	if(beaker && beakerreagents)
+		R += beakerreagents
 	for(var/i in 1 to total)
 		Q.add_reagent(pick(dispensable_reagents), 10)
 	R += Q
 	chem_splash(get_turf(src), 3, R)
-	if(beaker && beaker.reagents)
-		beaker.reagents.remove_all()
+	if(beaker && beakerreagents)
+		beakerreagentsremove_all()
 	cell.use(total/powerefficiency)
 	cell.emp_act()
 	visible_message("<span class='danger'>[src] malfunctions, spraying chemicals everywhere!</span>")

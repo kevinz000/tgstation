@@ -18,4 +18,4 @@
 /obj/item/clothing/suit/space/space_ninja/proc/ninjaboost_after()
 	GET_COMPONENT_FROM(reagents, /datum/component/reagents, affecting)
 	reagents.add_reagent("radium", a_transfer)
-	to_chat(affected, "<span class='danger'>You are beginning to feel the after-effect of the injection.</span>")
+	to_chat(affecting, "<span class='danger'>You are beginning to feel the after-effect of the injection.</span>")

@@ -185,9 +185,10 @@
 			mob_occupant.Sleeping((mob_occupant.bodytemperature * sleep_factor) * 2000)
 			mob_occupant.Unconscious((mob_occupant.bodytemperature * unconscious_factor) * 2000)
 		if(beaker)
+			GET_COMPONENT_FROM(beakerreagents, /datum/component/reagents, beaker)
 			if(reagent_transfer == 0) // Magically transfer reagents. Because cryo magic.
-				beaker.reagents.trans_to(occupant, 1, efficiency * 0.25) // Transfer reagents.
-				beaker.reagents.reaction(occupant, VAPOR)
+				beakerreagents.trans_to(occupant, 1, efficiency * 0.25) // Transfer reagents.
+				beakerreagents.reaction(occupant, VAPOR)
 				air1.gases[/datum/gas/oxygen][MOLES] -= 2 / efficiency //Let's use gas for this
 			if(++reagent_transfer >= 10 * efficiency) // Throttle reagent transfer (higher efficiency will transfer the same amount but consume less from the beaker).
 				reagent_transfer = 0
@@ -357,8 +358,9 @@
 
 	data["isBeakerLoaded"] = beaker ? TRUE : FALSE
 	var/beakerContents = list()
-	if(beaker && beaker.reagents && beaker.reagents.reagent_list.len)
-		for(var/datum/reagent/R in beaker.reagents.reagent_list)
+	GET_COMPONENT_FROM(beakerreagents, /datum/component/reagents, beaker)
+	if(beaker && beakerreagents && beakerreagents.reagent_list.len)
+		for(var/datum/reagent/R in beakerreagents.reagent_list)
 			beakerContents += list(list("name" = R.name, "volume" = R.volume))
 	data["beakerContents"] = beakerContents
 	return data

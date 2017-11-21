@@ -116,7 +116,8 @@
 /mob/living/simple_animal/hostile/asteroid/gutlunch/guthen/make_babies()
 	. = ..()
 	if(.)
-		udder.reagents.clear_reagents()
+		GET_COMPONENT_FROM(UR, /datum/component/reagents, udder)
+		UR.clear_reagents()
 		regenerate_icons()
 
 //Gutlunch udder
@@ -125,10 +126,10 @@
 
 /obj/item/udder/gutlunch/Initialize()
 	. = ..()
-	reagents = new(50)
-	reagents.my_atom = src
+	create_reagents(50)
 
 /obj/item/udder/gutlunch/generateMilk()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(prob(60))
 		reagents.add_reagent("cream", rand(2, 5))
 	if(prob(45))

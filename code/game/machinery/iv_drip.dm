@@ -42,10 +42,11 @@
 			add_overlay("beakeractive")
 		else
 			add_overlay("beakeridle")
-		if(beaker.reagents.total_volume)
+		GET_COMPONENT_FROM(BR, /datum/component/reagents, beaker)
+		if(BR.total_volume)
 			var/mutable_appearance/filling_overlay = mutable_appearance('icons/obj/iv_drip.dmi', "reagent")
 
-			var/percent = round((beaker.reagents.total_volume / beaker.volume) * 100)
+			var/percent = round((BR.total_volume / beaker.volume) * 100)
 			switch(percent)
 				if(0 to 9)
 					filling_overlay.icon_state = "reagent0"
@@ -62,7 +63,7 @@
 				if(91 to INFINITY)
 					filling_overlay.icon_state = "reagent100"
 
-			filling_overlay.color = list("#0000", "#0000", "#0000", "#000f", mix_color_from_reagents(beaker.reagents.reagent_list))
+			filling_overlay.color = list("#0000", "#0000", "#0000", "#000f", mix_color_from_reagents(BR.reagent_list))
 			add_overlay(filling_overlay)
 
 /obj/machinery/iv_drip/MouseDrop(mob/living/target)
@@ -121,20 +122,21 @@
 
 	if(beaker)
 		// Give blood
+		GET_COMPONENT_FROM(BR, /datum/component/reagents, beaker)
 		if(mode)
 			if(beaker.reagents.total_volume)
 				var/transfer_amount = 5
 				if(istype(beaker, /obj/item/reagent_containers/blood))
 					// speed up transfer on blood packs
 					transfer_amount = 10
-				var/fraction = min(transfer_amount/beaker.reagents.total_volume, 1) //the fraction that is transfered of the total volume
-				beaker.reagents.reaction(attached, INJECT, fraction, FALSE) //make reagents reacts, but don't spam messages
-				beaker.reagents.trans_to(attached, transfer_amount)
+				var/fraction = min(transfer_amount/BR.total_volume, 1) //the fraction that is transfered of the total volume
+				BR.reaction(attached, INJECT, fraction, FALSE) //make reagents reacts, but don't spam messages
+				BR.trans_to(attached, transfer_amount)
 				update_icon()
 
 		// Take blood
 		else
-			var/amount = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+			var/amount = BR.maximum_volume - BR.total_volume
 			amount = min(amount, 4)
 			// If the beaker is full, ping
 			if(!amount)
@@ -203,8 +205,9 @@
 	to_chat(user, "The IV drip is [mode ? "injecting" : "taking blood"].")
 
 	if(beaker)
-		if(beaker.reagents && beaker.reagents.reagent_list.len)
-			to_chat(user, "<span class='notice'>Attached is \a [beaker] with [beaker.reagents.total_volume] units of liquid.</span>")
+		GET_COMPONENT_FROM(BR, /datum/component/reagents, beaker)
+		if(BR && BR.reagent_list.len)
+			to_chat(user, "<span class='notice'>Attached is \a [beaker] with [BR.total_volume] units of liquid.</span>")
 		else
 			to_chat(user, "<span class='notice'>Attached is an empty [beaker.name].</span>")
 	else

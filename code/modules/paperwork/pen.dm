@@ -175,14 +175,16 @@
 		return
 
 	if(..())
+		GET_COMPONENT(reagents, /datum/component/reagents)
 		if(reagents.total_volume)
-			if(M.reagents)
+			GET_COMPONENT_FROM(MR, /datum/component/reagents, M)
+			if(MR)
 				reagents.trans_to(M, reagents.total_volume)
 
 
 /obj/item/pen/sleepy/Initialize()
 	. = ..()
-	create_reagents(45)
+	var/datum/component/reagents/reagents = create_reagents(45)
 	reagents.add_reagent("chloralhydrate2", 20)
 	reagents.add_reagent("mutetoxin", 15)
 	reagents.add_reagent("tirizene", 10)

@@ -193,7 +193,8 @@
 	if(!R || !patient || !SG || !(SG in chassis.equipment))
 		return 0
 	var/to_inject = min(R.volume, inject_amount)
-	if(to_inject && patient.reagents.get_reagent_amount(R.id) + to_inject <= inject_amount*2)
+	GET_COMPONENT_FROM(PR, /datum/component/reagents, patient)
+	if(to_inject && PR.get_reagent_amount(R.id) + to_inject <= inject_amount*2)
 		occupant_message("Injecting [patient] with [to_inject] units of [R.name].")
 		log_message("Injecting [patient] with [to_inject] units of [R.name].")
 		add_logs(chassis.occupant, patient, "injected", "[name] ([R] - [to_inject] units)")

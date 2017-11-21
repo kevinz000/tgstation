@@ -306,7 +306,7 @@
 	name = "udder"
 
 /obj/item/udder/Initialize()
-	create_reagents(50)
+	var/datum/component/reagents/reagents = create_reagents(50)
 	reagents.add_reagent("milk", 20)
 	. = ..()
 
@@ -316,6 +316,7 @@
 
 /obj/item/udder/proc/milkAnimal(obj/O, mob/user)
 	var/obj/item/reagent_containers/glass/G = O
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(G.reagents.total_volume >= G.volume)
 		to_chat(user, "<span class='danger'>[O] is full.</span>")
 		return

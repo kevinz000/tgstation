@@ -131,6 +131,7 @@
 			if(L) //living mob
 				if(!L.can_inject(user, TRUE))
 					return
+				GET_COMPONENT_FROM(LR, /datum/component/reagents, L)
 				if(L != user)
 					L.visible_message("<span class='danger'>[user] is trying to inject [L]!</span>", \
 											"<span class='userdanger'>[user] is trying to inject [L]!</span>")
@@ -138,7 +139,7 @@
 						return
 					if(!reagents.total_volume)
 						return
-					if(L.reagents.total_volume >= L.reagents.maximum_volume)
+					if(LR.total_volume >= LR.maximum_volume)
 						return
 					L.visible_message("<span class='danger'>[user] injects [L] with the syringe!", \
 									"<span class='userdanger'>[user] injects [L] with the syringe!</span>")

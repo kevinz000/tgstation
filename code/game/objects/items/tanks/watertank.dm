@@ -229,21 +229,21 @@
 	var/nozzle_mode = 0
 	var/metal_synthesis_cooldown = 0
 	var/resin_cooldown = 0
+	var/datum/component/reagents/reagents
 
-/obj/item/extinguisher/mini/nozzle/New(parent_tank)
-	..()
+/obj/item/extinguisher/mini/nozzle/Initialize(mapload, parent_tank)
+	. = ..()
 	if(check_tank_exists(parent_tank, src))
+		GET_COMPONENT_FROM(PR, /datum/component/reagents, parent_tank)
 		tank = parent_tank
-		reagents = tank.reagents
+		reagents = PR
 		max_water = tank.volume
-		loc = tank
-
+		forceMove(tank)
 
 /obj/item/extinguisher/mini/nozzle/Move()
 	..()
 	if(loc != tank.loc)
-		loc = tank
-	return
+		forceMove(tank)
 
 /obj/item/extinguisher/mini/nozzle/attack_self(mob/user)
 	switch(nozzle_mode)
@@ -280,7 +280,6 @@
 	if(nozzle_mode == RESIN_LAUNCHER)
 		if(Adj)
 			return //Safety check so you don't blast yourself trying to refill your tank
-		GET_COMPONENT(reagents, /datum/component/reagents)
 		if(R.total_volume < 100)
 			to_chat(user, "<span class='warning'>You need at least 100 units of water to use the resin launcher!</span>")
 			return

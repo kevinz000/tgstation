@@ -56,6 +56,7 @@
 	popup.open()
 
 /obj/machinery/limbgrower/on_deconstruction()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	for(var/obj/item/reagent_containers/glass/G in component_parts)
 		reagents.trans_to(G, G.reagents.maximum_volume)
 	..()
@@ -103,6 +104,7 @@
 			var/synth_cost = being_built.reagents_list["synthflesh"]*prod_coeff
 			var/power = max(2000, synth_cost/5)
 
+			GET_COMPONENT(reagents, /datum/component/reagents)
 			if(reagents.has_reagent("synthflesh", being_built.reagents_list["synthflesh"]*prod_coeff))
 				busy = TRUE
 				use_power(power)
@@ -117,6 +119,7 @@
 	return
 
 /obj/machinery/limbgrower/proc/build_item()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(reagents.has_reagent("synthflesh", being_built.reagents_list["synthflesh"]*prod_coeff))	//sanity check, if this happens we are in big trouble
 		reagents.remove_reagent("synthflesh",being_built.reagents_list["synthflesh"]*prod_coeff)
 		var/buildpath = being_built.build_path
@@ -149,6 +152,7 @@
 	limb.update_icon_dropped()
 
 /obj/machinery/limbgrower/RefreshParts()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	reagents.maximum_volume = 0
 	for(var/obj/item/reagent_containers/glass/G in component_parts)
 		reagents.maximum_volume += G.volume
@@ -198,7 +202,7 @@
 	var/dat = "<A href='?src=[REF(src)];menu=[LIMBGROWER_MAIN_MENU]'>Return to main menu</A>"
 	dat += "<div class='statusDisplay'><h3>Browsing Chemical Storage:</h3><br>"
 	dat += materials_printout()
-
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	for(var/datum/reagent/R in reagents.reagent_list)
 		dat += "[R.name]: [R.volume]"
 		dat += "<A href='?src=[REF(src)];disposeI=[R.id]'>Purge</A><BR>"
@@ -207,10 +211,12 @@
 	return dat
 
 /obj/machinery/limbgrower/proc/materials_printout()
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	var/dat = "<b>Total amount:></b> [reagents.total_volume] / [reagents.maximum_volume] cm<sup>3</sup><br>"
 	return dat
 
 /obj/machinery/limbgrower/proc/can_build(datum/design/D)
+	GET_COMPONENT(reagents, /datum/component/reagents)
 	return (reagents.has_reagent("synthflesh", D.reagents_list["synthflesh"]*prod_coeff)) //Return whether the machine has enough synthflesh to produce the design
 
 /obj/machinery/limbgrower/proc/get_design_cost(datum/design/D)

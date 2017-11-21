@@ -74,8 +74,8 @@
 	interact(user)
 
 /obj/machinery/juicer/interact(mob/user) // The microwave Menu
-	var/is_chamber_empty = 0
-	var/is_beaker_ready = 0
+	var/is_chamber_empty = FALSE
+	var/is_beaker_ready = FALSE
 	var/processing_chamber = ""
 	var/beaker_contents = ""
 
@@ -86,16 +86,17 @@
 			processing_chamber+= "some <B>[O]</B><BR>"
 			break
 	if (!processing_chamber)
-		is_chamber_empty = 1
+		is_chamber_empty = TRUE
 		processing_chamber = "Nothing."
 	if (!beaker)
 		beaker_contents = "\The [src] has no container attached."
-	else if (!beaker.reagents.total_volume)
+	GET_COMPONENT_FROM(BR, /datum/component/reagents, beaker)
+	else if (!BR.total_volume)
 		beaker_contents = "\The [src] has an empty [beaker] attached."
-		is_beaker_ready = 1
-	else if (beaker.reagents.total_volume < beaker.reagents.maximum_volume)
+		is_beaker_ready = TRUE
+	else if (BR.total_volume < BR.maximum_volume)
 		beaker_contents = "\The [src] has a partially filled [beaker] attached."
-		is_beaker_ready = 1
+		is_beaker_ready = TRUE
 	else
 		beaker_contents = "\The [src] has a completly filled [beaker] attached!"
 
@@ -156,14 +157,15 @@
 	power_change() //it is a portable machine
 	if(stat & (NOPOWER|BROKEN))
 		return
-	if (!beaker || beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+	GET_COMPONENT_FROM(BR, /datum/component/reagents, beaker)
+	if (!beaker || BR.total_volume >= BR.maximum_volume)
 		return
 	playsound(src.loc, 'sound/machines/juicer.ogg', 50, 1)
 	for (var/obj/item/reagent_containers/food/snacks/O in src.contents)
 		var/r_id = get_juice_id(O)
-		beaker.reagents.add_reagent(r_id,get_juice_amount(O))
+		BR.add_reagent(r_id,get_juice_amount(O))
 		qdel(O)
-		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+		if(BR.total_volume >= BR.maximum_volume)
 			break
 
 /obj/structure/closet/crate/juice/PopulateContents()

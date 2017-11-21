@@ -456,11 +456,12 @@
 /obj/machinery/clonepod/proc/check_brine()
 	// Clones are in a pickled bath of mild chemicals, keeping
 	// them alive, despite their lack of internal organs
+	GET_COMPONENT_FROM(occupant_reagents, /datum/component/reagents, occupant)
 	for(var/bt in brine_types)
-		if(bt == "corazone" && occupant.reagents.get_reagent_amount(bt) < 2)
-			occupant.reagents.add_reagent(bt, 2)//pump it full of extra corazone as a safety, you can't OD on corazone.
-		else if(occupant.reagents.get_reagent_amount(bt) < 1)
-			occupant.reagents.add_reagent(bt, 1)
+		if(bt == "corazone" && occupant_reagents.get_reagent_amount(bt) < 2)
+			occupant_reagents.add_reagent(bt, 2)//pump it full of extra corazone as a safety, you can't OD on corazone.
+		else if(occupant_reagents.get_reagent_amount(bt) < 1)
+			occupant_reagents.add_reagent(bt, 1)
 
 /*
  *	Manual -- A big ol' manual.

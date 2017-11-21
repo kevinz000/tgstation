@@ -25,9 +25,10 @@
 
 /obj/item/reagent_containers/glass/rag/afterattack(atom/A as obj|turf|area, mob/user,proximity)
 	GET_COMPONENT(reagents, /datum/component/reagents)
+	GET_COMPONENT_FROM(AR, /datum/component/reagents, A)
 	if(!proximity)
 		return
-	if(iscarbon(A) && A.reagents && reagents.total_volume)
+	if(iscarbon(A) && AR && reagents.total_volume)
 		var/mob/living/carbon/C = A
 		var/reagentlist = pretty_string_from_reagent_list(reagents)
 		if(user.a_intent == INTENT_HARM && !C.is_mouth_covered())
