@@ -339,7 +339,7 @@
 
 /obj/item/organ/lungs/prepare_eat()
 	var/obj/S = ..()
-	S.reagents.add_reagent("salbutamol", 5)
+	Sreagents.add_reagent("salbutamol", 5)
 	return S
 
 /obj/item/organ/lungs/plasmaman

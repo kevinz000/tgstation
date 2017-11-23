@@ -296,13 +296,14 @@
 
 
 /datum/effect_system/smoke_spread/chem/start()
-	var/mixcolor = mix_color_from_reagents(chemholder.reagents.reagent_list)
+	GET_COMPONENT_FROM(chemholderreagents, /datum/component/reagents, chemholder)
+	var/mixcolor = mix_color_from_reagents(chemholderreagents.reagent_list)
 	if(holder)
 		location = get_turf(holder)
 	var/obj/effect/particle_effect/smoke/chem/S = new effect_type(location)
 
-	if(chemholder.reagents.total_volume > 1) // can't split 1 very well
-		chemholder.reagents.copy_to(S, chemholder.reagents.total_volume)
+	if(chemholderreagents.total_volume > 1) // can't split 1 very well
+		chemholderreagents.copy_to(S, chemholderreagents.total_volume)
 
 	if(mixcolor)
 		S.add_atom_colour(mixcolor, FIXED_COLOUR_PRIORITY) // give the smoke color, if it has any to begin with

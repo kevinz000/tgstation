@@ -156,7 +156,8 @@ Bonus
 	M.adjust_fire_stacks(get_stacks)
 	M.adjustFireLoss(get_stacks/2)
 	if(chems)
-		M.reagents.add_reagent("clf3", 2 * power)
+		GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+		Mreagents.add_reagent("clf3", 2 * power)
 	return 1
 
 /datum/symptom/alkali/proc/Alkali_fire_stage_5(mob/living/M, datum/disease/advance/A)
@@ -164,5 +165,6 @@ Bonus
 	M.adjust_fire_stacks(get_stacks)
 	M.adjustFireLoss(get_stacks)
 	if(chems)
-		M.reagents.add_reagent_list(list("napalm" = 4 * power, "clf3" = 4 * power))
+		GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+		Mreagents.add_reagent_list(list("napalm" = 4 * power, "clf3" = 4 * power))
 	return 1

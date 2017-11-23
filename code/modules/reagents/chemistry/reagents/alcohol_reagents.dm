@@ -519,7 +519,8 @@ All effects don't start immediately, but rather get worse over time; the rate is
 
 /datum/reagent/consumable/ethanol/tequila_sunrise/on_mob_life(mob/living/M)
 	if(QDELETED(light_holder))
-		M.reagents.del_reagent("tequilasunrise") //If we lost our light object somehow, remove the reagent
+		GET_COMPONENT_FROM(reagents, /datum/component/reagents, M)
+		Mreagents.del_reagent("tequilasunrise") //If we lost our light object somehow, remove the reagent
 	else if(light_holder.loc != M)
 		light_holder.forceMove(M)
 	return ..()

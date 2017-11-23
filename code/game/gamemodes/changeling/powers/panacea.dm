@@ -25,10 +25,10 @@
 			C.vomit(0, toxic = TRUE)
 		O.forceMove(get_turf(user))
 
-	user.reagents.add_reagent("mutadone", 10)
-	user.reagents.add_reagent("pen_acid", 20)
-	user.reagents.add_reagent("antihol", 10)
-	user.reagents.add_reagent("mannitol", 25)
+	userreagents.add_reagent("mutadone", 10)
+	userreagents.add_reagent("pen_acid", 20)
+	userreagents.add_reagent("antihol", 10)
+	userreagents.add_reagent("mannitol", 25)
 
 	for(var/thing in user.viruses)
 		var/datum/disease/D = thing

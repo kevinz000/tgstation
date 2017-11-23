@@ -283,7 +283,7 @@
 /datum/species/golem/wood/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "plantbgone")
 		H.adjustToxLoss(3)
-		H.reagents.remove_reagent(chem.id, REAGENTS_METABOLISM)
+		Hreagents.remove_reagent(chem.id, REAGENTS_METABOLISM)
 		return 1
 
 //Radioactive
@@ -587,13 +587,14 @@
 
 /datum/species/golem/runic/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "holywater")
+		GET_COMPONENT_FROM(Hreagents, /datum/component/reagents, H)
 		H.adjustFireLoss(4)
-		H.reagents.remove_reagent(chem.id, REAGENTS_METABOLISM)
+		Hreagents.remove_reagent(chem.id, REAGENTS_METABOLISM)
 
 	if(chem.id == "unholywater")
 		H.adjustBruteLoss(-4)
 		H.adjustFireLoss(-4)
-		H.reagents.remove_reagent(chem.id, REAGENTS_METABOLISM)
+		Hreagents.remove_reagent(chem.id, REAGENTS_METABOLISM)
 
 
 /datum/species/golem/clockwork

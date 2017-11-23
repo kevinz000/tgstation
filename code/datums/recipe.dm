@@ -78,21 +78,23 @@
 /datum/recipe/proc/make(obj/container)
 	var/obj/result_obj = new result(container)
 	for (var/obj/O in (container.contents-result_obj))
-		O.reagents.trans_to(result_obj, O.reagents.total_volume)
+		GET_COMPONENT_FROM(Oreagents, /datum/component/reagents, O)
+		Oreagents.trans_to(result_obj, Oreagents.total_volume)
 		qdel(O)
-	container.reagents.clear_reagents()
+	containerreagents.clear_reagents()
 	return result_obj
 
 // food-related
 /datum/recipe/proc/make_food(obj/container)
 	var/obj/result_obj = new result(container)
-	for (var/obj/O in (container.contents-result_obj))
-		if (O.reagents)
-			O.reagents.del_reagent("nutriment")
-			O.reagents.update_total()
-			O.reagents.trans_to(result_obj, O.reagents.total_volume)
+	for(var/obj/O in (container.contents-result_obj))
+		GET_COMPONENT_FROM(Oreagents, /datum/component/reagents, O)
+		if(Oreagents)
+			Oreagents.del_reagent("nutriment")
+			Oreagents.update_total()
+			Oreagents.trans_to(result_obj, Oreagents.total_volume)
 		qdel(O)
-	container.reagents.clear_reagents()
+	containerreagents.clear_reagents()
 	return result_obj
 
 /proc/select_recipe(list/datum/recipe/avaiable_recipes, obj/obj, exact = 1 as num)
@@ -100,7 +102,7 @@
 		exact = -1
 	var/list/datum/recipe/possible_recipes = new
 	for (var/datum/recipe/recipe in avaiable_recipes)
-		if (recipe.check_reagents(obj.reagents)==exact && recipe.check_items(obj)==exact)
+		if (recipe.check_reagents(objreagents)==exact && recipe.check_items(obj)==exact)
 			possible_recipes+=recipe
 	if (possible_recipes.len==0)
 		return null
@@ -112,7 +114,7 @@
 		. = possible_recipes[1]
 		for (var/datum/recipe/recipe in possible_recipes)
 			var/N_i = (recipe.items)?(recipe.items.len):0
-			var/N_r = (recipe.reagents_list)?(recipe.reagents_list.len):0
+			var/N_r = (recipereagents_list)?(recipereagents_list.len):0
 			if (N_i > i_count || (N_i== i_count && N_r > r_count ))
 				r_count = N_r
 				i_count = N_i

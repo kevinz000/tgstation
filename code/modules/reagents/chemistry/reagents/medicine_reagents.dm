@@ -36,7 +36,8 @@
 	taste_description = "badmins"
 
 /datum/reagent/medicine/adminordrazine/on_mob_life(mob/living/carbon/M)
-	M.reagents.remove_all_type(/datum/reagent/toxin, 5*REM, 0, 1)
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+	Mreagents.remove_all_type(/datum/reagent/toxin, 5*REM, 0, 1)
 	M.setCloneLoss(0, 0)
 	M.setOxyLoss(0, 0)
 	M.radiation = 0
@@ -373,9 +374,10 @@
 /datum/reagent/medicine/charcoal/on_mob_life(mob/living/M)
 	M.adjustToxLoss(-2*REM, 0)
 	. = 1
-	for(var/datum/reagent/R in M.reagents.reagent_list)
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+	for(var/datum/reagent/R in Mreagents.reagent_list)
 		if(R != src)
-			M.reagents.remove_reagent(R.id,1)
+			Mreagents.remove_reagent(R.id,1)
 	..()
 
 /datum/reagent/medicine/omnizine
@@ -413,9 +415,10 @@
 	taste_description = "acid"
 
 /datum/reagent/medicine/calomel/on_mob_life(mob/living/M)
-	for(var/datum/reagent/R in M.reagents.reagent_list)
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+	for(var/datum/reagent/R in Mreagents.reagent_list)
 		if(R != src)
-			M.reagents.remove_reagent(R.id,2.5)
+			Mreagents.remove_reagent(R.id,2.5)
 	if(M.health > 20)
 		M.adjustToxLoss(2.5*REM, 0)
 		. = 1
@@ -443,11 +446,12 @@
 	metabolization_rate = 0.5 * REAGENTS_METABOLISM
 
 /datum/reagent/medicine/pen_acid/on_mob_life(mob/living/M)
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
 	M.radiation -= max(M.radiation-RAD_MOB_SAFE, 0)/50
 	M.adjustToxLoss(-2*REM, 0)
-	for(var/datum/reagent/R in M.reagents.reagent_list)
+	for(var/datum/reagent/R in Mreagents.reagent_list)
 		if(R != src)
-			M.reagents.remove_reagent(R.id,2)
+			Mreagents.remove_reagent(R.id,2)
 	..()
 	. = 1
 
@@ -573,7 +577,8 @@
 	if(prob(10))
 		M.drowsyness += 1
 	M.jitteriness -= 1
-	M.reagents.remove_reagent("histamine",3)
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+	Mreagents.remove_reagent("histamine",3)
 	..()
 
 /datum/reagent/medicine/morphine
@@ -802,11 +807,12 @@
 	taste_description = "raw egg"
 
 /datum/reagent/medicine/antihol/on_mob_life(mob/living/M)
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
 	M.dizziness = 0
 	M.drowsyness = 0
 	M.slurring = 0
 	M.confused = 0
-	M.reagents.remove_all_type(/datum/reagent/consumable/ethanol, 3*REM, 0, 1)
+	Mreagents.remove_all_type(/datum/reagent/consumable/ethanol, 3*REM, 0, 1)
 	M.adjustToxLoss(-0.2*REM, 0)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
@@ -855,7 +861,8 @@
 /datum/reagent/medicine/insulin/on_mob_life(mob/living/M)
 	if(M.AdjustSleeping(-20, FALSE))
 		. = 1
-	M.reagents.remove_reagent("sugar", 3)
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+	Mreagents.remove_reagent("sugar", 3)
 	..()
 
 //Trek Chems, used primarily by medibots. Only heals a specific damage type, but is very efficient.
@@ -924,8 +931,9 @@
 
 /datum/reagent/medicine/antitoxin/on_mob_life(mob/living/M)
 	M.adjustToxLoss(-2*REM, 0)
-	for(var/datum/reagent/toxin/R in M.reagents.reagent_list)
-		M.reagents.remove_reagent(R.id,1)
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+	for(var/datum/reagent/toxin/R in Mreagents.reagent_list)
+		Mreagents.remove_reagent(R.id,1)
 	..()
 	. = 1
 
@@ -1024,8 +1032,9 @@
 	metabolization_rate = 0.4 * REAGENTS_METABOLISM
 
 /datum/reagent/medicine/haloperidol/on_mob_life(mob/living/M)
-	for(var/datum/reagent/drug/R in M.reagents.reagent_list)
-		M.reagents.remove_reagent(R.id,5)
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+	for(var/datum/reagent/drug/R in Mreagents.reagent_list)
+		Mreagents.remove_reagent(R.id,5)
 	M.drowsyness += 2
 	if(M.jitteriness >= 3)
 		M.jitteriness -= 3

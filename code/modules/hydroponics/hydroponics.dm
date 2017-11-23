@@ -685,7 +685,7 @@
 				to_chat(user, "<span class='warning'>You can't get any extract out of this plant.</span>"		)
 				return
 
-		if(!reagent_source.reagents.total_volume)
+		if(!reagent_sourcereagents.total_volume)
 			to_chat(user, "<span class='notice'>[reagent_source] is empty.</span>")
 			return 1
 
@@ -697,13 +697,13 @@
 
 		if(istype(reagent_source, /obj/item/reagent_containers/food/snacks) || istype(reagent_source, /obj/item/reagent_containers/pill))
 			visi_msg="[user] composts [reagent_source], spreading it through [target]"
-			transfer_amount = reagent_source.reagents.total_volume
+			transfer_amount = reagent_sourcereagents.total_volume
 		else
 			transfer_amount = reagent_source.amount_per_transfer_from_this
 			if(istype(reagent_source, /obj/item/reagent_containers/syringe/))
 				var/obj/item/reagent_containers/syringe/syr = reagent_source
 				visi_msg="[user] injects [target] with [syr]"
-				if(syr.reagents.total_volume <= syr.amount_per_transfer_from_this)
+				if(syrreagents.total_volume <= syr.amount_per_transfer_from_this)
 					syr.mode = 0
 			else if(istype(reagent_source, /obj/item/reagent_containers/spray/))
 				visi_msg="[user] sprays [target] with [reagent_source]"
@@ -716,7 +716,7 @@
 			if(istype(reagent_source, /obj/item/reagent_containers/glass/))
 				playsound(loc, 'sound/effects/slosh.ogg', 25, 1)
 
-		if(irrigate && transfer_amount > 30 && reagent_source.reagents.total_volume >= 30 && using_irrigation)
+		if(irrigate && transfer_amount > 30 && reagent_sourcereagents.total_volume >= 30 && using_irrigation)
 			trays = FindConnected()
 			if (trays.len > 1)
 				visi_msg += ", setting off the irrigation system"
@@ -732,7 +732,7 @@
 			var/datum/component/reagents/S = new /datum/component/reagents(100, null, TRUE) //This is a strange way, but I don't know of a better one so I can't fix it at the moment...
 			S.parent = H
 
-			reagent_source.reagents.trans_to(S,split)
+			reagent_sourcereagents.trans_to(S,split)
 			if(istype(reagent_source, /obj/item/reagent_containers/food/snacks) || istype(reagent_source, /obj/item/reagent_containers/pill))
 				qdel(reagent_source)
 

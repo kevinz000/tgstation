@@ -58,7 +58,7 @@
 /obj/machinery/limbgrower/on_deconstruction()
 	GET_COMPONENT(reagents, /datum/component/reagents)
 	for(var/obj/item/reagent_containers/glass/G in component_parts)
-		reagents.trans_to(G, G.reagents.maximum_volume)
+		reagents.trans_to(G, Greagents.maximum_volume)
 	..()
 
 /obj/machinery/limbgrower/attackby(obj/item/O, mob/user, params)
@@ -101,11 +101,11 @@
 				return
 
 
-			var/synth_cost = being_built.reagents_list["synthflesh"]*prod_coeff
+			var/synth_cost = being_builtreagents_list["synthflesh"]*prod_coeff
 			var/power = max(2000, synth_cost/5)
 
 			GET_COMPONENT(reagents, /datum/component/reagents)
-			if(reagents.has_reagent("synthflesh", being_built.reagents_list["synthflesh"]*prod_coeff))
+			if(reagents.has_reagent("synthflesh", being_builtreagents_list["synthflesh"]*prod_coeff))
 				busy = TRUE
 				use_power(power)
 				flick("limbgrower_fill",src)
@@ -120,8 +120,8 @@
 
 /obj/machinery/limbgrower/proc/build_item()
 	GET_COMPONENT(reagents, /datum/component/reagents)
-	if(reagents.has_reagent("synthflesh", being_built.reagents_list["synthflesh"]*prod_coeff))	//sanity check, if this happens we are in big trouble
-		reagents.remove_reagent("synthflesh",being_built.reagents_list["synthflesh"]*prod_coeff)
+	if(reagents.has_reagent("synthflesh", being_builtreagents_list["synthflesh"]*prod_coeff))	//sanity check, if this happens we are in big trouble
+		reagents.remove_reagent("synthflesh",being_builtreagents_list["synthflesh"]*prod_coeff)
 		var/buildpath = being_built.build_path
 		if(ispath(buildpath, /obj/item/bodypart))	//This feels like spatgheti code, but i need to initilise a limb somehow
 			build_limb(buildpath)
@@ -156,7 +156,7 @@
 	reagents.maximum_volume = 0
 	for(var/obj/item/reagent_containers/glass/G in component_parts)
 		reagents.maximum_volume += G.volume
-		G.reagents.trans_to(src, G.reagents.total_volume)
+		Greagents.trans_to(src, Greagents.total_volume)
 	var/T=1.2
 	for(var/obj/item/stock_parts/manipulator/M in component_parts)
 		T -= M.rating*0.2
@@ -217,12 +217,12 @@
 
 /obj/machinery/limbgrower/proc/can_build(datum/design/D)
 	GET_COMPONENT(reagents, /datum/component/reagents)
-	return (reagents.has_reagent("synthflesh", D.reagents_list["synthflesh"]*prod_coeff)) //Return whether the machine has enough synthflesh to produce the design
+	return (reagents.has_reagent("synthflesh", Dreagents_list["synthflesh"]*prod_coeff)) //Return whether the machine has enough synthflesh to produce the design
 
 /obj/machinery/limbgrower/proc/get_design_cost(datum/design/D)
 	var/dat
-	if(D.reagents_list["synthflesh"])
-		dat += "[D.reagents_list["synthflesh"] * prod_coeff] Synthetic flesh "
+	if(Dreagents_list["synthflesh"])
+		dat += "[Dreagents_list["synthflesh"] * prod_coeff] Synthetic flesh "
 	return dat
 
 /obj/machinery/limbgrower/emag_act(mob/user)

@@ -25,7 +25,7 @@
 /obj/item/seeds/replicapod/attackby(obj/item/W, mob/user, params)
 	if(istype(W, /obj/item/reagent_containers/syringe))
 		if(!contains_sample)
-			for(var/datum/reagent/blood/bloodSample in W.reagents.reagent_list)
+			for(var/datum/reagent/blood/bloodSample in Wreagents.reagent_list)
 				if(bloodSample.data["mind"] && bloodSample.data["cloneable"] == 1)
 					mind = bloodSample.data["mind"]
 					ckey = bloodSample.data["ckey"]
@@ -34,7 +34,7 @@
 					blood_type = bloodSample.data["blood_type"]
 					features = bloodSample.data["features"]
 					factions = bloodSample.data["factions"]
-					W.reagents.clear_reagents()
+					Wreagents.clear_reagents()
 					to_chat(user, "<span class='notice'>You inject the contents of the syringe into the seeds.</span>")
 					contains_sample = 1
 				else

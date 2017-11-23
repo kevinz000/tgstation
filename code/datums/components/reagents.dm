@@ -407,21 +407,24 @@
 
 /datum/component/reagents/proc/check_ignoreslow(mob/M)
 	if(ismob(M))
-		if(M.reagents.has_reagent("morphine"))
+		GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+		if(Mreagents.has_reagent("morphine"))
 			return TRUE
 		else
 			M.status_flags &= ~IGNORESLOWDOWN
 
 /datum/component/reagents/proc/check_gofast(mob/M)
 	if(ismob(M))
-		if(M.reagents.has_reagent("unholywater")||M.reagents.has_reagent("nuka_cola")||M.reagents.has_reagent("stimulants")||M.reagents.has_reagent("ephedrine"))
+		GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+		if(Mreagents.has_reagent("unholywater")||Mreagents.has_reagent("nuka_cola")||Mreagents.has_reagent("stimulants")||Mreagents.has_reagent("ephedrine"))
 			return TRUE
 		else
 			M.status_flags &= ~GOTTAGOFAST
 
 /datum/component/reagents/proc/check_goreallyfast(mob/M)
 	if(ismob(M))
-		if(M.reagents.has_reagent("methamphetamine"))
+		GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+		if(Mreagents.has_reagent("methamphetamine"))
 			return TRUE
 		else
 			M.status_flags &= ~GOTTAGOREALLYFAST

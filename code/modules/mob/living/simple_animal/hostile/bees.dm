@@ -138,9 +138,10 @@
 		. = ..()
 		if(. && beegent && isliving(target))
 			var/mob/living/L = target
-			if(L.reagents)
+			GET_COMPONENT_FROM(Lreagents, /datum/component/reagents, L)
+			if(Lreagents)
 				beegent.reaction_mob(L, INJECT)
-				L.reagents.add_reagent(beegent.id, rand(1,5))
+				Lreagents.add_reagent(beegent.id, rand(1,5))
 
 
 /mob/living/simple_animal/hostile/poison/bees/proc/assign_reagent(datum/reagent/R)
@@ -225,7 +226,7 @@
 	if(. && beegent && isliving(target))
 		var/mob/living/L = target
 		beegent.reaction_mob(L, TOUCH)
-		L.reagents.add_reagent(beegent.id, rand(1,5))
+		Lreagents.add_reagent(beegent.id, rand(1,5))
 
 
 //PEASENT BEES
@@ -253,9 +254,9 @@
 /obj/item/queen_bee/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/reagent_containers/syringe))
 		var/obj/item/reagent_containers/syringe/S = I
-		if(S.reagents.has_reagent("royal_bee_jelly")) //checked twice, because I really don't want royal bee jelly to be duped
-			if(S.reagents.has_reagent("royal_bee_jelly",5))
-				S.reagents.remove_reagent("royal_bee_jelly", 5)
+		if(Sreagents.has_reagent("royal_bee_jelly")) //checked twice, because I really don't want royal bee jelly to be duped
+			if(Sreagents.has_reagent("royal_bee_jelly",5))
+				Sreagents.remove_reagent("royal_bee_jelly", 5)
 				var/obj/item/queen_bee/qb = new(user.drop_location())
 				qb.queen = new(qb)
 				if(queen && queen.beegent)
@@ -265,9 +266,9 @@
 			else
 				to_chat(user, "<span class='warning'>You don't have enough royal bee jelly to split a bee in two!</span>")
 		else
-			var/datum/reagent/R = GLOB.chemical_reagents_list[S.reagents.get_master_reagent_id()]
-			if(R && S.reagents.has_reagent(R.id, 5))
-				S.reagents.remove_reagent(R.id,5)
+			var/datum/reagent/R = GLOB.chemical_reagents_list[Sreagents.get_master_reagent_id()]
+			if(R && Sreagents.has_reagent(R.id, 5))
+				Sreagents.remove_reagent(R.id,5)
 				queen.assign_reagent(R)
 				user.visible_message("<span class='warning'>[user] injects [src]'s genome with [R.name], mutating it's DNA!</span>","<span class='warning'>You inject [src]'s genome with [R.name], mutating it's DNA!</span>")
 				name = queen.name

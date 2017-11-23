@@ -360,18 +360,19 @@ GLOBAL_LIST_INIT(devil_suffix, list(" the Red", " the Soulless", " the Master", 
 		to_chat(owner.current, "<span class='userdanger'>Your hellish powers are too weak to resurrect yourself.</span>")
 
 /datum/antagonist/devil/proc/check_banishment(mob/living/body)
+	GET_COMPONENT_FROM(Hreagents, /datum/component/reagents, H)
 	switch(banish)
 		if(BANISH_WATER)
 			if(iscarbon(body))
 				var/mob/living/carbon/H = body
-				return H.reagents.has_reagent("holy water")
+				return Hreagents.has_reagent("holy water")
 			return 0
 		if(BANISH_COFFIN)
 			return (body && istype(body.loc, /obj/structure/closet/coffin))
 		if(BANISH_FORMALDYHIDE)
 			if(iscarbon(body))
 				var/mob/living/carbon/H = body
-				return H.reagents.has_reagent("formaldehyde")
+				return Hreagents.has_reagent("formaldehyde")
 			return 0
 		if(BANISH_RUNES)
 			if(body)

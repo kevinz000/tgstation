@@ -127,7 +127,7 @@
 		var/temp_material
 		var/c = 50
 		var/t
-		var/all_materials = D.materials + D.reagents_list
+		var/all_materials = D.materials + Dreagents_list
 		for(var/M in all_materials)
 			t = check_mat(D, M)
 			temp_material += " | "
@@ -163,7 +163,7 @@
 		var/temp_material
 		var/c = 50
 		var/t
-		var/all_materials = D.materials + D.reagents_list
+		var/all_materials = D.materials + Dreagents_list
 		for(var/M in all_materials)
 			t = check_mat(D, M)
 			temp_material += " | "

@@ -60,7 +60,7 @@
 
 	else if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
 
-		if(target.reagents && !target.reagents.total_volume)
+		if(targetreagents && !targetreagents.total_volume)
 			to_chat(user, "<span class='warning'>[target] is empty and can't be refilled!</span>")
 			return
 
@@ -68,15 +68,15 @@
 			to_chat(user, "<span class='notice'>[src] is full.</span>")
 			return
 
-		var/trans = target.reagents.trans_to(src, amount_per_transfer_from_this)
+		var/trans = targetreagents.trans_to(src, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You fill [src] with [trans] unit\s of the contents of [target].</span>")
 
-	else if(target.is_open_container() && target.reagents) //Something like a glass. Player probably wants to transfer TO it.
+	else if(target.is_open_container() && targetreagents) //Something like a glass. Player probably wants to transfer TO it.
 		if(!reagents.total_volume)
 			to_chat(user, "<span class='warning'>[src] is empty!</span>")
 			return
 
-		if(target.reagents.total_volume >= target.reagents.maximum_volume)
+		if(targetreagents.total_volume >= targetreagents.maximum_volume)
 			to_chat(user, "<span class='notice'>[target] is full.</span>")
 			return
 

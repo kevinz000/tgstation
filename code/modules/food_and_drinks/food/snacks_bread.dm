@@ -193,7 +193,7 @@
 	icon_state = fried.icon_state
 	desc = fried.desc
 	if(istype(fried, /obj/item/reagent_containers/food/snacks))
-		fried.reagents.trans_to(src, fried.reagents.total_volume)
+		friedreagents.trans_to(src, friedreagents.total_volume)
 		qdel(fried)
 	else
 		fried.forceMove(src)

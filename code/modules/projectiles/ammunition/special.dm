@@ -56,7 +56,7 @@
 
 		var/obj/item/reagent_containers/syringe/S = SG.syringes[1]
 
-		S.reagents.trans_to(BB, S.reagents.total_volume)
+		Sreagents.trans_to(BB, Sreagents.total_volume)
 		BB.name = S.name
 		var/obj/item/projectile/bullet/dart/D = BB
 		D.piercing = S.proj_piercing

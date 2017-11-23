@@ -994,7 +994,7 @@
 	if(!internalBeaker)
 		internalBeaker = new/obj/item/reagent_containers/glass/beaker/bluespace(src)
 		internalBeaker.name = "Grow-U-All Super Spray"
-
+	GET_COMPONENT_FROM(internalBeakerreagents, /datum/component/reagents, internalBeaker)
 	if(internalBeaker && internalBag)
 		var/obj/machinery/hydroponics/HP
 
@@ -1040,22 +1040,22 @@
 					var/change = 0
 					if(HP.weedlevel > 0)
 						change = 1
-						if(!internalBeaker.reagents.has_reagent("weedkiller", 10))
-							internalBeaker.reagents.add_reagent("weedkiller",10)
+						if(!internalBeakerreagents.has_reagent("weedkiller", 10))
+							internalBeakerreagents.add_reagent("weedkiller",10)
 					if(HP.pestlevel > 0)
 						change = 1
-						if(!internalBeaker.reagents.has_reagent("pestkiller", 10))
-							internalBeaker.reagents.add_reagent("pestkiller",10)
+						if(!internalBeakerreagents.has_reagent("pestkiller", 10))
+							internalBeakerreagents.add_reagent("pestkiller",10)
 					if(HP.nutrilevel <  HP.maxnutri)
 						change = 1
-						if(!internalBeaker.reagents.has_reagent("eznutriment", 15))
-							internalBeaker.reagents.add_reagent("eznutriment",15)
-						if(!internalBeaker.reagents.has_reagent("diethylamine", 15))
-							internalBeaker.reagents.add_reagent("diethylamine",15)
+						if(!internalBeakerreagents.has_reagent("eznutriment", 15))
+							internalBeakerreagents.add_reagent("eznutriment",15)
+						if(!internalBeakerreagents.has_reagent("diethylamine", 15))
+							internalBeakerreagents.add_reagent("diethylamine",15)
 					if(HP.waterlevel < HP.maxwater)
 						change = 1
-						if(!internalBeaker.reagents.has_reagent("holywater", 50))
-							internalBeaker.reagents.add_reagent("holywater",50)
+						if(!internalBeakerreagents.has_reagent("holywater", 50))
+							internalBeakerreagents.add_reagent("holywater",50)
 					if(change)
 						HP.attackby(internalBeaker,src)
 
@@ -1179,8 +1179,9 @@
 						npcDrop(A)
 						hasPranked = 1
 			if(!hasPranked)
-				if(S.reagents.total_volume <= 5)
-					S.reagents.add_reagent("water", 25)
+				GET_COMPONENT_FROM(Sreagents, /datum/component/reagents, S)
+				if(Sreagents.total_volume <= 5)
+					Sreagents.add_reagent("water", 25)
 				S.afterattack(get_turf(pick(orange(1,clownTarget))),src)
 
 
@@ -1215,10 +1216,11 @@
 					tryWalk(get_turf(C))
 	else if(shouldTryHeal == 2)
 		if(HPS)
-			if(HPS.reagents.total_volume <= 0)
-				HPS.reagents.add_reagent("tricordrazine",30)
+			GET_COMPONENT_FROM(HPSreagents, /datum/component/reagents, HPS)
+			if(HPSreagents.total_volume <= 0)
+				HPSreagents.add_reagent("tricordrazine",30)
 			for(var/mob/living/carbon/human/C in nearby)
-				if(C.health <= 75 && C.reagents.get_reagent_amount("tricordrazine") <= 0) // make sure they wont be overdosing
+				if(C.health <= 75 && Creagents.get_reagent_amount("tricordrazine") <= 0) // make sure they wont be overdosing
 					if(get_dist(src,C) <= 2)
 						src.say("Wait, [C], let me heal you!")
 						HPS.attack(C,src)
@@ -1239,8 +1241,8 @@
 		S = locate(/obj/item/reagent_containers/spray) in allContents
 
 	if(S)
-		if(S.reagents.total_volume <= 5)
-			S.reagents.add_reagent("cleaner", 25) // bluespess water delivery for AI
+		if(Sreagents.total_volume <= 5)
+			Sreagents.add_reagent("cleaner", 25) // bluespess water delivery for AI
 
 		var/obj/effect/decal/cleanable/TC
 		TC = locate(/obj/effect/decal/cleanable) in range(MAX_RANGE_FIND,src)
@@ -1322,7 +1324,7 @@
 			var/obj/item/reagent_containers/food/snacks/FC = foundCustom
 			for(var/obj/item/reagent_containers/food/snacks/toMake in allContents)
 				if(prob(smartness))
-					if(FC.reagents)
+					if(FCreagents)
 						FC.attackby(toMake,src)
 					else
 						qdel(FC) // this food is usless, toss it
@@ -1431,7 +1433,8 @@
 
 			var/obj/item/reagent_containers/food/snacks/newSnack = new chosenType(get_turf(src))
 			TARGET = newSnack
-			newSnack.reagents.remove_any((newSnack.reagents.total_volume/2)-1)
+			GET_COMPONENT_FROM(newSnackreagents, /datum/component/reagents, newSnack)
+			newSnackreagents.remove_any((newSnackreagents.total_volume/2)-1)
 			newSnack.name = "Synthetic [newSnack.name]"
 			customEmote("[src] [pick("gibbers","drools","slobbers","claps wildly","spits")] as they vomit [newSnack] from their mouth!")
 // END COOKING MODULE

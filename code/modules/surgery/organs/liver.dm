@@ -32,24 +32,24 @@
 				var/toxamount
 				var/static/list/listOfToxinsInThisBitch = typesof(/datum/reagent/toxin)
 				for(var/datum/reagent/toxin/toxin in listOfToxinsInThisBitch)
-					toxamount += C.reagents.get_reagent_amount(initial(toxin.id))
+					toxamount += Creagents.get_reagent_amount(initial(toxin.id))
 
 				if(toxamount <= toxTolerance && toxamount > 0)
 					for(var/datum/reagent/toxin/toxin in listOfToxinsInThisBitch)
-						C.reagents.remove_reagent(initial(toxin.id), 1)
+						Creagents.remove_reagent(initial(toxin.id), 1)
 				else if(toxamount > toxTolerance)
 					damage += toxamount*toxLethality
 
 
 			//metabolize reagents
-			C.reagents.metabolize(C, can_overdose=TRUE)
+			Creagents.metabolize(C, can_overdose=TRUE)
 
 			if(damage > 10 && prob(damage/3))//the higher the damage the higher the probability
 				to_chat(C, "<span class='notice'>You feel [pick("nauseous", "dull pain in your lower body", "confused")].</span>")
 
 /obj/item/organ/liver/prepare_eat()
 	var/obj/S = ..()
-	S.reagents.add_reagent("iron", 5)
+	Sreagents.add_reagent("iron", 5)
 	return S
 
 /obj/item/organ/liver/fly

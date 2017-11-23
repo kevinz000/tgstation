@@ -98,7 +98,7 @@
 		if (!open)
 			return
 		var/obj/item/reagent_containers/RG = I
-		RG.reagents.add_reagent("water", min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
+		RGreagents.add_reagent("water", min(RG.volume - RGreagents.total_volume, RG.amount_per_transfer_from_this))
 		to_chat(user, "<span class='notice'>You fill [RG] from [src]. Gross.</span>")
 	else
 		return ..()
@@ -484,8 +484,8 @@
 	if(istype(O, /obj/item/reagent_containers))
 		var/obj/item/reagent_containers/RG = O
 		if(RG.container_type & OPENCONTAINER_1)
-			if(!RG.reagents.holder_full())
-				RG.reagents.add_reagent("[dispensedreagent]", min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
+			if(!RGreagents.holder_full())
+				RGreagents.add_reagent("[dispensedreagent]", min(RG.volume - RGreagents.total_volume, RG.amount_per_transfer_from_this))
 				to_chat(user, "<span class='notice'>You fill [RG] from [src].</span>")
 				return TRUE
 			to_chat(user, "<span class='notice'>\The [RG] is full.</span>")
@@ -506,7 +506,7 @@
 				return
 
 	if(istype(O, /obj/item/mop))
-		O.reagents.add_reagent("[dispensedreagent]", 5)
+		Oreagents.add_reagent("[dispensedreagent]", 5)
 		to_chat(user, "<span class='notice'>You wet [O] in [src].</span>")
 		playsound(loc, 'sound/effects/slosh.ogg', 25, 1)
 		return

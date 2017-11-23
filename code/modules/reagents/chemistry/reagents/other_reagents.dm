@@ -28,7 +28,7 @@
 		var/mob/living/carbon/C = M
 		if(C.get_blood_id() == "blood" && (method == INJECT || (method == INGEST && C.dna && C.dna.species && (DRINKSBLOOD in C.dna.species.species_traits))))
 			if(!data || !(data["blood_type"] in get_safe_blood(C.dna.blood_type)))
-				C.reagents.add_reagent("toxin", reac_volume * 0.5)
+				Creagents.add_reagent("toxin", reac_volume * 0.5)
 			else
 				C.blood_volume = min(C.blood_volume + round(reac_volume, 0.1), BLOOD_VOLUME_MAXIMUM)
 
@@ -246,7 +246,8 @@
 
 /datum/reagent/fuel/unholywater/reaction_mob(mob/living/M, method=TOUCH, reac_volume)
 	if(method == TOUCH || method == VAPOR)
-		M.reagents.add_reagent("unholywater", (reac_volume/4))
+		GET_COMPONENT_FROM(reagents, /datum/component/reagents, M)
+		Mreagents.add_reagent("unholywater", (reac_volume/4))
 		return
 	return ..()
 
@@ -783,7 +784,7 @@
 			var/obj/effect/decal/cleanable/greenglow/GG = locate() in T.contents
 			if(!GG)
 				GG = new/obj/effect/decal/cleanable/greenglow(T)
-			GG.reagents.add_reagent("radium", reac_volume)
+			GGreagents.add_reagent("radium", reac_volume)
 
 /datum/reagent/space_cleaner/sterilizine
 	name = "Sterilizine"
@@ -822,7 +823,8 @@
 		return
 	if(M.has_bane(BANE_IRON)) //If the target is weak to cold iron, then poison them.
 		if(holder && holder.chem_temp < 100) // COLD iron.
-			M.reagents.add_reagent("toxin", reac_volume)
+			GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+			Mreagents.add_reagent("toxin", reac_volume)
 	..()
 
 /datum/reagent/gold
@@ -845,7 +847,8 @@
 	if(!isliving(M))
 		return
 	if(M.has_bane(BANE_SILVER))
-		M.reagents.add_reagent("toxin", reac_volume)
+		GET_COMPONENT_FROM(reagents, /datum/component/reagents, M)
+		Mreagents.add_reagent("toxin", reac_volume)
 	..()
 
 /datum/reagent/uranium
@@ -866,7 +869,7 @@
 			var/obj/effect/decal/cleanable/greenglow/GG = locate() in T.contents
 			if(!GG)
 				GG = new/obj/effect/decal/cleanable/greenglow(T)
-			GG.reagents.add_reagent("uranium", reac_volume)
+			GGreagents.add_reagent("uranium", reac_volume)
 
 /datum/reagent/bluespace
 	name = "Bluespace Dust"

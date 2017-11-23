@@ -505,17 +505,18 @@ GLOBAL_LIST_EMPTY(blood_splatter_icons)
 		// Make toxins vomit look different
 		if(toxvomit)
 			V.icon_state = "vomittox_[pick(1,4)]"
-		if(M.reagents)
+		GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+		if(Mreagents)
 			clear_reagents_to_vomit_pool(M,V)
 
 /atom/proc/clear_reagents_to_vomit_pool(mob/living/carbon/M, obj/effect/decal/cleanable/vomit/V)
-	M.reagents.trans_to(V, M.reagents.total_volume / 10)
-	for(var/datum/reagent/R in M.reagents.reagent_list)                //clears the stomach of anything that might be digested as food
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+	Mreagents.trans_to(V, Mreagents.total_volume / 10)
+	for(var/datum/reagent/R in Mreagents.reagent_list)                //clears the stomach of anything that might be digested as food
 		if(istype(R, /datum/reagent/consumable))
 			var/datum/reagent/consumable/nutri_check = R
 			if(nutri_check.nutriment_factor >0)
-				M.reagents.remove_reagent(R.id,R.volume)
-
+				Mreagents.remove_reagent(R.id,R.volume)
 
 //Hook for running code when a dir change occurs
 /atom/proc/setDir(newdir)

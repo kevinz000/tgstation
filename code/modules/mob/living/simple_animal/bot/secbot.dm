@@ -53,7 +53,7 @@
 	var/turf/Tsec = get_turf(src)
 	new /obj/item/stock_parts/cell/potato(Tsec)
 	var/obj/item/reagent_containers/food/drinks/drinkingglass/shotglass/S = new(Tsec)
-	S.reagents.add_reagent("whiskey", 15)
+	Sreagents.add_reagent("whiskey", 15)
 	S.on_reagent_change()
 	..()
 

@@ -199,8 +199,9 @@
 		foundfoam.amount += amount
 	else
 		var/obj/effect/particle_effect/foam/F = new effect_type(location)
-		var/foamcolor = mix_color_from_reagents(chemholder.reagents.reagent_list)
-		chemholder.reagents.copy_to(F, chemholder.reagents.total_volume/amount)
+		GET_COMPONENT_FROM(chemholderreagents, /datum/component/reagents, chemholder)
+		var/foamcolor = mix_color_from_reagents(chemholderreagents.reagent_list)
+		chemholderreagents.copy_to(F, chemholderreagents.total_volume/amount)
 		F.add_atom_colour(foamcolor, FIXED_COLOUR_PRIORITY)
 		F.amount = amount
 		F.metal = metal

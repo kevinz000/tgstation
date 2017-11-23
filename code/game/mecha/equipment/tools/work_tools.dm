@@ -140,7 +140,7 @@
 	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(istype(target, /obj/structure/reagent_dispensers/watertank) && get_dist(chassis,target) <= 1)
 		var/obj/structure/reagent_dispensers/watertank/WT = target
-		WT.reagents.trans_to(src, 1000)
+		WTreagents.trans_to(src, 1000)
 		occupant_message("<span class='notice'>Extinguisher refilled.</span>")
 		playsound(chassis, 'sound/effects/refill.ogg', 50, 1, -6)
 	else
@@ -159,7 +159,7 @@
 						return
 					var/turf/my_target = pick(the_targets)
 					var/datum/reagents/R = new/datum/reagents(5)
-					W.reagents = R
+					Wreagents = R
 					R.my_atom = W
 					reagents.trans_to(W,1)
 					for(var/b=0, b<4, b++)
@@ -169,16 +169,16 @@
 						if(!W)
 							return
 						var/turf/W_turf = get_turf(W)
-						W.reagents.reaction(W_turf)
+						Wreagents.reaction(W_turf)
 						for(var/atom/atm in W_turf)
-							W.reagents.reaction(atm)
+							Wreagents.reaction(atm)
 						if(W.loc == my_target)
 							break
 						sleep(2)
 		return 1
 
 /obj/item/mecha_parts/mecha_equipment/extinguisher/get_equip_info()
-	return "[..()] \[[src.reagents.total_volume]\]"
+	return "[..()] \[[srcreagents.total_volume]\]"
 
 /obj/item/mecha_parts/mecha_equipment/extinguisher/on_reagent_change()
 	return

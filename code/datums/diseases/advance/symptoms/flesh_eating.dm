@@ -123,8 +123,9 @@ Bonus
 /datum/symptom/flesh_death/proc/Flesh_death(mob/living/M, datum/disease/advance/A)
 	var/get_damage = rand(6,10)
 	M.adjustBruteLoss(get_damage)
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
 	if(chems)
-		M.reagents.add_reagent_list(list("heparin" = 2, "lipolicide" = 2))
+		Mreagents.add_reagent_list(list("heparin" = 2, "lipolicide" = 2))
 	if(zombie)
-		M.reagents.add_reagent("romerol", 1)
+		Mreagents.add_reagent("romerol", 1)
 	return 1

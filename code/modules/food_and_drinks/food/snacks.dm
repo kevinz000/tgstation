@@ -64,7 +64,7 @@
 			return FALSE
 
 		var/fullness = M.nutrition + 10
-		for(var/datum/reagent/consumable/C in M.reagents.reagent_list) //we add the nutrition value of what we're currently digesting
+		for(var/datum/reagent/consumable/C in Mreagents.reagent_list) //we add the nutrition value of what we're currently digesting
 			fullness += C.nutriment_factor * C.volume / C.metabolization_rate
 
 		if(M == user)								//If you're eating it yourself.
@@ -163,7 +163,7 @@
 	..()
 	reagents.clear_reagents()
 	for(var/obj/item/reagent_containers/RC in contents)
-		RC.reagents.trans_to(reagents, RC.reagents.maximum_volume)
+		RCreagents.trans_to(reagents, RCreagents.maximum_volume)
 	if(istype(R))
 		contents_loop:
 			for(var/A in contents)
@@ -257,9 +257,9 @@
 		for(var/r_id in S.bonus_reagents)
 			var/amount = S.bonus_reagents[r_id] * cooking_efficiency
 			if(r_id == "nutriment" || r_id == "vitamin")
-				S.reagents.add_reagent(r_id, amount, tastes)
+				Sreagents.add_reagent(r_id, amount, tastes)
 			else
-				S.reagents.add_reagent(r_id, amount)
+				Sreagents.add_reagent(r_id, amount)
 
 /obj/item/reagent_containers/food/snacks/microwave_act(obj/machinery/microwave/M)
 	if(cooked_type)

@@ -174,13 +174,13 @@ Borg Shaker
 	if(!proximity)
 		return
 
-	else if(target.is_open_container() && target.reagents)
+	else if(target.is_open_container() && targetreagents)
 		var/datum/component/reagents/R = reagent_list[mode]
 		if(!R.total_volume)
 			to_chat(user, "<span class='warning'>[src] is currently out of this ingredient! Please allow some time for the synthesizer to produce more.</span>")
 			return
 
-		if(target.reagents.total_volume >= target.reagents.maximum_volume)
+		if(targetreagents.total_volume >= targetreagents.maximum_volume)
 			to_chat(user, "<span class='notice'>[target] is full.</span>")
 			return
 

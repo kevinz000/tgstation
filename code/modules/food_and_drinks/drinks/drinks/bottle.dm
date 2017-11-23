@@ -364,7 +364,7 @@
 	var/obj/item/reagent_containers/food/drinks/bottle/B = locate() in contents
 	if(B)
 		icon_state = B.icon_state
-		B.reagents.copy_to(src,100)
+		Breagents.copy_to(src,100)
 		if(!B.isGlass)
 			desc += " You're not sure if making this out of a carton was the brightest idea."
 			isGlass = 0

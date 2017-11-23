@@ -185,7 +185,8 @@
 	var/counter
 	for(counter=0, counter<=powerlevel, counter++)
 		var/obj/item/reagent_containers/food/snacks/hugemushroomslice/S = new /obj/item/reagent_containers/food/snacks/hugemushroomslice(src.loc)
-		S.reagents.add_reagent("mushroomhallucinogen", powerlevel)
-		S.reagents.add_reagent("omnizine", powerlevel)
-		S.reagents.add_reagent("synaptizine", powerlevel)
+		GET_COMPONENT_FROM(Sreagents, /datum/component/reagents, S)
+		Sreagents.add_reagent("mushroomhallucinogen", powerlevel)
+		Sreagents.add_reagent("omnizine", powerlevel)
+		Sreagents.add_reagent("synaptizine", powerlevel)
 	qdel(src)

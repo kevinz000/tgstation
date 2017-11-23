@@ -30,7 +30,7 @@
 		return
 
 	if(istype(A, /obj/structure/reagent_dispensers) && get_dist(src,A) <= 1) //this block copypasted from reagent_containers/glass, for lack of a better solution
-		if(!AR.total_volume && A.reagents)
+		if(!AR.total_volume && Areagents)
 			to_chat(user, "<span class='notice'>\The [A] is empty.</span>")
 			return
 
@@ -76,7 +76,7 @@
 		puff_reagent_left = 1
 	else
 		reagents.trans_to(D, amount_per_transfer_from_this, 1/range)
-	D.color = mix_color_from_reagents(D.reagents.reagent_list)
+	D.color = mix_color_from_reagents(Dreagents.reagent_list)
 	var/wait_step = max(round(2+3/range), 2)
 	do_spray(A, wait_step, D, range, puff_reagent_left)
 
@@ -98,17 +98,17 @@
 				if(ismob(T))
 					var/mob/M = T
 					if(!M.lying || !range_left)
-						D.reagents.reaction(M, VAPOR)
+						Dreagents.reaction(M, VAPOR)
 						puff_reagent_left -= 1
 				else if(!range_left)
-					D.reagents.reaction(T, VAPOR)
+					Dreagents.reaction(T, VAPOR)
 			else
-				D.reagents.reaction(T, VAPOR)
+				Dreagents.reaction(T, VAPOR)
 				if(ismob(T))
 					puff_reagent_left -= 1
 
 		if(puff_reagent_left > 0 && (!stream_mode || !range_left))
-			D.reagents.reaction(get_turf(D), VAPOR)
+			Dreagents.reaction(get_turf(D), VAPOR)
 			puff_reagent_left -= 1
 
 		if(puff_reagent_left <= 0) // we used all the puff so we delete it.

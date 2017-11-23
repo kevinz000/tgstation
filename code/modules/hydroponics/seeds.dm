@@ -83,7 +83,7 @@
 	for(var/g in genes)
 		var/datum/plant_gene/G = g
 		S.genes += G.Copy()
-	S.reagents_add = reagents_add.Copy() // Faster than grabbing the list from genes.
+	Sreagents_add = reagents_add.Copy() // Faster than grabbing the list from genes.
 	return S
 
 /obj/item/seeds/proc/get_gene(typepath)

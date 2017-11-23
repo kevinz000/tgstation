@@ -32,7 +32,7 @@
 		BB.def_zone = user.zone_selected
 	BB.suppressed = quiet
 
-	if(reagents && BB.reagents)
+	if(reagents && BBreagents)
 		reagents.trans_to(BB, reagents.total_volume) //For chemical darts/bullets
 		qdel(reagents)
 

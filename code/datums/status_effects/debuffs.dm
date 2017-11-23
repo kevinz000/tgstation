@@ -246,8 +246,8 @@
 	alert_type = null
 
 /datum/status_effect/cultghost/tick()
-	if(owner.reagents)
-		owner.reagents.del_reagent("holywater") //can't be deconverted
+	if(ownerreagents)
+		ownerreagents.del_reagent("holywater") //can't be deconverted
 
 /datum/status_effect/crusher_mark
 	id = "crusher_mark"

@@ -277,16 +277,17 @@ MASS SPECTROMETER
 
 /proc/chemscan(mob/living/user, mob/living/M)
 	if(istype(M))
-		if(M.reagents)
-			if(M.reagents.reagent_list.len)
+		GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+		if(Mreagents)
+			if(Mreagents.reagent_list.len)
 				to_chat(user, "<span class='notice'>Subject contains the following reagents:</span>")
-				for(var/datum/reagent/R in M.reagents.reagent_list)
+				for(var/datum/reagent/R in Mreagents.reagent_list)
 					to_chat(user, "<span class='notice'>[R.volume] units of [R.name][R.overdosed == 1 ? "</span> - <span class='boldannounce'>OVERDOSING</span>" : ".</span>"]")
 			else
 				to_chat(user, "<span class='notice'>Subject contains no reagents.</span>")
-			if(M.reagents.addiction_list.len)
+			if(Mreagents.addiction_list.len)
 				to_chat(user, "<span class='boldannounce'>Subject is addicted to the following reagents:</span>")
-				for(var/datum/reagent/R in M.reagents.addiction_list)
+				for(var/datum/reagent/R in Mreagents.addiction_list)
 					to_chat(user, "<span class='danger'>[R.name]</span>")
 			else
 				to_chat(user, "<span class='notice'>Subject is not addicted to any reagents.</span>")

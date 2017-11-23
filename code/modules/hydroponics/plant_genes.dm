@@ -198,8 +198,8 @@
 		if(istype(G) && ispath(G.trash, /obj/item/grown))
 			return
 		var/stun_len = seed.potency * rate
-
-		if(!istype(G, /obj/item/grown/bananapeel) && (!G.reagents || !G.reagents.has_reagent("lube")))
+		GET_COMPONENT_FROM(Greagents, /datum/component/reagents, G)
+		if(!istype(G, /obj/item/grown/bananapeel) && (!Greagents || !Greagents.has_reagent("lube")))
 			stun_len /= 3
 
 		var/knockdown = min(stun_len, 140)
@@ -229,7 +229,8 @@
 			C.electrocute_act(round(power), G, 1, 1)
 
 /datum/plant_gene/trait/cell_charge/on_consume(obj/item/reagent_containers/food/snacks/grown/G, mob/living/carbon/target)
-	if(!G.reagents.total_volume)
+	GET_COMPONENT_FROM(Greagents, /datum/component/reagents, G)
+	if(!Greagents.total_volume)
 		var/batteries_recharged = 0
 		for(var/obj/item/stock_parts/cell/C in target.GetAllContents())
 			var/newcharge = min(G.seed.potency*0.01*C.maxcharge, C.maxcharge)
@@ -315,11 +316,13 @@
 
 /datum/plant_gene/trait/noreact/on_new(obj/item/reagent_containers/food/snacks/grown/G, newloc)
 	..()
-	G.reagents.set_reacting(FALSE)
+	GET_COMPONENT_FROM(Greagents, /datum/component/reagents, G)
+	Greagents.set_reacting(FALSE)
 
 /datum/plant_gene/trait/noreact/on_squash(obj/item/reagent_containers/food/snacks/grown/G, atom/target)
-	G.reagents.set_reacting(TRUE)
-	G.reagents.handle_reactions()
+	GET_COMPONENT_FROM(Greagents, /datum/component/reagents, G)
+	Greagents.set_reacting(TRUE)
+	Greagents.handle_reactions()
 
 
 /datum/plant_gene/trait/maxchem
@@ -329,7 +332,8 @@
 
 /datum/plant_gene/trait/maxchem/on_new(obj/item/reagent_containers/food/snacks/grown/G, newloc)
 	..()
-	G.reagents.maximum_volume *= rate
+	GET_COMPONENT_FROM(Greagents, /datum/component/reagents, G)
+	Greagents.maximum_volume *= rate
 
 /datum/plant_gene/trait/repeated_harvest
 	name = "Perennial Growth"
@@ -361,7 +365,8 @@
 			pocell.name = "[G.name] battery"
 			pocell.desc = "A rechargeable plant based power cell. This one has a power rating of [DisplayPower(pocell.maxcharge)], and you should not swallow it."
 
-			if(G.reagents.has_reagent("plasma", 2))
+			GET_COMPONENT_FROM(HGreagents, /datum/component/reagents, G)
+			if(Greagents.has_reagent("plasma", 2))
 				pocell.rigged = 1
 
 			qdel(G)
@@ -373,13 +378,15 @@
 	name = "Hypodermic Prickles"
 
 /datum/plant_gene/trait/stinging/on_throw_impact(obj/item/reagent_containers/food/snacks/grown/G, atom/target)
-	if(isliving(target) && G.reagents && G.reagents.total_volume)
+	GET_COMPONENT_FROM(Greagents, /datum/component/reagents, G)
+	if(isliving(target) && Greagents && Greagents.total_volume)
 		var/mob/living/L = target
-		if(L.reagents && L.can_inject(null, 0))
+		GET_COMPONENT_FROM(Lreagents, /datum/component/reagents, L)
+		if(Lreagents && L.can_inject(null, 0))
 			var/injecting_amount = max(1, G.seed.potency*0.2) // Minimum of 1, max of 20
-			var/fraction = min(injecting_amount/G.reagents.total_volume, 1)
-			G.reagents.reaction(L, INJECT, fraction)
-			G.reagents.trans_to(L, injecting_amount)
+			var/fraction = min(injecting_amount/Greagents.total_volume, 1)
+			Greagents.reaction(L, INJECT, fraction)
+			Greagents.trans_to(L, injecting_amount)
 			to_chat(target, "<span class='danger'>You are pricked by [G]!</span>")
 
 /datum/plant_gene/trait/smoke
@@ -390,9 +397,10 @@
 	var/splat_location = get_turf(target)
 	var/smoke_amount = round(sqrt(G.seed.potency * 0.1), 1)
 	S.attach(splat_location)
-	S.set_up(G.reagents, smoke_amount, splat_location, 0)
+	GET_COMPONENT_FROM(Greagents, /datum/component/reagents, G)
+	S.set_up(Greagents, smoke_amount, splat_location, 0)
 	S.start()
-	G.reagents.clear_reagents()
+	Greagents.clear_reagents()
 
 /datum/plant_gene/trait/fire_resistance // Lavaland
 	name = "Fire Resistance"

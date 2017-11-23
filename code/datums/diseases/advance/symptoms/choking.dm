@@ -135,7 +135,8 @@ Bonus
 	var/get_damage = rand(15,21) * power
 	M.adjustOxyLoss(get_damage)
 	if(paralysis)
-		M.reagents.add_reagent_list(list("pancuronium" = 3, "sodium_thiopental" = 3))
+		GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+		Mreagents.add_reagent_list(list("pancuronium" = 3, "sodium_thiopental" = 3))
 	return 1
 
 /datum/symptom/asphyxiation/proc/Asphyxiate_death(mob/living/M, datum/disease/advance/A)

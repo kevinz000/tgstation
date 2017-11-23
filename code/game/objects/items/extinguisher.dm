@@ -83,7 +83,7 @@
 			safety = safety_save
 			return 1
 		var/obj/structure/reagent_dispensers/watertank/W = target
-		var/transferred = W.reagents.trans_to(src, max_water)
+		var/transferred = Wreagents.trans_to(src, max_water)
 		if(transferred > 0)
 			to_chat(user, "<span class='notice'>\The [src] has been refilled by [transferred] units.</span>")
 			playsound(src.loc, 'sound/effects/refill.ogg', 50, 1, -6)
@@ -105,7 +105,7 @@
 		refilling = FALSE
 		return
 	if (!safety)
-		if (src.reagents.total_volume < 1)
+		if (srcreagents.total_volume < 1)
 			to_chat(usr, "<span class='warning'>\The [src] is empty!</span>")
 			return
 
@@ -160,20 +160,20 @@
 				var/datum/reagents/R = new/datum/reagents(5)
 				if(!W)
 					return
-				W.reagents = R
+				Wreagents = R
 				R.my_atom = W
 				if(!W || !src)
 					return
 				reagents.trans_to(W,1)
 				for(var/b=0, b<power, b++)
 					step_towards(W,my_target)
-					if(!W || !W.reagents)
+					if(!W || !Wreagents)
 						return
-					W.reagents.reaction(get_turf(W))
+					Wreagents.reaction(get_turf(W))
 					for(var/A in get_turf(W))
 						if(!W)
 							return
-						W.reagents.reaction(A)
+						Wreagents.reaction(A)
 					if(W.loc == my_target)
 						break
 					sleep(2)

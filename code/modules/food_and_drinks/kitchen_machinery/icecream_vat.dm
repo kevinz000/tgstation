@@ -104,9 +104,9 @@
 				GET_COMPONENT_FROM(IR, /datum/component/reagents, I)
 				I.add_ice_cream(flavour_name)
 			//	if(beaker)
-			//		beaker.reagents.trans_to(I, 10)
+			//		beakerreagents.trans_to(I, 10)
 				if(IR.total_volume < 10)
-					IR.add_reagent("sugar", 10 - I.reagents.total_volume)
+					IR.add_reagent("sugar", 10 - Ireagents.total_volume)
 			else
 				to_chat(user, "<span class='warning'>There is not enough ice cream left!</span>")
 		else

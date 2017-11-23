@@ -101,7 +101,7 @@
 	for(var/datum/design/D in matching_designs)
 		var/temp_materials
 		var/check_materials = TRUE
-		var/all_materials = D.materials + D.reagents_list
+		var/all_materials = D.materials + Dreagents_list
 		for(var/M in all_materials)
 			temp_materials += " | "
 			if (!check_mat(D, M))
@@ -128,7 +128,7 @@
 	for(var/datum/design/D in cached_designs)
 		var/temp_materials
 		var/check_materials = TRUE
-		var/all_materials = D.materials + D.reagents_list
+		var/all_materials = D.materials + Dreagents_list
 		for(var/M in all_materials)
 			temp_materials += " | "
 			if (!check_mat(D, M))

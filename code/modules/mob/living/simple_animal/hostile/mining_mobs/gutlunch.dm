@@ -73,7 +73,8 @@
 
 /mob/living/simple_animal/hostile/asteroid/gutlunch/regenerate_icons()
 	cut_overlays()
-	if(udder.reagents.total_volume == udder.reagents.maximum_volume)
+	GET_COMPONENT_FROM(Oreagents, /datum/component/reagents, O)
+	if(udderreagents.total_volume == udderreagents.maximum_volume)
 		add_overlay("gl_full")
 	..()
 
@@ -110,7 +111,8 @@
 
 /mob/living/simple_animal/hostile/asteroid/gutlunch/guthen/Life()
 	..()
-	if(udder.reagents.total_volume == udder.reagents.maximum_volume) //Only breed when we're full.
+	GET_COMPONENT_FROM(udderreagents, /datum/component/reagents, udder)
+	if(udderreagents.total_volume == udderreagents.maximum_volume) //Only breed when we're full.
 		make_babies()
 
 /mob/living/simple_animal/hostile/asteroid/gutlunch/guthen/make_babies()

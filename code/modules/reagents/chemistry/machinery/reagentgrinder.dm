@@ -235,7 +235,7 @@
 			is_beaker_ready = TRUE
 			beaker_contents = "<B>The beaker contains:</B><br>"
 			var/anything = FALSE
-			for(var/datum/reagent/R in beaker.reagents.reagent_list)
+			for(var/datum/reagent/R in beakerreagents.reagent_list)
 				anything = TRUE
 				beaker_contents += "[R.volume] - [R.name]<br>"
 			if(!anything)
@@ -250,7 +250,7 @@
 			if(!is_chamber_empty && !(stat & (NOPOWER|BROKEN)))
 				dat += "<A href='?src=[REF(src)];action=grind'>Grind the reagents</a><BR>"
 				dat += "<A href='?src=[REF(src)];action=juice'>Juice the reagents</a><BR><BR>"
-			else if (beaker.reagents.total_volume)
+			else if (beakerreagents.total_volume)
 				dat += "<A href='?src=[REF(src)];action=mix'>Mix the reagents</a><BR><BR>"
 		if(length(holdingitems))
 			dat += "<A href='?src=[REF(src)];action=eject'>Eject the reagents</a><BR>"
@@ -339,7 +339,7 @@
 
 /obj/machinery/reagentgrinder/proc/juice()
 	power_change()
-	if(!beaker || (beaker && (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)))
+	if(!beaker || (beaker && (beakerreagents.total_volume >= beakerreagents.maximum_volume)))
 		return
 	operate_for(50, juicing = TRUE)
 
@@ -348,16 +348,16 @@
 		var/obj/item/I = i
 		if(istype(I, /obj/item/reagent_containers/food/snacks))
 			var/obj/item/reagent_containers/food/snacks/O = I
-			if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+			if(beakerreagents.total_volume >= beakerreagents.maximum_volume)
 				break
 			var/list/allowed = get_allowed_juice_by_obj(O)
 			if(isnull(allowed))
 				break
 			for(var/r_id in allowed)
-				var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+				var/space = beakerreagents.maximum_volume - beakerreagents.total_volume
 				var/amount = get_juice_amount(O)
-				beaker.reagents.add_reagent(r_id, min(amount, space))
-				if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+				beakerreagents.add_reagent(r_id, min(amount, space))
+				if(beakerreagents.total_volume >= beakerreagents.maximum_volume)
 					break
 			remove_object(O)
 
@@ -389,11 +389,11 @@
 /obj/machinery/reagentgrinder/proc/grind()
 
 	power_change()
-	if(!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
+	if(!beaker || (beaker && beakerreagents.total_volume >= beakerreagents.maximum_volume))
 		return
 	operate_for(60)
 	for(var/i in holdingitems)
-		if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+		if(beakerreagents.total_volume >= beakerreagents.maximum_volume)
 			break
 		var/obj/item/I = i
 		//Snacks
@@ -403,22 +403,22 @@
 			if(isnull(allowed))
 				continue
 			for(var/r_id in allowed)
-				var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+				var/space = beakerreagents.maximum_volume - beakerreagents.total_volume
 				var/amount = allowed[r_id]
 				if(amount <= 0)
 					if(amount == 0)
-						if (O.reagents != null && O.reagents.has_reagent("nutriment"))
-							beaker.reagents.add_reagent(r_id, min(O.reagents.get_reagent_amount("nutriment"), space))
-							O.reagents.remove_reagent("nutriment", min(O.reagents.get_reagent_amount("nutriment"), space))
+						if (Oreagents != null && Oreagents.has_reagent("nutriment"))
+							beakerreagents.add_reagent(r_id, min(Oreagents.get_reagent_amount("nutriment"), space))
+							Oreagents.remove_reagent("nutriment", min(Oreagents.get_reagent_amount("nutriment"), space))
 					else
-						if (O.reagents != null && O.reagents.has_reagent("nutriment"))
-							beaker.reagents.add_reagent(r_id, min(round(O.reagents.get_reagent_amount("nutriment")*abs(amount)), space))
-							O.reagents.remove_reagent("nutriment", min(O.reagents.get_reagent_amount("nutriment"), space))
+						if (Oreagents != null && Oreagents.has_reagent("nutriment"))
+							beakerreagents.add_reagent(r_id, min(round(Oreagents.get_reagent_amount("nutriment")*abs(amount)), space))
+							Oreagents.remove_reagent("nutriment", min(Oreagents.get_reagent_amount("nutriment"), space))
 				else
-					O.reagents.trans_id_to(beaker, r_id, min(amount, space))
-				if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+					Oreagents.trans_id_to(beaker, r_id, min(amount, space))
+				if (beakerreagents.total_volume >= beakerreagents.maximum_volume)
 					break
-			if(O.reagents.reagent_list.len == 0)
+			if(Oreagents.reagent_list.len == 0)
 				remove_object(O)
 		//Sheets
 		else if(istype(I, /obj/item/stack/sheet))
@@ -426,9 +426,9 @@
 			var/list/allowed = get_allowed_by_obj(O)
 			for(var/t in 1 to round(O.amount, 1))
 				for(var/r_id in allowed)
-					var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+					var/space = beakerreagents.maximum_volume - beakerreagents.total_volume
 					var/amount = allowed[r_id]
-					beaker.reagents.add_reagent(r_id,min(amount, space))
+					beakerreagents.add_reagent(r_id,min(amount, space))
 					if (space < amount)
 						break
 				if(t == round(O.amount, 1))
@@ -439,38 +439,38 @@
 			var/obj/item/grown/O = I
 			var/list/allowed = get_allowed_by_obj(O)
 			for (var/r_id in allowed)
-				var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+				var/space = beakerreagents.maximum_volume - beakerreagents.total_volume
 				var/amount = allowed[r_id]
 				if (amount == 0)
-					if (O.reagents != null && O.reagents.has_reagent(r_id))
-						beaker.reagents.add_reagent(r_id,min(O.reagents.get_reagent_amount(r_id), space))
+					if (Oreagents != null && Oreagents.has_reagent(r_id))
+						beakerreagents.add_reagent(r_id,min(Oreagents.get_reagent_amount(r_id), space))
 				else
-					beaker.reagents.add_reagent(r_id,min(amount, space))
-				if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+					beakerreagents.add_reagent(r_id,min(amount, space))
+				if (beakerreagents.total_volume >= beakerreagents.maximum_volume)
 					break
 			remove_object(O)
 		else if(istype(I, /obj/item/slime_extract))
 			var/obj/item/slime_extract/O = I
-			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			if (O.reagents != null)
-				var/amount = O.reagents.total_volume
-				O.reagents.trans_to(beaker, min(amount, space))
+			var/space = beakerreagents.maximum_volume - beakerreagents.total_volume
+			if (Oreagents != null)
+				var/amount = Oreagents.total_volume
+				Oreagents.trans_to(beaker, min(amount, space))
 			if (O.Uses > 0)
-				beaker.reagents.add_reagent("slimejelly",min(20, space))
+				beakerreagents.add_reagent("slimejelly",min(20, space))
 			remove_object(O)
 		if(istype(I, /obj/item/reagent_containers))
 			var/obj/item/reagent_containers/O = I
-			var/amount = O.reagents.total_volume
-			O.reagents.trans_to(beaker, amount)
-			if(!O.reagents.total_volume)
+			var/amount = Oreagents.total_volume
+			Oreagents.trans_to(beaker, amount)
+			if(!Oreagents.total_volume)
 				remove_object(O)
 		else if(istype(I, /obj/item/toy/crayon))
 			var/obj/item/toy/crayon/O = I
 			for (var/r_id in O.reagent_contents)
-				var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+				var/space = beakerreagents.maximum_volume - beakerreagents.total_volume
 				if(!space)
 					break
-				beaker.reagents.add_reagent(r_id, min(O.reagent_contents[r_id], space))
+				beakerreagents.add_reagent(r_id, min(O.reagent_contents[r_id], space))
 				remove_object(O)
 
 /obj/machinery/reagentgrinder/proc/mix(mob/user)
@@ -482,14 +482,14 @@
 	addtimer(CALLBACK(src, /obj/machinery/reagentgrinder/proc/mix_complete), 50)
 
 /obj/machinery/reagentgrinder/proc/mix_complete()
-	if(beaker && beaker.reagents.total_volume)
+	if(beaker && beakerreagents.total_volume)
 		//Recipe to make Butter
-		var/butter_amt = Floor(beaker.reagents.get_reagent_amount("milk") / MILK_TO_BUTTER_COEFF)
-		beaker.reagents.remove_reagent("milk", MILK_TO_BUTTER_COEFF * butter_amt)
+		var/butter_amt = Floor(beakerreagents.get_reagent_amount("milk") / MILK_TO_BUTTER_COEFF)
+		beakerreagents.remove_reagent("milk", MILK_TO_BUTTER_COEFF * butter_amt)
 		for(var/i in 1 to butter_amt)
 			new /obj/item/reagent_containers/food/snacks/butter(drop_location())
 		//Recipe to make Mayonnaise
-		if (beaker.reagents.has_reagent("eggyolk"))
-			var/amount = beaker.reagents.get_reagent_amount("eggyolk")
-			beaker.reagents.remove_reagent("eggyolk", amount)
-			beaker.reagents.add_reagent("mayonnaise", amount)
+		if (beakerreagents.has_reagent("eggyolk"))
+			var/amount = beakerreagents.get_reagent_amount("eggyolk")
+			beakerreagents.remove_reagent("eggyolk", amount)
+			beakerreagents.add_reagent("mayonnaise", amount)

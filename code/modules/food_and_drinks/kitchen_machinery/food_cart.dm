@@ -46,7 +46,7 @@
 			dat += "<a href='?src=[REF(src)];pour=[R.id]'>Pour in a glass</a>"
 		dat += "<a href='?src=[REF(src)];mix=[R.id]'>Add to the mixer</a><br>"
 	dat += "</div><br><b>MIXER CONTENTS</b><br><div class='statusDisplay'>"
-	for(var/datum/reagent/R in mixer.reagents.reagent_list)
+	for(var/datum/reagent/R in mixerreagents.reagent_list)
 		dat += "[R.name]: [R.volume] "
 		dat += "<a href='?src=[REF(src)];transfer=[R.id]'>Transfer back</a>"
 		if (glasses > 0)
@@ -68,7 +68,7 @@
 /obj/machinery/food_cart/attackby(obj/item/O, mob/user, params)
 	if(istype(O, /obj/item/reagent_containers/food/drinks/drinkingglass))
 		var/obj/item/reagent_containers/food/drinks/drinkingglass/DG = O
-		if(!DG.reagents.total_volume) //glass is empty
+		if(!DGreagents.total_volume) //glass is empty
 			qdel(DG)
 			glasses++
 			to_chat(user, "<span class='notice'>[src] accepts the drinking glass, sterilizing it.</span>")

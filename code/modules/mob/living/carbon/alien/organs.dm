@@ -22,7 +22,7 @@
 
 /obj/item/organ/alien/prepare_eat()
 	var/obj/S = ..()
-	S.reagents.add_reagent("sacid", 10)
+	Sreagents.add_reagent("sacid", 10)
 	return S
 
 
@@ -41,7 +41,7 @@
 
 /obj/item/organ/alien/plasmavessel/prepare_eat()
 	var/obj/S = ..()
-	S.reagents.add_reagent("plasma", storedPlasma/10)
+	Sreagents.add_reagent("plasma", storedPlasma/10)
 	return S
 
 /obj/item/organ/alien/plasmavessel/large

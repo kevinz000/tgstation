@@ -116,7 +116,7 @@
 
 //Gets blood from mob to a container or other mob, preserving all data in it.
 /mob/living/proc/transfer_blood_to(atom/movable/AM, amount, forced)
-	if(!blood_volume || !AM.reagents)
+	if(!blood_volume || !AMreagents)
 		return 0
 	if(blood_volume < BLOOD_VOLUME_BAD && !forced)
 		return 0
@@ -143,13 +143,13 @@
 							continue
 						C.ForceContractDisease(D)
 				if(!(blood_data["blood_type"] in get_safe_blood(C.dna.blood_type)))
-					C.reagents.add_reagent("toxin", amount * 0.5)
+					Creagents.add_reagent("toxin", amount * 0.5)
 					return 1
 
 			C.blood_volume = min(C.blood_volume + round(amount, 0.1), BLOOD_VOLUME_MAXIMUM)
 			return 1
 
-	AM.reagents.add_reagent(blood_id, amount, blood_data, bodytemperature)
+	AMreagents.add_reagent(blood_id, amount, blood_data, bodytemperature)
 	return 1
 
 

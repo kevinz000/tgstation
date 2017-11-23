@@ -264,7 +264,7 @@ doesn't have toxins access.
 	var/list/l = list()
 	l += "<div class='statusDisplay'><A href='?src=[REF(src)];switch_screen=[RDSCREEN_PROTOLATHE]'>Protolathe Menu</A>"
 	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_PROTOLATHE_MATERIALS]'><B>Material Amount:</B> [linked_lathe.materials.total_amount] / [linked_lathe.materials.max_amount]</A>"
-	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_PROTOLATHE_CHEMICALS]'><B>Chemical volume:</B> [linked_lathe.reagents.total_volume] / [linked_lathe.reagents.maximum_volume]</A></div>"
+	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_PROTOLATHE_CHEMICALS]'><B>Chemical volume:</B> [linked_lathereagents.total_volume] / [linked_lathereagents.maximum_volume]</A></div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_protolathe_category_view()	//Legacy code
@@ -281,7 +281,7 @@ doesn't have toxins access.
 		var/c = 50
 		var/t
 
-		var/all_materials = D.materials + D.reagents_list
+		var/all_materials = D.materials + Dreagents_list
 		for(var/M in all_materials)
 			t = linked_lathe.check_mat(D, M)
 			temp_material += " | "
@@ -330,7 +330,7 @@ doesn't have toxins access.
 		var/temp_material
 		var/c = 50
 		var/t
-		var/all_materials = D.materials + D.reagents_list
+		var/all_materials = D.materials + Dreagents_list
 		for(var/M in all_materials)
 			t = linked_lathe.check_mat(D, M)
 			temp_material += " | "
@@ -374,7 +374,7 @@ doesn't have toxins access.
 	l += ui_protolathe_header()
 	l += "<div class='statusDisplay'><A href='?src=[REF(src)];disposeallP=1'>Disposal All Chemicals in Storage</A>"
 	l += "<h3>Chemical Storage:</h3>"
-	for(var/datum/reagent/R in linked_lathe.reagents.reagent_list)
+	for(var/datum/reagent/R in linked_lathereagents.reagent_list)
 		l += "[R.name]: [R.volume]"
 		l += "<A href='?src=[REF(src)];disposeP=[R.id]'>Purge</A>"
 	l += "</div>"
@@ -384,7 +384,7 @@ doesn't have toxins access.
 	var/list/l = list()
 	l += "<div class='statusDisplay'><A href='?src=[REF(src)];switch_screen=[RDSCREEN_IMPRINTER]'>Circuit Imprinter Menu</A>"
 	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_IMPRINTER_MATERIALS]'><B>Material Amount:</B> [linked_imprinter.materials.total_amount] / [linked_imprinter.materials.max_amount]</A>"
-	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_IMPRINTER_CHEMICALS]'><B>Chemical volume:</B> [linked_imprinter.reagents.total_volume] / [linked_imprinter.reagents.maximum_volume]</A></div>"
+	l += "<A href='?src=[REF(src)];switch_screen=[RDSCREEN_IMPRINTER_CHEMICALS]'><B>Chemical volume:</B> [linked_imprinterreagents.total_volume] / [linked_imprinterreagents.maximum_volume]</A></div>"
 	return l
 
 /obj/machinery/computer/rdconsole/proc/ui_circuit()		//Legacy code
@@ -418,7 +418,7 @@ doesn't have toxins access.
 		var/temp_materials
 		var/check_materials = TRUE
 
-		var/all_materials = D.materials + D.reagents_list
+		var/all_materials = D.materials + Dreagents_list
 
 		for(var/M in all_materials)
 			temp_materials += " | "
@@ -444,7 +444,7 @@ doesn't have toxins access.
 	for(var/datum/design/D in matching_designs)
 		var/temp_materials
 		var/check_materials = TRUE
-		var/all_materials = D.materials + D.reagents_list
+		var/all_materials = D.materials + Dreagents_list
 		for(var/M in all_materials)
 			temp_materials += " | "
 			if (!linked_imprinter.check_mat(D, M))
@@ -465,7 +465,7 @@ doesn't have toxins access.
 	l += ui_circuit_header()
 	l += "<A href='?src=[REF(src)];disposeallI=1'>Disposal All Chemicals in Storage</A><div class='statusDisplay'>"
 	l += "<h3>Chemical Storage:</h3>"
-	for(var/datum/reagent/R in linked_imprinter.reagents.reagent_list)
+	for(var/datum/reagent/R in linked_imprinterreagents.reagent_list)
 		l += "[R.name]: [R.volume]"
 		l += "<A href='?src=[REF(src)];disposeI=[R.id]'>Purge</A>"
 	return l
@@ -641,7 +641,7 @@ doesn't have toxins access.
 		if(D.build_type & LIMBGROWER) l += "Limbgrower"
 		if(D.build_type & SMELTER) l += "Smelter"
 	l += "Required Materials:"
-	var/all_mats = D.materials + D.reagents_list
+	var/all_mats = D.materials + Dreagents_list
 	for(var/M in all_mats)
 		l += "* [CallMaterialName(M)] x [all_mats[M]]"
 	l += "[RDSCREEN_NOBREAK]</div>"
@@ -759,16 +759,16 @@ doesn't have toxins access.
 		linked_destroy.user_try_decon_id(ls["deconstruct"], usr)
 	//Protolathe Materials
 	if(ls["disposeP"] && linked_lathe)  //Causes the protolathe to dispose of a single reagent (all of it)
-		linked_lathe.reagents.del_reagent(ls["disposeP"])
+		linked_lathereagents.del_reagent(ls["disposeP"])
 	if(ls["disposeallP"] && linked_lathe) //Causes the protolathe to dispose of all it's reagents.
-		linked_lathe.reagents.clear_reagents()
+		linked_lathereagents.clear_reagents()
 	if(ls["ejectsheet"] && linked_lathe) //Causes the protolathe to eject a sheet of material
 		linked_lathe.materials.retrieve_sheets(text2num(ls["eject_amt"]), ls["ejectsheet"])
 	//Circuit Imprinter Materials
 	if(ls["disposeI"] && linked_imprinter)  //Causes the circuit imprinter to dispose of a single reagent (all of it)
-		linked_imprinter.reagents.del_reagent(ls["disposeI"])
+		linked_imprinterreagents.del_reagent(ls["disposeI"])
 	if(ls["disposeallI"] && linked_imprinter) //Causes the circuit imprinter to dispose of all it's reagents.
-		linked_imprinter.reagents.clear_reagents()
+		linked_imprinterreagents.clear_reagents()
 	if(ls["imprinter_ejectsheet"] && linked_imprinter) //Causes the imprinter to eject a sheet of material
 		linked_imprinter.materials.retrieve_sheets(text2num(ls["eject_amt"]), ls["imprinter_ejectsheet"])
 	if(ls["disk_slot"])
@@ -816,7 +816,7 @@ doesn't have toxins access.
 		var/datum/design/D = stored_research.researched_designs[ls["copy_design_ID"]]
 		if(D)
 			var/autolathe_friendly = TRUE
-			if(D.reagents_list.len)
+			if(Dreagents_list.len)
 				autolathe_friendly = FALSE
 				D.category -= "Imported"
 			else
@@ -900,14 +900,14 @@ doesn't have toxins access.
 	if(buildtype == IMPRINTER)
 		if(!linked_imprinter)
 			return FALSE
-		for(var/M in D.materials + D.reagents_list)
+		for(var/M in D.materials + Dreagents_list)
 			amount = min(amount, linked_imprinter.check_mat(D, M))
 			if(amount < 1)
 				return FALSE
 	else if(buildtype == PROTOLATHE)
 		if(!linked_lathe)
 			return FALSE
-		for(var/M in D.materials + D.reagents_list)
+		for(var/M in D.materials + Dreagents_list)
 			amount = min(amount, linked_lathe.check_mat(D, M))
 			if(amount < 1)
 				return FALSE

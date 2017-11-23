@@ -640,11 +640,11 @@
 
 		to_chat(user, "<span class='notice'>You inject the solution into \the [src].</span>")
 
-		if(S.reagents.has_reagent("plasma", 5))
+		if(Sreagents.has_reagent("plasma", 5))
 
 			rigged = 1
 
-		S.reagents.clear_reagents()
+		Sreagents.clear_reagents()
 	else
 		..()
 	return

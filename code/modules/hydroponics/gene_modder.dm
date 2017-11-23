@@ -293,7 +293,7 @@
 			if(!istype(disk.gene, /datum/plant_gene/core) && disk.gene.can_add(seed))
 				seed.genes += disk.gene.Copy()
 				if(istype(disk.gene, /datum/plant_gene/reagent))
-					seed.reagents_from_genes()
+					seedreagents_from_genes()
 			update_genes()
 			repaint_seed()
 			operation = ""
@@ -315,7 +315,7 @@
 					if(!istype(G, /datum/plant_gene/core))
 						seed.genes -= G
 						if(istype(G, /datum/plant_gene/reagent))
-							seed.reagents_from_genes()
+							seedreagents_from_genes()
 					repaint_seed()
 				if("extract")
 					if(disk && !disk.read_only)
@@ -351,7 +351,7 @@
 					if(disk && disk.gene && !istype(disk.gene, /datum/plant_gene/core) && disk.gene.can_add(seed))
 						seed.genes += disk.gene.Copy()
 						if(istype(disk.gene, /datum/plant_gene/reagent))
-							seed.reagents_from_genes()
+							seedreagents_from_genes()
 						disk.gene.apply_vars(seed)
 						repaint_seed()
 

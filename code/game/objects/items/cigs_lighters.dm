@@ -143,10 +143,10 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	if(!proximity || lit) //can't dip if cigarette is lit (it will heat the reagents in the glass instead)
 		return
 	if(istype(glass))	//you can dip cigarettes into beakers
-		if(glass.reagents.trans_to(src, chem_volume))	//if reagents were transfered, show the message
+		if(glassreagents.trans_to(src, chem_volume))	//if reagents were transfered, show the message
 			to_chat(user, "<span class='notice'>You dip \the [src] into \the [glass].</span>")
 		else			//if not, either the beaker was empty, or the cigarette was full
-			if(!glass.reagents.total_volume)
+			if(!glassreagents.total_volume)
 				to_chat(user, "<span class='notice'>[glass] is empty.</span>")
 			else
 				to_chat(user, "<span class='notice'>[src] is full.</span>")
@@ -422,8 +422,9 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 				smoketime = 400
 				packeditem = 1
 				name = "[O.name]-packed [initial(name)]"
-				if(O.reagents)
-					O.reagents.trans_to(src, O.reagents.total_volume)
+				GET_COMPONENT_FROM(Oreagents, /datum/component/reagents, O)
+				if(Oreagents)
+					Oreagents.trans_to(src, Oreagents.total_volume)
 				qdel(O)
 			else
 				to_chat(user, "<span class='warning'>It has to be dried first!</span>")
@@ -612,8 +613,8 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		var/obj/item/reagent_containers/food/snacks/grown/O = target
 		if(O.dry)
 			var/obj/item/clothing/mask/cigarette/rollie/R = new /obj/item/clothing/mask/cigarette/rollie(user.loc)
-			R.chem_volume = target.reagents.total_volume
-			target.reagents.trans_to(R, R.chem_volume)
+			R.chem_volume = targetreagents.total_volume
+			targetreagents.trans_to(R, R.chem_volume)
 			qdel(target)
 			qdel(src)
 			user.put_in_active_hand(R)
@@ -656,10 +657,11 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 /obj/item/clothing/mask/vape/attackby(obj/item/O, mob/user, params)
 	GET_COMPONENT(reagents, /datum/component/reagents)
+	GET_COMPONENT_FROM(Oreagents, /datum/component/reagents, O)
 	if(istype(O, /obj/item/reagent_containers) && (O.container_type & OPENCONTAINER_1))
 		if(reagents.total_volume < chem_volume)
-			if(O.reagents.total_volume > 0)
-				O.reagents.trans_to(src,25)
+			if(Oreagents.total_volume > 0)
+				Oreagents.trans_to(src,25)
 				to_chat(user, "<span class='notice'>You add the contents of [O] to [src].</span>")
 			else
 				to_chat(user, "<span class='warning'>[O] is empty!</span>")

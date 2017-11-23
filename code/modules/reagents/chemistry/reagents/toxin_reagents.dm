@@ -440,8 +440,9 @@
 	M.adjustBruteLoss((0.3*volume)*REM, 0)
 	. = 1
 	if(prob(15))
-		M.reagents.add_reagent("histamine", pick(5,10))
-		M.reagents.remove_reagent("venom", 1.1)
+		GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+		Mreagents.add_reagent("histamine", pick(5,10))
+		Mreagents.remove_reagent("venom", 1.1)
 	else
 		..()
 
@@ -503,7 +504,8 @@
 
 /datum/reagent/toxin/itching_powder/reaction_mob(mob/living/M, method=TOUCH, reac_volume)
 	if(method == TOUCH || method == VAPOR)
-		M.reagents.add_reagent("itching_powder", reac_volume)
+		GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+		Mreagents.add_reagent("itching_powder", reac_volume)
 
 /datum/reagent/toxin/itching_powder/on_mob_life(mob/living/M)
 	if(prob(15))
@@ -519,8 +521,9 @@
 		M.adjustBruteLoss(0.2*REM, 0)
 		. = 1
 	if(prob(3))
-		M.reagents.add_reagent("histamine",rand(1,3))
-		M.reagents.remove_reagent("itching_powder",1.2)
+		GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+		Mreagents.add_reagent("histamine",rand(1,3))
+		Mreagents.remove_reagent("itching_powder",1.2)
 		return
 	..()
 
@@ -666,9 +669,10 @@
 	if(current_cycle >=11 && prob(min(50,current_cycle)) && ishuman(M))
 		var/mob/living/carbon/human/H = M
 		H.vomit(10, prob(10), prob(50), rand(0,4), TRUE, prob(30))
-		for(var/datum/reagent/toxin/R in M.reagents.reagent_list)
+		GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+		for(var/datum/reagent/toxin/R in Mreagents.reagent_list)
 			if(R != src)
-				H.reagents.remove_reagent(R.id,1)
+				Hreagents.remove_reagent(R.id,1)
 
 /datum/reagent/toxin/spewium/overdose_process(mob/living/M)
 	. = ..()
@@ -788,12 +792,12 @@
 	var/remove_amt = 5
 	if(holder.has_reagent("calomel") || holder.has_reagent("pen_acid"))
 		remove_amt = 0.5
-	for(var/datum/reagent/medicine/R in M.reagents.reagent_list)
-		M.reagents.remove_reagent(R.id,remove_amt)
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+	for(var/datum/reagent/medicine/R in Mreagents.reagent_list)
+		Mreagents.remove_reagent(R.id,remove_amt)
 	return ..()
 
 //ACID
-
 
 /datum/reagent/toxin/acid
 	name = "Sulphuric acid"

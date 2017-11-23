@@ -24,13 +24,13 @@
 		return
 	if(on)
 		if(beaker)
-			if(beaker.reagents.chem_temp > target_temperature)
-				beaker.reagents.chem_temp += min(-1, (target_temperature - beaker.reagents.chem_temp) * heater_coefficient)
-			if(beaker.reagents.chem_temp < target_temperature)
-				beaker.reagents.chem_temp += max(1, (target_temperature - beaker.reagents.chem_temp) * heater_coefficient)
+			if(beakerreagents.chem_temp > target_temperature)
+				beakerreagents.chem_temp += min(-1, (target_temperature - beakerreagents.chem_temp) * heater_coefficient)
+			if(beakerreagents.chem_temp < target_temperature)
+				beakerreagents.chem_temp += max(1, (target_temperature - beakerreagents.chem_temp) * heater_coefficient)
 
-			beaker.reagents.chem_temp = round(beaker.reagents.chem_temp)
-			beaker.reagents.handle_reactions()
+			beakerreagents.chem_temp = round(beakerreagents.chem_temp)
+			beakerreagents.handle_reactions()
 
 /obj/machinery/chem_heater/attackby(obj/item/I, mob/user, params)
 	if(default_deconstruction_screwdriver(user, "mixer0b", "mixer0b", I))
@@ -72,13 +72,13 @@
 	data["isActive"] = on
 	data["isBeakerLoaded"] = beaker ? 1 : 0
 
-	data["currentTemp"] = beaker ? beaker.reagents.chem_temp : null
-	data["beakerCurrentVolume"] = beaker ? beaker.reagents.total_volume : null
+	data["currentTemp"] = beaker ? beakerreagents.chem_temp : null
+	data["beakerCurrentVolume"] = beaker ? beakerreagents.total_volume : null
 	data["beakerMaxVolume"] = beaker ? beaker.volume : null
 
 	var beakerContents[0]
 	if(beaker)
-		for(var/datum/reagent/R in beaker.reagents.reagent_list)
+		for(var/datum/reagent/R in beakerreagents.reagent_list)
 			beakerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
 	data["beakerContents"] = beakerContents
 	return data
@@ -112,6 +112,6 @@
 /obj/machinery/chem_heater/proc/eject_beaker()
 	if(beaker)
 		beaker.loc = get_turf(src)
-		beaker.reagents.handle_reactions()
+		beakerreagents.handle_reactions()
 		beaker = null
 		icon_state = "mixer0b"

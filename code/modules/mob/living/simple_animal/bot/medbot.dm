@@ -140,7 +140,8 @@
 	dat += "Maintenance panel panel is [open ? "opened" : "closed"]<BR>"
 	dat += "Beaker: "
 	if(reagent_glass)
-		dat += "<A href='?src=[REF(src)];eject=1'>Loaded \[[reagent_glass.reagents.total_volume]/[reagent_glass.reagents.maximum_volume]\]</a>"
+		GET_COMPONENT_FROM(reagent_glassreagents, /datum/component/reagents, reagent_glass)
+		dat += "<A href='?src=[REF(src)];eject=1'>Loaded \[[reagent_glassreagents.total_volume]/[reagent_glassreagents.maximum_volume]\]</a>"
 	else
 		dat += "None Loaded"
 	dat += "<br>Behaviour controls are [locked ? "locked" : "unlocked"]<hr>"
@@ -359,7 +360,8 @@
 
 	//If they're injured, we're using a beaker, and don't have one of our WONDERCHEMS.
 	if((reagent_glass) && (use_beaker) && ((C.getBruteLoss() >= heal_threshold) || (C.getToxLoss() >= heal_threshold) || (C.getToxLoss() >= heal_threshold) || (C.getOxyLoss() >= (heal_threshold + 15))))
-		for(var/datum/reagent/R in reagent_glass.reagents.reagent_list)
+		GET_COMPONENT_FROM(reagent_glassreagents, /datum/component/reagents, reagent_glass)
+		for(var/datum/reagent/R in reagent_glassreagents.reagent_list)
 			if(!their_reagents.has_reagent(R.id))
 				return TRUE
 
@@ -457,9 +459,10 @@
 			if(!their_reagents.has_reagent(treatment_tox) && !their_reagents.has_reagent(treatment_tox_avoid))
 				reagent_id = treatment_tox
 
+		GET_COMPONENT_FROM(reagent_glassreagents, /datum/component/reagents, reagent_glass)
 		//If the patient is injured but doesn't have our special reagent in them then we should give it to them first
-		if(reagent_id && use_beaker && reagent_glass && reagent_glass.reagents.total_volume)
-			for(var/datum/reagent/R in reagent_glass.reagents.reagent_list)
+		if(reagent_id && use_beaker && reagent_glass && reagent_glassreagents.total_volume)
+			for(var/datum/reagent/R in reagent_glassreagents.reagent_list)
 				if(!their_reagents.has_reagent(R.id))
 					reagent_id = "internal_beaker"
 					break
@@ -484,10 +487,11 @@
 		if(do_mob(src, patient, 30))	//Is C == patient? This is so confusing
 			if((get_dist(src, patient) <= 1) && (on) && assess_patient(patient))
 				if(reagent_id == "internal_beaker")
-					if(use_beaker && reagent_glass && reagent_glass.reagents.total_volume)
-						var/fraction = min(injection_amount/reagent_glass.reagents.total_volume, 1)
-						reagent_glass.reagents.reaction(patient, INJECT, fraction)
-						reagent_glass.reagents.trans_to(patient,injection_amount) //Inject from beaker instead.
+					GET_COMPONENT_FROM(reagentglass_reagents, /datum/component/reagents, reagent_glass)
+					if(use_beaker && reagent_glass && reagent_glassreagents.total_volume)
+						var/fraction = min(injection_amount/reagent_glassreagents.total_volume, 1)
+						reagent_glassreagents.reaction(patient, INJECT, fraction)
+						reagent_glassreagents.trans_to(patient,injection_amount) //Inject from beaker instead.
 				else
 					their_reagents.add_reagent(reagent_id,injection_amount)
 				C.visible_message("<span class='danger'>[src] injects [patient] with its syringe!</span>", \

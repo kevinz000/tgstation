@@ -33,8 +33,9 @@
 		return 0
 	to_chat(owner, "<span class='caution'>You grit your teeth and burst the implanted [target.name]!</span>")
 	add_logs(owner, null, "swallowed an implanted pill", target)
-	if(target.reagents.total_volume)
-		target.reagents.reaction(owner, INGEST)
-		target.reagents.trans_to(owner, target.reagents.total_volume)
+	GET_COMPONENT_FROM(targetreagents, /datum/component/reagents, target)
+	if(targetreagents.total_volume)
+		targetreagents.reaction(owner, INGEST)
+		targetreagents.trans_to(owner, targetreagents.total_volume)
 	qdel(target)
 	return 1

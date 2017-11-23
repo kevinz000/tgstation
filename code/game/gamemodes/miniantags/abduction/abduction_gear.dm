@@ -666,8 +666,8 @@ Congratulations! You are now trained for invasive xenobiology research!"}
 	for(var/mob/living/carbon/C in get_turf(src))
 		. = TRUE
 		for(var/chemical in injected_reagents)
-			if(C.reagents.get_reagent_amount(chemical) < 1)
-				C.reagents.add_reagent(chemical, 1)
+			if(Creagents.get_reagent_amount(chemical) < 1)
+				Creagents.add_reagent(chemical, 1)
 
 /obj/structure/table/optable/abductor/Destroy()
 	STOP_PROCESSING(SSobj, src)

@@ -272,12 +272,13 @@
 		if(D.icon_state != "donut2")
 			D.name = "frosted donut"
 			D.icon_state = "donut2"
-			D.reagents.add_reagent("sprinkles", 2)
+			Dreagents.add_reagent("sprinkles", 2)
 			D.bonus_reagents = list("sprinkles" = 2, "sugar" = 1)
 			D.filling_color = "#FF69B4"
 
 /mob/living/simple_animal/pet/cat/cak/attack_hand(mob/living/L)
 	..()
-	if(L.a_intent == INTENT_HARM && L.reagents && !stat)
-		L.reagents.add_reagent("nutriment", 0.4)
-		L.reagents.add_reagent("vitamin", 0.4)
+	GET_COMPONENT_FROM(Lreagents, /datum/component/reagents, L)
+	if(L.a_intent == INTENT_HARM && Lreagents && !stat)
+		Lreagents.add_reagent("nutriment", 0.4)
+		Lreagents.add_reagent("vitamin", 0.4)

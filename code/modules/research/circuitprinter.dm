@@ -42,7 +42,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	reagents.maximum_volume = 0
 	for(var/obj/item/reagent_containers/glass/G in component_parts)
 		reagents.maximum_volume += G.volume
-		G.reagents.trans_to(src, G.reagents.total_volume)
+		Greagents.trans_to(src, Greagents.total_volume)
 
 	GET_COMPONENT(materials, /datum/component/material_container)
 	materials.max_amount = 0
@@ -59,7 +59,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 		qdel(src)
 
 /obj/machinery/rnd/circuit_imprinter/proc/check_mat(datum/design/being_built, M)	// now returns how many times the item can be built with the material
-	var/list/all_materials = being_built.reagents_list + being_built.materials
+	var/list/all_materials = being_builtreagents_list + being_built.materials
 
 	GET_COMPONENT(materials, /datum/component/material_container)
 	var/A = materials.amount(M)
@@ -71,7 +71,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 //we eject the materials upon deconstruction.
 /obj/machinery/rnd/circuit_imprinter/on_deconstruction()
 	for(var/obj/item/reagent_containers/glass/G in component_parts)
-		reagents.trans_to(G, G.reagents.maximum_volume)
+		reagents.trans_to(G, Greagents.maximum_volume)
 	GET_COMPONENT(materials, /datum/component/material_container)
 	materials.retrieve_all()
 	..()
@@ -119,16 +119,16 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	if(!materials.has_materials(efficient_mats))
 		say("Not enough materials to complete prototype.")
 		return FALSE
-	for(var/R in D.reagents_list)
-		if(!reagents.has_reagent(R, D.reagents_list[R]/efficiency_coeff))
+	for(var/R in Dreagents_list)
+		if(!reagents.has_reagent(R, Dreagents_list[R]/efficiency_coeff))
 			say("Not enough reagents to complete prototype.")
 			return FALSE
 
 	busy = TRUE
 	flick("circuit_imprinter_ani", src)
 	materials.use_amount(efficient_mats)
-	for(var/R in D.reagents_list)
-		reagents.remove_reagent(R, D.reagents_list[R]/efficiency_coeff)
+	for(var/R in Dreagents_list)
+		reagents.remove_reagent(R, Dreagents_list[R]/efficiency_coeff)
 
 	var/P = D.build_path
 	addtimer(CALLBACK(src, .proc/reset_busy), 16)

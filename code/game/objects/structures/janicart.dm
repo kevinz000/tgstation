@@ -44,7 +44,7 @@
 
 	if(istype(I, /obj/item/mop))
 		var/obj/item/mop/m=I
-		if(m.reagents.total_volume < m.reagents.maximum_volume)
+		if(mreagents.total_volume < mreagents.maximum_volume)
 			if (wet_mop(m, user))
 				return
 		if(!mymop)
@@ -85,7 +85,7 @@
 		if(do_after(user, 30*I.toolspeed, target = src))
 			to_chat(usr, "<span class='notice'>You empty the contents of [src]'s bucket onto the floor.</span>")
 			reagents.reaction(src.loc)
-			src.reagents.clear_reagents()
+			srcreagents.clear_reagents()
 	else
 		return ..()
 

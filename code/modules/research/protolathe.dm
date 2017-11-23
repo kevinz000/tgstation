@@ -45,7 +45,7 @@ Note: Must be placed west/left of and R&D console to function.
 	reagents.maximum_volume = 0
 	for(var/obj/item/reagent_containers/glass/G in component_parts)
 		reagents.maximum_volume += G.volume
-		G.reagents.trans_to(src, G.reagents.total_volume)
+		Greagents.trans_to(src, Greagents.total_volume)
 
 	GET_COMPONENT(materials, /datum/component/material_container)
 	materials.max_amount = 0
@@ -58,7 +58,7 @@ Note: Must be placed west/left of and R&D console to function.
 	efficiency_coeff = min(max(0, T), 1)
 
 /obj/machinery/rnd/protolathe/proc/check_mat(datum/design/being_built, M)	// now returns how many times the item can be built with the material
-	var/list/all_materials = being_built.reagents_list + being_built.materials
+	var/list/all_materials = being_builtreagents_list + being_built.materials
 
 	GET_COMPONENT(materials, /datum/component/material_container)
 	var/A = materials.amount(M)
@@ -70,7 +70,7 @@ Note: Must be placed west/left of and R&D console to function.
 //we eject the materials upon deconstruction.
 /obj/machinery/rnd/protolathe/on_deconstruction()
 	for(var/obj/item/reagent_containers/glass/G in component_parts)
-		reagents.trans_to(G, G.reagents.maximum_volume)
+		reagents.trans_to(G, Greagents.maximum_volume)
 	GET_COMPONENT(materials, /datum/component/material_container)
 	materials.retrieve_all()
 	..()
@@ -125,14 +125,14 @@ Note: Must be placed west/left of and R&D console to function.
 	if(!materials.has_materials(efficient_mats, amount))
 		say("Not enough materials to complete prototype[amount > 1? "s" : ""].")
 		return FALSE
-	for(var/R in D.reagents_list)
-		if(!reagents.has_reagent(R, D.reagents_list[R]*efficiency_coeff))
+	for(var/R in Dreagents_list)
+		if(!reagents.has_reagent(R, Dreagents_list[R]*efficiency_coeff))
 			say("Not enough reagents to complete prototype[amount > 1? "s" : ""].")
 			return FALSE
 
 	materials.use_amount(efficient_mats, amount)
-	for(var/R in D.reagents_list)
-		reagents.remove_reagent(R, D.reagents_list[R]*efficiency_coeff)
+	for(var/R in Dreagents_list)
+		reagents.remove_reagent(R, Dreagents_list[R]*efficiency_coeff)
 
 	busy = TRUE
 	flick("protolathe_n", src)

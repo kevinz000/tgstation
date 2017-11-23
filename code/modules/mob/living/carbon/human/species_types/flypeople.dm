@@ -12,7 +12,7 @@
 /datum/species/fly/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "pestkiller")
 		H.adjustToxLoss(3)
-		H.reagents.remove_reagent(chem.id, REAGENTS_METABOLISM)
+		Hreagents.remove_reagent(chem.id, REAGENTS_METABOLISM)
 		return 1
 
 

@@ -228,7 +228,7 @@
 		if(iscarbon(target))
 			to_chat(user, "<span class='cultitalic'>You disturb [target] with visions of madness!</span>")
 			var/mob/living/carbon/H = target
-			H.reagents.add_reagent("mindbreaker", 12)
+			Hreagents.add_reagent("mindbreaker", 12)
 			if(is_servant_of_ratvar(target))
 				to_chat(target, "<span class='userdanger'>You see a brief but horrible vision of Ratvar, rusted and scrapped, being torn apart.</span>")
 				target.emote("scream")

@@ -55,6 +55,7 @@
 
 /obj/item/reagent_containers/food/drinks/afterattack(obj/target, mob/user , proximity)
 	GET_COMPONENT(reagents, /datum/component/reagents)
+	GET_COMPONENT_FROM(targetreagents, /datum/component/reagents, target)
 	if(!proximity)
 		return
 	if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
@@ -63,7 +64,7 @@
 			to_chat(user, "<span class='warning'>[target]'s tab isn't open!</span>")
 			return
 
-		if(!target.reagents.total_volume)
+		if(!targetreagents.total_volume)
 			to_chat(user, "<span class='warning'>[target] is empty.</span>")
 			return
 
@@ -71,7 +72,7 @@
 			to_chat(user, "<span class='warning'>[src] is full.</span>")
 			return
 
-		var/trans = target.reagents.trans_to(src, amount_per_transfer_from_this)
+		var/trans = targetreagents.trans_to(src, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You fill [src] with [trans] units of the contents of [target].</span>")
 
 	else if(target.is_open_container()) //Something like a glass. Player probably wants to transfer TO it.
@@ -79,11 +80,11 @@
 			to_chat(user, "<span class='warning'>[src] is empty.</span>")
 			return
 
-		if(target.reagents.total_volume >= target.reagents.maximum_volume)
+		if(targetreagents.total_volume >= targetreagents.maximum_volume)
 			to_chat(user, "<span class='warning'>[target] is full.</span>")
 			return
 		var/refill = reagents.get_master_reagent_id()
-		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
+		var/trans = srcreagents.trans_to(target, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the solution to [target].</span>")
 
 		if(iscyborg(user)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
@@ -352,7 +353,7 @@
 	spillable = FALSE
 
 /obj/item/reagent_containers/food/drinks/soda_cans/attack(mob/M, mob/user)
-	if(M == user && !src.reagents.total_volume && user.a_intent == INTENT_HARM && user.zone_selected == "head")
+	if(M == user && !srcreagents.total_volume && user.a_intent == INTENT_HARM && user.zone_selected == "head")
 		user.visible_message("<span class='warning'>[user] crushes the can of [src] on [user.p_their()] forehead!</span>", "<span class='notice'>You crush the can of [src] on your forehead.</span>")
 		playsound(user.loc,'sound/weapons/pierce.ogg', rand(10,50), 1)
 		var/obj/item/trash/can/crushed_can = new /obj/item/trash/can(user.loc)

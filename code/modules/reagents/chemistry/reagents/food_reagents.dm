@@ -489,7 +489,7 @@
 /datum/reagent/consumable/flour/reaction_turf(turf/T, reac_volume)
 	if(!isspaceturf(T))
 		var/obj/effect/decal/cleanable/reagentdecal = new/obj/effect/decal/cleanable/flour(T)
-		reagentdecal.reagents.add_reagent("flour", reac_volume)
+		reagentdecalreagents.add_reagent("flour", reac_volume)
 
 /datum/reagent/consumable/cherryjelly
 	name = "Cherry Jelly"
@@ -559,7 +559,8 @@
 	taste_description = "sweetness"
 
 /datum/reagent/consumable/honey/on_mob_life(mob/living/M)
-	M.reagents.add_reagent("sugar",3)
+	GET_COMPONENT_FROM(Mreagents, /datum/component/reagents, M)
+	Mreagents.add_reagent("sugar",3)
 	if(prob(55))
 		M.adjustBruteLoss(-1*REM, 0)
 		M.adjustFireLoss(-1*REM, 0)

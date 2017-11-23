@@ -54,27 +54,27 @@
 	GET_COMPONENT(reagents, /datum/component/reagents)
 	if (istype(A, /obj/structure/reagent_dispensers))
 		var/obj/structure/reagent_dispensers/RD = A
-		if(RD.reagents.total_volume <= 0)
+		if(RDreagents.total_volume <= 0)
 			to_chat(user, "<span class='warning'>[RD] is empty.</span>")
 		else if(reagents.total_volume >= 10)
 			to_chat(user, "<span class='warning'>[src] is full.</span>")
 		else
-			A.reagents.trans_to(src, 10)
+			Areagents.trans_to(src, 10)
 			to_chat(user, "<span class='notice'>You fill the balloon with the contents of [A].</span>")
 			desc = "A translucent balloon with some form of liquid sloshing around in it."
 			update_icon()
 
 /obj/item/toy/balloon/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/reagent_containers/glass))
-		if(I.reagents)
-			if(I.reagents.total_volume <= 0)
+		if(Ireagents)
+			if(Ireagents.total_volume <= 0)
 				to_chat(user, "<span class='warning'>[I] is empty.</span>")
 			else if(reagents.total_volume >= 10)
 				to_chat(user, "<span class='warning'>[src] is full.</span>")
 			else
 				desc = "A translucent balloon with some form of liquid sloshing around in it."
 				to_chat(user, "<span class='notice'>You fill the balloon with the contents of [I].</span>")
-				I.reagents.trans_to(src, 10)
+				Ireagents.trans_to(src, 10)
 				update_icon()
 	else if(I.is_sharp())
 		balloon_burst()

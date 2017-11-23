@@ -317,7 +317,7 @@
 /obj/item/udder/proc/milkAnimal(obj/O, mob/user)
 	var/obj/item/reagent_containers/glass/G = O
 	GET_COMPONENT(reagents, /datum/component/reagents)
-	if(G.reagents.total_volume >= G.volume)
+	if(Greagents.total_volume >= G.volume)
 		to_chat(user, "<span class='danger'>[O] is full.</span>")
 		return
 	var/transfered = reagents.trans_to(O, rand(5,10))

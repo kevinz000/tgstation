@@ -399,7 +399,7 @@
 	if(time_release > 0)
 		var/total_volume = 0
 		for(var/obj/item/reagent_containers/RC in beakers)
-			total_volume += RC.reagents.total_volume
+			total_volume += RCreagents.total_volume
 
 		if(total_volume < time_release) // If it's empty, the detonation is complete.
 			if(loc && istype(loc, /obj/machinery/syndicatebomb/))
@@ -423,15 +423,15 @@
 	var/list/reactants = list()
 
 	for(var/obj/item/reagent_containers/glass/G in beakers)
-		reactants += G.reagents
+		reactants += Greagents
 
 	for(var/obj/item/slime_extract/S in beakers)
 		if(S.Uses)
 			for(var/obj/item/reagent_containers/glass/G in beakers)
-				G.reagents.trans_to(S, G.reagents.total_volume)
+				Greagents.trans_to(S, Greagents.total_volume)
 
-			if(S && S.reagents && S.reagents.total_volume)
-				reactants += S.reagents
+			if(S && Sreagents && Sreagents.total_volume)
+				reactants += Sreagents
 
 	if(!chem_splash(get_turf(src), spread_range, reactants, temp_boost))
 		playsound(loc, 'sound/items/screwdriver2.ogg', 50, 1)

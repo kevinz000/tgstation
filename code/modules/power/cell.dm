@@ -103,9 +103,9 @@
 	if(istype(W, /obj/item/reagent_containers/syringe))
 		var/obj/item/reagent_containers/syringe/S = W
 		to_chat(user, "<span class='notice'>You inject the solution into the power cell.</span>")
-		if(S.reagents.has_reagent("plasma", 5))
+		if(Sreagents.has_reagent("plasma", 5))
 			rigged = 1
-		S.reagents.clear_reagents()
+		Sreagents.clear_reagents()
 
 
 /obj/item/stock_parts/cell/proc/explode()

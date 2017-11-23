@@ -38,7 +38,7 @@
 		var/mob/living/carbon/human/H = user
 		var/obj/item/clothing/gloves/G = H.gloves
 		if(!istype(G) || G.transfer_prints)
-			H.reagents.add_reagent(contact_poison,contact_poison_volume)
+			Hreagents.add_reagent(contact_poison,contact_poison_volume)
 			contact_poison = null
 	..()
 

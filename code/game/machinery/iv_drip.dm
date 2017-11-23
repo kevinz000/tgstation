@@ -124,7 +124,7 @@
 		// Give blood
 		GET_COMPONENT_FROM(BR, /datum/component/reagents, beaker)
 		if(mode)
-			if(beaker.reagents.total_volume)
+			if(beakerreagents.total_volume)
 				var/transfer_amount = 5
 				if(istype(beaker, /obj/item/reagent_containers/blood))
 					// speed up transfer on blood packs

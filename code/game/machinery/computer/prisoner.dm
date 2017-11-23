@@ -40,7 +40,7 @@
 				continue//Out of range
 			if(!C.imp_in)
 				continue
-			dat += "ID: [C.imp_in.name] | Remaining Units: [C.reagents.total_volume] <BR>"
+			dat += "ID: [C.imp_in.name] | Remaining Units: [Creagents.total_volume] <BR>"
 			dat += "| Inject: "
 			dat += "<A href='?src=[REF(src)];inject1=[REF(C)]'>(<font class='bad'>(1)</font>)</A>"
 			dat += "<A href='?src=[REF(src)];inject5=[REF(C)]'>(<font class='bad'>(5)</font>)</A>"

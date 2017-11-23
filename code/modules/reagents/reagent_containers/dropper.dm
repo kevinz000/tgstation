@@ -12,11 +12,11 @@
 	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(!proximity)
 		return
-	if(!target.reagents)
+	if(!targetreagents)
 		return
 
 	if(reagents.total_volume > 0)
-		if(target.reagents.total_volume >= target.reagents.maximum_volume)
+		if(targetreagents.total_volume >= targetreagents.maximum_volume)
 			to_chat(user, "<span class='notice'>[target] is full.</span>")
 			return
 
@@ -43,7 +43,7 @@
 						safe_thing = victim.glasses
 
 				if(safe_thing)
-					if(!safe_thing.reagents)
+					if(!safe_thingreagents)
 						safe_thing.create_reagents(100)
 
 					reagents.reaction(safe_thing, TOUCH, fraction)
@@ -66,12 +66,12 @@
 			var/mob/M = target
 			var/R
 			if(reagents)
-				for(var/datum/reagent/A in src.reagents.reagent_list)
+				for(var/datum/reagent/A in srcreagents.reagent_list)
 					R += A.id + " ("
 					R += num2text(A.volume) + "),"
 			add_logs(user, M, "squirted", R)
 
-		trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
+		trans = srcreagents.trans_to(target, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You transfer [trans] unit\s of the solution.</span>")
 		update_icon()
 
@@ -81,11 +81,11 @@
 			to_chat(user, "<span class='notice'>You cannot directly remove reagents from [target].</span>")
 			return
 
-		if(!target.reagents.total_volume)
+		if(!targetreagents.total_volume)
 			to_chat(user, "<span class='warning'>[target] is empty!</span>")
 			return
 
-		var/trans = target.reagents.trans_to(src, amount_per_transfer_from_this)
+		var/trans = targetreagents.trans_to(src, amount_per_transfer_from_this)
 
 		to_chat(user, "<span class='notice'>You fill [src] with [trans] unit\s of the solution.</span>")
 

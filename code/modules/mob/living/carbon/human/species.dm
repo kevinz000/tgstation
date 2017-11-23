@@ -914,7 +914,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 /datum/species/proc/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == exotic_blood)
 		H.blood_volume = min(H.blood_volume + round(chem.volume, 0.1), BLOOD_VOLUME_MAXIMUM)
-		H.reagents.del_reagent(chem.id)
+		Hreagents.del_reagent(chem.id)
 		return 1
 	return 0
 

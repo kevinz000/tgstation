@@ -104,7 +104,8 @@
 		if(restraint_check && (user.restrained() || user.buckled))
 			to_chat(user, "<span class='notice'>You cannot [key] while restrained.</span>")
 			return FALSE
-		if(user.reagents && user.reagents.has_reagent("mimesbane"))
+		GET_COMPONENT_FROM(userreagents, /datum/component/reagents, user)
+		if(userreagents && userreagents.has_reagent("mimesbane"))
 			return FALSE
 
 /datum/emote/sound

@@ -68,10 +68,10 @@
 	add_fingerprint(user)
 	if(istype(I, /obj/item/reagent_containers) && I.is_open_container())
 		var/obj/item/reagent_containers/RC = I
-		var/units = RC.reagents.trans_to(src, RC.amount_per_transfer_from_this)
+		var/units = RCreagents.trans_to(src, RC.amount_per_transfer_from_this)
 		if(units)
 			to_chat(user, "<span class='notice'>You transfer [units] units of the solution to [src].</span>")
-			add_logs(usr, src, "has added [english_list(RC.reagents.reagent_list)] to [src]")
+			add_logs(usr, src, "has added [english_list(RCreagents.reagent_list)] to [src]")
 			return
 	if(default_unfasten_wrench(user, I, 40))
 		on = FALSE

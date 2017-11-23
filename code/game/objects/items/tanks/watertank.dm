@@ -120,7 +120,7 @@
 	..()
 	if(check_tank_exists(parent_tank, src))
 		tank = parent_tank
-		reagents = tank.reagents	//This mister is really just a proxy for the tank's reagents
+		reagents = tankreagents	//This mister is really just a proxy for the tank's reagents
 		forceMove(tank)
 	return
 

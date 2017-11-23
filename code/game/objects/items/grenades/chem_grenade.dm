@@ -70,7 +70,7 @@
 			to_chat(user, "<span class='warning'>[src] can not hold more containers!</span>")
 			return
 		else
-			if(I.reagents.total_volume)
+			if(Ireagents.total_volume)
 				if(!user.transferItemToLoc(I, src))
 					return
 				to_chat(user, "<span class='notice'>You add [I] to the [initial(name)] assembly.</span>")
@@ -216,7 +216,7 @@
 
 			if(S)
 				GET_COMPONENT_FROM(S_reagents, /datum/component/reagents, S)
-				if(S_reagents && S.reagents.total_volume)
+				if(S_reagents && Sreagents.total_volume)
 					for(var/obj/item/reagent_containers/glass/G in beakers)
 						S_reagents.trans_to(G, S_reagents.total_volume)
 				else
@@ -320,9 +320,9 @@
 	var/obj/item/reagent_containers/glass/beaker/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/B2 = new(src)
 
-	B1.reagents.add_reagent("aluminium", 30)
-	B2.reagents.add_reagent("foaming_agent", 10)
-	B2.reagents.add_reagent("facid", 10)
+	B1reagents.add_reagent("aluminium", 30)
+	B2reagents.add_reagent("foaming_agent", 10)
+	B2reagents.add_reagent("facid", 10)
 
 	beakers += B1
 	beakers += B2
@@ -338,9 +338,9 @@
 	var/obj/item/reagent_containers/glass/beaker/large/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/B2 = new(src)
 
-	B1.reagents.add_reagent("aluminium", 75)
-	B2.reagents.add_reagent("smart_foaming_agent", 25)
-	B2.reagents.add_reagent("facid", 25)
+	B1reagents.add_reagent("aluminium", 75)
+	B2reagents.add_reagent("smart_foaming_agent", 25)
+	B2reagents.add_reagent("facid", 25)
 
 	beakers += B1
 	beakers += B2
@@ -356,9 +356,9 @@
 	var/obj/item/reagent_containers/glass/beaker/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/B2 = new(src)
 
-	B1.reagents.add_reagent("phosphorus", 25)
-	B2.reagents.add_reagent("stable_plasma", 25)
-	B2.reagents.add_reagent("sacid", 25)
+	B1reagents.add_reagent("phosphorus", 25)
+	B2reagents.add_reagent("stable_plasma", 25)
+	B2reagents.add_reagent("sacid", 25)
 
 	beakers += B1
 	beakers += B2
@@ -374,10 +374,10 @@
 	var/obj/item/reagent_containers/glass/beaker/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/B2 = new(src)
 
-	B1.reagents.add_reagent("plantbgone", 25)
-	B1.reagents.add_reagent("potassium", 25)
-	B2.reagents.add_reagent("phosphorus", 25)
-	B2.reagents.add_reagent("sugar", 25)
+	B1reagents.add_reagent("plantbgone", 25)
+	B1reagents.add_reagent("potassium", 25)
+	B2reagents.add_reagent("phosphorus", 25)
+	B2reagents.add_reagent("sugar", 25)
 
 	beakers += B1
 	beakers += B2
@@ -393,9 +393,9 @@
 	var/obj/item/reagent_containers/glass/beaker/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/B2 = new(src)
 
-	B1.reagents.add_reagent("fluorosurfactant", 40)
-	B2.reagents.add_reagent("water", 40)
-	B2.reagents.add_reagent("cleaner", 10)
+	B1reagents.add_reagent("fluorosurfactant", 40)
+	B2reagents.add_reagent("water", 40)
+	B2reagents.add_reagent("cleaner", 10)
 
 	beakers += B1
 	beakers += B2
@@ -411,9 +411,9 @@
 	var/obj/item/reagent_containers/glass/beaker/large/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/large/B2 = new(src)
 
-	B1.reagents.add_reagent("fluorosurfactant", 40)
-	B2.reagents.add_reagent("water", 40)
-	B2.reagents.add_reagent("ez_clean", 60) //ensures a  t h i c c  distribution
+	B1reagents.add_reagent("fluorosurfactant", 40)
+	B2reagents.add_reagent("water", 40)
+	B2reagents.add_reagent("ez_clean", 60) //ensures a  t h i c c  distribution
 
 	beakers += B1
 	beakers += B2
@@ -430,10 +430,10 @@
 	var/obj/item/reagent_containers/glass/beaker/large/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/large/B2 = new(src)
 
-	B1.reagents.add_reagent("condensedcapsaicin", 60)
-	B1.reagents.add_reagent("potassium", 40)
-	B2.reagents.add_reagent("phosphorus", 40)
-	B2.reagents.add_reagent("sugar", 40)
+	B1reagents.add_reagent("condensedcapsaicin", 60)
+	B1reagents.add_reagent("potassium", 40)
+	B2reagents.add_reagent("phosphorus", 40)
+	B2reagents.add_reagent("sugar", 40)
 
 	beakers += B1
 	beakers += B2
@@ -449,11 +449,11 @@
 	var/obj/item/reagent_containers/glass/beaker/bluespace/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/bluespace/B2 = new(src)
 
-	B1.reagents.add_reagent("facid", 290)
-	B1.reagents.add_reagent("potassium", 10)
-	B2.reagents.add_reagent("phosphorus", 10)
-	B2.reagents.add_reagent("sugar", 10)
-	B2.reagents.add_reagent("facid", 280)
+	B1reagents.add_reagent("facid", 290)
+	B1reagents.add_reagent("potassium", 10)
+	B2reagents.add_reagent("phosphorus", 10)
+	B2reagents.add_reagent("sugar", 10)
+	B2reagents.add_reagent("facid", 280)
 
 	beakers += B1
 	beakers += B2
@@ -469,10 +469,10 @@
 	var/obj/item/reagent_containers/glass/beaker/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/B2 = new(src)
 
-	B1.reagents.add_reagent("colorful_reagent", 25)
-	B1.reagents.add_reagent("potassium", 25)
-	B2.reagents.add_reagent("phosphorus", 25)
-	B2.reagents.add_reagent("sugar", 25)
+	B1reagents.add_reagent("colorful_reagent", 25)
+	B1reagents.add_reagent("potassium", 25)
+	B2reagents.add_reagent("phosphorus", 25)
+	B2reagents.add_reagent("sugar", 25)
 
 	beakers += B1
 	beakers += B2
@@ -488,10 +488,10 @@
 	var/obj/item/reagent_containers/glass/beaker/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/B2 = new(src)
 
-	B1.reagents.add_reagent(glitter_type, 25)
-	B1.reagents.add_reagent("potassium", 25)
-	B2.reagents.add_reagent("phosphorus", 25)
-	B2.reagents.add_reagent("sugar", 25)
+	B1reagents.add_reagent(glitter_type, 25)
+	B1reagents.add_reagent("potassium", 25)
+	B2reagents.add_reagent("phosphorus", 25)
+	B2reagents.add_reagent("sugar", 25)
 
 	beakers += B1
 	beakers += B2
@@ -521,10 +521,10 @@
 	var/obj/item/reagent_containers/glass/beaker/bluespace/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/bluespace/B2 = new(src)
 
-	B1.reagents.add_reagent("fluorosurfactant", 250)
-	B1.reagents.add_reagent("clf3", 50)
-	B2.reagents.add_reagent("water", 250)
-	B2.reagents.add_reagent("clf3", 50)
+	B1reagents.add_reagent("fluorosurfactant", 250)
+	B1reagents.add_reagent("clf3", 50)
+	B2reagents.add_reagent("water", 250)
+	B2reagents.add_reagent("clf3", 50)
 
 	beakers += B1
 	beakers += B2
@@ -539,13 +539,13 @@
 	var/obj/item/reagent_containers/glass/beaker/bluespace/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/bluespace/B2 = new(src)
 
-	B1.reagents.add_reagent("cryptobiolin", 75)
-	B1.reagents.add_reagent("water", 50)
-	B1.reagents.add_reagent("mutetoxin", 50)
-	B1.reagents.add_reagent("spore", 75)
-	B1.reagents.add_reagent("itching_powder", 50)
-	B2.reagents.add_reagent("fluorosurfactant", 150)
-	B2.reagents.add_reagent("mutagen", 150)
+	B1reagents.add_reagent("cryptobiolin", 75)
+	B1reagents.add_reagent("water", 50)
+	B1reagents.add_reagent("mutetoxin", 50)
+	B1reagents.add_reagent("spore", 75)
+	B1reagents.add_reagent("itching_powder", 50)
+	B2reagents.add_reagent("fluorosurfactant", 150)
+	B2reagents.add_reagent("mutagen", 150)
 	beakers += B1
 	beakers += B2
 
@@ -559,11 +559,11 @@
 	var/obj/item/reagent_containers/glass/beaker/bluespace/B1 = new(src)
 	var/obj/item/reagent_containers/glass/beaker/bluespace/B2 = new(src)
 
-	B1.reagents.add_reagent("potassium", 50)
-	B1.reagents.add_reagent("phosphorus", 50)
-	B1.reagents.add_reagent("fungalspores", 200)
-	B2.reagents.add_reagent("blood", 250)
-	B2.reagents.add_reagent("sugar", 50)
+	B1reagents.add_reagent("potassium", 50)
+	B1reagents.add_reagent("phosphorus", 50)
+	B1reagents.add_reagent("fungalspores", 200)
+	B2reagents.add_reagent("blood", 250)
+	B2reagents.add_reagent("sugar", 50)
 
 	beakers += B1
 	beakers += B2

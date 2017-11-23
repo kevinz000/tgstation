@@ -239,6 +239,6 @@
 
 /obj/effect/proc_holder/changeling/sting/cryo/sting_action(mob/user, mob/target)
 	add_logs(user, target, "stung", "cryo sting")
-	if(target.reagents)
-		target.reagents.add_reagent("frostoil", 30)
+	if(targetreagents)
+		targetreagents.add_reagent("frostoil", 30)
 	return TRUE

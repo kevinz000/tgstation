@@ -12,8 +12,8 @@
 	. = ..()
 	if(. && isliving(target))
 		var/mob/living/L = target
-		if(L.reagents)
-			L.reagents.add_reagent(poison_type, poison_per_bite)
+		if(Lreagents)
+			Lreagents.add_reagent(poison_type, poison_per_bite)
 
 //basic spider mob, these generally guard nests
 /mob/living/simple_animal/hostile/poison/giant_spider

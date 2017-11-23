@@ -18,7 +18,7 @@
 	GET_COMPONENT(reagents, /datum/component/reagents)
 	if(imp)
 		icon_state = "implantcase-[imp.item_color]"
-		reagents = imp.reagents
+		reagents = impreagents
 	else
 		icon_state = "implantcase-0"
 		reagents = null

@@ -218,9 +218,9 @@
 	var/S = 0
 	for(var/obj/item/reagent_containers/food/snacks/grown/I in contents)
 		S += 5
-		if(I.reagents.get_reagent_amount("nutriment") < 0.1)
+		if(Ireagents.get_reagent_amount("nutriment") < 0.1)
 			points += 1*productivity
-		else points += I.reagents.get_reagent_amount("nutriment")*10*productivity
+		else points += Ireagents.get_reagent_amount("nutriment")*10*productivity
 		qdel(I)
 	if(S)
 		processing = TRUE
@@ -254,7 +254,7 @@
 		sum_reagents += reagents[R]
 	sum_reagents *= multiplier
 
-	if(beaker.reagents.total_volume + sum_reagents > beaker.reagents.maximum_volume)
+	if(beakerreagents.total_volume + sum_reagents > beakerreagents.maximum_volume)
 		menustat = "nobeakerspace"
 		return FALSE
 
@@ -273,7 +273,7 @@
 		var/obj/item/stack/product = new D.build_path(loc)
 		product.amount = amount
 		for(var/R in D.make_reagents)
-			beaker.reagents.add_reagent(R, D.make_reagents[R]*amount)
+			beakerreagents.add_reagent(R, D.make_reagents[R]*amount)
 	else
 		var/i = amount
 		while(i > 0)
@@ -284,7 +284,7 @@
 			if(D.build_path)
 				new D.build_path(loc)
 			for(var/R in D.make_reagents)
-				beaker.reagents.add_reagent(R, D.make_reagents[R])
+				beakerreagents.add_reagent(R, D.make_reagents[R])
 			. = 1
 			--i
 

@@ -26,7 +26,7 @@
 /obj/machinery/chem_master/RefreshParts()
 	reagents.maximum_volume = 0
 	for(var/obj/item/reagent_containers/glass/beaker/B in component_parts)
-		reagents.maximum_volume += B.reagents.maximum_volume
+		reagents.maximum_volume += Breagents.maximum_volume
 
 /obj/machinery/chem_master/ex_act(severity, target)
 	if(severity < 3)
@@ -121,7 +121,7 @@
 /obj/machinery/chem_master/ui_data(mob/user)
 	var/list/data = list()
 	data["isBeakerLoaded"] = beaker ? 1 : 0
-	data["beakerCurrentVolume"] = beaker ? beaker.reagents.total_volume : null
+	data["beakerCurrentVolume"] = beaker ? beakerreagents.total_volume : null
 	data["beakerMaxVolume"] = beaker ? beaker.volume : null
 	data["mode"] = mode
 	data["condi"] = condi
@@ -136,7 +136,7 @@
 
 	var/beakerContents[0]
 	if(beaker)
-		for(var/datum/reagent/R in beaker.reagents.reagent_list)
+		for(var/datum/reagent/R in beakerreagents.reagent_list)
 			beakerContents.Add(list(list("name" = R.name, "id" = R.id, "volume" = R.volume))) // list in a list because Byond merges the first list...
 		data["beakerContents"] = beakerContents
 
@@ -174,12 +174,12 @@
 				var/id = params["id"]
 				var/amount = text2num(params["amount"])
 				if (amount > 0)
-					beaker.reagents.trans_id_to(src, id, amount)
+					beakerreagents.trans_id_to(src, id, amount)
 					. = TRUE
 				else if (amount == -1) // -1 means custom amount
 					useramount = input("Enter the Amount you want to transfer:", name, useramount) as num|null
 					if (useramount > 0)
-						beaker.reagents.trans_id_to(src, id, useramount)
+						beakerreagents.trans_id_to(src, id, useramount)
 						. = TRUE
 
 		if("transferFromBuffer")

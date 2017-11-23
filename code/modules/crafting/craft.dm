@@ -99,7 +99,8 @@
 			if(istype(I, /obj/item/reagent_containers))
 				var/obj/item/reagent_containers/RC = I
 				if(RC.container_type & OPENCONTAINER_1)
-					for(var/datum/reagent/A in RC.reagents.reagent_list)
+					GET_COMPONENT_FROM(Rreagents, /datum/component/reagents, R)
+					for(var/datum/reagent/A in RCreagents.reagent_list)
 						.[A.type] += A.volume
 			.[I.type] += 1
 
@@ -183,15 +184,16 @@
 				var/datum/reagent/RG = new A
 				var/datum/reagent/RGNT
 				while(amt > 0)
+					GET_COMPONENT_FROM(Rreagents, /datum/component/reagents, R)
 					var/obj/item/reagent_containers/RC = locate() in surroundings
-					RG = RC.reagents.get_reagent(A)
+					RG = RCreagents.get_reagent(A)
 					if(RG)
 						if(!locate(RG.type) in Deletion)
 							Deletion += new RG.type()
 						if(RG.volume > amt)
 							RG.volume -= amt
 							data = RG.data
-							RC.reagents.conditional_update(RC)
+							RCreagents.conditional_update(RC)
 							RG = locate(RG.type) in Deletion
 							RG.volume = amt
 							RG.data += data
@@ -199,8 +201,8 @@
 						else
 							surroundings -= RC
 							amt -= RG.volume
-							RC.reagents.reagent_list -= RG
-							RC.reagents.conditional_update(RC)
+							RCreagents.reagent_list -= RG
+							RCreagents.conditional_update(RC)
 							RGNT = locate(RG.type) in Deletion
 							RGNT.volume += RG.volume
 							RGNT.data += RG.data

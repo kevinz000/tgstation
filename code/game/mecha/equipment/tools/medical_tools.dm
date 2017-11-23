@@ -198,7 +198,7 @@
 		occupant_message("Injecting [patient] with [to_inject] units of [R.name].")
 		log_message("Injecting [patient] with [to_inject] units of [R.name].")
 		add_logs(chassis.occupant, patient, "injected", "[name] ([R] - [to_inject] units)")
-		SG.reagents.trans_id_to(patient,R.id,to_inject)
+		SGreagents.trans_id_to(patient,R.id,to_inject)
 		update_equip_info()
 	return
 
@@ -231,8 +231,8 @@
 	M.AdjustStun(-80)
 	M.AdjustKnockdown(-80)
 	M.AdjustUnconscious(-80)
-	if(M.reagents.get_reagent_amount("epinephrine") < 5)
-		M.reagents.add_reagent("epinephrine", 5)
+	if(Mreagents.get_reagent_amount("epinephrine") < 5)
+		Mreagents.add_reagent("epinephrine", 5)
 	chassis.use_power(energy_drain)
 	update_equip_info()
 
@@ -472,7 +472,7 @@
 			if(!(D.CanPass(S,loc)))
 				occupant_message("Unable to load syringe.")
 				return 0
-		S.reagents.trans_to(src, S.reagents.total_volume)
+		Sreagents.trans_to(src, Sreagents.total_volume)
 		S.forceMove(src)
 		syringes += S
 		occupant_message("Syringe loaded.")
