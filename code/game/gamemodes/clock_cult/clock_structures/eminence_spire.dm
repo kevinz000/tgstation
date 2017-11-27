@@ -12,6 +12,9 @@
 	var/kingmaking
 
 /obj/structure/destructible/clockwork/eminence_spire/attack_hand(mob/living/user)
+	. = ..()
+	if(.)
+		return
 	if(!is_servant_of_ratvar(user))
 		to_chat(user, "<span class='notice'>You can tell how powerful [src] is; you know better than to touch it.</span>")
 		return

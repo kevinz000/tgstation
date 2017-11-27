@@ -235,7 +235,8 @@
 
 /obj/machinery/power/turbine/attack_hand(mob/user)
 
-	if(..())
+	. = ..()
+	if(.)
 		return
 
 	interact(user)
@@ -328,7 +329,8 @@
 		compressor = locate(/obj/machinery/power/compressor) in range(5, src)
 
 /obj/machinery/computer/turbine_computer/attack_hand(var/mob/user as mob)
-	if(..())
+	. = ..()
+	if(.)
 		return
 
 	ui_interact(user)

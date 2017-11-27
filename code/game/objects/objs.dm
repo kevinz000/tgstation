@@ -177,10 +177,7 @@
 /obj/get_spans()
 	return ..() | SPAN_ROBOT
 
-/obj/storage_contents_dump_act(obj/item/storage/src_object, mob/user)
-	return
-
-/obj/get_dumping_location(obj/item/storage/source,mob/user)
+/obj/get_dumping_location(datum/component/storage/source,mob/user)
 	return get_turf(src)
 
 /obj/proc/CanAStarPass()

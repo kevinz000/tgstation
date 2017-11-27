@@ -31,7 +31,7 @@
 /obj/item/pizzabox/Initialize()
 	. = ..()
 	update_icon()
-	
+
 
 /obj/item/pizzabox/Destroy()
 	unprocess()
@@ -107,8 +107,7 @@
 
 /obj/item/pizzabox/attack_hand(mob/user)
 	if(user.get_inactive_held_item() != src)
-		..()
-		return
+		return ..()
 	if(open)
 		if(pizza)
 			user.put_in_hands(pizza)
@@ -146,7 +145,7 @@
 		update_icon()
 		user.regenerate_icons()
 		return
-	..()
+	return ..()
 
 /obj/item/pizzabox/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/pizzabox))

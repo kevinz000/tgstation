@@ -362,7 +362,7 @@
 	permeability_coefficient = 0.05
 	flags_1 = NOSLIP_1
 	resistance_flags = NONE
-	pockets = /obj/item/storage/internal/pocket/shoes
+	pocket_storage_component_path = /datum/component/storage/concrete/pockets/shoes
 	armor = list(melee = 10, bullet = 10, laser = 10, energy = 0, bomb = 0, bio = 0, rad = 0, fire = 50, acid = 50)
 
 	var/datum/action/item_action/chameleon/change/chameleon_action
@@ -518,8 +518,12 @@
 /obj/item/storage/belt/chameleon
 	name = "toolbelt"
 	desc = "Holds tools."
-	silent = 1
 	var/datum/action/item_action/chameleon/change/chameleon_action
+
+/obj/item/storage/belt/chameleon/ComponentInitialize()
+	. = ..()
+	GET_COMPONENT(STR, /datum/component/storage)
+	STR.silent = TRUE
 
 /obj/item/storage/belt/chameleon/New()
 	..()

@@ -56,7 +56,8 @@
 	. = ..() | SPAN_ROBOT
 
 /obj/machinery/computer/bank_machine/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	src.add_fingerprint(usr)
 	var/dat = "[station_name()] secure vault. Authorized personnel only.<br>"

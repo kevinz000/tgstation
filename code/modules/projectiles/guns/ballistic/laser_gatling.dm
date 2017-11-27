@@ -57,6 +57,7 @@
 		user.dropItemToGround(gun, TRUE)
 
 /obj/item/minigunpack/MouseDrop(atom/over_object)
+	. = ..()
 	if(armed)
 		return
 	if(iscarbon(usr))

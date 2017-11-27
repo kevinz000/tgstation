@@ -59,7 +59,8 @@
 			break
 
 /obj/machinery/doorButtons/access_button/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	if(busy)
 		return
@@ -260,7 +261,8 @@
 		icon_state = "access_control_standby"
 
 /obj/machinery/doorButtons/airlock_controller/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	var/datum/browser/popup = new(user, "computer", name)
 	popup.set_title_image(user.browse_rsc_icon(src.icon, src.icon_state))

@@ -161,7 +161,7 @@
 	var/mob/M = usr
 	if((!istype(over_object, /obj/screen)) && usr.canUseTopic(src))
 		return attack_self(M)
-	return
+	return ..()
 
 /obj/item/device/modular_computer/attack_ai(mob/user)
 	return attack_self(user)

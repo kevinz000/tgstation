@@ -36,6 +36,9 @@
 	attack_hand(user)
 
 /obj/machinery/telecomms/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 
 	// You need a multitool to use this, or be silicon
 	if(!issilicon(user))

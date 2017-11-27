@@ -49,6 +49,9 @@
 /obj/structure/falsewall/attack_hand(mob/user)
 	if(opening)
 		return
+	. = ..()
+	if(.)
+		return
 
 	opening = TRUE
 	update_icon()
@@ -188,7 +191,7 @@
 
 /obj/structure/falsewall/uranium/attack_hand(mob/user)
 	radiate()
-	..()
+	. = ..()
 
 /obj/structure/falsewall/uranium/proc/radiate()
 	if(!active)

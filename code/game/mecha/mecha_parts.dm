@@ -18,9 +18,6 @@
 	if(!construct || !construct.action(W, user))
 		return ..()
 
-/obj/item/mecha_parts/chassis/attack_hand()
-	return
-
 /////////// Ripley
 
 /obj/item/mecha_parts/chassis/ripley

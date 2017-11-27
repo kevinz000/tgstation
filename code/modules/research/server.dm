@@ -81,11 +81,13 @@
 				air_update_turf()
 
 /obj/machinery/rnd/server/attack_hand(mob/user as mob) // I guess only exists to stop ninjas or hell does it even work I dunno.  See also ninja gloves.
+	. = ..()
+	if(.)
+		return
 	if (disabled)
 		return
 	if (shocked)
 		shock(user,50)
-	return
 
 /proc/fix_noid_research_servers()
 	var/list/no_id_servers = list()
@@ -139,7 +141,8 @@
 	return
 
 /obj/machinery/computer/rdservercontrol/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	user.set_machine(src)
 	var/dat = ""

@@ -133,7 +133,8 @@ GLOBAL_LIST_EMPTY(allConsoles)
 	return ..()
 
 /obj/machinery/requests_console/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	var/dat = ""
 	if(!open)

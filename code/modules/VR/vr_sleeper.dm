@@ -36,6 +36,9 @@
 
 
 /obj/machinery/vr_sleeper/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(occupant)
 		ui_interact(user)
 	else

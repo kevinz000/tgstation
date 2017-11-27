@@ -150,6 +150,9 @@
 	return ..()
 
 /obj/item/device/gps/computer/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	attack_self(user)
 
 //Bed

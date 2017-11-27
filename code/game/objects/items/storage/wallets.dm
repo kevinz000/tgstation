@@ -1,11 +1,19 @@
 /obj/item/storage/wallet
 	name = "wallet"
 	desc = "It can hold a few small and personal things."
-	storage_slots = 4
 	icon_state = "wallet"
 	w_class = WEIGHT_CLASS_SMALL
 	resistance_flags = FLAMMABLE
-	can_hold = list(
+	slot_flags = SLOT_ID
+
+	var/obj/item/card/id/front_id = null
+	var/list/combined_access = list()
+
+/obj/item/storage/wallet/ComponentInitialize()
+	. = ..()
+	GET_COMPONENT(STR, /datum/component/storage)
+	STR.max_items = 4
+	STR.can_hold = typecacheof(list(
 		/obj/item/stack/spacecash,
 		/obj/item/card,
 		/obj/item/clothing/mask/cigarette,
@@ -26,18 +34,13 @@
 		/obj/item/reagent_containers/dropper,
 		/obj/item/reagent_containers/syringe,
 		/obj/item/screwdriver,
-		/obj/item/stamp)
-	slot_flags = SLOT_ID
+		/obj/item/stamp))
 
-	var/obj/item/card/id/front_id = null
-	var/list/combined_access = list()
-
-
-/obj/item/storage/wallet/remove_from_storage(obj/item/W, atom/new_location)
-	. = ..(W, new_location)
+/obj/item/storage/wallet/Exited(atom/movable/AM)
+	. = ..()
 	if(.)
-		if(istype(W, /obj/item/card/id))
-			if(W == front_id)
+		if(istype(AM, /obj/item/card/id))
+			if(AM == front_id)
 				front_id = null
 			refreshID()
 			update_icon()
@@ -50,10 +53,10 @@
 			update_icon()
 		combined_access |= I.access
 
-/obj/item/storage/wallet/handle_item_insertion(obj/item/W, prevent_warning = 0)
+/obj/item/storage/wallet/Entered(atom/movable/AM)
 	. = ..()
 	if(.)
-		if(istype(W, /obj/item/card/id))
+		if(istype(AM, /obj/item/card/id))
 			refreshID()
 
 /obj/item/storage/wallet/update_icon()

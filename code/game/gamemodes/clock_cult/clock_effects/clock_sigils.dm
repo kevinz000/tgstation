@@ -30,8 +30,8 @@
 			return ..()
 		user.visible_message("<span class='warning'>[user] stamps out [src]!</span>", "<span class='danger'>You stomp on [src], scattering it into thousands of particles.</span>")
 		qdel(src)
-		return 1
-	..()
+		return TRUE
+	. = ..()
 
 /obj/effect/clockwork/sigil/ex_act(severity)
 	visible_message("<span class='warning'>[src] scatters into thousands of particles.</span>")

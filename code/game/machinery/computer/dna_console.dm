@@ -61,7 +61,8 @@
 	injectorready = world.time + INJECTOR_TIMEOUT
 
 /obj/machinery/computer/scan_consolenew/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	ShowInterface(user)
 

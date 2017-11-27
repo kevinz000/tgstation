@@ -108,6 +108,9 @@
 		walk_link(user)
 
 /obj/effect/cross_action/spacetime_dist/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	walk_link(user)
 
 /obj/effect/cross_action/spacetime_dist/attack_paw(mob/user)

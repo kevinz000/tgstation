@@ -20,14 +20,14 @@
 	return src.attack_hand(user)
 
 /obj/machinery/igniter/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	add_fingerprint(user)
 
 	use_power(50)
 	src.on = !( src.on )
 	src.icon_state = text("igniter[]", src.on)
-	return
 
 /obj/machinery/igniter/process()	//ugh why is this even in process()?
 	if (src.on && !(stat & NOPOWER) )

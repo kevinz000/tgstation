@@ -41,13 +41,14 @@
 		return FALSE
 
 /obj/machinery/rnd/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(shocked)
 		if(shock(user,50))
 			return
 	if(panel_open)
 		wires.interact(user)
-
-
 
 /obj/machinery/rnd/attackby(obj/item/O, mob/user, params)
 	if (shocked)

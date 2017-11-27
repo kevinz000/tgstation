@@ -285,7 +285,7 @@
 			else
 				client.perspective = EYE_PERSPECTIVE
 				client.eye = loc
-		return 1 
+		return 1
 
 /mob/living/reset_perspective(atom/A)
 	if(..())
@@ -419,7 +419,7 @@
 		pulling = null
 		grab_state = 0
 		update_pull_hud_icon()
-    
+
 		if(isliving(ex_pulled))
 			var/mob/living/L = ex_pulled
 			L.update_canmove()// mob gets up if it was lyng down in a chokehold
@@ -563,7 +563,7 @@
 	return
 
 /mob/MouseDrop(mob/M)
-	..()
+	. = ..()
 	if(M != usr)
 		return
 	if(usr == src)

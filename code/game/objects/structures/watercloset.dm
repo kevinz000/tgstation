@@ -18,6 +18,9 @@
 
 
 /obj/structure/toilet/attack_hand(mob/living/user)
+	. = ..()
+	if(.)
+		return
 	if(swirlie)
 		user.changeNext_move(CLICK_CD_MELEE)
 		playsound(src.loc, "swing_hit", 25, 1)
@@ -133,6 +136,9 @@
 	hiddenitem = new /obj/item/reagent_containers/food/urinalcake
 
 /obj/structure/urinal/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(user.pulling && user.a_intent == INTENT_GRAB && isliving(user.pulling))
 		var/mob/living/GM = user.pulling
 		if(user.grab_state >= GRAB_AGGRESSIVE)
@@ -219,6 +225,9 @@
 
 
 /obj/machinery/shower/attack_hand(mob/M)
+	. = ..()
+	if(.)
+		return
 	on = !on
 	update_icon()
 	add_fingerprint(M)
@@ -436,6 +445,9 @@
 
 
 /obj/structure/sink/attack_hand(mob/living/user)
+	. = ..()
+	if(.)
+		return
 	if(!user || !istype(user))
 		return
 	if(!iscarbon(user))
@@ -637,9 +649,11 @@
 
 
 /obj/structure/curtain/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	playsound(loc, 'sound/effects/curtain.ogg', 50, 1)
 	toggle()
-	..()
 
 /obj/structure/curtain/deconstruct(disassembled = TRUE)
 	new /obj/item/stack/sheet/cloth (loc, 2)

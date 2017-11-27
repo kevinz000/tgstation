@@ -37,7 +37,9 @@
 	update_icon()
 
 /obj/item/reagent_containers/syringe/attack_hand()
-	..()
+	. = ..()
+	if(.)
+		return
 	update_icon()
 
 /obj/item/reagent_containers/syringe/attack_paw(mob/user)

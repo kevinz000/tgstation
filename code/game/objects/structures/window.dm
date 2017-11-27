@@ -157,6 +157,9 @@
 	. = ..()
 
 /obj/structure/window/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(!can_be_reached(user))
 		return
 	user.changeNext_move(CLICK_CD_MELEE)
@@ -732,6 +735,9 @@
 	update_icon()
 
 /obj/structure/window/paperframe/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	add_fingerprint(user)
 	if(user.a_intent != INTENT_HARM)
 		user.changeNext_move(CLICK_CD_MELEE)

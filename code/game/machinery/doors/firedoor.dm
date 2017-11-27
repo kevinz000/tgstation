@@ -82,6 +82,9 @@
 		stat |= NOPOWER
 
 /obj/machinery/door/firedoor/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(operating || !density)
 		return
 	user.changeNext_move(CLICK_CD_MELEE)

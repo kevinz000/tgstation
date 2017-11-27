@@ -104,6 +104,9 @@
 	qdel(src)
 
 /obj/structure/fireaxecabinet/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(open || broken)
 		if(fireaxe)
 			user.put_in_hands(fireaxe)

@@ -70,6 +70,9 @@
 		reagents.add_reagent(reagent, icecream_vat_reagents[reagent])
 
 /obj/machinery/icecream_vat/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	user.set_machine(src)
 	interact(user)
 

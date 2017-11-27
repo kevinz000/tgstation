@@ -12,8 +12,9 @@
 	return attack_hand(user)
 
 /obj/machinery/pipedispenser/attack_hand(mob/user)
-	if(..())
-		return 1
+	. = ..()
+	if(.)
+		return
 	var/dat = "PIPING LAYER: <A href='?src=[REF(src)];layer_down=1'>--</A><b>[piping_layer]</b><A href='?src=[REF(src)];layer_up=1'>++</A><BR>"
 
 	var/recipes = GLOB.atmos_pipe_recipes
@@ -120,8 +121,9 @@
 	qdel(pipe)
 
 /obj/machinery/pipedispenser/disposal/attack_hand(mob/user)
-	if(..())
-		return 1
+	. = ..()
+	if(.)
+		return
 
 	var/dat = ""
 	var/recipes = GLOB.disposal_pipe_recipes
@@ -172,8 +174,9 @@
 	anchored = TRUE
 
 /obj/machinery/pipedispenser/disposal/transit_tube/attack_hand(mob/user)
-	if(..())
-		return 1
+	. = ..()
+	if(.)
+		return
 
 	var/dat = {"<B>Transit Tubes:</B><BR>
 <A href='?src=[REF(src)];tube=[TRANSIT_TUBE_STRAIGHT]'>Straight Tube</A><BR>

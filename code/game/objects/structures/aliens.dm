@@ -250,6 +250,9 @@
 	. = attack_hand(user)
 
 /obj/structure/alien/egg/attack_hand(mob/living/user)
+	. = ..()
+	if(.)
+		return
 	if(user.getorgan(/obj/item/organ/alien/plasmavessel))
 		switch(status)
 			if(BURST)

@@ -259,8 +259,10 @@
 	return round(initial(D.construction_time)*time_coeff, roundto)
 
 /obj/machinery/mecha_part_fabricator/attack_hand(mob/user)
-	if(!(..()))
-		return interact(user)
+	. = ..()
+	if(.)
+		return
+	interact(user)
 
 /obj/machinery/mecha_part_fabricator/interact(mob/user as mob)
 	var/dat, left_part

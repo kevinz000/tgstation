@@ -10,13 +10,11 @@
 	pressure_resistance = 5*ONE_ATMOSPHERE
 
 /obj/structure/ore_box/attackby(obj/item/W, mob/user, params)
-	if (istype(W, /obj/item/ore))
+	if(istype(W, /obj/item/ore))
 		user.transferItemToLoc(W, src)
-	else if (istype(W, /obj/item/storage))
-		var/obj/item/storage/S = W
-		for(var/obj/item/ore/O in S.contents)
-			S.remove_from_storage(O, src) //This will move the item to this item's contents
-		to_chat(user, "<span class='notice'>You empty the ore in [S] into \the [src].</span>")
+	else if(W.SendSignal(COMSIG_CONTAINS_STORAGE))
+		W.SendSignal(COMSIG_TRY_STORAGE_TAKE_TYPE, /obj/item/ore, src)
+		to_chat(user, "<span class='notice'>You empty the ore in [W] into \the [src].</span>")
 	else if(istype(W, /obj/item/crowbar))
 		playsound(src, W.usesound, 50, 1)
 		var/obj/item/crowbar/C = W
@@ -32,6 +30,9 @@
 	. = ..()
 
 /obj/structure/ore_box/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(Adjacent(user))
 		show_contents(user)
 

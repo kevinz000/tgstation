@@ -224,8 +224,8 @@
 		to_chat(user, "<span class='warning'>They won't fit in, as there is already stuff inside!</span>")
 		return
 	if(T.use(10))
-		if(user.s_active)
-			user.s_active.close(user)
+		if(user.active_storage)
+			user.active_storage.close(user)
 		var/obj/item/toolbox_tiles/B = new /obj/item/toolbox_tiles
 		user.put_in_hands(B)
 		to_chat(user, "<span class='notice'>You add the tiles into the empty toolbox. They protrude from the top.</span>")
@@ -312,7 +312,6 @@
 	user.put_in_hands(A)
 	to_chat(user, "<span class='notice'>You add the robot arm to the first aid kit.</span>")
 	qdel(src)
-
 
 /obj/item/firstaid_arm_assembly/attackby(obj/item/W, mob/user, params)
 	..()

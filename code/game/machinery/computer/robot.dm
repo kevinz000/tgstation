@@ -26,7 +26,8 @@
 	return 1
 
 /obj/machinery/computer/robotics/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	interact(user)
 

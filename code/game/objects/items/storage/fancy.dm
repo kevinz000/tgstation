@@ -24,7 +24,8 @@
 	var/fancy_open = FALSE
 
 /obj/item/storage/fancy/PopulateContents()
-	for(var/i = 1 to storage_slots)
+	GET_COMPONENT(STR, /datum/component/storage)
+	for(var/i = 1 to STR.max_items)
 		new spawn_type(src)
 
 /obj/item/storage/fancy/update_icon()
@@ -36,7 +37,7 @@
 /obj/item/storage/fancy/examine(mob/user)
 	..()
 	if(fancy_open)
-		if(contents.len == 1)
+		if(length(contents) == 1)
 			to_chat(user, "There is one [icon_type] left.")
 		else
 			to_chat(user, "There are [contents.len <= 0 ? "no" : "[contents.len]"] [icon_type]s left.")
@@ -44,20 +45,17 @@
 /obj/item/storage/fancy/attack_self(mob/user)
 	fancy_open = !fancy_open
 	update_icon()
-
-/obj/item/storage/fancy/dump_content_at(atom/dest_object, mob/user)
 	. = ..()
-	if(.)
-		fancy_open = TRUE
-		update_icon()
 
-/obj/item/storage/fancy/handle_item_insertion(obj/item/W, prevent_warning = 0, mob/user)
+/obj/item/storage/fancy/Exited()
+	. = ..()
 	fancy_open = TRUE
-	return ..()
+	update_icon()
 
-/obj/item/storage/fancy/remove_from_storage(obj/item/W, atom/new_location, burn = 0)
+/obj/item/storage/fancy/Entered()
+	. = ..()
 	fancy_open = TRUE
-	return ..()
+	update_icon()
 
 /*
  * Donut Box
@@ -68,10 +66,14 @@
 	icon_state = "donutbox6"
 	icon_type = "donut"
 	name = "donut box"
-	storage_slots = 6
-	can_hold = list(/obj/item/reagent_containers/food/snacks/donut)
 	spawn_type = /obj/item/reagent_containers/food/snacks/donut
 	fancy_open = TRUE
+
+/obj/item/storage/fancy/donut_box/ComponentInitialize()
+	. = ..()
+	GET_COMPONENT(STR, /datum/component/storage)
+	STR.max_items = 6
+	STR.can_hold = typecacheof(list(/obj/item/reagent_containers/food/snacks/donut))
 
 /*
  * Egg Box
@@ -84,9 +86,13 @@
 	lefthand_file = 'icons/mob/inhands/misc/food_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/misc/food_righthand.dmi'
 	name = "egg box"
-	storage_slots = 12
-	can_hold = list(/obj/item/reagent_containers/food/snacks/egg)
 	spawn_type = /obj/item/reagent_containers/food/snacks/egg
+
+/obj/item/storage/fancy/egg_box/ComponentInitialize()
+	. = ..()
+	GET_COMPONENT(STR, /datum/component/storage)
+	STR.max_items = 12
+	STR.can_hold = typecacheof(list(/obj/item/reagent_containers/food/snacks/egg))
 
 /*
  * Candle Box
@@ -99,11 +105,15 @@
 	icon_state = "candlebox5"
 	icon_type = "candle"
 	item_state = "candlebox5"
-	storage_slots = 5
 	throwforce = 2
 	slot_flags = SLOT_BELT
 	spawn_type = /obj/item/candle
 	fancy_open = TRUE
+
+/obj/item/storage/fancy/candle_box/ComponentInitialize()
+	. = ..()
+	GET_COMPONENT(STR, /datum/component/storage)
+	STR.max_items = 5
 
 /obj/item/storage/fancy/candle_box/attack_self(mob_user)
 	return
@@ -120,10 +130,14 @@
 	w_class = WEIGHT_CLASS_TINY
 	throwforce = 0
 	slot_flags = SLOT_BELT
-	storage_slots = 6
-	can_hold = list(/obj/item/clothing/mask/cigarette, /obj/item/lighter)
 	icon_type = "cigarette"
 	spawn_type = /obj/item/clothing/mask/cigarette/space_cigarette
+
+/obj/item/storage/fancy/cigarettes/ComponentInitialize()
+	. = ..()
+	GET_COMPONENT(STR, /datum/component/storage)
+	STR.max_items = 6
+	STR.can_hold = typecacheof(list(/obj/item/clothing/mask/cigarette, /obj/item/lighter))
 
 /obj/item/storage/fancy/cigarettes/examine(mob/user)
 	..()
@@ -134,7 +148,7 @@
 		return
 	var/obj/item/clothing/mask/cigarette/W = locate(/obj/item/clothing/mask/cigarette) in contents
 	if(W && contents.len > 0)
-		remove_from_storage(W, user)
+		SendSignal(COMSIG_TRY_STORAGE_TAKE, W, user)
 		user.put_in_hands(W)
 		contents -= W
 		to_chat(user, "<span class='notice'>You take a [icon_type] out of the pack.</span>")
@@ -171,7 +185,7 @@
 	if(cig)
 		if(M == user && contents.len > 0 && !user.wear_mask)
 			var/obj/item/clothing/mask/cigarette/W = cig
-			remove_from_storage(W, M)
+			SendSignal(COMSIG_TRY_STORAGE_TAKE, W, M)
 			M.equip_to_slot_if_possible(W, slot_wear_mask)
 			contents -= W
 			to_chat(user, "<span class='notice'>You take a [icon_type] out of the pack.</span>")
@@ -234,10 +248,14 @@
 	w_class = WEIGHT_CLASS_TINY
 	icon = 'icons/obj/cigarettes.dmi'
 	icon_state = "cig_paper_pack"
-	storage_slots = 10
 	icon_type = "rolling paper"
-	can_hold = list(/obj/item/rollingpaper)
 	spawn_type = /obj/item/rollingpaper
+
+/obj/item/storage/fancy/rollingpapers/ComponentInitialize()
+	. = ..()
+	GET_COMPONENT(STR, /datum/component/storage)
+	STR.max_items = 10
+	STR.can_hold = typecacheof(list(/obj/item/rollingpaper))
 
 /obj/item/storage/fancy/rollingpapers/update_icon()
 	cut_overlays()
@@ -254,10 +272,14 @@
 	icon = 'icons/obj/cigarettes.dmi'
 	icon_state = "cigarcase"
 	w_class = WEIGHT_CLASS_NORMAL
-	storage_slots = 5
-	can_hold = list(/obj/item/clothing/mask/cigarette/cigar)
 	icon_type = "premium cigar"
 	spawn_type = /obj/item/clothing/mask/cigarette/cigar
+
+/obj/item/storage/fancy/cigarettes/cigars/ComponentInitialize()
+	. = ..()
+	GET_COMPONENT(STR, /datum/component/storage)
+	STR.max_items = 5
+	STR.can_hold = typecacheof(list(/obj/item/clothing/mask/cigarette/cigar))
 
 /obj/item/storage/fancy/cigarettes/cigars/update_icon()
 	cut_overlays()

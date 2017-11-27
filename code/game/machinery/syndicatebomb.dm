@@ -181,6 +181,9 @@
 			to_chat(user, "<span class='warning'>That seems like a really bad idea...</span>")
 
 /obj/machinery/syndicatebomb/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	interact(user)
 
 /obj/machinery/syndicatebomb/attack_ai()

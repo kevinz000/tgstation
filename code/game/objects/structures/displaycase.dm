@@ -171,6 +171,9 @@
 	return src.attack_hand(user)
 
 /obj/structure/displaycase/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	user.changeNext_move(CLICK_CD_MELEE)
 	if (showpiece && (broken || open))
 		to_chat(user, "<span class='notice'>You deactivate the hover field built into the case.</span>")

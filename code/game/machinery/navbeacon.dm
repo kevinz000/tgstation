@@ -109,6 +109,9 @@
 	return
 
 /obj/machinery/navbeacon/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	interact(user, 0)
 
 /obj/machinery/navbeacon/interact(mob/user, ai = 0)

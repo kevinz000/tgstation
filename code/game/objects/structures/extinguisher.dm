@@ -68,6 +68,9 @@
 
 
 /obj/structure/extinguisher_cabinet/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(iscyborg(user) || isalien(user))
 		return
 	if(stored_extinguisher)

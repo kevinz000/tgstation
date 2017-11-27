@@ -21,6 +21,9 @@
 	qdel(src)
 
 /obj/structure/dresser/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(!Adjacent(user))//no tele-grooming
 		return
 	if(ishuman(user))

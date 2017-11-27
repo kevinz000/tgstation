@@ -68,6 +68,9 @@
 
 
 /obj/item/papercutter/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	add_fingerprint(user)
 	if(!storedcutter)
 		to_chat(user, "<span class='notice'>The cutting blade is gone! You can't use [src] now.</span>")
@@ -90,6 +93,7 @@
 
 
 /obj/item/papercutter/MouseDrop(atom/over_object)
+	. = ..()
 	var/mob/M = usr
 	if(M.incapacitated() || !Adjacent(M))
 		return
@@ -101,7 +105,6 @@
 		var/obj/screen/inventory/hand/H = over_object
 		M.putItemFromInventoryInHandIfPossible(src, H.held_index)
 	add_fingerprint(M)
-
 
 /obj/item/paperslip
 	name = "paper slip"

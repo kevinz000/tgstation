@@ -225,8 +225,10 @@ GLOBAL_LIST_EMPTY(gravity_generators) // We will keep track of this by adding ne
 
 
 /obj/machinery/gravity_generator/main/attack_hand(mob/user)
-	if(!..())
-		return interact(user)
+	. = ..()
+	if(.)
+		return
+	interact(user)
 
 /obj/machinery/gravity_generator/main/interact(mob/user)
 	if(stat & BROKEN)

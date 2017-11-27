@@ -145,9 +145,9 @@
 
 	data["isPillBottleLoaded"] = bottle ? 1 : 0
 	if(bottle)
+		GET_COMPONENT_FROM(STRB, /datum/component/storage, bottle)
 		data["pillBotContent"] = bottle.contents.len
-		data["pillBotMaxContent"] = bottle.storage_slots
-
+		data["pillBotMaxContent"] = STRB.max_items
 
 	var/beakerContents[0]
 	if(beaker)
@@ -160,7 +160,6 @@
 		for(var/datum/reagent/N in reagents.reagent_list)
 			bufferContents.Add(list(list("name" = N.name, "id" = N.id, "volume" = N.volume))) // ^
 		data["bufferContents"] = bufferContents
-
 
 	return data
 
@@ -225,7 +224,8 @@
 				var/obj/item/reagent_containers/pill/P
 
 				for(var/i = 0; i < amount; i++)
-					if(bottle && bottle.contents.len < bottle.storage_slots)
+					GET_COMPONENT_FROM(STRB, /datum/component/storage, bottle)
+					if(bottle && bottle.contents.len < STRB.max_items)
 						P = new/obj/item/reagent_containers/pill(bottle)
 					else
 						P = new/obj/item/reagent_containers/pill(drop_location())

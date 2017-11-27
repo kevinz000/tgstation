@@ -49,7 +49,7 @@
 /obj/machinery/power/rtg/attack_hand(mob/user)
 	if(user.a_intent == INTENT_GRAB && user_buckle_mob(user.pulling, user, check_loc = 0))
 		return
-	..()
+	. = ..()
 
 
 /obj/machinery/power/rtg/advanced

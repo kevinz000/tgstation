@@ -71,6 +71,9 @@
 	var/insistinga = 0
 
 /obj/machinery/wish_granter_dark/attack_hand(mob/living/carbon/human/user)
+	. = ..()
+	if(.)
+		return
 	usr.set_machine(src)
 
 	if(chargesa <= 0)
@@ -115,7 +118,7 @@
 				to_chat(user, "The Wish Granter punishes you for your wickedness, claiming your soul and warping your body to match the darkness in your heart.")
 				SSticker.mode.traitors += user.mind
 				user.mind.special_role = "traitor"
-				
+
 				var/datum/objective/hijack/hijack = new
 				hijack.owner = user.mind
 				user.mind.objectives += hijack

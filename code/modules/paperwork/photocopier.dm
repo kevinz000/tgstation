@@ -37,6 +37,9 @@
 	return attack_hand(user)
 
 /obj/machinery/photocopier/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	user.set_machine(src)
 
 	var/dat = "Photocopier<BR><BR>"

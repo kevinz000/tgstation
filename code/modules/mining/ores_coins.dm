@@ -40,21 +40,18 @@
 		OB = locate(/obj/item/storage/bag/ore) in R.held_items
 	if(OB)
 		var/obj/structure/ore_box/box
-		if(!OB.can_be_inserted(src, TRUE, AM))
+		if(!OB.SendSignal(COMSIG_TRY_STORAGE_INSERT, src, AM, TRUE))
 			if(!OB.spam_protection)
 				to_chat(AM, "<span class='warning'>Your [OB.name] is full and can't hold any more ore!</span>")
 				OB.spam_protection = TRUE
 				sleep(1)
 				OB.spam_protection = FALSE
-		else
-			OB.handle_item_insertion(src, TRUE, AM)
 		// Then, if the user is dragging an ore box, empty the satchel
 		// into the box.
 		var/mob/living/L = AM
 		if(istype(L.pulling, /obj/structure/ore_box))
 			box = L.pulling
-			for(var/obj/item/ore/O in OB)
-				OB.remove_from_storage(src, box)
+			OB.SendSignal(COMSIG_TRY_STORAGE_QUICK_EMPTY, box)
 		if(show_message)
 			playsound(L, "rustle", 50, TRUE)
 			if(box)

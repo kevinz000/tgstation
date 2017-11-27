@@ -38,6 +38,9 @@
 	. = ..()
 
 /obj/effect/clockwork/city_of_cogs_rift/attack_hand(atom/movable/AM)
+	. = ..()
+	if(.)
+		return
 	beckon(AM)
 
 /obj/effect/clockwork/city_of_cogs_rift/CollidedWith(atom/movable/AM)

@@ -63,7 +63,7 @@
 	if(currentcolor > coloredlights.len)
 		on = FALSE
 	update_icon()
-	..()  //I am not sure what the parent procs have for attack_hand, best to check later.
+	return ..()  //I am not sure what the parent procs have for attack_hand, best to check later.
 
 /turf/open/floor/light/attack_ai(mob/user)
 	attack_hand(user)

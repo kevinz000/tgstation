@@ -335,6 +335,9 @@
 		qdel(src)
 
 /obj/item/restraints/legcuffs/beartrap/energy/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	Crossed(user) //honk
 
 /obj/item/restraints/legcuffs/beartrap/energy/cyborg

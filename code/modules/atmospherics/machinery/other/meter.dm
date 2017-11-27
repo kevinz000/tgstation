@@ -121,6 +121,9 @@
 	return attack_hand(user)
 
 /obj/machinery/meter/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 
 	if(stat & (NOPOWER|BROKEN))
 		return 1

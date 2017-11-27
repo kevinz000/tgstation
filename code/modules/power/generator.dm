@@ -124,8 +124,8 @@
 	..()
 
 /obj/machinery/power/generator/attack_hand(mob/user)
-	if(..())
-		user << browse(null, "window=teg")
+	. = ..()
+	if(.)
 		return
 	interact(user)
 

@@ -32,7 +32,8 @@ interface with the mining shuttle at the landing site if a mobile beacon is also
 	locator = new(src)
 
 /obj/machinery/computer/auxillary_base/attack_hand(mob/user)
-	if(..(user))
+	. = ..()
+	if(.)
 		return
 	add_fingerprint(usr)
 
@@ -267,6 +268,9 @@ obj/docking_port/stationary/public_mining_dock
 	var/console_range = 15 //Wifi range of the beacon to find the aux base console
 
 /obj/structure/mining_shuttle_beacon/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(anchored)
 		to_chat(user, "<span class='warning'>Landing zone already set.</span>")
 		return

@@ -47,7 +47,7 @@ Contents:
 	var/a_maxamount = 7//Maximum number of adrenaline boosts.
 
 		//Support function variables.
-	var/s_active = 0//Stealth off.
+	var/active_storage = 0//Stealth off.
 	var/s_busy = FALSE//Is the suit busy with a process? Like AI hacking. Used for safety functions.
 
 		//Ability function variables.
@@ -151,7 +151,7 @@ Contents:
 	if(s_initialized)
 		if(user == affecting)
 			to_chat(user, "All systems operational. Current energy capacity: <B>[DisplayEnergy(cell.charge)]</B>.")
-			to_chat(user, "The CLOAK-tech device is <B>[s_active?"active":"inactive"]</B>.")
+			to_chat(user, "The CLOAK-tech device is <B>[active_storage?"active":"inactive"]</B>.")
 			to_chat(user, "There are <B>[s_bombs]</B> smoke bomb\s remaining.")
 			to_chat(user, "There are <B>[a_boost]</B> adrenaline booster\s remaining.")
 

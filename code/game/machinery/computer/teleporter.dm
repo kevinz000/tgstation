@@ -49,7 +49,8 @@
 	return attack_hand(user)
 
 /obj/machinery/computer/teleporter/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	interact(user)
 

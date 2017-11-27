@@ -34,6 +34,9 @@
 	popup.open()
 
 /obj/machinery/embedded_controller/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	interact(user)
 
 /obj/machinery/embedded_controller/update_icon()

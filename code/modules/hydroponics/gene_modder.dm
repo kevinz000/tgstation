@@ -100,7 +100,8 @@
 
 
 /obj/machinery/plantgenes/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	interact(user)
 

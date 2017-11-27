@@ -647,6 +647,9 @@
 	capture(user)
 
 /obj/machinery/control_point/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	capture(user)
 
 /obj/machinery/control_point/proc/capture(mob/user)

@@ -42,7 +42,7 @@
 
 
 /obj/machinery/power/emitter/energycannon/magical/attack_hand(mob/user)
-	return
+	. = ..()
 
 /obj/machinery/power/emitter/energycannon/magical/attackby(obj/item/W, mob/user, params)
 	return

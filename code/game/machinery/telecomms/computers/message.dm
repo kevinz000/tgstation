@@ -68,7 +68,8 @@
 			break
 
 /obj/machinery/computer/message_monitor/attack_hand(mob/living/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	//If the computer is being hacked or is emagged, display the reboot message.
 	if(hacking || emagged)

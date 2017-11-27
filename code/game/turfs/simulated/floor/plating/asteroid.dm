@@ -39,12 +39,8 @@
 	if(..())
 		return TRUE
 	if(istype(W, /obj/item/storage/bag/ore))
-		var/obj/item/storage/bag/ore/S = W
-		if(S.collection_mode == 1)
-			for(var/obj/item/ore/O in src.contents)
-				O.attackby(W,user)
-				return
-
+		for(var/obj/item/ore/O in src)
+			W.SendSignal(COMSIG_PARENT_ATTACKBY, O)
 	if(istype(W, /obj/item/stack/tile))
 		var/obj/item/stack/tile/Z = W
 		if(!Z.use(1))
@@ -57,7 +53,6 @@
 		playsound(src, 'sound/weapons/genhit.ogg', 50, 1)
 		return
 
-
 /turf/open/floor/plating/asteroid/singularity_act()
 	if(is_planet_level(z))
 		return ..()
@@ -66,7 +61,6 @@
 /turf/open/floor/plating/asteroid/ex_act(severity, target)
 	. = SendSignal(COMSIG_ATOM_EX_ACT, severity, target)
 	contents_explosion(severity, target)
-
 
 /turf/open/floor/plating/asteroid/basalt
 	name = "volcanic floor"

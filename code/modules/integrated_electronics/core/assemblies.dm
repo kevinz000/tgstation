@@ -457,6 +457,9 @@
 	..()
 
 /obj/item/device/electronic_assembly/large/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(anchored)
 		attack_self(user)
 		return

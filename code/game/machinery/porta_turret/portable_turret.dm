@@ -750,6 +750,9 @@
 		to_chat(user, "<span class='notice'>There seems to be a firewall preventing you from accessing this device.</span>")
 
 /obj/machinery/turretid/attack_hand(mob/user as mob)
+	. = ..()
+	if(.)
+		return
 	if ( get_dist(src, user) > 0 )
 		if ( !(issilicon(user) || IsAdminGhost(user)) )
 			to_chat(user, "<span class='notice'>You are too far away.</span>")

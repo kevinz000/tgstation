@@ -516,12 +516,13 @@
 	var/list/slots = list ("left pocket" = slot_l_store,"right pocket" = slot_r_store,"left hand" = slot_hands,"right hand" = slot_hands)
 	var/obj/item/I = get_item_by_slot(pick(slots))
 	var/obj/item/storage/BP = get_item_by_slot(slot_back)
-	if(back && BP && I)
-		if(BP.can_be_inserted(I,0))
-			BP.handle_item_insertion(I,0)
+	GET_COMPONENT_FROM(STR, /datum/component/storage, BP)
+	if(back && BP && I && STR)
+		if(STR.can_be_inserted(I,FALSE))
+			STR.handle_item_insertion(I,FALSE, src)
 	else
 		dropItemToGround(I,TRUE)
-	update_hands = 1
+	update_hands = TRUE
 
 /mob/living/carbon/human/interactive/proc/targetRange(towhere)
 	return get_dist(get_turf(towhere), get_turf(src))

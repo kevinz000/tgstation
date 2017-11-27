@@ -95,6 +95,9 @@
 		. = ..()
 
 /obj/machinery/power/floodlight/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	var/current = setting
 	if(current == 1)
 		current = light_setting_list.len

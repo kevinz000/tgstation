@@ -40,6 +40,9 @@
 		return ..()
 
 /obj/structure/noticeboard/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	var/auth = allowed(user)
 	var/dat = "<B>[name]</B><BR>"
 	for(var/obj/item/P in src)

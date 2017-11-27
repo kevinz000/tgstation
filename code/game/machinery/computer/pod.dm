@@ -40,7 +40,12 @@
 			M.close()
 
 /obj/machinery/computer/pod/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
+		return
+
+	if(!allowed(user))
+		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 
 	var/dat = ""
@@ -131,12 +136,12 @@
 	req_access = list(ACCESS_SYNDICATE)
 
 /obj/machinery/computer/pod/old/syndicate/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(!allowed(user))
 		to_chat(user, "<span class='notice'>Access denied.</span>")
 		return
-	else
-		..()
-
 
 /obj/machinery/computer/pod/old/swf
 	name = "\improper Magix System IV"

@@ -37,7 +37,8 @@
 	. = ..()
 
 /obj/machinery/rnd/circuit_imprinter/department/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	interact(user)
 

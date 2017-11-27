@@ -427,7 +427,8 @@
 	playsound(src, 'sound/machines/terminal_alert.ogg', 50, 0)
 
 /obj/machinery/computer/communications/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	if (z > 6)
 		to_chat(user, "<span class='boldannounce'>Unable to establish a connection</span>: \black You're too far away from the station!")

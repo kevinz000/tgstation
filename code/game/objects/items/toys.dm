@@ -420,10 +420,11 @@
 		. = ..()
 
 /obj/item/toy/prize/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(loc == user)
 		attack_self(user)
-	else
-		. = ..()
 
 /obj/item/toy/prize/ripley
 	name = "toy Ripley"
@@ -648,6 +649,9 @@
 
 
 /obj/item/toy/cards/deck/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(user.lying)
 		return
 	var/choice = null
@@ -714,6 +718,7 @@
 		return ..()
 
 /obj/item/toy/cards/deck/MouseDrop(atom/over_object)
+	. = ..()
 	var/mob/living/M = usr
 	if(!istype(M) || usr.incapacitated() || usr.lying)
 		return

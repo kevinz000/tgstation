@@ -100,7 +100,7 @@
 			user.visible_message("<span class='warning'>[user] accidentally sets off [src], breaking their fingers.</span>", \
 								 "<span class='warning'>You accidentally trigger [src]!</span>")
 			return
-	..()
+	return ..()
 
 
 /obj/item/device/assembly/mousetrap/Crossed(atom/movable/AM as mob|obj)

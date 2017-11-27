@@ -139,8 +139,10 @@
 	return src.attack_hand(user)
 
 /obj/machinery/door/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	return try_to_activate_door(user)
-
 
 /obj/machinery/door/attack_tk(mob/user)
 	if(requiresID() && !allowed(null))

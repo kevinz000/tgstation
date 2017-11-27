@@ -132,8 +132,8 @@
 			if (contents.len>=max_n_of_items)
 				to_chat(user, "<span class='warning'>[src] is full, you can't put anything in!</span>")
 				return 1
-			T.remove_from_storage(S, src)
-			loaded++
+			if(T.SendSignal(COMSIG_TRY_STORAGE_TAKE, S, src))
+				loaded++
 
 		if(loaded)
 			to_chat(user, "<span class='notice'>You insert [loaded] items into [src].</span>")
@@ -163,7 +163,8 @@
 	return 0
 
 /obj/machinery/microwave/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	user.set_machine(src)
 	interact(user)

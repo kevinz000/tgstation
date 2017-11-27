@@ -63,7 +63,8 @@
 	. = ..()
 
 /obj/machinery/rnd/protolathe/department/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	interact(user)
 

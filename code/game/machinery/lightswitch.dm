@@ -42,6 +42,9 @@
 	src.attack_hand(user)
 
 /obj/machinery/light_switch/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 
 	on = !on
 

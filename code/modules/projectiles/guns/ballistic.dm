@@ -112,7 +112,7 @@
 			suppressed = null
 			update_icon()
 			return
-	..()
+	. = ..()
 
 /obj/item/gun/ballistic/attack_self(mob/living/user)
 	var/obj/item/ammo_casing/AC = chambered //Find chambered round

@@ -121,9 +121,12 @@
 	initialized_button = 1
 
 /obj/machinery/button/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(!initialized_button)
 		setup_device()
-	src.add_fingerprint(user)
+	add_fingerprint(user)
 	if(panel_open)
 		if(device || board)
 			if(device)

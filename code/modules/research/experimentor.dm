@@ -69,7 +69,6 @@
 			if(initial(tempCheck.icon_state) != null)
 				critical_items += I
 
-
 /obj/machinery/rnd/experimentor/Initialize()
 	. = ..()
 
@@ -110,6 +109,9 @@
 	. = ..(O)
 
 /obj/machinery/rnd/experimentor/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	user.set_machine(src)
 	var/list/dat = list("<center>")
 	if(!linked_console)

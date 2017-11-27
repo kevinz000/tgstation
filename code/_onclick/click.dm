@@ -179,9 +179,6 @@
 
 //Can [target] in this container be reached by [user], can't be more than [depth] levels deep
 /atom/proc/CanReachStorage(atom/target,user,depth)
-	return FALSE
-
-/obj/item/storage/CanReachStorage(atom/target,user,depth)
 	while(target && depth > 0)
 		target = target.loc
 		depth--
@@ -190,23 +187,13 @@
 	return FALSE
 
 /atom/movable/proc/DirectAccess(atom/target)
-	if(target == src)
-		return TRUE
-	if(target == loc)
-		return TRUE
+	return (target == src || target == loc)
 
 /mob/DirectAccess(atom/target)
-	if(..())
-		return TRUE
-	if(target in contents) //This could probably use moving down and restricting to inventory only
-		return TRUE
-	return FALSE
+	return (..() || (target in contents))
 
 /mob/living/DirectAccess(atom/target)
-	if(..()) //Lightweight checks first
-		return TRUE
-	if(target in GetAllContents())
-		return TRUE
+	return (..() || (target in GetAllContents()))
 
 /atom/proc/AllowClick()
 	return FALSE

@@ -34,7 +34,8 @@
 	attack_hand(user)
 
 /obj/machinery/computer/launchpad/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	interact(user)
 

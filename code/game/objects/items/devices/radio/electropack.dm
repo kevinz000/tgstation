@@ -28,6 +28,9 @@
 	return ..()
 
 /obj/item/device/electropack/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(iscarbon(user))
 		var/mob/living/carbon/C = user
 		if(src == C.back)

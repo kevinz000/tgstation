@@ -26,6 +26,9 @@
 	density = FALSE
 
 /obj/machinery/artillerycontrol/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	user.set_machine(src)
 	var/dat = "<B>Bluespace Artillery Control:</B><BR>"
 	dat += "Locked on<BR>"

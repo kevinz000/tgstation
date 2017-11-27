@@ -190,7 +190,8 @@
 	..()
 
 /obj/machinery/mineral/ore_redemption/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	interact(user)
 

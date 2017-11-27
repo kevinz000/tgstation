@@ -82,7 +82,8 @@
 	return interact(user)
 
 /obj/machinery/computer/mech_bay_power_console/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	interact(user)
 

@@ -37,7 +37,9 @@
 	no_cost = TRUE
 
 /obj/item/clockwork/slab/debug/attack_hand(mob/living/user)
-	..()
+	. = ..()
+	if(.)
+		return
 	if(!is_servant_of_ratvar(user))
 		add_servant_of_ratvar(user)
 

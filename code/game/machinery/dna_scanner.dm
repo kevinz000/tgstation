@@ -145,7 +145,8 @@
 	return ..()
 
 /obj/machinery/dna_scannernew/attack_hand(mob/user)
-	if(..(user,1,0)) //don't set the machine, since there's no dialog
+	. = ..(user, 1, 0)
+	if(.)
 		return
 
 	toggle_open(user)

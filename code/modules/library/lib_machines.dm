@@ -29,7 +29,8 @@
 	clockwork = TRUE //it'd look weird
 
 /obj/machinery/computer/libraryconsole/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	interact(user)
 
@@ -511,6 +512,9 @@ GLOBAL_LIST(cachedbooks) // List of our cached book datums
 		return ..()
 
 /obj/machinery/libraryscanner/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	usr.set_machine(src)
 	var/dat = "" // <META HTTP-EQUIV='Refresh' CONTENT='10'>
 	if(cache)

@@ -8,6 +8,7 @@
 /atom/MouseDrop(atom/over, src_location, over_location, src_control, over_control, params)
 	if(!usr || !over)
 		return
+	SendSignal(COMSIG_MOUSEDROP_ONTO, over, usr)	//Whatever is recieving will verify themselves for adjacency.
 	if(over == src)
 		return usr.client.Click(src, src_location, src_control, params)
 	if(!Adjacent(usr) || !over.Adjacent(usr))
@@ -18,4 +19,5 @@
 
 // recieve a mousedrop
 /atom/proc/MouseDrop_T(atom/dropping, mob/user)
+	SendSignal(COMSIG_MOUSEDROPPED_ONTO, dropping, user)
 	return

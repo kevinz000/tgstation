@@ -143,7 +143,8 @@
 		return ..()
 
 /obj/machinery/computer/cloning/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	interact(user)
 

@@ -27,7 +27,8 @@
 	return attack_hand(user)
 
 /obj/machinery/computer/stockexchange/attack_hand(var/mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	user.machine = src
 

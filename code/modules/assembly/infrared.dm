@@ -78,8 +78,7 @@
 
 /obj/item/device/assembly/infra/attack_hand()
 	qdel(first)
-	..()
-	return
+	return ..()
 
 /obj/item/device/assembly/infra/Move()
 	var/t = dir

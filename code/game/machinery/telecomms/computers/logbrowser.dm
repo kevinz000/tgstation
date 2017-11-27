@@ -18,7 +18,8 @@
 	circuit = /obj/item/circuitboard/computer/comm_server
 
 /obj/machinery/computer/telecomms/server/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	user.set_machine(src)
 	var/dat = "<TITLE>Telecommunication Server Monitor</TITLE><center><b>Telecommunications Server Monitor</b></center>"

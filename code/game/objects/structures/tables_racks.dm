@@ -117,11 +117,9 @@
 	if(istype(I, /obj/item/storage/bag/tray))
 		var/obj/item/storage/bag/tray/T = I
 		if(T.contents.len > 0) // If the tray isn't empty
-			var/list/obj/item/oldContents = T.contents.Copy()
-			T.quick_empty()
-
-			for(var/obj/item/C in oldContents)
-				C.forceMove(drop_location())
+			for(var/i in T.contents)
+				var/obj/O = i
+				T.SendSignal(COMSIG_TRY_STORAGE_TAKE, O, drop_location())
 
 			user.visible_message("[user] empties [I] on [src].")
 			return
@@ -458,13 +456,15 @@
 	attack_hand(user)
 
 /obj/structure/rack/attack_hand(mob/living/user)
+	. = ..()
+	if(.)
+		return
 	if(user.IsKnockdown() || user.resting || user.lying || user.get_num_legs() < 2)
 		return
 	user.changeNext_move(CLICK_CD_MELEE)
 	user.do_attack_animation(src, ATTACK_EFFECT_KICK)
 	user.visible_message("<span class='danger'>[user] kicks [src].</span>", null, null, COMBAT_MESSAGE_RANGE)
 	take_damage(rand(4,8), BRUTE, "melee", 1)
-
 
 /obj/structure/rack/play_attack_sound(damage_amount, damage_type = BRUTE, damage_flag = 0)
 	switch(damage_type)

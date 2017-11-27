@@ -20,6 +20,9 @@
 	return ..()
 
 /obj/machinery/field/containment/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(get_dist(src, user) > 1)
 		return FALSE
 	else

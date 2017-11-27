@@ -47,6 +47,9 @@
 
 
 /obj/machinery/power/singularity_beacon/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(anchored)
 		return active ? Deactivate(user) : Activate(user)
 	else

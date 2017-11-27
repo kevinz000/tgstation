@@ -46,7 +46,8 @@
 			last_power-=power_produced
 
 /obj/machinery/power/rad_collector/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	if(anchored)
 		if(!src.locked)

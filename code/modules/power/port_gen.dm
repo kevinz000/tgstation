@@ -54,7 +54,8 @@
 		soundloop.stop()
 
 /obj/machinery/power/port_gen/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	if(!anchored)
 		return
@@ -212,7 +213,9 @@
 	emp_act(EMP_HEAVY)
 
 /obj/machinery/power/port_gen/pacman/attack_hand(mob/user)
-	..()
+	. = ..()
+	if(.)
+		return
 	if (!anchored)
 		return
 

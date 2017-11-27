@@ -67,6 +67,9 @@
 
 
 /obj/structure/filingcabinet/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(contents.len <= 0)
 		to_chat(user, "<span class='notice'>[src] is empty.</span>")
 		return
@@ -137,7 +140,10 @@
 
 /obj/structure/filingcabinet/security/attack_hand()
 	populate()
-	..()
+	. = ..()
+	if(.)
+		return
+
 /obj/structure/filingcabinet/security/attack_tk()
 	populate()
 	..()

@@ -9,6 +9,9 @@
 	var/sortTag = 0
 
 /obj/structure/bigDelivery/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	playsound(src.loc, 'sound/items/poster_ripped.ogg', 50, 1)
 	qdel(src)
 

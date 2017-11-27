@@ -9,15 +9,14 @@
 
 /mob/living/silicon/robot/proc/uneq_module(obj/item/O)
 	if(!O)
-		return 0
+		return FALSE
 	O.mouse_opacity = MOUSE_OPACITY_OPAQUE
 	if(istype(O, /obj/item/borg/sight))
 		var/obj/item/borg/sight/S = O
 		sight_mode &= ~S.sight_mode
 		update_sight()
 	else if(istype(O, /obj/item/storage/bag/tray/))
-		var/obj/item/storage/bag/tray/T = O
-		T.do_quick_empty()
+		O.SendSignal(COMSIG_TRY_STORAGE_QUICK_EMPTY)
 	if(client)
 		client.screen -= O
 	observer_screen_update(O,FALSE)
@@ -124,8 +123,7 @@
 /mob/living/silicon/robot/proc/get_selected_module()
 	if(module_active)
 		return held_items.Find(module_active)
-
-	return 0
+	return FALSE
 
 //select_module(module) - Selects the module slot specified by "module"
 /mob/living/silicon/robot/proc/select_module(module) //Module is 1-3

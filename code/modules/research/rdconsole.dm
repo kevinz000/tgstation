@@ -960,7 +960,8 @@ doesn't have toxins access.
 	updateUsrDialog()
 
 /obj/machinery/computer/rdconsole/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	interact(user)
 

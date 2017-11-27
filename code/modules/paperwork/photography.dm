@@ -99,8 +99,12 @@
 	item_state = "briefcase"
 	lefthand_file = 'icons/mob/inhands/equipment/briefcase_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/briefcase_righthand.dmi'
-	can_hold = list(/obj/item/photo)
 	resistance_flags = FLAMMABLE
+
+/obj/item/storage/photo_album/Initialize()
+	. = ..()
+	GET_COMPONENT(STR, /datum/component/storage)
+	STR.can_hold = typecacheof(list(/obj/item/photo))
 
 /*
  * Camera
@@ -529,6 +533,9 @@
 		to_chat(user, "<span class='notice'>You carefully remove the photo from \the [src].</span>")
 		displayed = null
 		update_icon()
+	. = ..()
+	if(.)
+		return
 
 /obj/item/wallframe/picture/attack_self(mob/user)
 	user.examinate(src)
@@ -599,6 +606,9 @@
 	..()
 
 /obj/structure/sign/picture_frame/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(framed)
 		framed.show(user)
 

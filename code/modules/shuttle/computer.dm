@@ -11,7 +11,8 @@
 	var/no_destination_swap = 0
 
 /obj/machinery/computer/shuttle/attack_hand(mob/user)
-	if(..(user))
+	. = ..()
+	if(.)
 		return
 	add_fingerprint(usr)
 

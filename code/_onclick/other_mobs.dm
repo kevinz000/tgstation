@@ -27,10 +27,12 @@
 
 	SendSignal(COMSIG_HUMAN_MELEE_UNARMED_ATTACK, A)
 	A.attack_hand(src)
-	SendSignal(COMSIG_HUMAN_MELEE_UNARMED_ATTACKBY, src)
 
+//Return TRUE to cancel other attack hand effects that respect it.
 /atom/proc/attack_hand(mob/user)
-	return
+	if(SendSignal(COMSIG_ATOM_ATTACK_HAND, user) & COMPONENT_NO_ATTACK_HAND)
+		return TRUE
+	return FALSE
 
 /atom/proc/interact(mob/user)
 	return
@@ -72,8 +74,11 @@
 */
 /mob/living/carbon/monkey/UnarmedAttack(atom/A)
 	A.attack_paw(src)
+
 /atom/proc/attack_paw(mob/user)
-	return
+	if(SendSignal(COMSIG_ATOM_ATTACK_PAW, user) & COMPONENT_NO_ATTACK_HAND)
+		return TRUE
+	return FALSE
 
 /*
 	Monkey RestrainedClickOn() was apparently the
@@ -115,9 +120,11 @@
 */
 /mob/living/carbon/alien/UnarmedAttack(atom/A)
 	A.attack_alien(src)
+
 /atom/proc/attack_alien(mob/living/carbon/alien/user)
 	attack_paw(user)
 	return
+
 /mob/living/carbon/alien/RestrainedClickOn(atom/A)
 	return
 

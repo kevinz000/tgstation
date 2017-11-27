@@ -94,6 +94,9 @@
 
 // On-click handling. Turns on the computer if it's off and opens the GUI.
 /obj/machinery/modular_computer/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(cpu)
 		cpu.attack_self(user) // CPU is an item, that's why we route attack_hand to attack_self
 

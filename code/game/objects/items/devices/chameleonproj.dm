@@ -114,6 +114,9 @@
 	master.disrupt()
 
 /obj/effect/dummy/chameleon/attack_hand()
+	. = ..()
+	if(.)
+		return
 	master.disrupt()
 
 /obj/effect/dummy/chameleon/attack_animal()

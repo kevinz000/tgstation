@@ -81,6 +81,9 @@
 	toggle_paddles()
 
 /obj/item/defibrillator/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(loc == user)
 		if(slot_flags == SLOT_BACK)
 			if(user.get_item_by_slot(slot_back) == src)
@@ -94,9 +97,9 @@
 			else
 				to_chat(user, "<span class='warning'>Strap the defibrillator's belt on first!</span>")
 		return
-	..()
 
 /obj/item/defibrillator/MouseDrop(obj/over_object)
+	. = ..()
 	if(ismob(loc))
 		var/mob/M = loc
 		if(!M.incapacitated() && istype(over_object, /obj/screen/inventory/hand))

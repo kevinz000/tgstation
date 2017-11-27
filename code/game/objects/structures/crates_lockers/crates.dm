@@ -37,10 +37,12 @@
 		add_overlay("manifest")
 
 /obj/structure/closet/crate/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(manifest)
 		tear_manifest(user)
 		return
-	..()
 
 /obj/structure/closet/crate/open(mob/living/user)
 	. = ..()

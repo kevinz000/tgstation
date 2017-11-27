@@ -65,6 +65,9 @@ To draw a rune, use an arcane tome.
 		qdel(src)
 
 /obj/effect/rune/attack_hand(mob/living/user)
+	. = ..()
+	if(.)
+		return
 	if(!iscultist(user))
 		to_chat(user, "<span class='warning'>You aren't able to understand the words of [src].</span>")
 		return

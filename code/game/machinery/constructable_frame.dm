@@ -208,9 +208,9 @@
 					while(req_components[path] > 0 && (locate(path) in part_list))
 						var/obj/item/part = (locate(path) in part_list)
 						added_components[part] = path
-						replacer.remove_from_storage(part, src)
-						req_components[path]--
-						part_list -= part
+						if(replacer.SendSignal(COMSIG_TRY_STORAGE_TAKE, part, src))
+							req_components[path]--
+							part_list -= part
 
 				for(var/obj/item/stock_parts/part in added_components)
 					components += part

@@ -265,6 +265,9 @@ GLOBAL_LIST_EMPTY(allCasters)
 	return attack_hand(user)
 
 /obj/machinery/newscaster/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(stat & (NOPOWER|BROKEN))
 		return
 	if(ishuman(user) || issilicon(user))

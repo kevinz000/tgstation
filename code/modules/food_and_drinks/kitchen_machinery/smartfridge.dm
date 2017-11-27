@@ -127,22 +127,21 @@
 			to_chat(usr, "<span class='warning'>\the [O] is stuck to your hand, you cannot put it in \the [src]!</span>")
 			return
 	else
-		if(istype(O.loc, /obj/item/storage))
-			var/obj/item/storage/S = O.loc
-			S.remove_from_storage(O,src)
-		O.forceMove(src)
+		if(O.loc.SendSignal(COMSIG_CONTAINS_STORAGE))
+			O.loc.SendSignal(COMSIG_TRY_STORAGE_TAKE, O, src)
 
 /obj/machinery/smartfridge/attack_paw(mob/user)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/smartfridge/attack_ai(mob/user)
 	return FALSE
 
 /obj/machinery/smartfridge/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	user.set_machine(src)
 	interact(user)
-
-
 
 /obj/machinery/smartfridge/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state)
 	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)

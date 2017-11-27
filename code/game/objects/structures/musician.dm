@@ -355,6 +355,9 @@
 		song.tempo = song.sanitize_tempo(song.tempo) // tick_lag isn't set when the map is loaded
 
 /obj/structure/piano/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(!user.IsAdvancedToolUser())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1

@@ -82,6 +82,9 @@
 	random_icon_states = list("vomit_1", "vomit_2", "vomit_3", "vomit_4")
 
 /obj/effect/decal/cleanable/vomit/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(isflyperson(H))

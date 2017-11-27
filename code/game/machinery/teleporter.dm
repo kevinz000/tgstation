@@ -190,6 +190,9 @@
 	src.attack_hand()
 
 /obj/machinery/teleport/station/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(!panel_open)
 		toggle(user)
 

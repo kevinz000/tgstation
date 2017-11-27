@@ -359,7 +359,7 @@
 	for(var/datum/spacevine_mutation/SM in mutations)
 		SM.on_hit(src, user)
 	user_unbuckle_mob(user, user)
-
+	. = ..()
 
 /obj/structure/spacevine/attack_paw(mob/living/user)
 	for(var/datum/spacevine_mutation/SM in mutations)

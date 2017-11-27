@@ -71,6 +71,9 @@
 	updateicon()
 
 /obj/machinery/cell_charger/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(!charging)
 		return
 

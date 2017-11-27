@@ -109,6 +109,9 @@
 		add_fingerprint(user)
 
 /obj/structure/ladder/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	use(user)
 
 /obj/structure/ladder/attack_paw(mob/user)

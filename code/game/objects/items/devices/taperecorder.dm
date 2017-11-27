@@ -54,6 +54,9 @@
 	..()
 
 /obj/item/device/taperecorder/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(loc == user)
 		if(mytape)
 			if(!user.is_holding(src))

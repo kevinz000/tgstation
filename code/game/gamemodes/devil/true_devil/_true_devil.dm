@@ -159,6 +159,9 @@
 	//They're immune to fire.
 
 /mob/living/carbon/true_devil/attack_hand(mob/living/carbon/human/M)
+	. = ..()
+	if(.)
+		return
 	if(..())
 		switch(M.a_intent)
 			if ("harm")

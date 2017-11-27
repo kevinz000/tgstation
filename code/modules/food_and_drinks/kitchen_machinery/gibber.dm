@@ -54,6 +54,9 @@
 	go_out()
 
 /obj/machinery/gibber/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(stat & (NOPOWER|BROKEN))
 		return
 	if(operating)

@@ -19,7 +19,8 @@
 	GLOB.crewmonitor.show(user)
 
 /obj/machinery/computer/crew/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	if(stat & (BROKEN|NOPOWER))
 		return

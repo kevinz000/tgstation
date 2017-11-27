@@ -69,7 +69,8 @@
 	return ..()
 
 /obj/machinery/recharge_station/attack_hand(mob/user)
-	if(..(user,1,set_machine = 0))
+	. = ..(user, 1, 0)
+	if(.)
 		return
 
 	toggle_open()

@@ -26,6 +26,8 @@
 
 /obj/structure/attack_hand(mob/user)
 	. = ..()
+	if(.)
+		return
 	add_fingerprint(user)
 	if(structureclimber && structureclimber != user)
 		user.changeNext_move(CLICK_CD_MELEE)

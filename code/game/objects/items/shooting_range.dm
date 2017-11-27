@@ -35,6 +35,9 @@
 		return ..()
 
 /obj/item/target/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(pinnedLoc)
 		pinnedLoc.removeTarget(user)
 	..()

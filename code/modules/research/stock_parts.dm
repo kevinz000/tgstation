@@ -9,18 +9,22 @@ If you create T5+ please take a pass at gene_modder.dm [L40]. Max_values MUST fi
 	lefthand_file = 'icons/mob/inhands/misc/devices_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/misc/devices_righthand.dmi'
 	w_class = WEIGHT_CLASS_HUGE
-	can_hold = list(/obj/item/stock_parts)
-	storage_slots = 50
-	use_to_pickup = 1
-	allow_quick_gather = 1
-	allow_quick_empty = 1
-	collection_mode = 1
-	display_contents_with_number = 1
-	max_w_class = WEIGHT_CLASS_NORMAL
-	max_combined_w_class = 100
 	var/works_from_distance = 0
 	var/pshoom_or_beepboopblorpzingshadashwoosh = 'sound/items/rped.ogg'
 	var/alt_sound = null
+
+/obj/item/storage/part_replacer/Initialize()
+	. = ..()
+	GET_COMPONENT(STR, /datum/component/storage)
+	STR.collection_mode = COLLECT_EVERYTHING
+	STR.display_numerical_stacking = TRUE
+	STR.max_items = 50
+	STR.max_combined_w_class = 100
+	STR.max_w_class = WEIGHT_CLASS_NORMAL
+	STR.allow_quick_empty = TRUE
+	STR.allow_quick_gather = TRUE
+	STR.click_gather = TRUE
+	STR.can_hold = typecacheof(list(/obj/item/stock_parts))
 
 /obj/item/storage/part_replacer/afterattack(obj/machinery/T, mob/living/carbon/human/user, flag, params)
 	if(flag)
@@ -30,31 +34,6 @@ If you create T5+ please take a pass at gene_modder.dm [L40]. Max_values MUST fi
 			if(T.component_parts)
 				T.exchange_parts(user, src)
 				user.Beam(T,icon_state="rped_upgrade",time=5)
-	return
-
-/obj/item/storage/part_replacer/bluespace
-	name = "bluespace rapid part exchange device"
-	desc = "A version of the RPED that allows for replacement of parts and scanning from a distance, along with higher capacity for parts."
-	icon_state = "BS_RPED"
-	w_class = WEIGHT_CLASS_NORMAL
-	storage_slots = 400
-	max_w_class = WEIGHT_CLASS_NORMAL
-	max_combined_w_class = 800
-	works_from_distance = 1
-	pshoom_or_beepboopblorpzingshadashwoosh = 'sound/items/pshoom.ogg'
-	alt_sound = 'sound/items/pshoom_2.ogg'
-
-/obj/item/storage/part_replacer/bluespace/dump_content_at(atom/dest_object, mob/user)
-	if(Adjacent(user))
-		var/atom/dumping_location = dest_object.get_dumping_location()
-		if(get_dist(user, dumping_location) < 8)
-			if(dumping_location.storage_contents_dump_act(src, user))
-				play_rped_sound()
-				user.Beam(dumping_location,icon_state="rped_upgrade",time=5)
-				return 1
-		to_chat(user, "The [src.name] buzzes.")
-		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
-	return 0
 
 /obj/item/storage/part_replacer/proc/play_rped_sound()
 	//Plays the sound for RPED exhanging or installing parts.
@@ -62,6 +41,21 @@ If you create T5+ please take a pass at gene_modder.dm [L40]. Max_values MUST fi
 		playsound(src, alt_sound, 40, 1)
 	else
 		playsound(src, pshoom_or_beepboopblorpzingshadashwoosh, 40, 1)
+
+/obj/item/storage/part_replacer/bluespace
+	name = "bluespace rapid part exchange device"
+	desc = "A version of the RPED that allows for replacement of parts and scanning from a distance, along with higher capacity for parts."
+	icon_state = "BS_RPED"
+	w_class = WEIGHT_CLASS_NORMAL
+	works_from_distance = TRUE
+	pshoom_or_beepboopblorpzingshadashwoosh = 'sound/items/pshoom.ogg'
+	alt_sound = 'sound/items/pshoom_2.ogg'
+
+/obj/item/storage/part_replacer/bluespace/Initialize()
+	. = ..()
+	GET_COMPONENT(STR, /datum/component/storage/concrete/bluespace)
+	STR.max_combined_w_class = 800
+	STR.max_items = 400
 
 //Sorts stock parts inside an RPED by their rating.
 //Only use /obj/item/stock_parts/ with this sort proc!

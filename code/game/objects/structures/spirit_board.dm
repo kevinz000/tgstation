@@ -15,7 +15,8 @@
 	..()
 
 /obj/structure/spirit_board/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	spirit_board_pick_letter(user)
 

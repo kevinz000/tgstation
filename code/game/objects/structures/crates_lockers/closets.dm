@@ -315,7 +315,9 @@
 	container_resist()
 
 /obj/structure/closet/attack_hand(mob/user)
-	..()
+	. = ..()
+	if(.)
+		return
 	if(user.lying && get_dist(src, user) > 0)
 		return
 

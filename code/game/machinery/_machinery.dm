@@ -109,7 +109,8 @@ Class Procs:
 	var/list/occupant_typecache //if set, turned into typecache in Initialize, other wise, defaults to mob/living typecache
 	var/atom/movable/occupant = null
 	var/interact_open = FALSE // Can the machine be interacted with when in maint/when the panel is open.
-	var/interact_offline = 0 // Can the machine be interacted with while de-powered.
+	var/interact_offline = FALSE // Can the machine be interacted with while de-powered.
+	var/interact_requires_silicon = FALSE	//requires silicon for interact() autocall?
 	var/speed_process = FALSE // Process as fast as possible?
 	var/obj/item/circuitboard/circuit // Circuit to be created and inserted when the machinery is created
 
@@ -269,20 +270,23 @@ Class Procs:
 
 //set_machine must be 0 if clicking the machinery doesn't bring up a dialog
 /obj/machinery/attack_hand(mob/user, check_power = 1, set_machine = 1)
-	if(..())// unbuckling etc
-		return 1
+	. = ..()
+	if(.)
+		return
 	if((user.lying || user.stat) && !IsAdminGhost(user))
-		return 1
+		return TRUE
 	if(!user.IsAdvancedToolUser() && !IsAdminGhost(user))
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
-		return 1
+		return TRUE
 	if(!is_interactable())
-		return 1
+		return TRUE
+	if(interact_requires_silicon && !issilicon(user))
+		return TRUE
 	if(set_machine)
 		user.set_machine(src)
 	interact(user)
 	add_fingerprint(user)
-	return 0
+	return FALSE
 
 /obj/machinery/CheckParts(list/parts_list)
 	..()
@@ -411,8 +415,8 @@ Class Procs:
 				for(var/obj/item/stock_parts/B in W.contents)
 					if(istype(B, P) && istype(A, P))
 						if(B.rating > A.rating)
-							W.remove_from_storage(B, src)
-							W.handle_item_insertion(A, 1)
+							W.SendSignal(COMSIG_TRY_STORAGE_TAKE, B, src, TRUE, TRUE)
+							W.SendSignal(COMSIG_TRY_STORAGE_INSERT, A, null, TRUE, TRUE)
 							component_parts -= A
 							component_parts += B
 							B.moveToNullspace()

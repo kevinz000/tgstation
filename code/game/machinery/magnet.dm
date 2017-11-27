@@ -243,6 +243,9 @@
 	return src.attack_hand(user)
 
 /obj/machinery/magnetic_controller/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(stat & (BROKEN|NOPOWER))
 		return
 	user.set_machine(src)

@@ -30,6 +30,9 @@
 	return ..()
 
 /obj/machinery/food_cart/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	user.set_machine(src)
 	interact(user)
 
@@ -95,11 +98,11 @@
 				to_chat(user, "<span class='warning'>[src] is at full capacity.</span>")
 				break
 			else
-				T.remove_from_storage(S, src)
-				if(stored_food[sanitize(S.name)])
-					stored_food[sanitize(S.name)]++
-				else
-					stored_food[sanitize(S.name)] = 1
+				if(T.SendSignal(COMSIG_TRY_STORAGE_TAKE, S, src))
+					if(stored_food[sanitize(S.name)])
+						stored_food[sanitize(S.name)]++
+					else
+						stored_food[sanitize(S.name)] = 1
 	else if(O.is_drainable())
 		return
 	else

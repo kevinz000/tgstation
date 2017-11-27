@@ -16,7 +16,8 @@
 	light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/prisoner/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	user.set_machine(src)
 	var/dat = ""

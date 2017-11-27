@@ -130,7 +130,8 @@
 	name = (name_action + name_part1 + name_part2)
 
 /obj/machinery/computer/arcade/battle/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	user.set_machine(src)
 	var/dat = "<a href='byond://?src=[REF(src)];close=1'>Close</a>"
@@ -279,7 +280,7 @@
 		playsound(loc, 'sound/arcade/lose.ogg', 50, 1, extrarange = -3, falloff = 10)
 		if(emagged)
 			usr.gib()
-		SSblackbox.record_feedback("nested tally", "arcade_results", 1, list("loss", "hp", (emagged ? "emagged":"normal"))) 
+		SSblackbox.record_feedback("nested tally", "arcade_results", 1, list("loss", "hp", (emagged ? "emagged":"normal")))
 
 	blocked = FALSE
 	return
@@ -400,7 +401,8 @@
 	last_spaceport_action = ""
 
 /obj/machinery/computer/arcade/orion_trail/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	if(fuel <= 0 || food <=0 || settlers.len == 0)
 		gameStatus = ORION_STATUS_GAMEOVER

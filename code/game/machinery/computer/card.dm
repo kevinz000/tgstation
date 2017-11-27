@@ -134,7 +134,8 @@ GLOBAL_VAR_INIT(time_last_changed_position, 0)
 	return 0
 
 /obj/machinery/computer/card/attack_hand(mob/user)
-	if(..())
+	. = ..()
+	if(.)
 		return
 
 	user.set_machine(src)

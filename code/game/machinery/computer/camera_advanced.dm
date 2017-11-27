@@ -70,14 +70,25 @@
 	if(M == current_user)
 		remove_eye_control(M)
 
+/obj/machinery/computer/camera_advanced/proc/can_use(mob/living/user)
+	return TRUE
+
+/obj/machinery/computer/camera_advanced/can_use(mob/user)
+	if(!isabductor(user))
+		return FALSE
+	return ..()
+
 /obj/machinery/computer/camera_advanced/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(current_user)
 		to_chat(user, "The console is already in use!")
 		return
-	if(..())
-		return
 	var/mob/living/L = user
 
+	if(!can_use(user))
+		return
 	if(!eyeobj)
 		CreateEye()
 
@@ -280,6 +291,11 @@
 		actions += warp_action
 
 /obj/machinery/computer/camera_advanced/ratvar/attack_hand(mob/living/user)
+	. = ..()
+	if(.)
+		return
+
+/obj/machinery/computer/camera_advanced/ratvar/can_use(mob/living/user)
 	if(!is_servant_of_ratvar(user))
 		to_chat(user, "<span class='warning'>[src]'s keys are in a language foreign to you, and you don't understand anything on its screen.</span>")
 		return

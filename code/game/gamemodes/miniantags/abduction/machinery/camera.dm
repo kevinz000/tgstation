@@ -59,9 +59,9 @@
 	return S.scientist
 
 /obj/machinery/computer/camera_advanced/abductor/attack_hand(mob/user)
-	if(!isabductor(user))
+	. = ..()
+	if(.)
 		return
-	return ..()
 
 /datum/action/innate/teleport_in
 	name = "Send To"
