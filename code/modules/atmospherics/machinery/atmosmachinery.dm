@@ -327,17 +327,15 @@ Pipelines + Other Objects -> Pipe network
 		if((direction & initialize_directions) || is_type_in_typecache(src, GLOB.ventcrawl_machinery) && can_crawl_through()) //if we move in a way the pipe can connect, but doesn't - or we're in a vent
 			user.forceMove(loc)
 			user.visible_message("<span class='notice'>You hear something squeezing through the ducts...</span>","<span class='notice'>You climb out the ventilation system.")
-	user.canmove = 0
+	user.canmove = FALSE
 	spawn(1)
-		user.canmove = 1
-
+		user.canmove = TRUE
 
 /obj/machinery/atmospherics/AltClick(mob/living/L)
 	if(is_type_in_list(src, GLOB.ventcrawl_machinery))
 		L.handle_ventcrawl(src)
 		return
 	..()
-
 
 /obj/machinery/atmospherics/proc/can_crawl_through()
 	return TRUE
