@@ -153,7 +153,10 @@
 
 #define ismachinery(A) (istype(A, /obj/machinery))
 
-#define ismecha(A) (istype(A, /obj/mecha))
+#define is_vehicle(A) (istype(A, /obj/vehicle))
+#define is_vehicle_sealed(A) (istype(A, /obj/vehicle/sealed))
+#define is_vehicle_ridden(A) (istype(A, /obj/vehicle/ridden))
+//#define is_vehicle_exosuit(A) (istype(A, /obj/vehicle/sealed/modular/exosuit)
 
 #define is_cleanable(A) (istype(A, /obj/effect/decal/cleanable) || istype(A, /obj/effect/rune)) //if something is cleanable
 
