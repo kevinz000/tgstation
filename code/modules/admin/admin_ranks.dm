@@ -61,6 +61,8 @@ GLOBAL_PROTECT(admin_ranks)
 			flag = R_SOUNDS
 		if("spawn","create")
 			flag = R_SPAWN
+		if("database")
+			flag = R_DATABASE
 		if("@","prev")
 			flag = previous_rights
 		if("rejuv","rejuvinate")

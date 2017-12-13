@@ -306,7 +306,7 @@
 		output += ruler
 	usr << browse({"<!DOCTYPE html><html><head><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /></head><body>[output]</body></html>"}, "window=browse_messages;size=900x500")
 
-proc/get_message_output(type, target_ckey)
+/proc/get_message_output(type, target_ckey)
 	if(!SSdbcore.Connect())
 		to_chat(usr, "<span class='danger'>Failed to establish database connection.</span>")
 		return
@@ -345,7 +345,7 @@ proc/get_message_output(type, target_ckey)
 	return output
 
 #define NOTESFILE "data/player_notes.sav"
-//if the AUTOCONVERT_NOTES is turned on, anytime a player connects this will be run to try and add all their notes to the databas
+//if the AUTOCONVERT_NOTES is turned on, anytime a player connects this will be run to try and add all their notes to the database
 /proc/convert_notes_sql(ckey)
 	var/savefile/notesfile = new(NOTESFILE)
 	if(!notesfile)
