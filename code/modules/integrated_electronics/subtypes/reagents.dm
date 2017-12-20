@@ -20,8 +20,8 @@
 	container_type = OPENCONTAINER
 	volume = 100
 
-	complexity = 20
-	cooldown_per_use = 1 SECONDS
+	complexity = 30
+	cooldown_per_use = 5 SECONDS
 	inputs = list()
 	outputs = list(
 		"volume used" = IC_PINTYPE_NUMBER,
@@ -32,8 +32,8 @@
 		"on smoked" = IC_PINTYPE_PULSE_OUT
 		)
 	spawn_flags = IC_SPAWN_RESEARCH
-	power_draw_per_use = 20
-	var/smoke_radius = 5
+	power_draw_per_use = 200
+	var/smoke_radius = 4
 	var/notified = FALSE
 
 /obj/item/integrated_circuit/reagent/smoke/on_reagent_change(changetype)
