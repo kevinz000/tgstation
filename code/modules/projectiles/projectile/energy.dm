@@ -9,27 +9,36 @@
 /obj/item/projectile/energy/chameleon
 	nodamage = TRUE
 
+#define TASER_HEALTH_STUN_THRESHOLD 55
+#define TASER_MAX_STUN 100
+#define TASER_HEALTH_DEFFICIENCY_THRESHOLD 50
+
 /obj/item/projectile/energy/electrode
 	name = "electrode"
 	icon_state = "spark"
 	color = "#FFFF00"
-	nodamage = 1
-	knockdown = 100
+	stamina = 30
+	nodamage = TRUE
 	stutter = 5
 	jitter = 20
 	hitsound = 'sound/weapons/taserhit.ogg'
-	range = 7
 
 /obj/item/projectile/energy/electrode/on_hit(atom/target, blocked = FALSE)
 	. = ..()
 	if(!ismob(target) || blocked >= 100) //Fully blocked by mob or collided with dense object - burst into sparks!
 		do_sparks(1, TRUE, src)
-	else if(iscarbon(target))
+	if(ismob(target))
+		var/mob/M = target
+		M.confused = max(2, M.confused)
+	if(iscarbon(target))
 		var/mob/living/carbon/C = target
 		if(C.dna && C.dna.check_mutation(HULK))
 			C.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 		else if(C.status_flags & CANKNOCKDOWN)
 			addtimer(CALLBACK(C, /mob/living/carbon.proc/do_jitter_animation, jitter), 5)
+		var/defficiency = C.staminaloss + min(0, (TASER_HEALTH_DEFFICIENCY_THRESHOLD - C.health))
+		if(defficiency > TASER_HEALTH_STUN_THRESHOLD)
+			C.Knockdown(CLAMP((defficiency ** 0.5) * 11, 0, TASER_MAX_STUN))
 
 /obj/item/projectile/energy/electrode/on_range() //to ensure the bolt sparks when it reaches the end of its range if it didn't hit a target yet
 	do_sparks(1, TRUE, src)

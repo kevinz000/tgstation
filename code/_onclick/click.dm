@@ -17,9 +17,20 @@
 // eg: 10*0.5 = 5 deciseconds of delay
 // DOES NOT EFFECT THE BASE 1 DECISECOND DELAY OF NEXT_CLICK
 
-/mob/proc/changeNext_move(num)
-	next_move = world.time + ((num+next_move_adjust)*next_move_modifier)
+/mob/proc/changeNext_move(num, extra_adjust = 0, extra_modifier = 1)
+	next_move = world.time + ((num+next_move_adjust+extra_adjust)*next_move_modifier*extra_modifier)
 
+/mob/living/changeNext_move(num, extra_adjust = 0, extra_modifier = 1)
+	var/EA = 0
+	var/EM = 1
+	for(var/i in status_effects)
+		var/datum/status_effect/S = i
+		EA += S.clickcd_adjuster()
+		EM *= S.clickcd_multiplier()
+	return ..(num, extra_adjust + EA, extra_modifier * EM)
+
+/mob/living/carbon/changeNext_move(num, extra_adjust = 0, extra_modifier = 1)
+	return ..(num, extra_adjust, extra_modifier * min(1, ((staminaloss/10) ** 0.3)))
 
 /*
 	Before anything else, defer these calls to a per-mobtype handler.  This allows us to

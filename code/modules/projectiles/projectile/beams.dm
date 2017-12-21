@@ -17,6 +17,12 @@
 
 /obj/item/projectile/beam/laser
 
+/obj/item/projectile/beam/laser/advtaser
+	name = "light laser"
+	icon_state = "light_laser"
+	damage = 10
+	eyeblur = 1
+
 /obj/item/projectile/beam/laser/heavylaser
 	name = "heavy laser"
 	icon_state = "heavylaser"
