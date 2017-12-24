@@ -3,7 +3,7 @@
 //When making a new status effect, add a define to status_effects.dm in __DEFINES for ease of use!
 
 /datum/status_effect
-	var/id = "effect" //Used for screen alerts.
+	var/id = "effect"			//Used for screen alerts, and making the status effect unique. Do not change at runtime.
 	var/duration = -1 //How long the status effect lasts in DECISECONDS. Enter -1 for an effect that never ends unless removed through some means.
 	var/tick_interval = 10 //How many deciseconds between ticks, approximately. Leave at 10 for every second.
 	var/mob/living/owner //The mob affected by the status effect.
@@ -15,11 +15,13 @@
 /datum/status_effect/New(list/arguments)
 	on_creation(arglist(arguments))
 
-/datum/status_effect/proc/on_creation(mob/living/new_owner, ...)
+/datum/status_effect/proc/_on_creation(mob/living/new_owner, ...)
 	if(new_owner)
 		owner = new_owner
 	if(owner)
-		LAZYADD(owner.status_effects, src)
+		LAZYINITLIST(owner.status_effects)
+		LAZYINITLIST(owner.status_effects[id])
+		LAZYADD(owner.status_effects[id], src)
 	if(!owner || !on_apply())
 		qdel(src)
 		return
@@ -37,7 +39,9 @@
 	STOP_PROCESSING(SSfastprocess, src)
 	if(owner)
 		owner.clear_alert(id)
-		LAZYREMOVE(owner.status_effects, src)
+		LAZYREMOVE(owner.status_effects[id], src)
+		UNSETEMPTY(owner.status_effects[id])
+		UNSETEMPTY(owner.status_effects)
 		on_remove()
 		owner = null
 	return ..()
@@ -56,9 +60,11 @@
 	return TRUE
 /datum/status_effect/proc/tick() //Called every tick.
 /datum/status_effect/proc/on_remove() //Called whenever the buff expires or is removed; do note that at the point this is called, it is out of the owner's status_effects but owner is not yet null
-/datum/status_effect/proc/be_replaced() //Called instead of on_remove when a status effect is replaced by itself or when a status effect with on_remove_on_mob_delete = FALSE has its mob deleted
+/datum/status_effect/proc/_be_replaced() //Called instead of on_remove when a status effect is replaced by itself or when a status effect with on_remove_on_mob_delete = FALSE has its mob deleted
 	owner.clear_alert(id)
-	LAZYREMOVE(owner.status_effects, src)
+	LAZYREMOVE(owner.status_effects[id], src)
+	UNSETEMPTY(owner.status_effects[id])
+	UNSETEMPTY(owner.status_effects)
 	owner = null
 	qdel(src)
 
@@ -75,12 +81,14 @@
 // HELPER PROCS //
 //////////////////
 
-/mob/living/proc/apply_status_effect(effect, ...) //applies a given status effect to this mob, returning the effect if it was successful
+/mob/living/proc/_apply_status_effect(effect, ...) //applies a given status effect to this mob, returning the effect if it was successful
 	. = FALSE
 	var/datum/status_effect/S1 = effect
 	LAZYINITLIST(status_effects)
-	for(var/datum/status_effect/S in status_effects)
-		if(S.id == initial(S1.id) && S.status_type)
+	LAZYINITLIST(status_effects[S1.ID])
+	if(length(status_effects[S1.ID]))
+		var/datum/status_effect/S = status_effects[S1.ID][1]
+		if(S.status_type)
 			if(S.status_type == STATUS_EFFECT_REPLACE)
 				S.be_replaced()
 			else
@@ -90,27 +98,32 @@
 	S1 = new effect(arguments)
 	. = S1
 
-/mob/living/proc/remove_status_effect(effect) //removes all of a given status effect from this mob, returning TRUE if at least one was removed
+/mob/living/proc/_remove_status_effect(effect) //removes all of a given status effect from this mob, returning TRUE if at least one was removed
 	. = FALSE
 	if(status_effects)
 		var/datum/status_effect/S1 = effect
-		for(var/datum/status_effect/S in status_effects)
-			if(initial(S1.id) == S.id)
-				qdel(S)
-				. = TRUE
+		for(var/datum/status_effect/S in status_effects[S1.id])
+			qdel(S)
+			. = TRUE
 
-/mob/living/proc/has_status_effect(effect) //returns the effect if the mob calling the proc owns the given status effect
+/mob/living/proc/_has_status_effect(effect) //returns the effect if the mob calling the proc owns the given status effect
 	. = FALSE
 	if(status_effects)
 		var/datum/status_effect/S1 = effect
-		for(var/datum/status_effect/S in status_effects)
+		if(!status_effects[S1.id])
+			return
+		for(var/s in status_effects[S1.id])
+			var/datum/status_effect/S = s
 			if(initial(S1.id) == S.id)
 				return S
 
-/mob/living/proc/has_status_effect_list(effect) //returns a list of effects with matching IDs that the mod owns; use for effects there can be multiple of
+/mob/living/proc/_has_status_effect_list(effect) //returns a list of effects with matching IDs that the mod owns; use for effects there can be multiple of
 	. = list()
 	if(status_effects)
 		var/datum/status_effect/S1 = effect
-		for(var/datum/status_effect/S in status_effects)
+		if(!status_effects[S1.id])
+			return
+		for(var/s in status_effects)
+			var/datum/status_effect/S = s
 			if(initial(S1.id) == S.id)
 				. += S
