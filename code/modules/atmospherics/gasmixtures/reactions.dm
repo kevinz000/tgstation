@@ -27,6 +27,9 @@
 #define FUSION_PURITY_THRESHOLD				0.95
 #define FUSION_HEAT_DROPOFF					20000+T0C
 #define NOBLIUM_FORMATION_ENERGY			2e9 //1 Mole of Noblium takes the planck energy to condense.
+
+
+
 /datum/controller/subsystem/air/var/list/gas_reactions //this is our singleton of all reactions
 
 /proc/init_gas_reactions()

@@ -29,8 +29,6 @@ SUBSYSTEM_DEF(air)
 	var/list/obj/machinery/atmos_machinery = list()
 	var/list/pipe_init_dirs_cache = list()
 
-
-
 	//Special functions lists
 	var/list/turf/active_super_conductivity = list()
 	var/list/turf/open/high_pressure_delta = list()
