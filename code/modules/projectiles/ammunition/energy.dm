@@ -14,7 +14,7 @@
 	e_cost = 0
 	var/list/projectile_vars = list()
 
-/obj/item/ammo_casing/energy/chameleon/ready_proj(atom/target, mob/living/user, quiet, zone_override = "")
+/obj/item/ammo_casing/energy/chameleon/ready_proj()
 	. = ..()
 	if(!BB)
 		newshot()
@@ -38,6 +38,11 @@
 
 /obj/item/ammo_casing/energy/laser/hos
 	e_cost = 100
+
+/obj/item/ammo_casing/energy/laser/advtaser
+	e_cost = 120
+	select_name = "light laser"
+	projectile_type = /obj/item/projectile/beam/laser/advtaser
 
 /obj/item/ammo_casing/energy/laser/practice
 	projectile_type = /obj/item/projectile/beam/practice
@@ -82,7 +87,7 @@
 	projectile_type = /obj/item/projectile/energy/electrode
 	select_name = "stun"
 	fire_sound = 'sound/weapons/taser.ogg'
-	e_cost = 200
+	e_cost = 100
 
 /obj/item/ammo_casing/energy/electrode/spec
 	e_cost = 100

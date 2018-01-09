@@ -406,7 +406,7 @@
 	SetSleeping(0, FALSE)
 	radiation = 0
 	nutrition = NUTRITION_LEVEL_FED + 50
-	bodytemperature = BODYTEMP_NORMAL
+	bodytemperature = 310
 	set_blindness(0)
 	set_blurriness(0)
 	set_eye_damage(0)
@@ -761,9 +761,9 @@
 	var/turf/T = get_turf(src)
 	if(!T)
 		return 0
-	if(is_centcom_level(T.z)) //dont detect mobs on centcom
+	if(T.z == ZLEVEL_CENTCOM) //dont detect mobs on centcom
 		return 0
-	if(is_away_level(T.z))
+	if(T.z >= ZLEVEL_SPACEMAX)
 		return 0
 	if(user != null && src == user)
 		return 0
@@ -793,7 +793,7 @@
 	visible_message("<span class='notice'>[user] butchers [src].</span>")
 	gib(0, 0, 1)
 
-/mob/living/canUseTopic(atom/movable/M, be_close=FALSE, no_dextery=FALSE)
+/mob/living/canUseTopic(atom/movable/M, be_close = 0, no_dextery = 0)
 	if(incapacitated())
 		return
 	if(no_dextery)
@@ -806,18 +806,16 @@
 	if(G.trigger_guard != TRIGGER_GUARD_ALLOW_ALL && !IsAdvancedToolUser())
 		to_chat(src, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return FALSE
-	if(has_disability(DISABILITY_PACIFISM))
+	if(has_disability(PACIFISM))
 		to_chat(src, "<span class='notice'>You don't want to risk harming anyone!</span>")
 		return FALSE
 	return TRUE
 
 /mob/living/carbon/proc/update_stamina()
-	if(staminaloss)
-		var/total_health = (health - staminaloss)
-		if(total_health <= HEALTH_THRESHOLD_CRIT && !stat)
-			to_chat(src, "<span class='notice'>You're too exhausted to keep going...</span>")
-			Knockdown(100)
-			setStaminaLoss(health - 2)
+	if(staminaloss <= HEALTH_THRESHOLD_CRIT && !stat)
+		to_chat(src, "<span class='notice'>You're too exhausted to keep going...</span>")
+		Knockdown(100)
+		setStaminaLoss(health - 2)
 	update_health_hud()
 
 /mob/living/carbon/alien/update_stamina()
@@ -1034,7 +1032,7 @@
 	. = ..()
 	if(.)
 		if(client)
-			reset_perspective()
+			reset_perspective(destination)
 		update_canmove() //if the mob was asleep inside a container and then got forceMoved out we need to make them fall.
 
 /mob/living/proc/update_z(new_z) // 1+ to register, null to unregister
@@ -1058,31 +1056,3 @@
 /mob/living/onTransitZ(old_z,new_z)
 	..()
 	update_z(new_z)
-
-/mob/living/MouseDrop(mob/over)
-	. = ..()
-	var/mob/living/user = usr
-	if(!istype(over) || !istype(user))
-		return
-	if(!over.Adjacent(src) || (user != src) || !canUseTopic(over))
-		return
-	if(can_be_held)
-		mob_try_pickup(over)
-
-/mob/living/proc/mob_pickup(mob/living/L)
-	return
-
-/mob/living/proc/mob_try_pickup(mob/living/user)
-	if(!ishuman(user))
-		return
-	if(user.get_active_held_item())
-		to_chat(user, "<span class='warning'>Your hands are full!</span>")
-		return FALSE
-	if(buckled)
-		to_chat(user, "<span class='warning'>[src] is buckled to something!</span>")
-		return FALSE
-	user.visible_message("<span class='notice'>[user] starts trying to scoop up [src]!</span>")
-	if(!do_after(user, 20, target = src))
-		return FALSE
-	mob_pickup(user)
-	return TRUE
