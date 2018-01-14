@@ -1097,7 +1097,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 		for(var/obj/item/I in H.held_items)
 			if(I.flags_2 & SLOWS_WHILE_IN_HAND_2)
 				. += I.slowdown
-		var/health_deficiency = (100 - H.health + H.staminaloss)
+		var/health_deficiency = (100 - H.health)
 		var/hungry = (500 - H.nutrition) / 5 // So overeat would be 100 and default level would be 80
 		if(health_deficiency >= 40)
 			if(flight)
@@ -1110,6 +1110,8 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 			. += (1.5 - flight)
 		if(H.bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT)
 			. += (BODYTEMP_COLD_DAMAGE_LIMIT - H.bodytemperature) / COLD_SLOWDOWN_FACTOR
+	if(H.staminaloss && . < 1)
+		. += max(1 - ., min(0, H.staminaloss - 30) * 0.015)
 	return .
 
 //////////////////

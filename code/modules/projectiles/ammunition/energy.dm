@@ -39,6 +39,11 @@
 /obj/item/ammo_casing/energy/laser/hos
 	e_cost = 100
 
+/obj/item/ammo_casing/energy/laser/advtaser
+	e_cost = 120
+	select_name = "light laser"
+	projectile_type = /obj/item/projectile/beam/laser/advtaser
+
 /obj/item/ammo_casing/energy/laser/practice
 	projectile_type = /obj/item/projectile/beam/practice
 	select_name = "practice"
@@ -82,7 +87,7 @@
 	projectile_type = /obj/item/projectile/energy/electrode
 	select_name = "stun"
 	fire_sound = 'sound/weapons/taser.ogg'
-	e_cost = 200
+	e_cost = 100
 
 /obj/item/ammo_casing/energy/electrode/spec
 	e_cost = 100

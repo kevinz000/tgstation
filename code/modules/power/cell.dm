@@ -173,6 +173,9 @@
 	. = ..()
 	charge = 0
 
+/obj/item/stock_parts/cell/advtaser
+	maxcharge = 1200
+
 /obj/item/stock_parts/cell/upgraded
 	name = "high-capacity power cell"
 	desc = "A power cell with a slightly higher capacity than normal!"
