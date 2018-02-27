@@ -19,7 +19,6 @@
 	var/firing_effect_type = /obj/effect/temp_visual/dir_setting/firing_effect	//the visual effect appearing when the ammo is fired.
 	var/heavy_metal = TRUE
 
-
 /obj/item/ammo_casing/Initialize()
 	. = ..()
 	if(projectile_type)
