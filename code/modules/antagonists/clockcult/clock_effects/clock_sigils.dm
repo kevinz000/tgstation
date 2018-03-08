@@ -177,6 +177,7 @@
 	resist_string = "glows faintly"
 	sigil_name = "Sigil of Transmission"
 	affects_servants = TRUE
+	lit = TRUE
 
 /obj/effect/clockwork/sigil/transmission/Initialize()
 	. = ..()
@@ -242,14 +243,17 @@
 	return TRUE
 
 /obj/effect/clockwork/sigil/transmission/update_icon()
+	var/power_charge = get_clockwork_power()
 	if(GLOB.ratvar_awakens)
 		alpha = 255
-	var/power_charge = get_clockwork_power()
-	alpha = min(initial(alpha) + power_charge * 0.02, 255)
-	if(!power_charge)
-		set_light(0)
 	else
+		alpha = min(initial(alpha) + power_charge * 0.02, 255)
+	if(!power_charge && lit)
+		set_light(0)
+		lit = FALSE
+	else if(!lit)
 		set_light(max(alpha * 0.02, 1.4), max(alpha * 0.01, 0.1))
+		lit = TRUE
 
 //Vitality Matrix: Drains health from non-servants to heal or even revive servants.
 /obj/effect/clockwork/sigil/vitality
