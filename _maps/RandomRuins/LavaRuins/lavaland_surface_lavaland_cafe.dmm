@@ -1,0 +1,1577 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/template_noop,
+/area/template_noop)
+"ab" = (
+/turf/closed/wall/mineral/wood,
+/area/ruin/powered/cafe)
+"ac" = (
+/obj/machinery/hydroponics/constructable,
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"ad" = (
+/obj/structure/sink/kitchen{
+	desc = "A sink used for washing one's hands and face. It looks rusty and home-made";
+	name = "sink";
+	pixel_y = 28
+	},
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"ae" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"af" = (
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"ag" = (
+/obj/machinery/plantgenes/seedvault,
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"ah" = (
+/obj/machinery/vending/assist,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"ai" = (
+/obj/machinery/vending/engivend,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"aj" = (
+/obj/machinery/vending/tool,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"ak" = (
+/obj/machinery/autolathe,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"al" = (
+/obj/structure/table/wood/bar,
+/obj/structure/safe/floor,
+/obj/item/seeds/cherry/bomb,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"am" = (
+/obj/structure/dresser,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"an" = (
+/obj/structure/table/wood/bar,
+/obj/structure/mirror{
+	pixel_y = 28
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"ao" = (
+/obj/machinery/vending/clothing,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"ap" = (
+/obj/machinery/vending/autodrobe{
+	req_access_txt = "0"
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"aq" = (
+/obj/machinery/modular_computer/console/preset/research,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"ar" = (
+/obj/structure/table/wood,
+/obj/machinery/computer/libraryconsole/bookmanagement,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"as" = (
+/obj/structure/table/wood,
+/obj/item/device/camera/detective{
+	desc = "A polaroid camera with extra capacity for social media marketing.";
+	name = "Professional camera"
+	},
+/obj/item/device/camera_film,
+/obj/item/wallframe/newscaster,
+/obj/item/paper_bin,
+/obj/item/pen/fountain,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"at" = (
+/obj/machinery/chem_master/condimaster{
+	desc = "Used to separate out liquids - useful for purifying botanical extracts. Also dispenses condiments.";
+	name = "BrewMaster 2199";
+	pixel_x = -4
+	},
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"au" = (
+/obj/structure/table,
+/obj/item/seeds/pumpkin/blumpkin,
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"av" = (
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"aw" = (
+/obj/machinery/door/airlock/wood{
+	req_one_access_txt = "28"
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"ax" = (
+/obj/structure/chair/wood/normal{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"ay" = (
+/obj/structure/table,
+/obj/machinery/reagentgrinder,
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"az" = (
+/obj/machinery/seed_extractor,
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"aA" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"aB" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 0
+	},
+/obj/machinery/door/window/eastright{
+	dir = 8;
+	name = "Animal Pen";
+	req_access_txt = "0"
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"aC" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 0
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"aD" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"aE" = (
+/obj/machinery/hydroponics/constructable,
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"aF" = (
+/obj/machinery/vending/hydronutrients,
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"aG" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/mob/living/simple_animal/chicken,
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"aH" = (
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"aI" = (
+/mob/living/simple_animal/cow,
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"aJ" = (
+/obj/effect/mob_spawn/human/cafe,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"aK" = (
+/obj/structure/closet/crate,
+/obj/item/vending_refill/autodrobe,
+/obj/item/vending_refill/autodrobe,
+/obj/item/vending_refill/autodrobe,
+/obj/item/vending_refill/autodrobe,
+/obj/item/stack/sheet/paperframes/fifty,
+/obj/item/stack/sheet/paperframes/fifty,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"aL" = (
+/obj/machinery/vending/hydroseeds,
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"aM" = (
+/obj/structure/closet/crate/hydroponics,
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"aN" = (
+/obj/machinery/biogenerator,
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"aO" = (
+/obj/structure/closet/secure_closet/hydroponics{
+	locked = 0
+	},
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"aP" = (
+/obj/machinery/gibber,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"aQ" = (
+/obj/machinery/processor,
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"aR" = (
+/obj/structure/table,
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"aS" = (
+/obj/structure/sink/kitchen{
+	desc = "A sink used for washing one's hands and face. It looks rusty and home-made";
+	name = "sink";
+	pixel_y = 28
+	},
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"aT" = (
+/obj/structure/table,
+/obj/machinery/microwave{
+	pixel_x = -3;
+	pixel_y = 6
+	},
+/turf/open/floor/plasteel/cafeteria{
+	dir = 2
+	},
+/area/ruin/powered/cafe)
+"aU" = (
+/obj/structure/table,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"aV" = (
+/obj/machinery/deepfryer,
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"aW" = (
+/obj/machinery/vending/dinnerware,
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"aX" = (
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"aY" = (
+/obj/machinery/vending/wallmed{
+	name = "Emergency NanoMed";
+	pixel_y = 28;
+	req_access_txt = "0";
+	use_power = 0
+	},
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"aZ" = (
+/obj/machinery/light,
+/turf/open/floor/plasteel/whitegreen,
+/area/ruin/powered/cafe)
+"ba" = (
+/obj/machinery/smartfridge,
+/turf/closed/wall/mineral/wood,
+/area/ruin/powered/cafe)
+"bb" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"bc" = (
+/obj/structure/extinguisher_cabinet{
+	pixel_x = -27
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bd" = (
+/obj/structure/closet/secure_closet/freezer/meat{
+	locked = 0
+	},
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"be" = (
+/obj/structure/closet/secure_closet/freezer/fridge{
+	locked = 0
+	},
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"bf" = (
+/obj/structure/closet/secure_closet/freezer/kitchen{
+	locked = 0
+	},
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"bg" = (
+/obj/structure/table,
+/obj/item/reagent_containers/glass/beaker,
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"bh" = (
+/obj/structure/table,
+/obj/machinery/reagentgrinder,
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"bi" = (
+/obj/structure/table,
+/obj/item/stack/packageWrap,
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"bj" = (
+/obj/structure/table,
+/turf/open/floor/plasteel/cafeteria{
+	dir = 2
+	},
+/area/ruin/powered/cafe)
+"bk" = (
+/obj/structure/closet/chefcloset,
+/turf/open/floor/plasteel/cafeteria,
+/area/ruin/powered/cafe)
+"bl" = (
+/obj/structure/toilet{
+	dir = 4
+	},
+/turf/open/floor/plasteel/airless/white,
+/area/ruin/powered/cafe)
+"bm" = (
+/turf/open/floor/plasteel/airless/white,
+/area/ruin/powered/cafe)
+"bn" = (
+/obj/machinery/washing_machine,
+/turf/open/floor/plasteel/airless/white,
+/area/ruin/powered/cafe)
+"bo" = (
+/obj/structure/curtain,
+/obj/structure/window/reinforced/tinted{
+	dir = 8
+	},
+/obj/machinery/shower{
+	pixel_y = 12
+	},
+/turf/open/floor/plasteel/airless/white,
+/area/ruin/powered/cafe)
+"bp" = (
+/turf/open/space/basic,
+/area/ruin/powered/cafe)
+"bq" = (
+/obj/machinery/vending/boozeomat{
+	req_access_txt = "0"
+	},
+/turf/closed/wall/mineral/wood,
+/area/ruin/powered/cafe)
+"br" = (
+/obj/machinery/chem_dispenser/drinks/beer,
+/turf/closed/wall/mineral/wood,
+/area/ruin/powered/cafe)
+"bs" = (
+/obj/machinery/chem_dispenser/drinks,
+/turf/closed/wall/mineral/wood,
+/area/ruin/powered/cafe)
+"bt" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/open/floor/plasteel/airless/white,
+/area/ruin/powered/cafe)
+"bu" = (
+/obj/structure/piano,
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/open/floor/carpet/black,
+/area/ruin/powered/cafe)
+"bv" = (
+/obj/structure/sign/barsign{
+	pixel_y = 32
+	},
+/obj/structure/chair/stool,
+/turf/open/floor/carpet/black,
+/area/ruin/powered/cafe)
+"bw" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/open/floor/carpet/black,
+/area/ruin/powered/cafe)
+"bx" = (
+/obj/machinery/vending/cigarette,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"by" = (
+/obj/structure/sink{
+	dir = 8;
+	pixel_x = -12;
+	pixel_y = 2
+	},
+/obj/machinery/button/door{
+	id = "lmrestroom";
+	name = "Lock Control";
+	pixel_y = -28
+	},
+/turf/open/floor/plasteel/airless/white,
+/area/ruin/powered/cafe)
+"bz" = (
+/obj/machinery/recharge_station,
+/turf/open/floor/plasteel/airless/white,
+/area/ruin/powered/cafe)
+"bA" = (
+/obj/structure/curtain,
+/obj/structure/window/reinforced/tinted{
+	dir = 8
+	},
+/obj/machinery/shower{
+	dir = 1
+	},
+/turf/open/floor/plasteel/airless/white,
+/area/ruin/powered/cafe)
+"bB" = (
+/obj/structure/table/wood,
+/obj/item/device/instrument/piano_synth,
+/turf/open/floor/carpet/black,
+/area/ruin/powered/cafe)
+"bC" = (
+/turf/open/floor/carpet/black,
+/area/ruin/powered/cafe)
+"bD" = (
+/obj/structure/table/wood/bar,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bE" = (
+/obj/machinery/door/airlock/wood{
+	id_tag = "lmrestroom"
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bF" = (
+/obj/structure/window/plasma/reinforced{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bG" = (
+/obj/structure/window/plasma/reinforced{
+	dir = 4
+	},
+/obj/structure/window/plasma/reinforced{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bH" = (
+/turf/open/floor/plasteel/stairs,
+/area/ruin/powered/cafe)
+"bI" = (
+/obj/structure/chair/stool/bar,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bJ" = (
+/obj/structure/window/paperframe{
+	CanAtmosPass = 0
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bK" = (
+/obj/structure/chair/wood/wings{
+	dir = 3
+	},
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bL" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bM" = (
+/turf/open/floor/grass,
+/area/lavaland/surface/outdoors)
+"bN" = (
+/obj/structure/table/wood/fancy,
+/obj/item/candle/infinite{
+	pixel_y = 6
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bO" = (
+/obj/structure/chair/wood/wings{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bP" = (
+/obj/structure/chair/wood/wings{
+	dir = 4
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bQ" = (
+/obj/structure/chair/wood/wings{
+	dir = 8
+	},
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bR" = (
+/obj/structure/flora/ausbushes/fernybush,
+/obj/structure/flora/ausbushes/fullgrass,
+/obj/structure/flora/ausbushes/ppflowers,
+/obj/structure/flora/ausbushes/palebush,
+/obj/structure/window/reinforced/fulltile,
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"bS" = (
+/obj/structure/flora/ausbushes/fernybush,
+/obj/structure/flora/ausbushes/fullgrass,
+/obj/structure/flora/ausbushes/ppflowers,
+/obj/structure/flora/ausbushes/palebush,
+/obj/structure/window/reinforced/fulltile,
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"bT" = (
+/obj/structure/closet/crate/bin,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"bU" = (
+/obj/structure/flora/ausbushes/fernybush,
+/obj/structure/flora/ausbushes/ppflowers,
+/obj/structure/flora/ausbushes/palebush,
+/obj/structure/window/reinforced/fulltile,
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"bV" = (
+/obj/structure/flora/ausbushes/fernybush,
+/obj/structure/flora/ausbushes/fullgrass,
+/obj/structure/flora/ausbushes/palebush,
+/obj/structure/window/reinforced/fulltile,
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"bW" = (
+/obj/structure/flora/ausbushes/fernybush,
+/obj/structure/flora/ausbushes/ppflowers,
+/obj/structure/flora/ausbushes/palebush,
+/obj/structure/window/reinforced/fulltile,
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"bX" = (
+/obj/structure/flora/ausbushes/fullgrass,
+/obj/structure/flora/ausbushes/ppflowers,
+/obj/structure/flora/ausbushes/palebush,
+/obj/structure/window/reinforced/fulltile,
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"bY" = (
+/obj/structure/flora/ausbushes/fernybush,
+/obj/structure/flora/ausbushes/fullgrass,
+/obj/structure/flora/ausbushes/ppflowers,
+/obj/structure/window/reinforced/fulltile,
+/obj/machinery/light,
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"bZ" = (
+/obj/machinery/light,
+/turf/open/floor/wood,
+/area/ruin/powered/cafe)
+"ca" = (
+/obj/structure/flora/ausbushes/fernybush,
+/obj/structure/flora/ausbushes/fullgrass,
+/obj/structure/flora/ausbushes/ppflowers,
+/obj/structure/flora/ausbushes/palebush,
+/obj/structure/window/reinforced/fulltile,
+/obj/machinery/light,
+/turf/open/floor/grass,
+/area/ruin/powered/cafe)
+"cb" = (
+/obj/structure/fans/tiny,
+/obj/structure/mineral_door/paperframe,
+/turf/open/floor/carpet/black,
+/area/ruin/powered/cafe)
+
+(1,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(2,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(3,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+bM
+aa
+aa
+bM
+bM
+aa
+aa
+aa
+aa
+aa
+"}
+(4,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+bM
+bM
+bM
+bM
+bM
+bM
+bM
+bM
+bM
+aa
+aa
+"}
+(5,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+bJ
+bJ
+bJ
+ab
+bJ
+bJ
+bJ
+ab
+bM
+aa
+aa
+aa
+"}
+(6,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ac
+ac
+ac
+aE
+ac
+ac
+ac
+ab
+bl
+bt
+by
+ab
+bK
+bN
+bO
+bR
+av
+av
+bP
+bJ
+bM
+aa
+aa
+aa
+"}
+(7,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ad
+af
+af
+af
+af
+af
+af
+ab
+bm
+bm
+bm
+bE
+av
+av
+av
+bS
+av
+av
+bN
+bJ
+bM
+bM
+aa
+aa
+"}
+(8,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ae
+at
+ay
+aF
+aL
+aN
+aZ
+ab
+bn
+bm
+bz
+ab
+av
+av
+av
+av
+av
+av
+bQ
+bJ
+bM
+bM
+aa
+aa
+"}
+(9,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+af
+af
+af
+af
+af
+af
+af
+ab
+bo
+bm
+bA
+ab
+av
+av
+av
+bT
+av
+bS
+bY
+ab
+bM
+bM
+bM
+aa
+"}
+(10,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ag
+au
+az
+af
+aM
+aO
+af
+ab
+ab
+ab
+ab
+ab
+av
+av
+bP
+bU
+av
+av
+bP
+bJ
+bM
+bM
+bM
+aa
+"}
+(11,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+aw
+ab
+ab
+ba
+ab
+av
+aA
+av
+aw
+av
+av
+bN
+bS
+av
+av
+bN
+bJ
+bM
+bM
+bM
+aa
+"}
+(12,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ah
+av
+aA
+av
+av
+av
+av
+bc
+av
+ab
+ab
+ab
+bL
+av
+bQ
+bS
+av
+av
+bQ
+bJ
+bM
+bM
+bM
+aa
+"}
+(13,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ai
+av
+aB
+aG
+ab
+aP
+aX
+bd
+ab
+ab
+bB
+bF
+av
+av
+av
+av
+av
+av
+bZ
+ab
+bM
+bM
+bM
+aa
+"}
+(14,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+aj
+av
+aC
+aH
+ab
+aQ
+aX
+be
+ab
+bu
+bC
+bF
+av
+av
+bC
+bC
+bC
+bC
+bC
+cb
+bM
+bM
+bM
+aa
+"}
+(15,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ak
+av
+aC
+aI
+ab
+aR
+aX
+bf
+bp
+bv
+bC
+bF
+av
+av
+bC
+bC
+bC
+bC
+bC
+ab
+bM
+bM
+bM
+aa
+"}
+(16,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+aw
+ab
+ab
+ab
+aS
+aX
+bg
+ab
+bw
+bC
+bG
+av
+av
+bC
+bC
+bC
+bC
+bC
+cb
+bM
+bM
+bM
+aa
+"}
+(17,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+al
+av
+aA
+aJ
+ab
+aT
+aX
+bh
+ab
+ab
+bC
+bH
+av
+av
+av
+av
+av
+av
+bZ
+ab
+bM
+bM
+bM
+aa
+"}
+(18,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+am
+av
+av
+aJ
+ab
+aU
+aX
+bi
+ab
+ab
+ab
+ab
+bL
+av
+bP
+bS
+av
+av
+bP
+bJ
+bM
+bM
+aa
+aa
+"}
+(19,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+an
+av
+av
+aJ
+ab
+aV
+aX
+bj
+bq
+aA
+bD
+bI
+av
+av
+bN
+bV
+av
+av
+bN
+bJ
+bM
+bM
+aa
+aa
+"}
+(20,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ao
+av
+av
+aJ
+ab
+aW
+aX
+aX
+ba
+av
+bD
+bI
+av
+av
+bQ
+bS
+av
+av
+bQ
+bJ
+bM
+bM
+aa
+aa
+"}
+(21,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ap
+av
+av
+aJ
+ab
+aX
+aX
+aX
+br
+av
+bD
+bI
+av
+av
+av
+bT
+av
+bX
+ca
+ab
+bM
+bM
+bM
+aa
+"}
+(22,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+aq
+av
+av
+av
+ab
+aY
+aX
+aX
+bs
+av
+bD
+bI
+av
+av
+av
+av
+av
+av
+bP
+bJ
+bM
+bM
+bM
+aa
+"}
+(23,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ar
+ax
+av
+av
+aw
+aX
+aX
+aX
+aw
+av
+bD
+bI
+av
+av
+av
+bS
+av
+av
+bN
+bJ
+bM
+bM
+bM
+aa
+"}
+(24,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+as
+av
+aD
+aK
+ab
+aX
+bb
+bk
+ab
+bx
+ab
+ab
+bK
+bN
+bO
+bW
+av
+av
+bQ
+bJ
+bM
+bM
+bM
+aa
+"}
+(25,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+bJ
+bJ
+bJ
+ab
+bJ
+bJ
+bJ
+ab
+bM
+bM
+bM
+aa
+"}
+(26,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+bM
+bM
+bM
+bM
+bM
+bM
+bM
+bM
+bM
+bM
+aa
+"}
+(27,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+bM
+bM
+bM
+aa
+bM
+bM
+bM
+bM
+aa
+aa
+"}
+(28,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+bM
+bM
+aa
+aa
+"}
+(29,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
+(30,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+"}
