@@ -288,8 +288,17 @@
 	siemens_coefficient = -1
 	var/tesla_power = 25000
 	var/tesla_range = 20
-	var/tesla_boom = FALSE
-	var/tesla_stun = FALSE
+	var/tesla_flags = TESLA_MOB_DAMAGE | TESLA_OBJ_DAMAGE
+
+/obj/item/clothing/suit/armor/reactive/tesla/dropped(mob/user)
+	..()
+	if(istype(user))
+		user.flags_2 &= ~TESLA_IGNORE_2
+
+/obj/item/clothing/suit/armor/reactive/tesla/equipped(mob/user, slot)
+	..()
+	if(slot_flags & slotdefine2slotbit(slot)) //Was equipped to a valid slot for this item?
+		user.flags_2 |= TESLA_IGNORE_2
 
 /obj/item/clothing/suit/armor/reactive/tesla/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
 	if(!active)
@@ -302,7 +311,7 @@
 			owner.visible_message("<span class='danger'>The tesla capacitors on [owner]'s reactive tesla armor are still recharging! The armor merely emits some sparks.</span>")
 			return
 		owner.visible_message("<span class='danger'>[src] blocks [attack_text], sending out arcs of lightning!</span>")
-		tesla_zap(owner,tesla_range,tesla_power,tesla_boom, tesla_stun)
+		tesla_zap(owner, tesla_range, tesla_power, tesla_flags)
 		reactivearmor_cooldown = world.time + reactivearmor_cooldown_duration
 		return 1
 

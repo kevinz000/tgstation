@@ -101,3 +101,12 @@ GLOBAL_LIST_INIT(bitflags, list(1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 204
 #define ACID_PROOF 32 //acid stuck on it doesn't melt it.
 #define INDESTRUCTIBLE 64 //doesn't take damage
 #define FREEZE_PROOF 128 //can't be frozen
+
+//tesla_zap
+#define TESLA_MACHINE_EXPLOSIVE 1
+#define TESLA_ALLOW_DUPLICATES 2
+#define TESLA_OBJ_DAMAGE 4
+#define TESLA_MOB_DAMAGE 8
+#define TESLA_MOB_STUN 16
+
+#define TESLA_DEFAULT_FLAGS ALL
