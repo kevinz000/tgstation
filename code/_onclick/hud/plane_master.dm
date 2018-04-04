@@ -22,6 +22,11 @@
 	appearance_flags = PLANE_MASTER //should use client color
 	blend_mode = BLEND_OVERLAY
 
+/obj/screen/plane_master/game_world/backdrop(mob/M)
+	. = ..()
+	if(isAI(M))
+		filters += filter(type = "outline", size = 1, color = "#29ff1e")
+
 /obj/screen/plane_master/lighting
 	name = "lighting plane master"
 	plane = LIGHTING_PLANE

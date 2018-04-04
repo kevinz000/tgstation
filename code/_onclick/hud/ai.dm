@@ -256,9 +256,3 @@
 /mob/living/silicon/ai/create_mob_hud()
 	if(client && !hud_used)
 		hud_used = new /datum/hud/ai(src)
-
-/obj/screen/plane_master/game_world/backdrop(mob/M)
-	. = ..()
-	if(isAI(M))
-		filters += filter(type = "outline", size = 1, outline = "#29ff1e")
-
