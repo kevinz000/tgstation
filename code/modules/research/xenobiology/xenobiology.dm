@@ -273,7 +273,7 @@
 	switch(activation_type)
 		if(SLIME_ACTIVATE_MINOR)
 			to_chat(user, "<span class='notice'>You activate [src]. You start feeling fast!</span>")
-			user.reagents.add_reagent("ephedrine",5)
+			user.reagents._add_reagent("ephedrine",5)
 			return 450
 
 		if(SLIME_ACTIVATE_MAJOR)
@@ -294,8 +294,8 @@
 		if(SLIME_ACTIVATE_MINOR)
 			to_chat(user, "<span class='notice'>You activate [src]. Your genome feels more stable!</span>")
 			user.adjustCloneLoss(-15)
-			user.reagents.add_reagent("mutadone", 10)
-			user.reagents.add_reagent("potass_iodide", 10)
+			user.reagents._add_reagent("mutadone", 10)
+			user.reagents._add_reagent("potass_iodide", 10)
 			return 250
 
 		if(SLIME_ACTIVATE_MAJOR)
@@ -319,8 +319,8 @@
 			to_chat(user, "<span class='notice'>You activate [src]. You start feeling colder!</span>")
 			user.ExtinguishMob()
 			user.adjust_fire_stacks(-20)
-			user.reagents.add_reagent("frostoil",4)
-			user.reagents.add_reagent("cryoxadone",5)
+			user.reagents._add_reagent("frostoil",4)
+			user.reagents._add_reagent("cryoxadone",5)
 			return 100
 
 		if(SLIME_ACTIVATE_MAJOR)
@@ -355,7 +355,7 @@
 			user.visible_message("<span class='warning'>[user]'s skin starts flashing hypnotically...</span>", "<span class='notice'>Your skin starts forming odd patterns, pacifying creatures around you.</span>")
 			for(var/mob/living/carbon/C in viewers(user, null))
 				if(C != user)
-					C.reagents.add_reagent("pax",2)
+					C.reagents._add_reagent("pax",2)
 			return 600
 
 /obj/item/slime_extract/green

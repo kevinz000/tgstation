@@ -4,6 +4,7 @@
 //Toxin & acid reagents
 //Hydroponics stuff
 
+WIP_TAG		//all this code is operating under the assumption 1 unit = 1 mole AND 1 liter
 /datum/reagent
 	var/name = "Reagent"
 	var/id = "reagent"
@@ -18,7 +19,9 @@
 	var/reagent_state = LIQUID
 	var/list/data
 	var/current_cycle = 0
-	var/volume = 0
+	var/volume = 0									//To keep things simple, 1 unit is also 1 mole is also 1 liter. Yeah, I know.
+	var/purity = 1									//pure moles / total moles. in other words, fraction of this that is actually... this.
+	var/specific_heat = DEFAULT_SPECIFIC_HEAT		//kJ/(temperature_change*unit)
 	var/color = "#000000" // rgb: 0, 0, 0
 	var/can_synth = TRUE
 	var/metabolization_rate = REAGENTS_METABOLISM //how fast the reagent is metabolized by the mob

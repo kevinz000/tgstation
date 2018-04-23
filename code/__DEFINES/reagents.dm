@@ -2,6 +2,10 @@
 #define LIQUID			2
 #define GAS				3
 
+#define REAGENT_NORMAL_PH 7.000
+#define REAGENT_PH_ACCURACY 0.001
+#define REAGENT_PURITY_ACCURACY 0.001
+#define DEFAULT_SPECIFIC_HEAT 200
 
 // container_type defines
 #define INJECTABLE		(1<<0)	// Makes it possible to add reagents through droppers and syringes.
@@ -28,3 +32,5 @@
 #define DEL_REAGENT		1	// reagent deleted (fully cleared)
 #define ADD_REAGENT		2	// reagent added
 #define REM_REAGENT		3	// reagent removed (may still exist)
+
+#define WIP_TAG			//tag wip stuff with this so we can make sure we got them all by removing the define and making sure there's no compile errors.
