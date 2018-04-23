@@ -98,8 +98,8 @@
 			amount = 4
 		if(chem == "holy water and uranium")
 			chem = "uranium"
-			reagents._add_reagent("holywater")
-		reagents._add_reagent(chem,amount)
+			reagents.add_reagent("holywater")
+		reagents.add_reagent(chem,amount)
 
 /obj/effect/payload_spawner/random_slime/spawn_payload(type, numspawned)
 	for(var/loop = numspawned ,loop > 0, loop--)

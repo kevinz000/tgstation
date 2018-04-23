@@ -527,8 +527,17 @@
 		return TRUE
 	return FALSE
 
+//Returns the average specific heat for all reagents currently in this holder.
+/datum/reagents/proc/specific_heat()
+	. = 0
+	var/cached_amount = total_volume		//cache amount
+	var/list/cached_reagents = reagent_list		//cache reagents
+	for(var/I in cached_reagents)
+		var/datum/reagent/R = I
+		. += R.volume / cached_amount
+
 WIP_TAG		//optimize performance
-/datum/reagents/proc/_add_reagent(reagent, amount, list/data=null, other_temp = 300, other_pH = REAGENT_NORMAL_PH, purity = 1.000, no_react = 0)
+/datum/reagents/proc/add_reagent(reagent, amount, list/data=null, other_temp = 300, other_pH = REAGENT_NORMAL_PH, other_purity = 1.000, no_react = 0)
 	if(!isnum(amount) || !amount)
 		return FALSE
 
@@ -539,36 +548,30 @@ WIP_TAG		//optimize performance
 	if(!D)
 		return FALSE
 
-	var/list/cached_reagents = reagent_list
 	update_total()
-	if(total_volume + amount > maximum_volume)
-		amount = (maximum_volume - total_volume) //Doesnt fit in. Make it disappear. Shouldnt happen. Will happen.
+	var/cached_total = total_volume
+	if(cached_total + amount > maximum_volume)
+		amount = (maximum_volume - cached_total) //Doesnt fit in. Make it disappear. Shouldnt happen. Will happen.
+	var/new_total = cached_total + amount
+	var/cached_temp = chem_temp
+	var/list/cached_reagents = reagent_list
+	var/cached_pH = pH
 
 	WIP_TAG		//check my maths for temperature and pH
-
-	//Equalize temperature
-	var/thermal_capacity = 0
-	var/total_energy = 0
-	var/new_total = total_volume + amount
-	for(var/I in cached_reagents)
-		var/datum/reagent/R = I
-		thermal_capacity += R.specific_heat * (R.volume / new_total)
-		total_energy += R.specific_heat
-	thermal_capacity += D.specific_heat * (amount / new_total)
-	thermal_capacity *= new_total
-	total_energy *= chem_temp
-	total_energy *= total_volume
-	total_energy += D.specific_heat * amount * other_temp
-	chem_temp = thermal_capacity / total_energy
+	//Equalize temperature - Not using specific_heat() intentionally.
+	var/specific_heat = 0
+	var/thermal_energy = 0
+	for(var/i in cached_reagents)
+		var/datum/reagent/R = i
+		specific_heat += R.specific_heat * (R.volume / new_total)
+		thermal_energy += R.specific_heat * R.volume * cached_temp
+	specific_heat += D.specific_heat * (amount / new_total)
+	thermal_energy += D.specific_heat * amount * other_temp
+	chem_temp = thermal_energy / specific_heat
 	////
 
 	//Neutralize pH
-	var/hplus_molarity_self = 10^(-pH)
-	var/hplus_molarity_source = 10^(-pH)
-	var/hplus_moles_self = total_volume * hplus_molarity_self
-	var/hplus_moles_source = amount * hplus_molarity_source
-	var/new_hplus_moles = hplus_moles_self + hplus_moles_source
-	pH = round((-log(10, new_hplus_moles/new_total)), REAGENT_PH_ACCURACY)
+	pH = round(-log(10, ((cached_total * (10^(-cached_pH))) + (amount * (10^(-other_pH)))) / new_total), REAGENT_PH_ACCURACY)
 	////
 
 	for(var/A in cached_reagents)
@@ -576,14 +579,13 @@ WIP_TAG		//optimize performance
 		if (R.id == reagent)
 
 			WIP_TAG			//check my maths for purity calculations
-			//Equalize purity
-			var/their_pure_moles = R.purity * R.volume
-			var/our_pure_moles = purity * amount
-			var/total_amount = R.volume + amount
-			R.purity = (their_pure_moles + our_pure_moles) / total_amount
+			//Add amount and equalize purity
+			var/our_pure_moles = R.volume * R.purity
+			var/their_pure_moles = amount * other_purity
+			R.volume += amount
+			R.purity = (our_pure_moles + their_pure_moles) / (R.volume)
 			////
 
-			R.volume += amount
 			update_total()
 			if(my_atom)
 				my_atom.on_reagent_change(ADD_REAGENT)
@@ -598,6 +600,7 @@ WIP_TAG		//optimize performance
 		cached_reagents += R
 		R.holder = src
 		R.volume = amount
+		R.purity = other_purity
 		if(data)
 			R.data = data
 			R.on_new(data)

@@ -190,9 +190,9 @@
 	icon_state = "icecream_cone_[cone_name]"
 	switch (cone_type)
 		if ("waffle")
-			reagents._add_reagent("nutriment", 1)
+			reagents.add_reagent("nutriment", 1)
 		if ("chocolate")
-			reagents._add_reagent("cocoa", 1) // chocolate ain't as nutritious kids
+			reagents.add_reagent("cocoa", 1) // chocolate ain't as nutritious kids
 
 	desc = "Delicious [cone_name] cone, but no ice cream."
 
@@ -205,16 +205,16 @@
 			desc = "A delicious [cone_type] cone filled with vanilla ice cream. All the other ice creams take content from it."
 		if ("chocolate")
 			desc = "A delicious [cone_type] cone filled with chocolate ice cream. Surprisingly, made with real cocoa."
-			reagents._add_reagent("cocoa", 2)
+			reagents.add_reagent("cocoa", 2)
 		if ("strawberry")
 			desc = "A delicious [cone_type] cone filled with strawberry ice cream. Definitely not made with real strawberries."
-			reagents._add_reagent("berryjuice", 2)
+			reagents.add_reagent("berryjuice", 2)
 		if ("blue")
 			desc = "A delicious [cone_type] cone filled with blue ice cream. Made with real... blue?"
-			reagents._add_reagent("singulo", 2)
+			reagents.add_reagent("singulo", 2)
 		if ("mob")
 			desc = "A suspicious [cone_type] cone filled with bright red ice cream. That's probably not strawberry..."
-			reagents._add_reagent("liquidgibs", 2)
+			reagents.add_reagent("liquidgibs", 2)
 	ice_creamed = 1
 
 /obj/item/reagent_containers/food/snacks/icecream/proc/add_mob_flavor(var/mob/M)
