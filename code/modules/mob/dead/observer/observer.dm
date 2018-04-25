@@ -15,7 +15,7 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 	see_invisible = SEE_INVISIBLE_OBSERVER
 	see_in_dark = 100
 	invisibility = INVISIBILITY_OBSERVER
-	
+
 	var/can_reenter_corpse
 	var/datum/hud/living/carbon/hud = null // hud
 	var/bootime = 0
@@ -293,10 +293,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 	ghostize(0)
 
-/mob/dead/observer/Move(newloc, direct)
-	if(!updatedir)
-		direct = SOUTH
-	return ..()
+/mob/dead/observer/is_active()
+	return 0
 
 /mob/dead/observer/verb/reenter_corpse()
 	set category = "Ghost"
