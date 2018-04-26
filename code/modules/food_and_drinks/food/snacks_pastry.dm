@@ -19,7 +19,7 @@
 	if(prob(30))
 		icon_state = "donut2"
 		name = "frosted donut"
-		reagents.add_reagent("sprinkles", 2)
+		reagents._add_reagent("sprinkles", 2)
 		bonus_reagents = list("sprinkles" = 2, "sugar" = 1)
 		filling_color = "#FF69B4"
 
@@ -47,12 +47,12 @@
 /obj/item/reagent_containers/food/snacks/donut/chaos/Initialize()
 	. = ..()
 	extra_reagent = pick("nutriment", "capsaicin", "frostoil", "krokodil", "plasma", "cocoa", "slimejelly", "banana", "berryjuice", "omnizine")
-	reagents.add_reagent("[extra_reagent]", 3)
+	reagents._add_reagent("[extra_reagent]", 3)
 	bonus_reagents = list("[extra_reagent]" = 3, "sugar" = 1)
 	if(prob(30))
 		icon_state = "donut2"
 		name = "frosted chaos donut"
-		reagents.add_reagent("sprinkles", 2)
+		reagents._add_reagent("sprinkles", 2)
 		bonus_reagents = list("sprinkles" = 2, "[extra_reagent]" = 3, "sugar" = 1)
 		filling_color = "#FF69B4"
 
@@ -68,11 +68,11 @@
 /obj/item/reagent_containers/food/snacks/donut/jelly/Initialize()
 	. = ..()
 	if(extra_reagent)
-		reagents.add_reagent("[extra_reagent]", 3)
+		reagents._add_reagent("[extra_reagent]", 3)
 	if(prob(30))
 		icon_state = "jdonut2"
 		name = "frosted jelly Donut"
-		reagents.add_reagent("sprinkles", 2)
+		reagents._add_reagent("sprinkles", 2)
 		bonus_reagents = list("sprinkles" = 2, "sugar" = 1)
 		filling_color = "#FF69B4"
 
@@ -252,7 +252,7 @@
 		bonus_reagents = list("omnizine" = 5, "nutriment" = 1, "vitamin" = 1)
 	. = ..()
 	if(fey)
-		reagents.add_reagent("omnizine", 5)
+		reagents._add_reagent("omnizine", 5)
 
 /obj/item/reagent_containers/food/snacks/cracker
 	name = "cracker"

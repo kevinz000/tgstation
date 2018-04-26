@@ -48,6 +48,7 @@
 	var/maximum_volume = 100
 	var/atom/my_atom = null
 	var/chem_temp = 150
+	var/pH = REAGENT_NORMAL_PH
 	var/last_tick = 1
 	var/addiction_tick = 1
 	var/list/datum/reagent/addiction_list = new/list()
@@ -182,7 +183,7 @@
 		var/transfer_amount = T.volume * part
 		if(preserve_data)
 			trans_data = copy_data(T)
-		R.add_reagent(T.id, transfer_amount * multiplier, trans_data, chem_temp, no_react = 1) //we only handle reaction after every reagent has been transfered.
+		R.add_reagent(T.id, transfer_amount * multiplier, trans_data, chem_temp, pH, T.purity, no_react = TRUE) //we only handle reaction after every reagent has been transfered.
 		remove_reagent(T.id, transfer_amount)
 
 	update_total()
@@ -215,7 +216,7 @@
 		var/copy_amount = T.volume * part
 		if(preserve_data)
 			trans_data = T.data
-		R.add_reagent(T.id, copy_amount * multiplier, trans_data)
+		R.add_reagent(T.id, copy_amount * multiplier, trans_data, chem_temp, pH, T.purity, no_react = TRUE)
 
 	src.update_total()
 	R.update_total()
@@ -242,7 +243,7 @@
 		if(current_reagent.id == reagent)
 			if(preserve_data)
 				trans_data = current_reagent.data
-			R.add_reagent(current_reagent.id, amount, trans_data, src.chem_temp)
+			R.add_reagent(current_reagent.id, amount, trans_data, src.chem_temp, pH, current_reagent.purity, no_react = TRUE)
 			remove_reagent(current_reagent.id, amount, 1)
 			break
 
@@ -526,22 +527,62 @@
 		return TRUE
 	return FALSE
 
-/datum/reagents/proc/add_reagent(reagent, amount, list/data=null, reagtemp = 300, no_react = 0)
+WIP_TAG		//optimize performance
+/datum/reagents/proc/_add_reagent(reagent, amount, list/data=null, other_temp = 300, other_pH = REAGENT_NORMAL_PH, purity = 1.000, no_react = 0)
 	if(!isnum(amount) || !amount)
 		return FALSE
 
 	if(amount < 0)
 		return FALSE
 
+	var/datum/reagent/D = GLOB.chemical_reagents_list[reagent]
+	if(!D)
+		return FALSE
+
 	var/list/cached_reagents = reagent_list
 	update_total()
 	if(total_volume + amount > maximum_volume)
 		amount = (maximum_volume - total_volume) //Doesnt fit in. Make it disappear. Shouldnt happen. Will happen.
-	chem_temp = round(((amount * reagtemp) + (total_volume * chem_temp)) / (total_volume + amount)) //equalize with new chems
+
+	WIP_TAG		//check my maths for temperature and pH
+
+	//Equalize temperature
+	var/thermal_capacity = 0
+	var/total_energy = 0
+	var/new_total = total_volume + amount
+	for(var/I in cached_reagents)
+		var/datum/reagent/R = I
+		thermal_capacity += R.specific_heat * (R.volume / new_total)
+		total_energy += R.specific_heat
+	thermal_capacity += D.specific_heat * (amount / new_total)
+	thermal_capacity *= new_total
+	total_energy *= chem_temp
+	total_energy *= total_volume
+	total_energy += D.specific_heat * amount * other_temp
+	chem_temp = thermal_capacity / total_energy
+	////
+
+	//Neutralize pH
+	var/hplus_molarity_self = 10^(-pH)
+	var/hplus_molarity_source = 10^(-pH)
+	var/hplus_moles_self = total_volume * hplus_molarity_self
+	var/hplus_moles_source = amount * hplus_molarity_source
+	var/new_hplus_moles = hplus_moles_self + hplus_moles_source
+	pH = round((-log(10, new_hplus_moles/new_total)), REAGENT_PH_ACCURACY)
+	////
 
 	for(var/A in cached_reagents)
 		var/datum/reagent/R = A
 		if (R.id == reagent)
+
+			WIP_TAG			//check my maths for purity calculations
+			//Equalize purity
+			var/their_pure_moles = R.purity * R.volume
+			var/our_pure_moles = purity * amount
+			var/total_amount = R.volume + amount
+			R.purity = (their_pure_moles + our_pure_moles) / total_amount
+			////
+
 			R.volume += amount
 			update_total()
 			if(my_atom)
@@ -551,7 +592,6 @@
 				handle_reactions()
 			return TRUE
 
-	var/datum/reagent/D = GLOB.chemical_reagents_list[reagent]
 	if(D)
 
 		var/datum/reagent/R = new D.type(data)
