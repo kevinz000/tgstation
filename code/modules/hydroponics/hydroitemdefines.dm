@@ -172,7 +172,7 @@
 
 /obj/item/reagent_containers/glass/bottle/nutrient/ez/Initialize()
 	. = ..()
-	reagents._add_reagent("eznutriment", 50)
+	reagents.add_reagent("eznutriment", 50)
 
 /obj/item/reagent_containers/glass/bottle/nutrient/l4z
 	name = "bottle of Left 4 Zed"
@@ -181,7 +181,7 @@
 
 /obj/item/reagent_containers/glass/bottle/nutrient/l4z/Initialize()
 	. = ..()
-	reagents._add_reagent("left4zednutriment", 50)
+	reagents.add_reagent("left4zednutriment", 50)
 
 /obj/item/reagent_containers/glass/bottle/nutrient/rh
 	name = "bottle of Robust Harvest"
@@ -190,7 +190,7 @@
 
 /obj/item/reagent_containers/glass/bottle/nutrient/rh/Initialize()
 	. = ..()
-	reagents._add_reagent("robustharvestnutriment", 50)
+	reagents.add_reagent("robustharvestnutriment", 50)
 
 /obj/item/reagent_containers/glass/bottle/nutrient/empty
 	name = "bottle"
@@ -211,7 +211,7 @@
 
 /obj/item/reagent_containers/glass/bottle/killer/weedkiller/Initialize()
 	. = ..()
-	reagents._add_reagent("weedkiller", 50)
+	reagents.add_reagent("weedkiller", 50)
 
 /obj/item/reagent_containers/glass/bottle/killer/pestkiller
 	name = "bottle of pest spray"
@@ -220,4 +220,4 @@
 
 /obj/item/reagent_containers/glass/bottle/killer/pestkiller/Initialize()
 	. = ..()
-	reagents._add_reagent("pestkiller", 50)
+	reagents.add_reagent("pestkiller", 50)

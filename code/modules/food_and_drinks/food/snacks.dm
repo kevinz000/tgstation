@@ -31,9 +31,9 @@
 			for(var/rid in list_reagents)
 				var/amount = list_reagents[rid]
 				if(rid == "nutriment" || rid == "vitamin")
-					reagents._add_reagent(rid, amount, tastes.Copy())
+					reagents.add_reagent(rid, amount, tastes.Copy())
 				else
-					reagents._add_reagent(rid, amount)
+					reagents.add_reagent(rid, amount)
 	else
 		..()
 

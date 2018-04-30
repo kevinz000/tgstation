@@ -455,13 +455,13 @@
 
 /obj/item/watertank/op/New()
 	..()
-	reagents._add_reagent("mutagen",350)
-	reagents._add_reagent("napalm",125)
-	reagents._add_reagent("welding_fuel",125)
-	reagents._add_reagent("clf3",300)
-	reagents._add_reagent("cryptobiolin",350)
-	reagents._add_reagent("plasma",250)
-	reagents._add_reagent("condensedcapsaicin",500)
+	reagents.add_reagent("mutagen",350)
+	reagents.add_reagent("napalm",125)
+	reagents.add_reagent("welding_fuel",125)
+	reagents.add_reagent("clf3",300)
+	reagents.add_reagent("cryptobiolin",350)
+	reagents.add_reagent("plasma",250)
+	reagents.add_reagent("condensedcapsaicin",500)
 
 /obj/item/reagent_containers/spray/mister/op
 	desc = "A mister nozzle attached to several extended water tanks. It suspiciously has a compressor in the system and is labelled entirely in New Cyrillic."

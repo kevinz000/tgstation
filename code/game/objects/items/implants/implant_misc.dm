@@ -40,9 +40,9 @@
 	imp_in.lying = 0
 	imp_in.update_canmove()
 
-	imp_in.reagents._add_reagent("synaptizine", 10)
-	imp_in.reagents._add_reagent("omnizine", 10)
-	imp_in.reagents._add_reagent("stimulants", 10)
+	imp_in.reagents.add_reagent("synaptizine", 10)
+	imp_in.reagents.add_reagent("omnizine", 10)
+	imp_in.reagents.add_reagent("stimulants", 10)
 	if(!uses)
 		qdel(src)
 
