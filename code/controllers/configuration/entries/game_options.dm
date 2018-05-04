@@ -176,28 +176,40 @@
 
 /datum/config_entry/flag/emojis
 
-/datum/config_entry/number/run_delay	//Used for modifying movement speed for mobs.
+//Movedelays are all in pixels per decisecond!
+/datum/config_entry/number/movespeed_base_run	//Used for modifying movement speed for mobs.
+	default_value = 32
 	var/static/value_cache = 0
 
-/datum/config_entry/number/run_delay/ValidateAndSet()
+/datum/config_entry/number/movespeed_base_run/ValidateAndSet()
 	. = ..()
 	if(.)
 		value_cache = config_entry_value
 
-/datum/config_entry/number/walk_delay
+/datum/config_entry/number/movespeed_base_walk
+	default_value = 32 / 3
 	var/static/value_cache = 0
 
-/datum/config_entry/number/walk_delay/ValidateAndSet()
+/datum/config_entry/number/movespeed_base_walk/ValidateAndSet()
 	. = ..()
 	if(.)
 		value_cache = config_entry_value
 
-/datum/config_entry/number/human_delay	//Mob specific modifiers. NOTE: These will affect different mob types in different ways
-/datum/config_entry/number/robot_delay
-/datum/config_entry/number/monkey_delay
-/datum/config_entry/number/alien_delay
-/datum/config_entry/number/slime_delay
-/datum/config_entry/number/animal_delay
+/datum/config_entry/number/movespeed_base_ghost
+	default_value = 32
+	var/static/value_cache = 0
+
+/datum/config_entry/number/movespeed_base_ghost/ValidateAndSet()
+	. = ..()
+	if(.)
+		value_cache = config_entry_value
+
+/datum/config_entry/number/movespeed_mod_human	//Mob specific modifiers. NOTE: These will affect different mob types in different ways
+/datum/config_entry/number/movespeed_mod_robot
+/datum/config_entry/number/movespeed_mod_monkey
+/datum/config_entry/number/movespeed_mod_alien
+/datum/config_entry/number/movespeed_mod_slime
+/datum/config_entry/number/movespeed_mod_slime
 
 /datum/config_entry/flag/roundstart_away	//Will random away mission be loaded.
 

@@ -28,10 +28,20 @@
 			mob.control_object.forceMove(get_step(mob.control_object,direct))
 	return
 
+//Override movespeed_ds, not the other ones!
+/mob/proc/movespeed_ds()			//Pixels per decisecond
+	return CONFIG_GET(number/movespeed_base_run) || 32
+
+/mob/proc/movespeed_s()				//Pixels per second
+	return movespeed_ds() * 10
+
+/mob/proc/movespeed_tick()			//Pixels per input subsystem tick
+	return movespeed_s() / ((SSinput.flags & SS_INPUT)? (world.fps / SSinput.wait) : (SSinput.wait))
+
 #define MOVEMENT_DELAY_BUFFER 0.75
 #define MOVEMENT_DELAY_BUFFER_DELTA 1.25
 
-/client/Move(n, direct)
+/client/Move(newloc, dir)
 	if(world.time < move_delay) //do not move anything ahead of this check please
 		return FALSE
 	else

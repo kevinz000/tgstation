@@ -136,6 +136,9 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 
 	grant_all_languages()
 
+/mob/dead/observer/movespeed_ds()
+	return CONFIG_GET(number/movespeed_base_ghost)
+
 /mob/dead/observer/narsie_act()
 	var/old_color = color
 	color = "#960000"

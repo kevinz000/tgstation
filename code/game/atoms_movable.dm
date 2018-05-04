@@ -3,7 +3,8 @@
 	appearance_flags = TILE_BOUND|PIXEL_SCALE
 
 	// Movement related vars
-	step_size = 8
+	step_size = 8				//This is variable in mobs to allow the use of fine grained move delays!
+	var/last_move_time = 0
 	var/last_move = NONE
 	var/walking = NONE
 
