@@ -20,17 +20,18 @@
 // Is an open container for all intents and purposes.
 #define OPENCONTAINER 	(REFILLABLE | DRAINABLE | TRANSPARENT)
 
-
+//Mob reagent application types
 #define TOUCH			1	// splashing
 #define INGEST			2	// ingestion
 #define VAPOR			3	// foam, spray, blob attack
 #define PATCH			4	// patches
 #define INJECT			5	// injection
 
-
 //defines passed through to the on_reagent_change proc
 #define DEL_REAGENT		1	// reagent deleted (fully cleared)
 #define ADD_REAGENT		2	// reagent added
 #define REM_REAGENT		3	// reagent removed (may still exist)
+
+#define REAGENT_GC_MINIMUM_VOLUME 0.1
 
 #define WIP_TAG			//tag wip stuff with this so we can make sure we got them all by removing the define and making sure there's no compile errors.

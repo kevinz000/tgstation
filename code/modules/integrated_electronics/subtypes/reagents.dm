@@ -447,8 +447,8 @@ obj/item/integrated_circuit/reagent/storage/juicer
 	switch(ord)
 		if(1)
 			var/cont[0]
-			for(var/datum/reagent/RE in reagents.reagent_list)
-				cont += RE.id
+			for(var/id in reagents.reagent_list)
+				cont += id
 			set_pin_data(IC_OUTPUT, 3, cont)
 			push_data()
 		if(2)
@@ -514,13 +514,13 @@ obj/item/integrated_circuit/reagent/storage/juicer
 	if(target.reagents.maximum_volume - target.reagents.total_volume <= 0)
 		return
 
-	for(var/datum/reagent/G in source.reagents.reagent_list)
+	for(var/id in source.reagents.reagent_list)
 		if(!direction_mode)
-			if(G.id in demand)
-				source.reagents.trans_id_to(target, G.id, transfer_amount)
+			if(id in demand)
+				source.reagents.trans_id_to(target, id, transfer_amount)
 		else
-			if(!(G.id in demand))
-				source.reagents.trans_id_to(target, G.id, transfer_amount)
+			if(!(id in demand))
+				source.reagents.trans_id_to(target, id, transfer_amount)
 	activate_pin(2)
 	push_data()
 
@@ -563,6 +563,6 @@ obj/item/integrated_circuit/reagent/storage/juicer
 			reagents.chem_temp += max(1, (target_temperature - reagents.chem_temp) * heater_coefficient)
 
 		reagents.chem_temp = round(reagents.chem_temp)
-		reagents.handle_reactions()
+		reagents.start_reacting()
 		set_pin_data(IC_OUTPUT, 3, reagents.chem_temp)
 		push_data()

@@ -54,7 +54,7 @@
 				beaker.reagents.chem_temp += max(1, (target_temperature - beaker.reagents.chem_temp) * heater_coefficient)
 
 			beaker.reagents.chem_temp = round(beaker.reagents.chem_temp)
-			beaker.reagents.handle_reactions()
+			beaker.reagents.start_reacting()
 
 /obj/machinery/chem_heater/attackby(obj/item/I, mob/user, params)
 	if(default_deconstruction_screwdriver(user, "mixer0b", "mixer0b", I))
@@ -103,7 +103,8 @@
 
 	var beakerContents[0]
 	if(beaker)
-		for(var/datum/reagent/R in beaker.reagents.reagent_list)
+		for(var/id in beaker.reagents.reagent_list)
+			var/datum/reagent/R = beaker.reagents.reagent_list[id]
 			beakerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
 	data["beakerContents"] = beakerContents
 	return data

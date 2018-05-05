@@ -25,7 +25,7 @@
 
 	..(target, blocked)
 	reagents.set_reacting(TRUE)
-	reagents.handle_reactions()
+	reagents.start_reacting()
 	return TRUE
 
 /obj/item/projectile/bullet/dart/metalfoam/Initialize()

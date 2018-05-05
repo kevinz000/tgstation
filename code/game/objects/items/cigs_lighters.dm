@@ -184,7 +184,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		return
 	// allowing reagents to react after being lit
 	reagents.set_reacting(TRUE)
-	reagents.handle_reactions()
+	reagents.start_reacting()
 	icon_state = icon_on
 	item_state = icon_on
 	if(flavor_text)
