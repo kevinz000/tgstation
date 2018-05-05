@@ -1,9 +1,11 @@
-/mob/living/carbon/human/movement_delay()
-	. = 0
-	var/static/config_human_delay
-	if(isnull(config_human_delay))
-		config_human_delay = CONFIG_GET(number/human_delay)
-	. += ..() + config_human_delay + dna.species.movement_delay(src)
+/mob/living/carbon/human/movespeed_ds()
+	. = 32
+	var/static/datum/config_entry/number/config_human_mod
+	var/static/datum/config_entry/number/config_human_adj
+	if(isnull(config_human_delay) || isnull(config_human_adj))
+		config_human_mod = CONFIG_GET_DATUM(number/movespeed_mod_human)
+		config_human_adj = CONFIG_GET_DATUM(number/movespeed_adj_human)
+	. = (((..() * dna.species.movespeed_mod(src)) + dna.species.movespeed_adj(src)) * config_human_mod.config_entry_value) + config_human_adj.config_entry_value
 
 /mob/living/carbon/human/slip(knockdown_amount, obj/O, lube)
 	if(has_trait(TRAIT_NOSLIPALL))

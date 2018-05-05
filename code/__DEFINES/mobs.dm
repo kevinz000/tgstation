@@ -263,3 +263,6 @@
 // AI Toggles
 #define AI_CAMERA_LUMINOSITY	5
 #define AI_VOX // Comment out if you don't want VOX to be enabled and have players download the voice sounds.
+
+#define XENO_QUEEN_MOVESPEED_FACTOR 0.333
+#define XENO_PRAETORIAN_MOVESPEED_FACTOR 0.5

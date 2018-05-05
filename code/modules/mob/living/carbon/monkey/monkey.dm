@@ -58,26 +58,33 @@
 	internal_organs += new /obj/item/organ/stomach
 	..()
 
-/mob/living/carbon/monkey/movement_delay()
+/mob/living/carbon/monkey/movespeed_ds()
 	if(reagents)
 		if(reagents.has_reagent("morphine"))
-			return -1
+			return 64
 
 		if(reagents.has_reagent("nuka_cola"))
-			return -1
+			return 64
 
-	. = ..()
+	. = 32
+
+	var/oldstyle_slowdown = 1
 	var/health_deficiency = (100 - health)
 	if(health_deficiency >= 45)
-		. += (health_deficiency / 25)
+		oldstyle_slowdown += (health_deficiency / 25)
 
 	if (bodytemperature < 283.222)
-		. += (283.222 - bodytemperature) / 10 * 1.75
+		oldstyle_slowdown += (283.222 - bodytemperature) / 10 * 1.75
 
-	var/static/config_monkey_delay
-	if(isnull(config_monkey_delay))
-		config_monkey_delay = CONFIG_GET(number/monkey_delay)
-	. += config_monkey_delay
+	var/static/datum/config_entry/number/config_monkey_mod
+	var/static/datum/config_entry/number/config_monkey_adj
+	if(isnull(config_monkey_delay) || isnull(config_monkey_adj))
+		config_monkey_mod = CONFIG_GET_DATUM(number/movespeed_mod_monkey)
+		config_monkey_adj = CONFIG_GET_DATUM(number/movespeed_adj_monkey)
+
+	oldstyle_slowdown = 1 / max(1, oldstyle_slowdown)
+
+	. = ((..() * oldstyle_slowdown) * config_monkey_mod) + config_monkey_adj
 
 /mob/living/carbon/monkey/Stat()
 	..()

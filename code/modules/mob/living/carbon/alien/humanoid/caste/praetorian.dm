@@ -23,9 +23,9 @@
 	..()
 
 
-/mob/living/carbon/alien/humanoid/royal/praetorian/movement_delay()
+/mob/living/carbon/alien/humanoid/royal/praetorian/movespeed_ds()
 	. = ..()
-	. += 1
+	. *= XENO_PRAETORIAN_MOVESPEED_FACTOR
 
 /obj/effect/proc_holder/alien/royal/praetorian/evolve
 	name = "Evolve"

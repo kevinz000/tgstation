@@ -136,31 +136,36 @@
 
 /mob/living/simple_animal/slime/movement_delay()
 	if(bodytemperature >= 330.23) // 135 F or 57.08 C
-		return -1	// slimes become supercharged at high temperatures
+		return 64	// slimes become supercharged at high temperatures
 
-	. = ..()
+	. = 32
 
+	var/oldstyle_slowdown = 1
 	var/health_deficiency = (100 - health)
 	if(health_deficiency >= 45)
-		. += (health_deficiency / 25)
+		oldstyle_slowdown += (health_deficiency / 25)
 
 	if(bodytemperature < 183.222)
-		. += (283.222 - bodytemperature) / 10 * 1.75
+		oldstyle_slowdown += (283.222 - bodytemperature) / 10 * 1.75
 
 	if(reagents)
 		if(reagents.has_reagent("morphine")) // morphine slows slimes down
-			. *= 2
+			oldstyle_slowdown *= 2
 
 		if(reagents.has_reagent("frostoil")) // Frostoil also makes them move VEEERRYYYYY slow
-			. *= 5
+			oldstyle_slowdown *= 5
 
 	if(health <= 0) // if damaged, the slime moves twice as slow
-		. *= 2
+		oldstyle_slowdown *= 2
 
-	var/static/config_slime_delay
-	if(isnull(config_slime_delay))
-		config_slime_delay = CONFIG_GET(number/slime_delay)
-	. += config_slime_delay
+	oldstyle_slowdown = 1 / max(1, oldstyle_slowdown)
+
+	var/static/datum/config_entry/number/config_slime_mod
+	var/static/datum/config_entry/number/config_slime_adj
+	if(isnull(config_slime_mod) || isnull(config_slime_adj))
+		config_slime_mod = CONFIG_GET_DATUM(number/movespeed_mod_slime)
+		config_slime_adj = CONFIG_GET_DATUM(number/movespeed_adj_slime)
+	. = ((..() * oldstyle_slowdown) * config_slime_mod) + config_slime_adj
 
 /mob/living/simple_animal/slime/ObjCollide(obj/O)
 	if(!client && powerlevel > 0)

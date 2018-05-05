@@ -178,7 +178,7 @@
 
 //Movedelays are all in pixels per decisecond!
 /datum/config_entry/number/movespeed_base_run	//Used for modifying movement speed for mobs.
-	default_value = 32
+	default = 32
 	var/static/value_cache = 0
 
 /datum/config_entry/number/movespeed_base_run/ValidateAndSet()
@@ -187,7 +187,7 @@
 		value_cache = config_entry_value
 
 /datum/config_entry/number/movespeed_base_walk
-	default_value = 32 / 3
+	default = 32 / 3
 	var/static/value_cache = 0
 
 /datum/config_entry/number/movespeed_base_walk/ValidateAndSet()
@@ -196,7 +196,7 @@
 		value_cache = config_entry_value
 
 /datum/config_entry/number/movespeed_base_ghost
-	default_value = 32
+	default = 32
 	var/static/value_cache = 0
 
 /datum/config_entry/number/movespeed_base_ghost/ValidateAndSet()
@@ -204,12 +204,21 @@
 	if(.)
 		value_cache = config_entry_value
 
+//These are MULTIPLIERS!
 /datum/config_entry/number/movespeed_mod_human	//Mob specific modifiers. NOTE: These will affect different mob types in different ways
 /datum/config_entry/number/movespeed_mod_robot
 /datum/config_entry/number/movespeed_mod_monkey
 /datum/config_entry/number/movespeed_mod_alien
 /datum/config_entry/number/movespeed_mod_slime
-/datum/config_entry/number/movespeed_mod_slime
+/datum/config_entry/number/movespeed_mod_animal
+
+//These are ADDITIONS!
+/datum/config_entry/number/movespeed_adj_human	//Mob specific adjusts. NOTE: These will affect different mob types in different ways
+/datum/config_entry/number/movespeed_adj_robot
+/datum/config_entry/number/movespeed_adj_monkey
+/datum/config_entry/number/movespeed_adj_alien
+/datum/config_entry/number/movespeed_adj_slime
+/datum/config_entry/number/movespeed_adj_animal
 
 /datum/config_entry/flag/roundstart_away	//Will random away mission be loaded.
 

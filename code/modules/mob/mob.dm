@@ -586,18 +586,16 @@
 // facing verbs
 /mob/proc/canface()
 	if(!canmove)
-		return 0
+		return FALSE
 	if(world.time < client.move_delay)
-		return 0
-	if(stat==2)
-		return 0
+		return FALSE
 	if(anchored)
-		return 0
+		return FALSE
 	if(notransform)
-		return 0
-	if(restrained())
-		return 0
-	return 1
+		return FALSE
+	if(incapacitated())
+		return FALSE
+	return TRUE
 
 /mob/proc/fall(forced)
 	drop_all_held_items()
@@ -607,7 +605,7 @@
 	if(!canface())
 		return 0
 	setDir(EAST)
-	client.move_delay += movement_delay()
+	client.move_delay += 1
 	return 1
 
 /mob/verb/westface()
@@ -615,7 +613,7 @@
 	if(!canface())
 		return 0
 	setDir(WEST)
-	client.move_delay += movement_delay()
+	client.move_delay += 1
 	return 1
 
 /mob/verb/northface()
@@ -623,7 +621,7 @@
 	if(!canface())
 		return 0
 	setDir(NORTH)
-	client.move_delay += movement_delay()
+	client.move_delay += 1
 	return 1
 
 /mob/verb/southface()
@@ -631,7 +629,7 @@
 	if(!canface())
 		return 0
 	setDir(SOUTH)
-	client.move_delay += movement_delay()
+	client.move_delay += 1
 	return 1
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check

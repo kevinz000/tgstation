@@ -53,7 +53,7 @@
 	var/friendly = "nuzzles" //If the mob does no damage with it's attack
 	var/environment_smash = ENVIRONMENT_SMASH_NONE //Set to 1 to allow breaking of crates,lockers,racks,tables; 2 for walls; 3 for Rwalls
 
-	var/speed = 1 //LETS SEE IF I CAN SET SPEEDS FOR SIMPLE MOBS WITHOUT DESTROYING EVERYTHING. Higher speed is slower, negative speed is faster
+	var/speed_mod = 1 //LETS SEE IF I CAN SET SPEEDS FOR SIMPLE MOBS WITHOUT DESTROYING EVERYTHING. Higher speed is slower, negative speed is faster
 
 	//Hot simple_animal baby making vars
 	var/list/childtype = null
@@ -267,14 +267,15 @@
 		act = "me"
 	..(act, m_type, message)
 
-
-
-/mob/living/simple_animal/movement_delay()
-	var/static/config_animal_delay
-	if(isnull(config_animal_delay))
-		config_animal_delay = CONFIG_GET(number/animal_delay)
-	. += config_animal_delay
-	return ..() + speed + config_animal_delay
+/mob/living/simple_animal/movespeed_ds()
+	. = 32
+	var/static/datum/config_entry/number/config_animal_speedmod
+	var/static/datum/config_entry/number/config_animal_speedadj
+	if(!config_animal_speedmod)
+		config_animal_speedmod = CONFIG_GET_DATUM(number/movespeed_mod_animal)
+	if(!config_animal_speedadj)
+		config_animal_speedadj = CONFIG_GET_DATUM(number/movespeed_adj_animal)
+	. = ((..() * speed_mod) * config_animal_speedmod.config_entry_value) + config_animal_speedadj
 
 /mob/living/simple_animal/Stat()
 	..()

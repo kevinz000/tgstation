@@ -28,37 +28,33 @@
 			mob.control_object.forceMove(get_step(mob.control_object,direct))
 	return
 
-//Override movespeed_ds, not the other ones!
+//Override movespeed_ds (this one!), not the other ones!
 /mob/proc/movespeed_ds()			//Pixels per decisecond
-	return CONFIG_GET(number/movespeed_base_run) || 32
+	return (CONFIG_GET(number/movespeed_base_run) || 32)
 
 /mob/proc/movespeed_s()				//Pixels per second
 	return movespeed_ds() * 10
 
-/mob/proc/movespeed_tick()			//Pixels per input subsystem tick
-	return movespeed_s() / ((SSinput.flags & SS_INPUT)? (world.fps / SSinput.wait) : (SSinput.wait))
-
-#define MOVEMENT_DELAY_BUFFER 0.75
-#define MOVEMENT_DELAY_BUFFER_DELTA 1.25
+//CHECK MY MATH!!
+/mob/proc/movespeed_tick()			//Pixels per input subsystem tick. Check my math, please!!
+	return movespeed_s() / ((SSinput.flags & SS_TICKER)? (world.fps / SSinput.wait) : (SSinput.wait))
+//CHECK MY MATH!! ALSO NEEDS TO IMPLEMENT MASTER CONTROLLER PROCESSING VAR
 
 /client/Move(newloc, dir)
-	if(world.time < move_delay) //do not move anything ahead of this check please
+	if(move_delay > world.time)
 		return FALSE
-	else
-		next_move_dir_add = 0
-		next_move_dir_sub = 0
-	var/old_move_delay = move_delay
-	move_delay = world.time+world.tick_lag //this is here because Move() can now be called mutiple times per tick
+	next_move_dir_add = NONE
+	next_move_dir_sub = NONE
 	if(!mob || !mob.loc)
 		return FALSE
-	if(!n || !direct)
+	if(!newloc || !dir)
 		return FALSE
 	if(mob.notransform)
 		return FALSE	//This is sota the goto stop mobs from moving var
 	if(mob.control_object)
-		return Move_object(direct)
+		return Move_object(dir)
 	if(!isliving(mob))
-		return mob.Move(n, direct)
+		return mob.Move(newloc, dir)
 	if(mob.stat == DEAD)
 		mob.ghostize()
 		return FALSE
@@ -67,62 +63,57 @@
 
 	var/mob/living/L = mob  //Already checked for isliving earlier
 	if(L.incorporeal_move)	//Move though walls
-		Process_Incorpmove(direct)
+		Process_Incorpmove(dir)
 		return FALSE
 
 	if(mob.remote_control)					//we're controlling something, our movement is relayed to it
-		return mob.remote_control.relaymove(mob, direct)
+		return mob.remote_control.relaymove(mob, dir)
 
 	if(isAI(mob))
-		return AIMove(n,direct,mob)
+		return AIMove(newloc, dir, mob)
 
 	if(Process_Grab()) //are we restrained by someone's grip?
 		return
 
 	if(mob.buckled)							//if we're buckled to something, tell it we moved.
-		return mob.buckled.relaymove(mob, direct)
+		return mob.buckled.relaymove(mob, dir)
 
 	if(!mob.canmove)
 		return FALSE
 
 	if(isobj(mob.loc) || ismob(mob.loc))	//Inside an object, tell it we moved
 		var/atom/O = mob.loc
-		return O.relaymove(mob, direct)
+		return O.relaymove(mob, dir)
 
-	if(!mob.Process_Spacemove(direct))
+	if(!mob.Process_Spacemove(dir))
 		return FALSE
-	//We are now going to move
-	var/add_delay = mob.movement_delay()
-	if(old_move_delay + (add_delay*MOVEMENT_DELAY_BUFFER_DELTA) + MOVEMENT_DELAY_BUFFER > world.time)
-		move_delay = old_move_delay
-	else
-		move_delay = world.time
+
 	var/oldloc = mob.loc
 
-	if(L.confused)
-		var/newdir = 0
+	var/pixels_to_move = mob.movespeed_ds() + move_pixel_overrun	//how many pixels we should move plus old overrun
+	move_pixel_overrun = pixels_to_move % 1						//round off overrun and store
+	pixels_to_move -= move_pixel_overrun						//get rid of overrun
+
+	if(L.confused)												//randomly change dirs or whatever if you're unable to walk straight
+		var/newdir = NONE
 		if(L.confused > 40)
 			newdir = pick(GLOB.alldirs)
 		else if(prob(L.confused * 1.5))
-			newdir = angle2dir(dir2angle(direct) + pick(90, -90))
+			newdir = angle2dir(dir2angle(dir) + pick(90, -90))
 		else if(prob(L.confused * 3))
-			newdir = angle2dir(dir2angle(direct) + pick(45, -45))
+			newdir = angle2dir(dir2angle(dir) + pick(45, -45))
 		if(newdir)
-			direct = newdir
-			n = get_step(L, direct)
+			dir = newdir
+			newloc = get_step(L, dir)
 
-	. = ..()
+	. = step(mob, dir, pixels_to_move)								//move!
 
-	if((direct & (direct - 1)) && mob.loc == n) //moved diagonally successfully
-		add_delay *= 2
-	if(mob.loc != oldloc)
-		move_delay += add_delay
 	if(.) // If mob is null here, we deserve the runtime
 		if(mob.throwing)
 			mob.throwing.finalize(FALSE)
 
 	for(var/obj/O in mob.user_movement_hooks)
-		O.intercept_user_move(direct, mob, n, oldloc)
+		O.intercept_user_move(dir, mob, newloc, oldloc)
 
 	var/atom/movable/P = mob.pulling
 	if(P && !ismob(P) && P.density)

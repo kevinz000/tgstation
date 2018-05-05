@@ -77,11 +77,12 @@
 	var/silent = FALSE
 	var/hit_slowdown = 0
 	var/brightness_power = 5
-	var/slowdown = 0
+	var/spacemove = FALSE
 
-/mob/living/silicon/pai/movement_delay()
-	. = ..()
-	. += slowdown
+/mob/living/silicon/pai/movespeed_ds()
+	. = ..() || 16
+	if(spacemove)
+		. *= 0.5
 
 /mob/living/silicon/pai/can_unbuckle()
 	return FALSE
@@ -261,9 +262,9 @@
 /mob/living/silicon/pai/Process_Spacemove(movement_dir = 0)
 	. = ..()
 	if(!.)
-		slowdown = 2
+		spacemove = TRUE
 		return TRUE
-	slowdown = initial(slowdown)
+	spacemove = FALSE
 	return TRUE
 
 /mob/living/silicon/pai/examine(mob/user)

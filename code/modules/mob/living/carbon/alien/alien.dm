@@ -14,7 +14,7 @@
 
 	var/obj/item/card/id/wear_id = null // Fix for station bounced radios -- Skie
 	var/has_fine_manipulation = 0
-	var/move_delay_add = 0 // movement delay to add
+	var/move_delay_mod = 1		//multiplicative!
 
 	status_flags = CANUNCONSCIOUS|CANPUSH
 

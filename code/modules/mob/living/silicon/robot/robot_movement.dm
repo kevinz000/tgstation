@@ -3,12 +3,14 @@
 		return 1
 	return ..()
 
-/mob/living/silicon/robot/movement_delay()
-	. = ..()
-	var/static/config_robot_delay
-	if(isnull(config_robot_delay))
-		config_robot_delay = CONFIG_GET(number/robot_delay)
-	. += speed + config_robot_delay
+/mob/living/silicon/robot/movespeed_ds()
+	. = 32
+	var/static/datum/config_entry/number/config_robot_mod
+	var/static/datum/config_entry/number/config_robot_adj
+	if(isnull(config_robot_delay) || isnull(config_robot_adj))
+		config_robot_mod = CONFIG_GET_DATUM(number/movespeed_mod_robot)
+		config_robot_adj = CONFIG_GET_DATUM(number/movespeed_adj_robot)
+	. = ((..() * speed_mod) * config_robot_mod) + config_robot_adj
 
 /mob/living/silicon/robot/mob_negates_gravity()
 	return magpulse

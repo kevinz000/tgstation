@@ -50,9 +50,9 @@
 	internal_organs += new /obj/item/organ/alien/eggsac
 	..()
 
-/mob/living/carbon/alien/humanoid/royal/queen/movement_delay()
+/mob/living/carbon/alien/humanoid/royal/queen/movespeed_ds()
 	. = ..()
-	. += 3
+	. *= XENO_QUEEN_MOVESPEED_FACTOR
 
 //Queen verbs
 /obj/effect/proc_holder/alien/lay_egg

@@ -20,7 +20,8 @@
 		//OTHER//
 		/////////
 	var/datum/preferences/prefs = null
-	var/move_delay		= 1
+	var/move_pixel_overrun		= 0
+	var/move_delay				= 0
 
 	var/area			= null
 

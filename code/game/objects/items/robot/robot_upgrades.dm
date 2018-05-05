@@ -69,28 +69,28 @@
 	name = "cyborg VTEC module"
 	desc = "Used to kick in a cyborg's VTEC systems, increasing their speed."
 	icon_state = "cyborg_upgrade2"
-	require_module = 1
+	require_module = TRUE
 
 /obj/item/borg/upgrade/vtec/action(mob/living/silicon/robot/R, user = usr)
 	. = ..()
 	if(.)
-		if(R.speed < 0)
+		if(R.speed_mod > 1)
 			to_chat(R, "<span class='notice'>A VTEC unit is already installed!</span>")
 			to_chat(user, "<span class='notice'>There's no room for another VTEC unit!</span>")
 			return FALSE
 
-		R.speed = -2 // Gotta go fast.
+		R.speed_mod = 3 // Gotta go fast.
 
 /obj/item/borg/upgrade/vtec/deactivate(mob/living/silicon/robot/R, user = usr)
 	. = ..()
 	if (.)
-		R.speed = initial(R.speed)
+		R.speed_mod = initial(R.speed_mod)
 
 /obj/item/borg/upgrade/disablercooler
 	name = "cyborg rapid disabler cooling module"
 	desc = "Used to cool a mounted disabler, increasing the potential current in it and thus its recharge rate."
 	icon_state = "cyborg_upgrade3"
-	require_module = 1
+	require_module = TRUE
 	module_type = /obj/item/robot_module/security
 
 /obj/item/borg/upgrade/disablercooler/action(mob/living/silicon/robot/R, user = usr)
