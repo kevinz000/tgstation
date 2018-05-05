@@ -1,13 +1,13 @@
 
 /datum/reagents
-	var/list/reagent_list = list()				//id = reagent datum
+	var/list/_reagent_list = list()				//type = reagent datum
 	var/total_volume = 0
 	var/maximum_volume = 100
 	var/atom/my_atom = null
 	var/chem_temp = 150
 	var/last_tick = 1
 	var/addiction_tick = 1
-	var/list/addiction_list = list()						//id = reagent datum
+	var/list/_addiction_list = list()						//type = reagent datum
 	var/reagents_holder_flags
 
 /datum/reagents/New(maximum=100)

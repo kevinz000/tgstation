@@ -1,4 +1,4 @@
-/datum/crafting_recipe/food
+s/datum/crafting_recipe/food
 	var/real_parts
 	category = CAT_FOOD
 
