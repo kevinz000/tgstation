@@ -107,7 +107,7 @@
 	reagent_id = reag_id
 	name = "UNKNOWN"
 
-	var/datum/reagent/R = GLOB.chemical_reagents_list[reag_id]
+	var/datum/reagent/R = SSreagents.reagents_by_id[reag_id]
 	if(R && R.id == reagent_id)
 		name = R.name
 
@@ -319,7 +319,7 @@
 
 /datum/plant_gene/trait/noreact/on_squash(obj/item/reagent_containers/food/snacks/grown/G, atom/target)
 	G.reagents.set_reacting(TRUE)
-	G.reagents.handle_reactions()
+	G.reagents.start_reacting()
 
 
 /datum/plant_gene/trait/maxchem

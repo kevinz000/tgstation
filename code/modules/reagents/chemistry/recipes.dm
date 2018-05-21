@@ -1,9 +1,9 @@
 /datum/chemical_reaction
 	var/name = null
 	var/id = null
-	var/list/results = new/list()
-	var/list/required_reagents = new/list()
-	var/list/required_catalysts = new/list()
+	var/list/results = list()
+	var/list/required_reagents = list()
+	var/list/required_catalysts = list()
 
 	// Both of these variables are mostly going to be used with slime cores - but if you want to, you can use them for other things
 	var/required_container = null // the exact container path required for the reaction to happen
@@ -15,6 +15,12 @@
 	var/is_cold_recipe = 0 // Set to 1 if you want the recipe to only react when it's BELOW the required temp.
 	var/mix_message = "The solution begins to bubble." //The message shown to nearby people upon mixing, if applicable
 	var/mix_sound = 'sound/effects/bubbles.ogg' //The sound played upon mixing, if applicable
+
+	var/reaction_rate_debug = 0.5				WIP_TAG			//placeholder for rate.
+
+//Reactions (as specified by units of reagents to units of results) per DECISECOND.
+/datum/chemical_reaction/proc/get_reaction_rate(datum/reagents/holder)
+	return reaction_rate_debug
 
 /datum/chemical_reaction/proc/on_reaction(datum/reagents/holder, created_volume)
 	return

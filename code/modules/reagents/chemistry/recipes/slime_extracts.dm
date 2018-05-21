@@ -2,6 +2,9 @@
 /datum/chemical_reaction/slime
 	var/deletes_extract = TRUE
 
+/datum/chemical_reaction/slime/get_reaction_rate()
+	return INFINITY
+
 /datum/chemical_reaction/slime/on_reaction(datum/reagents/holder)
 	SSblackbox.record_feedback("tally", "slime_cores_used", 1, "type")
 	if(deletes_extract)

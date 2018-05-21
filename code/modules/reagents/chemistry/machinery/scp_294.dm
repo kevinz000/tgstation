@@ -67,7 +67,7 @@
 				input_reagent = shortcuts[input_reagent]
 			else
 				input_reagent = find_reagent(input_reagent)
-			if(!input_reagent || !GLOB.chemical_reagents_list[input_reagent])
+			if(!input_reagent || !SSreagents.reagents_by_id[input_reagent])
 				say("OUT OF RANGE")
 				return
 			else
@@ -84,12 +84,12 @@
 
 /obj/machinery/chem_dispenser/scp_294/proc/find_reagent(input)
 	. = FALSE
-	if(GLOB.chemical_reagents_list[input]) //prefer IDs!
-		var/datum/reagent/R = GLOB.chemical_reagents_list[input]
+	if(SSreagents.reagents_by_id[input]) //prefer IDs!
+		var/datum/reagent/R = SSreagents.reagents_by_id[input]
 		if(R.can_synth)
 			return input
 	else
-		for(var/X in GLOB.chemical_reagents_list)
-			var/datum/reagent/R = GLOB.chemical_reagents_list[X]
+		for(var/X in SSreagents.reagents_by_id)
+			var/datum/reagent/R = SSreagents.reagents_by_id[X]
 			if(R.can_synth && input == replacetext(lowertext(R.name), " ", ""))
 				return X
