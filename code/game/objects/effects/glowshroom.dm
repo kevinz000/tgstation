@@ -11,9 +11,11 @@
 	layer = ABOVE_NORMAL_TURF_LAYER
 	max_integrity = 30
 	var/delay = 1200
+	var/last_process = 0
 	var/floor = 0
 	var/generation = 1
 	var/spreadIntoAdjacentChance = 60
+	var/list/linked
 	var/obj/item/seeds/myseed = /obj/item/seeds/glowshroom
 	var/static/list/blacklisted_glowshroom_turfs = typecacheof(list(
 	/turf/open/lava,
@@ -41,10 +43,15 @@
 /obj/structure/glowshroom/Destroy()
 	if(myseed)
 		QDEL_NULL(myseed)
+	if(islist(linked))
+		linked -= src
+		for(var/i in linked)
+			var/obj/structure/glowshroom/GS = linked[i]
+			START_PROCESSING(SSbackground, GS)
 	return ..()
 
-/obj/structure/glowshroom/New(loc, obj/item/seeds/newseed, mutate_stats)
-	..()
+/obj/structure/glowshroom/Initialize(mapload, obj/item/seeds/newseed, mutate_stats, /obj/structure/glowshroom/parent)
+	. = ..()
 	if(newseed)
 		myseed = newseed.Copy()
 		myseed.forceMove(src)
@@ -55,6 +62,11 @@
 		myseed.adjust_yield(rand(-1,2))
 		myseed.adjust_production(rand(-3,6))
 		myseed.adjust_endurance(rand(-3,6))
+	if(parent && islist(parent.linked))
+		linked = parent.linked
+		linked[src] = TRUE
+	else
+		linked = list(src = TRUE)
 	delay = delay - myseed.production * 100 //So the delay goes DOWN with better stats instead of up. :I
 	obj_integrity = myseed.endurance
 	max_integrity = myseed.endurance
@@ -80,7 +92,22 @@
 	else //if on the floor, glowshroom on-floor sprite
 		icon_state = base_icon_state
 
-	addtimer(CALLBACK(src, .proc/Spread), delay)
+	START_PROCESSING(SSbackground, src)
+
+/obj/structure/glowshroom/process()			//No offset compensation for half-ticks, we're not important enough for that.
+	if(world.time + delay > last_process)
+		return
+	Spread()
+	last_process = world.time
+
+/obj/structure/glowshroom/proc/cluster_absorb(obj/structure/glowshroom/other)
+	if(islist(other.linked))
+		var/list/L = other.linked
+		for(var/i in L)					//this includes other.
+			var/obj/structure/glowshroom/GS = linked[i]
+			linked[GS] = TRUE
+			GS.linked = linked
+		L.Cut()
 
 /obj/structure/glowshroom/proc/Spread()
 	var/turf/ownturf = get_turf(src)
@@ -98,11 +125,18 @@
 					continue
 				if(!ownturf.CanAtmosPass(earth))
 					continue
-				if(spreadsIntoAdjacent || !locate(/obj/structure/glowshroom) in view(1,earth))
+				if(spreadsIntoAdjacent)
 					possibleLocs += earth
+				else
+					var/obj/structure/glowshroom/other = locate(/obj/structure/glowshroom) in view(1, earth)
+					if(!other)
+						possibleLocs += earth
+					else
+						linked[other] = TRUE
 				CHECK_TICK
 
 			if(!possibleLocs.len)
+				STOP_PROCESSING(SSbackground, src)
 				break
 
 			var/turf/newLoc = pick(possibleLocs)
@@ -118,7 +152,8 @@
 			if(shroomCount >= placeCount)
 				continue
 
-			var/obj/structure/glowshroom/child = new type(newLoc, myseed, TRUE)
+			var/obj/structure/glowshroom/child = new type(newLoc, myseed, TRUE, src)
+
 			child.generation = generation + 1
 			shrooms_planted++
 
@@ -170,7 +205,7 @@
 		take_damage(5, BURN, 0, 0)
 
 /obj/structure/glowshroom/acid_act(acidpwr, acid_volume)
-	. = 1
+	. = TRUE
 	visible_message("<span class='danger'>[src] melts away!</span>")
 	var/obj/effect/decal/cleanable/molten_object/I = new (get_turf(src))
 	I.desc = "Looks like this was \an [src] some time ago."
