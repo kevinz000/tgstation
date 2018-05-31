@@ -1,3 +1,5 @@
+#define AUTOCLONING_MINIMAL_LEVEL
+
 /obj/machinery/computer/cloning
 	name = "cloning console"
 	desc = "Used to clone people and manage DNA."
@@ -151,7 +153,7 @@
 	var/dat = ""
 	dat += "<a href='byond://?src=[REF(src)];refresh=1'>Refresh</a>"
 
-	if(scanner && HasEfficientPod() && scanner.scan_level > 2)
+	if(scanner && HasEfficientPod() && scanner.scan_level >= AUTOCLONING_MINIMAL_LEVEL)
 		if(!autoprocess)
 			dat += "<a href='byond://?src=[REF(src)];task=autoprocess'>Autoprocess</a>"
 		else
