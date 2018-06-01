@@ -71,6 +71,11 @@
 	var/ore_type = /obj/item/stack/ore/glass
 	var/turfverb = "uproot"
 
+/turf/open/floor/grass/planetstation
+	baseturfs = /turf/open/floor/grass/planetstation
+	initial_gas_mix = LAVALAND_DEFAULT_ATMOS
+	planetary_atmos = TRUE
+
 /turf/open/floor/grass/Initialize()
 	. = ..()
 	update_icon()
