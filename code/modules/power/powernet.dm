@@ -3,7 +3,6 @@
 // each contiguous network of cables & nodes
 /////////////////////////////////////
 /datum/powernet
-	var/number					// unique id
 	var/list/cables = list()	// all cables & junctions
 	var/list/nodes = list()		// all connected machines
 
@@ -14,32 +13,63 @@
 	var/viewload = 0			// the load as it appears on the power console (gradually updated)
 	var/netexcess = 0			// excess power on the powernet (typically avail-load)///////
 
-/datum/powernet/New()
+/datum/powernet/New(obj/structure/cable/C, autoprop = TRUE)
 	SSmachines.powernets += src
+	if(istype(C))
+		cables += C
+		if(autoprop)
+			automatic_propagation(C)
 
 /datum/powernet/Destroy()
-	//Go away references, you suck!
-	for(var/obj/structure/cable/C in cables)
-		cables -= C
-		C.powernet = null
-	for(var/obj/machinery/power/M in nodes)
-		nodes -= M
-		M.powernet = null
-
+	nullify_network()
 	SSmachines.powernets -= src
 	return ..()
 
-/datum/powernet/proc/is_empty()
-	return !cables.len && !nodes.len
+/datum/powernet/proc/merge_network(datum/powernet/PN)
+	if(!istype(PN))
+		return
+	for(var/i in PN.nodes)
+		var/obj/machinery/power/M = PN.nodes[i]
+		if(istype(M))
+			M.powernet = src
+	for(var/i in PN.cables)
+		var/obj/structure/cable/C = PN.cables[i]
+		if(istype(C))
+			C.powernet = src
+	nodes |= PN.nodes
+	cables |= PN.cables
+	PN.nodes.Cut()
+	PN.cables.Cut()
+	qdel(PN)
 
-//remove a cable from the current powernet
-//if the powernet is then empty, delete it
-//Warning : this proc DON'T check if the cable exists
+/datum/powernet/proc/nullify_network(delete_self = FALSE)
+	for(var/i in nodes)
+		var/obj/machinery/power/M = nodes[i]
+		if(istype(M) && M.powernet == src)
+			M.powernet = null
+	for(var/i in cables)
+		var/obj/structure/cable/C = cables[i]
+		if(istype(C) && C.powernet == src)
+			C.powernet = null
+	nodes.Cut()
+	cables.Cut()
+	if(delete_self)
+		qdel(src)
+
+/datum/powernet/proc/automatic_propagation(obj/structure/cable/C)
+	if(!istype(C))
+		return
+	nullify_network()
+	var/list/obj/structure/cable/possible_expansions = list(C)
+	do
+		var/list/c = C.powernet_expansion()
+		var/list/m = C.machinery_expansion()
+
 /datum/powernet/proc/remove_cable(obj/structure/cable/C)
 	cables -= C
-	C.powernet = null
-	if(is_empty())//the powernet is now empty...
-		qdel(src)///... delete it
+	if(istype(C) && C.powernet == src)
+		C.powernet = null
+	null_check()
 
 //add a cable to the current powernet
 //Warning : this proc DON'T check if the cable exists
