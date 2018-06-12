@@ -106,8 +106,8 @@
 	else
 		// send to oblivion
 		AM.visible_message("<span class='boldwarning'>[AM] falls into [parent]!</span>", "<span class='userdanger'>[oblivion_message]</span>")
-		if (isliving(AM))
-			var/mob/living/L = AM
+		var/mob/living/L = AM
+		if(istype(L))
 			L.notransform = TRUE
 			L.Stun(200)
 			L.resting = TRUE
@@ -133,6 +133,8 @@
 
 		falling_atoms -= AM
 		qdel(AM)
+		if(istype(L))
+			L.death(TRUE)
 		if(AM && !QDELETED(AM))	//It's indestructible
 			var/atom/parent = src.parent
 			parent.visible_message("<span class='boldwarning'>[parent] spits out [AM]!</span>")
