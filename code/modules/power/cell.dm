@@ -200,6 +200,11 @@
 	charge = 0
 	update_icon()
 
+/obj/item/stock_parts/cell/zero
+	maxcharge = 0
+	charge = 0
+	chargerate = 0
+
 /obj/item/stock_parts/cell/pulse //200 pulse shots
 	name = "pulse rifle power cell"
 	maxcharge = 40000

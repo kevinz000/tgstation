@@ -36,9 +36,7 @@
 	. = ..()
 	if(cell_type)
 		cell = new cell_type(src)
-	else
-		cell = new(src)
-	if(!dead_cell)
+	if(!dead_cell && cell)
 		cell.give(cell.maxcharge)
 	update_ammo_types()
 	recharge_newshot(TRUE)
