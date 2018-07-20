@@ -6,7 +6,7 @@
 	item_state = "radio"
 	lefthand_file = 'icons/mob/inhands/misc/devices_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/misc/devices_righthand.dmi'
-	flags_1 = NOBLUDGEON_1
+	item_flags = NOBLUDGEON
 	w_class = WEIGHT_CLASS_SMALL
 	siemens_coefficient = 1
 	var/obj/machinery/computer/cargo/cargo_console = null
@@ -17,6 +17,7 @@
 		to_chat(user, "<span class='notice'>[src] is not currently linked to a cargo console.</span>")
 
 /obj/item/export_scanner/afterattack(obj/O, mob/user, proximity)
+	. = ..()
 	if(!istype(O) || !proximity)
 		return
 

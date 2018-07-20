@@ -231,7 +231,6 @@
 	if(!new_mob)
 		return
 	new_mob.grant_language(/datum/language/common)
-	new_mob.logging = M.logging
 
 	// Some forms can still wear some items
 	for(var/obj/item/W in contents)
@@ -346,7 +345,7 @@
 	if(proxdet)
 		for(var/mob/living/L in range(1, get_turf(src)))
 			if(L.stat != DEAD && L != firer && !L.anti_magic_check())
-				return Collide(L)
+				return Bump(L)
 	..()
 
 /obj/item/projectile/magic/aoe/lightning

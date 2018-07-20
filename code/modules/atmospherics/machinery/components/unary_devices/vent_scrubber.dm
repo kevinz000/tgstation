@@ -64,15 +64,13 @@
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/Destroy()
 	var/area/A = get_area(src)
-	A.air_scrub_names -= id_tag
-	A.air_scrub_info -= id_tag
+	if (A)
+		A.air_scrub_names -= id_tag
+		A.air_scrub_info -= id_tag
 
 	SSradio.remove_object(src,frequency)
 	radio_connection = null
-
-	for(var/I in adjacent_turfs)
-		I = null
-
+	adjacent_turfs.Cut()
 	return ..()
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/auto_use_power()
@@ -303,6 +301,11 @@
 	if(. && on && is_operational())
 		to_chat(user, "<span class='warning'>You cannot unwrench [src], turn it off first!</span>")
 		return FALSE
+		
+/obj/machinery/atmospherics/components/unary/vent_scrubber/examine(mob/user)
+	..()
+	if(welded)
+		to_chat(user, "It seems welded shut.")
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/can_crawl_through()
 	return !welded

@@ -3,7 +3,6 @@
 	desc = "It opens and closes."
 	icon = 'icons/obj/doors/Doorint.dmi'
 	icon_state = "door1"
-	anchored = TRUE
 	opacity = 1
 	density = TRUE
 	layer = OPEN_DOOR_LAYER
@@ -80,7 +79,7 @@
 		spark_system = null
 	return ..()
 
-/obj/machinery/door/CollidedWith(atom/movable/AM)
+/obj/machinery/door/Bumped(atom/movable/AM)
 	if(operating || (obj_flags & EMAGGED))
 		return
 	if(ismob(AM))
@@ -179,7 +178,7 @@
 	else if(istype(I, /obj/item/weldingtool))
 		try_to_weld(I, user)
 		return 1
-	else if(!(I.flags_1 & NOBLUDGEON_1) && user.a_intent != INTENT_HARM)
+	else if(!(I.item_flags & NOBLUDGEON) && user.a_intent != INTENT_HARM)
 		try_to_activate_door(user)
 		return 1
 	return ..()

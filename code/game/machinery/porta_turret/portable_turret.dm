@@ -8,7 +8,6 @@
 	name = "turret"
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "turretCover"
-	anchored = TRUE
 	layer = OBJ_LAYER
 	invisibility = INVISIBILITY_OBSERVER	//the turret is invisible if it's inside its cover
 	density = TRUE
@@ -262,7 +261,7 @@
 
 		//This code handles moving the turret around. After all, it's a portable turret!
 		if(!anchored && !isinspace())
-			anchored = TRUE
+			setAnchored(TRUE)
 			invisibility = INVISIBILITY_MAXIMUM
 			update_icon()
 			to_chat(user, "<span class='notice'>You secure the exterior bolts on the turret.</span>")
@@ -270,7 +269,7 @@
 				cover = new /obj/machinery/porta_turret_cover(loc) //create a new turret. While this is handled in process(), this is to workaround a bug where the turret becomes invisible for a split second
 				cover.parent_turret = src //make the cover's parent src
 		else if(anchored)
-			anchored = FALSE
+			setAnchored(FALSE)
 			to_chat(user, "<span class='notice'>You unsecure the exterior bolts on the turret.</span>")
 			power_change()
 			invisibility = 0
@@ -552,10 +551,6 @@
 	A.fire()
 	return A
 
-/obj/machinery/porta_turret/shuttleRotate(rotation)
-	if(wall_turret_direction)
-		wall_turret_direction = turn(wall_turret_direction,rotation)
-
 /obj/machinery/porta_turret/proc/setState(on, mode)
 	if(controllock)
 		return
@@ -754,7 +749,6 @@
 	desc = "Used to control a room's automated defenses."
 	icon = 'icons/obj/machines/turret_control.dmi'
 	icon_state = "control_standby"
-	anchored = TRUE
 	density = FALSE
 	var/enabled = 1
 	var/lethal = 0

@@ -8,7 +8,6 @@
 	icon_state = "smartfridge"
 	layer = BELOW_OBJ_LAYER
 	density = TRUE
-	anchored = TRUE
 	use_power = IDLE_POWER_USE
 	idle_power_usage = 5
 	active_power_usage = 100
@@ -16,6 +15,7 @@
 	var/max_n_of_items = 1500
 	var/icon_on = "smartfridge"
 	var/icon_off = "smartfridge-off"
+	var/allow_ai_retrieve = FALSE
 	var/list/initial_contents
 
 /obj/machinery/smartfridge/Initialize()
@@ -126,14 +126,11 @@
 		else
 			return TRUE
 	else
-		if(O.loc.SendSignal(COMSIG_CONTAINS_STORAGE))
-			return O.loc.SendSignal(COMSIG_TRY_STORAGE_TAKE, O, src)
+		if(SEND_SIGNAL(O.loc, COMSIG_CONTAINS_STORAGE))
+			return SEND_SIGNAL(O.loc, COMSIG_TRY_STORAGE_TAKE, O, src)
 		else
 			O.forceMove(src)
 			return TRUE
-
-/obj/machinery/smartfridge/attack_ai(mob/user)
-	return FALSE
 
 /obj/machinery/smartfridge/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state)
 	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
@@ -171,6 +168,10 @@
 	switch(action)
 		if("Release")
 			var/desired = 0
+
+			if(!allow_ai_retrieve && isAI(usr))
+				to_chat(usr, "<span class='warning'>[src] does not seem to be configured to respect your authority!</span>")
+				return
 
 			if (params["amount"])
 				desired = text2num(params["amount"])
@@ -328,7 +329,7 @@
 	desc = "A refrigerated storage unit for tasty tasty alcohol."
 
 /obj/machinery/smartfridge/drinks/accept_check(obj/item/O)
-	if(!istype(O, /obj/item/reagent_containers) || (O.flags_1 & ABSTRACT_1) || !O.reagents || !O.reagents.reagent_list.len)
+	if(!istype(O, /obj/item/reagent_containers) || (O.item_flags & ABSTRACT) || !O.reagents || !O.reagents.reagent_list.len)
 		return FALSE
 	if(istype(O, /obj/item/reagent_containers/glass) || istype(O, /obj/item/reagent_containers/food/drinks) || istype(O, /obj/item/reagent_containers/food/condiment))
 		return TRUE
@@ -376,7 +377,7 @@
 					return FALSE
 			return TRUE
 		return FALSE
-	if(!istype(O, /obj/item/reagent_containers) || (O.flags_1 & ABSTRACT_1))
+	if(!istype(O, /obj/item/reagent_containers) || (O.item_flags & ABSTRACT))
 		return FALSE
 	if(istype(O, /obj/item/reagent_containers/pill)) // empty pill prank ok
 		return TRUE
@@ -416,6 +417,9 @@
 /obj/machinery/smartfridge/disks
 	name = "disk compartmentalizer"
 	desc = "A machine capable of storing a variety of disks. Denoted by most as the DSU (disk storage unit)."
+	icon_state = "disktoaster"
+	icon_on = "disktoaster"
+	icon_off = "disktoaster-off"
 
 /obj/machinery/smartfridge/disks/accept_check(obj/item/O)
 	if(istype(O, /obj/item/disk/))

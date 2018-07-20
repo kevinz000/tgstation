@@ -193,7 +193,7 @@
 		reciever.research_node_id(i, TRUE, FALSE)
 	for(var/i in researched_design_ids)
 		CHECK_TICK
-		reciever.add_design_by_id(i)
+		receiver.add_design_by_id(i)
 	if(unlock_hidden)
 		for(var/i in reciever.hidden_node_ids)
 			CHECK_TICK
