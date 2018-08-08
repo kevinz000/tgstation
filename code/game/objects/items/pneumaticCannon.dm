@@ -249,7 +249,7 @@
 	src.update_icon()
 
 /obj/item/pneumatic_cannon/proc/fill_with_type(type, amount)
-	if(!ispath(type, /obj/item))
+	if(!ispath(type, /obj) && !ispath(type, /mob))
 		return FALSE
 	var/loaded = 0
 	for(var/i in 1 to amount)
