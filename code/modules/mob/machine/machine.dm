@@ -1,1 +1,1 @@
-/mob/machine
+/mob/living/machine
