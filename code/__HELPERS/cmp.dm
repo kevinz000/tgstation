@@ -81,3 +81,6 @@ GLOBAL_VAR_INIT(cmp_field, "name")
 
 /proc/cmp_advdisease_resistance_asc(datum/disease/advance/A, datum/disease/advance/B)
 	return A.totalResistance() - B.totalResistance()
+
+/proc/cmp_mech_part_render_layer_asc(obj/item/mech_part/A, obj/item/mech_part/B)
+	return A.render_layer - B.render_layer

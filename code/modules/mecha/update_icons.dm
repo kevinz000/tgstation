@@ -5,7 +5,7 @@
 	var/list/obj/item/mech_part/assembled = list()
 	for(var/slot in parts_by_slot)
 		assembled += parts_by_slot[slot]
-	//timsort/whatever
+	assembled = timSort(assembled, /proc/cmp_mech_part_render_layer_asc, TRUE)
 	for(var/i in 1 to assembled.len)
 		var/obj/item/mech_part/MP = assembled[i]
 		if(!overlays_by_slot[MP.slot])
