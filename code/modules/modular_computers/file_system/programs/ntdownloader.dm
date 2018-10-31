@@ -1,4 +1,4 @@
-/datum/computer_file/program/ntnetdownload
+/datum/computer_file/program/exonetdownload
 	filename = "ntndownloader"
 	filedesc = "Software Download Tool"
 	program_icon_state = "generic"
@@ -6,9 +6,9 @@
 	unsendable = 1
 	undeletable = 1
 	size = 4
-	requires_ntnet = 1
-	requires_ntnet_feature = EXONET_SOFTWAREDOWNLOAD
-	available_on_ntnet = 0
+	requires_exonet = 1
+	requires_exonet_feature = EXONET_SOFTWAREDOWNLOAD
+	available_on_exonet = 0
 	ui_header = "downloader_finished.gif"
 	tgui_id = "ntos_net_downloader"
 
@@ -19,11 +19,11 @@
 	var/downloaderror = ""
 	var/obj/item/modular_computer/my_computer = null
 
-/datum/computer_file/program/ntnetdownload/proc/begin_file_download(filename)
+/datum/computer_file/program/exonetdownload/proc/begin_file_download(filename)
 	if(downloaded_file)
 		return 0
 
-	var/datum/computer_file/program/PRG = SSnetworks.station_network.find_ntnet_file_by_name(filename)
+	var/datum/computer_file/program/PRG = SSnetworks.station_network.find_exonet_file_by_name(filename)
 
 	if(!PRG || !istype(PRG))
 		return 0
@@ -40,7 +40,7 @@
 	ui_header = "downloader_running.gif"
 
 	if(PRG in SSnetworks.station_network.available_station_software)
-		generate_network_log("Began downloading file [PRG.filename].[PRG.filetype] from NTNet Software Repository.")
+		generate_network_log("Began downloading file [PRG.filename].[PRG.filetype] from Exonet Software Repository.")
 		hacked_download = 0
 	else if(PRG in SSnetworks.station_network.available_antag_software)
 		generate_network_log("Began downloading file **ENCRYPTED**.[PRG.filetype] from unspecified server.")
@@ -51,7 +51,7 @@
 
 	downloaded_file = PRG.clone()
 
-/datum/computer_file/program/ntnetdownload/proc/abort_file_download()
+/datum/computer_file/program/exonetdownload/proc/abort_file_download()
 	if(!downloaded_file)
 		return
 	generate_network_log("Aborted download of file [hacked_download ? "**ENCRYPTED**" : "[downloaded_file.filename].[downloaded_file.filetype]"].")
@@ -59,7 +59,7 @@
 	download_completion = 0
 	ui_header = "downloader_finished.gif"
 
-/datum/computer_file/program/ntnetdownload/proc/complete_file_download()
+/datum/computer_file/program/exonetdownload/proc/complete_file_download()
 	if(!downloaded_file)
 		return
 	generate_network_log("Completed download of file [hacked_download ? "**ENCRYPTED**" : "[downloaded_file.filename].[downloaded_file.filetype]"].")
@@ -71,15 +71,15 @@
 	download_completion = 0
 	ui_header = "downloader_finished.gif"
 
-/datum/computer_file/program/ntnetdownload/process_tick()
+/datum/computer_file/program/exonetdownload/process_tick()
 	if(!downloaded_file)
 		return
 	if(download_completion >= downloaded_file.size)
 		complete_file_download()
-	// Download speed according to connectivity state. NTNet server is assumed to be on unlimited speed so we're limited by our local connectivity
+	// Download speed according to connectivity state. Exonet server is assumed to be on unlimited speed so we're limited by our local connectivity
 	download_netspeed = 0
 	// Speed defines are found in misc.dm
-	switch(ntnet_status)
+	switch(exonet_status)
 		if(1)
 			download_netspeed = EXONETSPEED_LOWSIGNAL
 		if(2)
@@ -88,7 +88,7 @@
 			download_netspeed = EXONETSPEED_ETHERNET
 	download_completion += download_netspeed
 
-/datum/computer_file/program/ntnetdownload/ui_act(action, params)
+/datum/computer_file/program/exonetdownload/ui_act(action, params)
 	if(..())
 		return 1
 	switch(action)
@@ -105,7 +105,7 @@
 			return 1
 	return 0
 
-/datum/computer_file/program/ntnetdownload/ui_data(mob/user)
+/datum/computer_file/program/exonetdownload/ui_data(mob/user)
 	my_computer = computer
 
 	if(!istype(my_computer))
@@ -159,13 +159,13 @@
 
 	return data
 
-/datum/computer_file/program/ntnetdownload/proc/check_compatibility(datum/computer_file/program/P)
+/datum/computer_file/program/exonetdownload/proc/check_compatibility(datum/computer_file/program/P)
 	var/hardflag = computer.hardware_flag
 
 	if(P && P.is_supported_by_hardware(hardflag,0))
 		return "Compatible"
 	return "Incompatible!"
 
-/datum/computer_file/program/ntnetdownload/kill_program(forced)
+/datum/computer_file/program/exonetdownload/kill_program(forced)
 	abort_file_download()
 	return ..(forced)

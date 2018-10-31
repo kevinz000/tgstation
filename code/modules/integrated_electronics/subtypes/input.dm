@@ -711,9 +711,9 @@
 			var/mob/LM = CHM
 			LM.playsound_local(get_turf(src), 'sound/machines/triple_beep.ogg', ASSEMBLY_BEEP_VOLUME, TRUE)
 
-/obj/item/integrated_circuit/input/ntnet_packet
-	name = "NTNet networking circuit"
-	desc = "Enables the sending and receiving of messages over NTNet via packet data protocol."
+/obj/item/integrated_circuit/input/exonet_packet
+	name = "Exonet networking circuit"
+	desc = "Enables the sending and receiving of messages over Exonet via packet data protocol."
 	extended_desc = "Data can be sent or received using the second pin on each side, \
 	with additonal data reserved for the third pin. When a message is received, the second activation pin \
 	will pulse whatever is connected to it. Pulsing the first activation pin will send a message. Messages \
@@ -722,7 +722,7 @@
 	complexity = 2
 	cooldown_per_use = 1
 	inputs = list(
-		"target NTNet addresses"= IC_PINTYPE_STRING,
+		"target Exonet addresses"= IC_PINTYPE_STRING,
 		"data to send"			= IC_PINTYPE_STRING,
 		"secondary text"		= IC_PINTYPE_STRING
 		)
@@ -739,14 +739,14 @@
 	power_draw_per_use = 50
 	var/address
 
-/obj/item/integrated_circuit/input/ntnet_packet/Initialize()
+/obj/item/integrated_circuit/input/exonet_packet/Initialize()
 	. = ..()
-	var/datum/component/ntnet_interface/net = LoadComponent(/datum/component/ntnet_interface)
+	var/datum/component/exonet_interface/net = LoadComponent(/datum/component/exonet_interface)
 	address = net.hardware_id
 	net.differentiate_broadcast = FALSE
-	desc += "<br>This circuit's NTNet hardware address is: [address]"
+	desc += "<br>This circuit's Exonet hardware address is: [address]"
 
-/obj/item/integrated_circuit/input/ntnet_packet/do_work()
+/obj/item/integrated_circuit/input/exonet_packet/do_work()
 	var/target_address = get_pin_data(IC_INPUT, 1)
 	var/message = get_pin_data(IC_INPUT, 2)
 	var/text = get_pin_data(IC_INPUT, 3)
@@ -754,9 +754,9 @@
 	var/datum/netdata/data = new
 	data.recipient_ids = splittext(target_address, ";")
 	data.standard_format_data(message, text, assembly ? strtohex(XorEncrypt(json_encode(assembly.access_card.access), SScircuit.cipherkey)) : null)
-	ntnet_send(data)
+	exonet_send(data)
 
-/obj/item/integrated_circuit/input/ntnet_receive(datum/netdata/data)
+/obj/item/integrated_circuit/input/exonet_receive(datum/netdata/data)
 	set_pin_data(IC_OUTPUT, 1, data.sender_id)
 	set_pin_data(IC_OUTPUT, 2, data.data["data"])
 	set_pin_data(IC_OUTPUT, 3, data.data["data_secondary"])
@@ -766,9 +766,9 @@
 	push_data()
 	activate_pin(2)
 
-/obj/item/integrated_circuit/input/ntnet_advanced
-	name = "Low level NTNet transreceiver"
-	desc = "Enables the sending and receiving of messages over NTNet via packet data protocol. Allows advanced control of message contents and signalling. Must use associative lists. Outputs associative list. Has a slower transmission rate than normal NTNet circuits, due to increased data processing complexity."
+/obj/item/integrated_circuit/input/exonet_advanced
+	name = "Low level Exonet transreceiver"
+	desc = "Enables the sending and receiving of messages over Exonet via packet data protocol. Allows advanced control of message contents and signalling. Must use associative lists. Outputs associative list. Has a slower transmission rate than normal Exonet circuits, due to increased data processing complexity."
 	extended_desc = "Data can be sent or received using the second pin on each side, \
 	When a message is received, the second activation pin will pulse whatever is connected to it. \
 	Pulsing the first activation pin will send a message. Messages can be sent to multiple recepients. \
@@ -777,7 +777,7 @@
 	complexity = 4
 	cooldown_per_use = 10
 	inputs = list(
-		"target NTNet addresses"= IC_PINTYPE_STRING,
+		"target Exonet addresses"= IC_PINTYPE_STRING,
 		"data"					= IC_PINTYPE_LIST,
 		)
 	outputs = list("received data" = IC_PINTYPE_LIST, "is_broadcast" = IC_PINTYPE_BOOLEAN)
@@ -787,14 +787,14 @@
 	power_draw_per_use = 50
 	var/address
 
-/obj/item/integrated_circuit/input/ntnet_advanced/Initialize()
+/obj/item/integrated_circuit/input/exonet_advanced/Initialize()
 	. = ..()
-	var/datum/component/ntnet_interface/net = LoadComponent(/datum/component/ntnet_interface)
+	var/datum/component/exonet_interface/net = LoadComponent(/datum/component/exonet_interface)
 	address = net.hardware_id
 	net.differentiate_broadcast = FALSE
-	desc += "<br>This circuit's NTNet hardware address is: [address]"
+	desc += "<br>This circuit's Exonet hardware address is: [address]"
 
-/obj/item/integrated_circuit/input/ntnet_advanced/do_work()
+/obj/item/integrated_circuit/input/exonet_advanced/do_work()
 	var/target_address = get_pin_data(IC_INPUT, 1)
 	var/list/message = get_pin_data(IC_INPUT, 2)
 	if(!islist(message))
@@ -803,9 +803,9 @@
 	data.recipient_ids = splittext(target_address, ";")
 	data.data = message
 	data.passkey = assembly.access_card.access
-	ntnet_send(data)
+	exonet_send(data)
 
-/obj/item/integrated_circuit/input/ntnet_advanced/ntnet_receive(datum/netdata/data)
+/obj/item/integrated_circuit/input/exonet_advanced/exonet_receive(datum/netdata/data)
 	set_pin_data(IC_OUTPUT, 1, data.data)
 	set_pin_data(IC_OUTPUT, 2, data.broadcast)
 	push_data()
@@ -1032,9 +1032,9 @@
 	activate_pin(2)
 	return
 
-/obj/item/integrated_circuit/input/ntnetsc
-	name = "NTNet scanner"
-	desc = "This can return the NTNet IDs of a component inside the given object, if there are any."
+/obj/item/integrated_circuit/input/exonetsc
+	name = "Exonet scanner"
+	desc = "This can return the Exonet IDs of a component inside the given object, if there are any."
 	icon_state = "signalsc"
 	w_class = WEIGHT_CLASS_TINY
 	complexity = 2
@@ -1046,9 +1046,9 @@
 	spawn_flags = IC_SPAWN_DEFAULT|IC_SPAWN_RESEARCH
 	power_draw_per_use = 1
 
-/obj/item/integrated_circuit/input/ntnetsc/do_work()
+/obj/item/integrated_circuit/input/exonetsc/do_work()
 	var/atom/AM = get_pin_data_as_type(IC_INPUT, 1, /atom)
-	var/datum/component/ntnet_interface/net
+	var/datum/component/exonet_interface/net
 
 	if(AM)
 		var/list/processing_list = list(AM)
@@ -1058,7 +1058,7 @@
 			//Byond does not allow things to be in multiple contents, or double parent-child hierarchies, so only += is needed
 			//This is also why we don't need to check against assembled as we go along
 			processing_list += A.contents
-			net = A.GetComponent(/datum/component/ntnet_interface)
+			net = A.GetComponent(/datum/component/exonet_interface)
 
 	if(net)
 		set_pin_data(IC_OUTPUT, 1, net.hardware_id)

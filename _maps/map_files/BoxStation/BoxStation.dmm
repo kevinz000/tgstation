@@ -43644,7 +43644,7 @@
 /turf/open/floor/plating/airless,
 /area/maintenance/port/aft)
 "cag" = (
-/obj/machinery/ntnet_relay,
+/obj/machinery/exonet_relay,
 /turf/open/floor/circuit/telecomms/mainframe,
 /area/tcommsat/server)
 "cah" = (

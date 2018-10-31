@@ -18,7 +18,7 @@
 /obj/item/door_remote/Initialize()
 	. = ..()
 	access_list = get_region_accesses(region_access)
-	AddComponent(/datum/component/ntnet_interface)
+	AddComponent(/datum/component/exonet_interface)
 
 /obj/item/door_remote/attack_self(mob/user)
 	switch(mode)
@@ -30,10 +30,10 @@
 			mode = WAND_OPEN
 	to_chat(user, "Now in mode: [mode].")
 
-// Airlock remote works by sending NTNet packets to whatever it's pointed at.
+// Airlock remote works by sending Exonet packets to whatever it's pointed at.
 /obj/item/door_remote/afterattack(atom/A, mob/user)
 	. = ..()
-	GET_COMPONENT_FROM(target_interface, /datum/component/ntnet_interface, A)
+	GET_COMPONENT_FROM(target_interface, /datum/component/exonet_interface, A)
 
 	if(!target_interface)
 		return
@@ -53,7 +53,7 @@
 	data.data["data_secondary"] = "toggle"
 	data.passkey = access_list
 
-	ntnet_send(data)
+	exonet_send(data)
 
 
 /obj/item/door_remote/omni

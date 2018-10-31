@@ -26,12 +26,12 @@
 	var/filedesc = "Unknown Program"		// User-friendly name of this program.
 	var/extended_desc = "N/A"				// Short description of this program's function.
 	var/program_icon_state = null			// Program-specific screen icon state
-	var/requires_ntnet = 0					// Set to 1 for program to require nonstop NTNet connection to run. If NTNet connection is lost program crashes.
-	var/requires_ntnet_feature = 0			// Optional, if above is set to 1 checks for specific function of NTNet (currently EXONET_SOFTWAREDOWNLOAD, EXONET_PEERTOPEER, EXONET_SYSTEMCONTROL and EXONET_COMMUNICATION)
-	var/ntnet_status = 1					// NTNet status, updated every tick by computer running this program. Don't use this for checks if NTNet works, computers do that. Use this for calculations, etc.
+	var/requires_exonet = 0					// Set to 1 for program to require nonstop Exonet connection to run. If Exonet connection is lost program crashes.
+	var/requires_exonet_feature = 0			// Optional, if above is set to 1 checks for specific function of Exonet (currently EXONET_SOFTWAREDOWNLOAD, EXONET_PEERTOPEER, EXONET_SYSTEMCONTROL and EXONET_COMMUNICATION)
+	var/exonet_status = 1					// Exonet status, updated every tick by computer running this program. Don't use this for checks if Exonet works, computers do that. Use this for calculations, etc.
 	var/usage_flags = PROGRAM_ALL			// Bitflags (PROGRAM_CONSOLE, PROGRAM_LAPTOP, PROGRAM_TABLET combination) or PROGRAM_ALL
-	var/network_destination = null			// Optional string that describes what NTNet server/system this program connects to. Used in default logging.
-	var/available_on_ntnet = 1				// Whether the program can be downloaded from NTNet. Set to 0 to disable.
+	var/network_destination = null			// Optional string that describes what Exonet server/system this program connects to. Used in default logging.
+	var/available_on_exonet = 1				// Whether the program can be downloaded from Exonet. Set to 0 to disable.
 	var/available_on_syndinet = 0			// Whether the program can be downloaded from SyndiNet (accessible via emagging the computer). Set to 1 to enable.
 
 /datum/computer_file/program/clone()
@@ -39,8 +39,8 @@
 	temp.required_access = required_access
 	temp.filedesc = filedesc
 	temp.program_icon_state = program_icon_state
-	temp.requires_ntnet = requires_ntnet
-	temp.requires_ntnet_feature = requires_ntnet_feature
+	temp.requires_exonet = requires_exonet
+	temp.requires_exonet_feature = requires_exonet_feature
 	temp.usage_flags = usage_flags
 	return temp
 
@@ -49,7 +49,7 @@
 	if(computer)
 		computer.update_icon()
 
-// Attempts to create a log in global ntnet datum. Returns 1 on success, 0 on fail.
+// Attempts to create a log in global exonet datum. Returns 1 on success, 0 on fail.
 /datum/computer_file/program/proc/generate_network_log(text)
 	if(computer)
 		return computer.add_log(text)
@@ -64,7 +64,7 @@
 
 /datum/computer_file/program/proc/get_signal(specific_action = 0)
 	if(computer)
-		return computer.get_ntnet_status(specific_action)
+		return computer.get_exonet_status(specific_action)
 	return 0
 
 // Called by Process() on device that runs us, once every tick.
@@ -128,7 +128,7 @@
 // When implementing new program based device, use this to run the program.
 /datum/computer_file/program/proc/run_program(mob/living/user)
 	if(can_run(user, 1))
-		if(requires_ntnet && network_destination)
+		if(requires_exonet && network_destination)
 			generate_network_log("Connection opened to [network_destination].")
 		program_state = PROGRAM_STATE_ACTIVE
 		return 1

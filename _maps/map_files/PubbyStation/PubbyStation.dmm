@@ -49712,7 +49712,7 @@
 /area/tcommsat/server)
 "cnc" = (
 /obj/machinery/power/terminal,
-/obj/machinery/ntnet_relay,
+/obj/machinery/exonet_relay,
 /turf/open/floor/circuit/telecomms/mainframe,
 /area/tcommsat/server)
 "cnd" = (

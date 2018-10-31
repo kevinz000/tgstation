@@ -154,7 +154,7 @@
 
 /obj/machinery/door/airlock/ComponentInitialize()
 	. = ..()
-	AddComponent(/datum/component/ntnet_interface)
+	AddComponent(/datum/component/exonet_interface)
 
 /obj/machinery/door/airlock/proc/update_other_id()
 	for(var/obj/machinery/door/airlock/A in GLOB.airlocks)
@@ -190,16 +190,16 @@
 		if ("cyclelinkeddir")
 			cyclelinkairlock()
 
-/obj/machinery/door/airlock/check_access_ntnet(datum/netdata/data)
+/obj/machinery/door/airlock/check_access_exonet(datum/netdata/data)
 	return !requiresID() || ..()
 
-/obj/machinery/door/airlock/ntnet_receive(datum/netdata/data)
+/obj/machinery/door/airlock/exonet_receive(datum/netdata/data)
 	// Check if the airlock is powered and can accept control packets.
 	if(!hasPower() || !canAIControl())
 		return
 
 	// Check packet access level.
-	if(!check_access_ntnet(data))
+	if(!check_access_exonet(data))
 		return
 
 	// Handle received packet.

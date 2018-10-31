@@ -416,8 +416,8 @@
 	id = "scanner_gate"
 	build_path = /obj/item/circuitboard/machine/scanner_gate
 	category = list ("Misc. Machinery")
-	departmental_flags = DEPARTMENTAL_FLAG_ALL	
-	
+	departmental_flags = DEPARTMENTAL_FLAG_ALL
+
 /datum/design/board/holopad
 	name = "Machine Design (AI Holopad Board)"
 	desc = "The circuit board for a holopad."
@@ -499,11 +499,11 @@
 	category = list ("Hydroponics Machinery")
 	departmental_flags = DEPARTMENTAL_FLAG_SERVICE
 
-/datum/design/board/ntnet_relay
-	name = "Machine Design (NTNet Relay Board)"
+/datum/design/board/exonet_relay
+	name = "Machine Design (Exonet Relay Board)"
 	desc = "The circuit board for a wireless network relay."
-	id = "ntnet_relay"
-	build_path = /obj/item/circuitboard/machine/ntnet_relay
+	id = "exonet_relay"
+	build_path = /obj/item/circuitboard/machine/exonet_relay
 	category = list("Subspace Telecomms")
 	departmental_flags = DEPARTMENTAL_FLAG_ENGINEERING | DEPARTMENTAL_FLAG_SCIENCE
 

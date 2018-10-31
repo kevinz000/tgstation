@@ -4,10 +4,10 @@ Ok. so a quick rundown on how to make a program. This is kind of a shitty docume
 
 ## Base setup
 
-This is how the base program is setup. the rest is mostly tgui stuff. I'll use the ntnetmonitor as a base
+This is how the base program is setup. the rest is mostly tgui stuff. I'll use the exonetmonitor as a base
 
 ```DM
-/datum/computer_file/program/ntnetmonitor
+/datum/computer_file/program/exonetmonitor
 	/// This is obviously the name of the file itself. not much to be said
 	filename = "ntmonitor"
 
@@ -17,28 +17,28 @@ This is how the base program is setup. the rest is mostly tgui stuff. I'll use t
 	/// This is what the screen will look like when the program is active
 	program_icon_state = "comm_monitor"
 
-	/// This is a sort of a description, visible when looking on the ntnet
+	/// This is a sort of a description, visible when looking on the exonet
 	extended_desc = "This program is a dummy."
 
 	/// size of the program. Big programs need more hard drive space. Don't
 	/// make it too big though.
 	size = 12
 
-	/// If this is set, the program will not run without an ntnet connection,
+	/// If this is set, the program will not run without an exonet connection,
 	/// and will close if the connection is lost. Mainly for primarily online
 	/// programs.
-	requires_ntnet = 1
+	requires_exonet = 1
 
 	/// This is access required to run the program itself. ONLY SET THIS FOR
 	/// SUPER SECURE SHIT. This also acts as transfer_access as well.
 	required_access = access_network
 
-	/// This is the access needed to download from ntnet or host on the ptp
+	/// This is the access needed to download from exonet or host on the ptp
 	/// program. This is what you want to use most of the time.
 	transfer_access = access_change_ids
 
-	/// If it's available to download on ntnet. pretty self explanatory.
-	available_on_ntnet = 1
+	/// If it's available to download on exonet. pretty self explanatory.
+	available_on_exonet = 1
 
 	/// ditto but on emagged syndie net. Use this for antag programs
 	available_on_syndinet = 0

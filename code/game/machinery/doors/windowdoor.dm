@@ -38,7 +38,7 @@
 
 /obj/machinery/door/window/ComponentInitialize()
 	. = ..()
-	AddComponent(/datum/component/ntnet_interface)
+	AddComponent(/datum/component/exonet_interface)
 
 /obj/machinery/door/window/Destroy()
 	density = FALSE
@@ -301,16 +301,16 @@
 		if("deny")
 			flick("[base_state]deny", src)
 
-/obj/machinery/door/window/check_access_ntnet(datum/netdata/data)
+/obj/machinery/door/window/check_access_exonet(datum/netdata/data)
 	return !requiresID() || ..()
 
-/obj/machinery/door/window/ntnet_receive(datum/netdata/data)
+/obj/machinery/door/window/exonet_receive(datum/netdata/data)
 	// Check if the airlock is powered.
 	if(!hasPower())
 		return
 
 	// Check packet access level.
-	if(!check_access_ntnet(data))
+	if(!check_access_exonet(data))
 		return
 
 	// Handle received packet.

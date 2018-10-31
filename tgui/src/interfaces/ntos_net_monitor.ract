@@ -6,11 +6,11 @@
 	<ui-display title='WIRELESS CONNECTIVITY'>
 
 		<ui-section label='Active NTNetRelays'>
-			<b>{{data.ntnetrelays}}</b>
+			<b>{{data.exonetrelays}}</b>
 		</ui-section>
-		{{#if data.ntnetrelays}}
+		{{#if data.exonetrelays}}
 			<ui-section label='System status'>
-					<b>{{data.ntnetstatus ? "ENABLED" : "DISABLED"}}</b>
+					<b>{{data.exonetstatus ? "ENABLED" : "DISABLED"}}</b>
 			</ui-section>
 			<ui-section label='Control'>
 
@@ -66,7 +66,7 @@
 		</ui-section>
 		
 		<ui-section label='Maximal Log Count'>
-			<b>{{data.ntnetmaxlogs}}</b>
+			<b>{{data.exonetmaxlogs}}</b>
 		</ui-section>
 		
 		<ui-section label='Controls'>
@@ -82,7 +82,7 @@
 		<div class="statusDisplay" style="overflow: auto;">
 		<div class="item">
 			<div class="itemContent" style="width: 100%;">
-				{{#each data.ntnetlogs}}
+				{{#each data.exonetlogs}}
 					{{entry}}<br>
 				{{/each}}
 			</div>

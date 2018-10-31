@@ -4,10 +4,10 @@
 	extended_desc = "This program allows for simple file transfer via direct peer to peer connection."
 	program_icon_state = "comm_logs"
 	size = 7
-	requires_ntnet = 1
-	requires_ntnet_feature = EXONET_PEERTOPEER
+	requires_exonet = 1
+	requires_exonet_feature = EXONET_PEERTOPEER
 	network_destination = "other device via P2P tunnel"
-	available_on_ntnet = 1
+	available_on_exonet = 1
 	tgui_id = "ntos_net_transfer"
 
 	var/error = ""										// Error screen
@@ -55,7 +55,7 @@
 
 /datum/computer_file/program/nttransfer/proc/update_netspeed()
 	download_netspeed = 0
-	switch(ntnet_status)
+	switch(exonet_status)
 		if(1)
 			download_netspeed = EXONETSPEED_LOWSIGNAL
 		if(2)

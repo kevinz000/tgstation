@@ -15,7 +15,7 @@
 Some crap about file IDs here?
 
 /datum/computer_file
-	var/unsendable = 0										// Whether the file may be sent to someone via NTNet transfer or other means.
+	var/unsendable = 0										// Whether the file may be sent to someone via Exonet transfer or other means.
 	var/undeletable = 0										// Whether the file may be deleted. Setting to 1 prevents deletion/renaming/etc.
 
 /datum/computer_file/New()

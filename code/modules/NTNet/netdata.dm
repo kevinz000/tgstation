@@ -12,7 +12,7 @@
 	var/list/passkey
 
 // Process data before sending it
-/datum/netdata/proc/pre_send(datum/component/ntnet_interface/interface)
+/datum/netdata/proc/pre_send(datum/component/exonet_interface/interface)
 	// Decrypt the passkey.
 	if(autopasskey)
 		if(data["encrypted_passkey"] && !passkey)

@@ -32,7 +32,7 @@
 #define NANITE_COMPILER  (1<<8) //Prints nanite disks
 //Note: More than one of these can be added to a design but imprinter and lathe designs are incompatable.
 
-//Modular computer/NTNet defines
+//Modular computer/Exonet defines
 
 //Modular computer part defines
 #define MC_CPU "CPU"
@@ -45,19 +45,19 @@
 #define MC_CHARGE "CHARGE"
 #define MC_AI "AI"
 
-//NTNet stuff, for modular computers
-									// NTNet module-configuration values. Do not change these. If you need to add another use larger number (5..6..7 etc)
-#define EXONET_SOFTWAREDOWNLOAD 1 	// Downloads of software from NTNet
+//Exonet stuff, for modular computers
+									// Exonet module-configuration values. Do not change these. If you need to add another use larger number (5..6..7 etc)
+#define EXONET_SOFTWAREDOWNLOAD 1 	// Downloads of software from Exonet
 #define EXONET_PEERTOPEER 2			// P2P transfers of files between devices
 #define EXONET_COMMUNICATION 3		// Communication (messaging)
 #define EXONET_SYSTEMCONTROL 4		// Control of various systems, RCon, air alarm control, etc.
 
-//NTNet transfer speeds, used when downloading/uploading a file/program.
+//Exonet transfer speeds, used when downloading/uploading a file/program.
 #define EXONET_SPEED_LOWSIGNAL 0.5	// GQ/s transfer speed when the device is wirelessly connected and on Low signal
 #define EXONET_SPEED_HIGHSIGNAL 1	// GQ/s transfer speed when the device is wirelessly connected and on High signal
 #define EXONET_SPEED_ETHERNET 2		// GQ/s transfer speed when the device is using wired connection
 
-//Caps for NTNet logging. Less than 10 would make logging useless anyway, more than 500 may make the log browser too laggy. Defaults to 100 unless user changes it.
+//Caps for Exonet logging. Less than 10 would make logging useless anyway, more than 500 may make the log browser too laggy. Defaults to 100 unless user changes it.
 #define MAX_EXONET_LOGS 300
 #define MIN_EXONET_LOGS 10
 

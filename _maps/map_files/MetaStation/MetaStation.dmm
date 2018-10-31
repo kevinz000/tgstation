@@ -47638,7 +47638,7 @@
 	network = list("ss13","tcomms")
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/machinery/ntnet_relay,
+/obj/machinery/exonet_relay,
 /turf/open/floor/plasteel/dark/telecomms,
 /area/tcommsat/server)
 "bOa" = (
