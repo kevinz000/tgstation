@@ -7,7 +7,7 @@
 	undeletable = 1
 	size = 4
 	requires_ntnet = 1
-	requires_ntnet_feature = NTNET_SOFTWAREDOWNLOAD
+	requires_ntnet_feature = EXONET_SOFTWAREDOWNLOAD
 	available_on_ntnet = 0
 	ui_header = "downloader_finished.gif"
 	tgui_id = "ntos_net_downloader"
@@ -81,11 +81,11 @@
 	// Speed defines are found in misc.dm
 	switch(ntnet_status)
 		if(1)
-			download_netspeed = NTNETSPEED_LOWSIGNAL
+			download_netspeed = EXONETSPEED_LOWSIGNAL
 		if(2)
-			download_netspeed = NTNETSPEED_HIGHSIGNAL
+			download_netspeed = EXONETSPEED_HIGHSIGNAL
 		if(3)
-			download_netspeed = NTNETSPEED_ETHERNET
+			download_netspeed = EXONETSPEED_ETHERNET
 	download_completion += download_netspeed
 
 /datum/computer_file/program/ntnetdownload/ui_act(action, params)

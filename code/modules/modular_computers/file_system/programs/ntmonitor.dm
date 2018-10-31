@@ -48,7 +48,7 @@
 		if("updatemaxlogs")
 			. = 1
 			var/mob/user = usr
-			var/logcount = text2num(input(user,"Enter amount of logs to keep in memory ([MIN_NTNET_LOGS]-[MAX_NTNET_LOGS]):"))
+			var/logcount = text2num(input(user,"Enter amount of logs to keep in memory ([MIN_EXONET_LOGS]-[MAX_EXONET_LOGS]):"))
 			if(SSnetworks.station_network)
 				SSnetworks.station_network.update_max_log_count(logcount)
 		if("toggle_function")

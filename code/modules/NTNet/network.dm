@@ -166,13 +166,13 @@
 		return FALSE
 
 	switch(specific_action)
-		if(NTNET_SOFTWAREDOWNLOAD)
+		if(EXONET_SOFTWAREDOWNLOAD)
 			return setting_softwaredownload
-		if(NTNET_PEERTOPEER)
+		if(EXONET_PEERTOPEER)
 			return setting_peertopeer
-		if(NTNET_COMMUNICATION)
+		if(EXONET_COMMUNICATION)
 			return setting_communication
-		if(NTNET_SYSTEMCONTROL)
+		if(EXONET_SYSTEMCONTROL)
 			return setting_systemcontrol
 	return TRUE
 
@@ -220,7 +220,7 @@
 	if(!lognumber)
 		return FALSE
 	// Trim the value if necessary
-	lognumber = max(MIN_NTNET_LOGS, min(lognumber, MAX_NTNET_LOGS))
+	lognumber = max(MIN_EXONET_LOGS, min(lognumber, MAX_EXONET_LOGS))
 	setting_maxlogcount = lognumber
 	add_log("Configuration Updated. Now keeping [setting_maxlogcount] logs in system memory.")
 
@@ -229,21 +229,21 @@
 		return
 	function = text2num(function)
 	switch(function)
-		if(NTNET_SOFTWAREDOWNLOAD)
+		if(EXONET_SOFTWAREDOWNLOAD)
 			setting_softwaredownload = !setting_softwaredownload
 			add_log("Configuration Updated. Wireless network firewall now [setting_softwaredownload ? "allows" : "disallows"] connection to software repositories.")
-		if(NTNET_PEERTOPEER)
+		if(EXONET_PEERTOPEER)
 			setting_peertopeer = !setting_peertopeer
 			add_log("Configuration Updated. Wireless network firewall now [setting_peertopeer ? "allows" : "disallows"] peer to peer network traffic.")
-		if(NTNET_COMMUNICATION)
+		if(EXONET_COMMUNICATION)
 			setting_communication = !setting_communication
 			add_log("Configuration Updated. Wireless network firewall now [setting_communication ? "allows" : "disallows"] instant messaging and similar communication services.")
-		if(NTNET_SYSTEMCONTROL)
+		if(EXONET_SYSTEMCONTROL)
 			setting_systemcontrol = !setting_systemcontrol
 			add_log("Configuration Updated. Wireless network firewall now [setting_systemcontrol ? "allows" : "disallows"] remote control of station's systems.")
 
 /datum/ntnet/station
-	network_id = "SS13-NTNET"
+	network_id = "SS13-EXONET"
 
 /datum/ntnet/station/proc/register_map_supremecy()					//called at map init to make this what station networks use.
 	for(var/obj/machinery/ntnet_relay/R in GLOB.machines)

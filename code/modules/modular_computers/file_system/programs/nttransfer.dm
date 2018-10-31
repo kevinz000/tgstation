@@ -5,7 +5,7 @@
 	program_icon_state = "comm_logs"
 	size = 7
 	requires_ntnet = 1
-	requires_ntnet_feature = NTNET_PEERTOPEER
+	requires_ntnet_feature = EXONET_PEERTOPEER
 	network_destination = "other device via P2P tunnel"
 	available_on_ntnet = 1
 	tgui_id = "ntos_net_transfer"
@@ -57,11 +57,11 @@
 	download_netspeed = 0
 	switch(ntnet_status)
 		if(1)
-			download_netspeed = NTNETSPEED_LOWSIGNAL
+			download_netspeed = EXONETSPEED_LOWSIGNAL
 		if(2)
-			download_netspeed = NTNETSPEED_HIGHSIGNAL
+			download_netspeed = EXONETSPEED_HIGHSIGNAL
 		if(3)
-			download_netspeed = NTNETSPEED_ETHERNET
+			download_netspeed = EXONETSPEED_ETHERNET
 
 // Finishes download and attempts to store the file on HDD
 /datum/computer_file/program/nttransfer/proc/finish_download()
