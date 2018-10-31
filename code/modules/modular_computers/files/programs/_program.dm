@@ -1,7 +1,24 @@
+/datum/computer_file/program
+	extension = MODULAR_COMPUTERS_FILE_TYPE_PROGRAM
+	name = "Unknown Program"
+	var/tgui_id								// ID of TG UI interface
+	var/ui_style							// ID of custom TG UI style (optional)
+	var/ui_x = 575							// Default size of TG UI window, in pixels
+	var/ui_y = 700
+	var/ui_header = null					// Example: "something.gif" - a header image that will be rendered in computer's UI when this program is running at background. Images are taken from /icons/program_icons. Be careful not to use too large images!
+
+
+/datum/computer_file/program/proc/get_available_terminal_commands(datum/computer/C, mob/user/U)
+	return list(
+	"NONE" = "This program has no terminal commands."
+	)
+
+/datum/computer_file/program/proc/terminal_command(datum/computer/C, mob/user/U, command, args)
+	return "This program does not accept terminal commands."
+
+/*
 // /program/ files are executable programs that do things.
 /datum/computer_file/program
-	filetype = "PRG"
-	filename = "UnknownProgram"				// File name. FILE NAME MUST BE UNIQUE IF YOU WANT THE PROGRAM TO BE DOWNLOADABLE FROM NTNET!
 	var/required_access = null				// List of required accesses to *run* the program.
 	var/transfer_access = null				// List of required access to download or file host the program
 	var/program_state = PROGRAM_STATE_KILLED// PROGRAM_STATE_KILLED or PROGRAM_STATE_BACKGROUND or PROGRAM_STATE_ACTIVE - specifies whether this program is running.
@@ -16,20 +33,6 @@
 	var/network_destination = null			// Optional string that describes what NTNet server/system this program connects to. Used in default logging.
 	var/available_on_ntnet = 1				// Whether the program can be downloaded from NTNet. Set to 0 to disable.
 	var/available_on_syndinet = 0			// Whether the program can be downloaded from SyndiNet (accessible via emagging the computer). Set to 1 to enable.
-	var/tgui_id								// ID of TG UI interface
-	var/ui_style							// ID of custom TG UI style (optional)
-	var/ui_x = 575							// Default size of TG UI window, in pixels
-	var/ui_y = 700
-	var/ui_header = null					// Example: "something.gif" - a header image that will be rendered in computer's UI when this program is running at background. Images are taken from /icons/program_icons. Be careful not to use too large images!
-
-/datum/computer_file/program/New(obj/item/modular_computer/comp = null)
-	..()
-	if(comp && istype(comp))
-		computer = comp
-
-/datum/computer_file/program/Destroy()
-	computer = null
-	. = ..()
 
 /datum/computer_file/program/clone()
 	var/datum/computer_file/program/temp = ..()
@@ -196,3 +199,7 @@
 	if(program_state != PROGRAM_STATE_ACTIVE) // Our program was closed. Close the ui if it exists.
 		return UI_CLOSE
 	return ..()
+
+
+*/
+

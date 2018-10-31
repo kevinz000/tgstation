@@ -1,12 +1,22 @@
 /datum/computer_file
-	var/filename = "NewFile" 								// Placeholder. No spacebars
-	var/filetype = "XXX" 									// File full names are [filename].[filetype] so like NewFile.XXX in this case
-	var/size = 1											// File size in GQ. Integers only!
-	var/obj/item/computer_hardware/hard_drive/holder	// Holder that contains this file.
+	var/name = "Untitled"
+	var/extension = MODULAR_COMPUTERS_FILE_TYPE_DEFAULT
+	var/size = 0					//Size in GQ (GigaQuads)
+	var/datum/file_system/holder
+
+/datum/computer_file/Destroy()
+	if(istype(holder))
+		holder.remove(src)
+	holder = null
+	return ..()
+
+/*	var/
+
+Some crap about file IDs here?
+
+/datum/computer_file
 	var/unsendable = 0										// Whether the file may be sent to someone via NTNet transfer or other means.
 	var/undeletable = 0										// Whether the file may be deleted. Setting to 1 prevents deletion/renaming/etc.
-	var/uid													// UID of this file
-	var/static/file_uid = 0
 
 /datum/computer_file/New()
 	..()
@@ -34,4 +44,4 @@
 	else
 		temp.filename = filename
 	temp.filetype = filetype
-	return temp
+	return temp*/
