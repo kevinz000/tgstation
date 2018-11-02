@@ -1,20 +1,70 @@
 /datum/computer_file/program
 	extension = MODULAR_COMPUTERS_FILE_TYPE_PROGRAM
 	name = "Unknown Program"
+	abstract_type = /datum/computer_file/program
+	var/desc = "Unknown program."			// User-facing description of program.
 	var/tgui_id								// ID of TG UI interface
 	var/ui_style							// ID of custom TG UI style (optional)
 	var/ui_x = 575							// Default size of TG UI window, in pixels
 	var/ui_y = 700
 	var/ui_header = null					// Example: "something.gif" - a header image that will be rendered in computer's UI when this program is running at background. Images are taken from /icons/program_icons. Be careful not to use too large images!
+	var/program_id = "INVALID_ID"			//THIS MUST BE UNIQUE PER TYPE AND SUBTYPE!
+	var/can_terminal_execute = TRUE
+	var/list/datum/computer_terminal/terminal_sessions
 
+/datum/computer_file/program/Destroy()
+	for(var/i in terminal_sessions)
+		var/datum/computer_terminal/T = i
+		T.kill_running_program()
+	terminal_sessions.Cut()
+	return ..()
 
-/datum/computer_file/program/proc/get_available_terminal_commands(datum/computer/C, mob/user/U)
+/datum/computer_file/program/copy()
+	var/datum/computer_file/program/P = ..()
+	P.ui_x = ui_x
+	P.ui_y = ui_y
+	P.ui_header = ui_header
+	P.ui_style = ui_style
+	P.tgui_id = tgui_id
+	P.program_id = program_id
+	P.desc = desc
+	return P
+
+//First entry of returned list is a text blurb, others will be associated command = description.
+/datum/computer_file/program/proc/terminal_manual(datum/computer_terminal/T, mob/user/U, list/arguments)
 	return list(
+	"This is not a console-supported program.",
 	"NONE" = "This program has no terminal commands."
 	)
 
-/datum/computer_file/program/proc/terminal_command(datum/computer/C, mob/user/U, command, args)
+/datum/computer_file/program/proc/terminal_command(datum/computer_terminal/T, mob/user/U, command, list/arguments)
 	return "This program does not accept terminal commands."
+
+/datum/computer_file/program/process()
+	return
+
+/datum/computer_file/program/proc/terminal_print(datum/computer_terminal/T, text)
+	T.on_program_print(src, text)
+
+/datum/computer_file/program/proc/is_running_on_terminal(datum/computer_terminal/T)
+	return (T in terminal_sessions) && (T.running_program == src)
+
+/datum/computer_file/program/proc/terminal_sessions()
+	return SANITIZE_LIST(terminal_sessions)
+
+/datum/computer_file/program/proc/terminal_killed(datum/computer_terminal/T)
+	return
+
+/datum/computer_file/program/proc/on_terminal_input(text)
+	return
+
+/datum/computer_file/program/proc/can_terminal_execute(datum/computer_terminal/T, mob/user/U, force = FALSE)
+	if(supports_terminal_execution() && (force || can_terminal_execute))
+		return TRUE
+	return FALSE
+
+/datum/computer_file/program/proc/supports_terminal_execution()			//Whether this is supported CODEWISE.
+	return FALSE
 
 /*
 // /program/ files are executable programs that do things.
@@ -23,8 +73,6 @@
 	var/transfer_access = null				// List of required access to download or file host the program
 	var/program_state = PROGRAM_STATE_KILLED// PROGRAM_STATE_KILLED or PROGRAM_STATE_BACKGROUND or PROGRAM_STATE_ACTIVE - specifies whether this program is running.
 	var/obj/item/modular_computer/computer	// Device that runs this program.
-	var/filedesc = "Unknown Program"		// User-friendly name of this program.
-	var/extended_desc = "N/A"				// Short description of this program's function.
 	var/program_icon_state = null			// Program-specific screen icon state
 	var/requires_exonet = 0					// Set to 1 for program to require nonstop Exonet connection to run. If Exonet connection is lost program crashes.
 	var/requires_exonet_feature = 0			// Optional, if above is set to 1 checks for specific function of Exonet (currently EXONET_SOFTWAREDOWNLOAD, EXONET_PEERTOPEER, EXONET_SYSTEMCONTROL and EXONET_COMMUNICATION)

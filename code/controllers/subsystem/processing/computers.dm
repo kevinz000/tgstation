@@ -5,9 +5,24 @@ PROCESSING_SUBSYSTEM_DEF(computers)
 	flags = SS_KEEP_TIMING
 	priority = FIRE_PRIORITY_COMPUTERS
 	init_order = INIT_ORDER_COMPUTERS
+	var/static/next_file_id = 0
+	var/static/next_terminal_id = 0
 
+	var/static/list/datum/computer/computers = list()
 
+/datum/controller/subsystem/processing/computers/proc/next_file_UID()
+	return "[num2text(next_file_id++)]"
 
+/datum/controller/subsystem/processing/computers/proc/next_terminal_id()
+	return "[num2text(next_termianl_id++)]"
+
+/datum/controller/subsystem/processing/computers/proc/add_computer(datum/computer/C)
+	START_PROCESSING(src, C)
+	computers |= C
+
+/datum/controller/subsystem/processing/computers/proc/remove_computer(datum/computer/C)
+	STOP_PROCESSING(src, C)
+	computers -= C
 
 
 
