@@ -333,7 +333,7 @@
 /obj/machinery/power/port_gen/pacman{
 	anchored = 1
 	},
-/obj/structure/cable/power{
+/obj/structure/cable{
 	icon_state = "0-4"
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -524,7 +524,7 @@
 /obj/machinery/power/smes/engineering{
 	charge = 1e+006
 	},
-/obj/structure/cable/power,
+/obj/structure/cable,
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/plating,
 /area/shuttle/pirate)
@@ -714,7 +714,9 @@
 /turf/open/floor/plasteel,
 /area/shuttle/pirate)
 "bH" = (
-/obj/machinery/vending/boozeomat/all_access,
+/obj/machinery/vending/boozeomat/all_access{
+	onstation = 0
+	},
 /obj/effect/turf_decal/tile/bar,
 /obj/effect/turf_decal/tile/bar{
 	dir = 1
@@ -775,7 +777,7 @@
 /turf/open/floor/plasteel/dark,
 /area/shuttle/pirate)
 "bO" = (
-/obj/structure/cable/power{
+/obj/structure/cable{
 	icon_state = "0-2"
 	},
 /obj/machinery/power/apc{
@@ -797,7 +799,7 @@
 /turf/open/floor/plating,
 /area/shuttle/pirate)
 "bQ" = (
-/obj/structure/cable/power{
+/obj/structure/cable{
 	icon_state = "1-2"
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -808,7 +810,7 @@
 /obj/machinery/power/terminal{
 	dir = 4
 	},
-/obj/structure/cable/power{
+/obj/structure/cable{
 	icon_state = "0-8"
 	},
 /obj/structure/rack,

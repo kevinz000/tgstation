@@ -1408,7 +1408,6 @@
 	name = "photon torpedo tube"
 	},
 /obj/item/toy/minimeteor{
-	color = "";
 	desc = "A primitive long-range weapon, inferior to Nanotrasen's perfected bluespace artillery.";
 	icon = 'icons/effects/effects.dmi';
 	icon_state = "impact_laser";
@@ -1457,7 +1456,6 @@
 	name = "photon torpedo tube"
 	},
 /obj/item/toy/minimeteor{
-	color = "";
 	desc = "A primitive long-range weapon, inferior to Nanotrasen's perfected bluespace artillery.";
 	icon = 'icons/effects/effects.dmi';
 	icon_state = "impact_laser";
@@ -7034,14 +7032,6 @@
 /obj/effect/landmark/ai_multicam_room,
 /turf/open/ai_visible,
 /area/ai_multicam_room)
-"pX" = (
-/obj/item/storage/crayons,
-/obj/structure/table,
-/obj/item/storage/crayons,
-/turf/open/floor/plasteel/freezer{
-	dir = 2
-	},
-/area/syndicate_mothership/control)
 "pY" = (
 /obj/machinery/washing_machine,
 /turf/open/floor/plasteel/freezer{
@@ -7447,9 +7437,7 @@
 /obj/structure/urinal{
 	pixel_y = 28
 	},
-/turf/open/floor/plasteel/freezer{
-	dir = 2
-	},
+/turf/open/floor/plasteel/freezer,
 /area/syndicate_mothership/control)
 "qO" = (
 /obj/item/soap/syndie,
@@ -7807,7 +7795,7 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "0-4"
 	},
 /obj/effect/turf_decal/stripes/line,
@@ -7834,10 +7822,10 @@
 /obj/item/stack/cable_coil/white,
 /obj/item/screwdriver/power,
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "0-2"
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "0-8"
 	},
 /obj/effect/turf_decal/stripes/line,
@@ -8134,6 +8122,14 @@
 /obj/effect/turf_decal/tile/bar{
 	dir = 1
 	},
+/obj/item/storage/crayons{
+	pixel_x = -2;
+	pixel_y = 5
+	},
+/obj/item/storage/crayons{
+	pixel_x = 2;
+	pixel_y = 5
+	},
 /turf/open/floor/plasteel,
 /area/syndicate_mothership/control)
 "sh" = (
@@ -8298,7 +8294,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "2-4"
 	},
 /turf/open/floor/wood,
@@ -8310,7 +8306,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "4-8"
 	},
 /obj/effect/turf_decal/tile/neutral{
@@ -8330,7 +8326,7 @@
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "4-8"
 	},
 /turf/open/floor/plasteel/grimy,
@@ -8339,7 +8335,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "4-8"
 	},
 /turf/open/floor/plasteel/grimy,
@@ -8352,7 +8348,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "4-8"
 	},
 /obj/effect/turf_decal/stripes/line{
@@ -8365,10 +8361,10 @@
 	dir = 1
 	},
 /obj/machinery/meter,
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "4-8"
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "2-8"
 	},
 /obj/effect/turf_decal/tile/neutral{
@@ -8390,13 +8386,13 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/visible{
 	dir = 1
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "0-8"
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "0-4"
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "0-2"
 	},
 /obj/effect/turf_decal/tile/neutral{
@@ -8416,13 +8412,13 @@
 	dir = 1
 	},
 /obj/machinery/meter,
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "1-8"
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "1-2"
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "2-8"
 	},
 /obj/effect/turf_decal/tile/neutral{
@@ -8733,7 +8729,7 @@
 /obj/structure/chair/office/dark{
 	dir = 4
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "1-2"
 	},
 /turf/open/floor/wood,
@@ -8804,7 +8800,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/portable_atmospherics/canister/air,
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "1-4"
 	},
 /obj/effect/turf_decal/stripes/line{
@@ -8820,10 +8816,10 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "4-8"
 	},
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "1-8"
 	},
 /obj/effect/turf_decal/stripes/line{
@@ -8840,7 +8836,7 @@
 	pixel_y = -24
 	},
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "1-8"
 	},
 /obj/effect/turf_decal/stripes/line{
@@ -9129,7 +9125,7 @@
 /turf/open/floor/plasteel/grimy,
 /area/centcom/ferry)
 "ur" = (
-/obj/structure/cable/power/white{
+/obj/structure/cable/white{
 	icon_state = "1-2"
 	},
 /turf/open/floor/wood,
@@ -9395,7 +9391,7 @@
 /turf/open/floor/plasteel/dark,
 /area/centcom/ferry)
 "uU" = (
-/obj/structure/cable/power/white,
+/obj/structure/cable/white,
 /obj/effect/turf_decal/tile/neutral{
 	dir = 1
 	},
@@ -17321,6 +17317,9 @@
 	},
 /turf/open/floor/plasteel,
 /area/centcom/supplypod/loading/two)
+"OA" = (
+/turf/open/floor/plasteel/freezer,
+/area/syndicate_mothership/control)
 "OD" = (
 /obj/machinery/microwave{
 	desc = "Cooks and boils stuff, somehow.";
@@ -17657,6 +17656,14 @@
 /obj/machinery/door/window/westleft,
 /turf/open/floor/carpet/black,
 /area/centcom/holding)
+"RA" = (
+/obj/effect/turf_decal/tile/bar,
+/obj/effect/turf_decal/tile/bar{
+	dir = 1
+	},
+/obj/effect/spawner/xmastree,
+/turf/open/floor/plasteel,
+/area/syndicate_mothership/control)
 "RM" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -18089,6 +18096,15 @@
 	},
 /turf/open/floor/plasteel,
 /area/centcom/evac)
+"Wj" = (
+/obj/machinery/light/small{
+	brightness = 3;
+	dir = 8
+	},
+/turf/open/floor/plasteel/freezer{
+	dir = 2
+	},
+/area/syndicate_mothership/control)
 "Wm" = (
 /obj/structure/window/reinforced{
 	dir = 1
@@ -36105,8 +36121,8 @@ hl
 hl
 hl
 kt
-ku
-pX
+nz
+pZ
 pZ
 pZ
 rf
@@ -36363,8 +36379,8 @@ kt
 kt
 kt
 nz
-pY
 pZ
+RA
 rf
 sf
 te
@@ -37903,7 +37919,7 @@ mz
 hl
 mz
 hl
-hl
+kt
 pG
 ku
 ku
@@ -38160,12 +38176,12 @@ hl
 mA
 hl
 hl
-mz
-kt
+pG
+ku
 ku
 qN
 ri
-ri
+Wj
 ku
 ku
 nz
@@ -38417,10 +38433,10 @@ hl
 mz
 hl
 hl
-mz
-ma
+pG
 ku
 qO
+OA
 ri
 sj
 ku
@@ -38674,9 +38690,9 @@ mA
 hl
 hl
 mA
-hl
-pG
+kt
 nz
+pY
 qP
 rj
 ku
@@ -38931,8 +38947,8 @@ hl
 mA
 mz
 hl
-mA
-kt
+ma
+ku
 ku
 ku
 ku
@@ -39188,7 +39204,7 @@ mz
 hl
 hl
 hl
-mz
+pG
 ma
 hh
 aa
