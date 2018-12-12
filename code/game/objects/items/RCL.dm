@@ -1,4 +1,4 @@
-/obj/item/twohanded/rcl/power
+/obj/item/twohanded/rcl
 	name = "rapid cable layer"
 	desc = "A device used to rapidly deploy cables. It has screws on the side which can be removed to slide off the cables. Do not use without insulation!"
 	icon = 'icons/obj/tools.dmi'
@@ -22,7 +22,7 @@
 	righthand_file = 'icons/mob/inhands/equipment/tools_righthand.dmi'
 	var/datum/component/mobhook
 
-/obj/item/twohanded/rcl/power/attackby(obj/item/W, mob/user)
+/obj/item/twohanded/rcl/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/C = W
 
@@ -79,18 +79,18 @@
 	else
 		..()
 
-/obj/item/twohanded/rcl/power/examine(mob/user)
+/obj/item/twohanded/rcl/examine(mob/user)
 	..()
 	if(loaded)
 		to_chat(user, "<span class='info'>It contains [loaded.amount]/[max_amount] cables.</span>")
 
-/obj/item/twohanded/rcl/power/Destroy()
+/obj/item/twohanded/rcl/Destroy()
 	QDEL_NULL(loaded)
 	last = null
 	setActive(FALSE, null) // setactive(FALSE) removes mobhook
 	return ..()
 
-/obj/item/twohanded/rcl/power/update_icon()
+/obj/item/twohanded/rcl/update_icon()
 	if(!loaded)
 		icon_state = "rcl-0"
 		item_state = "rcl-0"
@@ -109,7 +109,7 @@
 			icon_state = "rcl-0"
 			item_state = "rcl-0"
 
-/obj/item/twohanded/rcl/power/proc/is_empty(mob/user, loud = 1)
+/obj/item/twohanded/rcl/proc/is_empty(mob/user, loud = 1)
 	update_icon()
 	if(!loaded || !loaded.amount)
 		if(loud)
@@ -122,13 +122,13 @@
 		return TRUE
 	return FALSE
 
-/obj/item/twohanded/rcl/power/dropped(mob/wearer)
+/obj/item/twohanded/rcl/dropped(mob/wearer)
 	..()
 	if(mobhook)
 		setActive(FALSE, mobhook.parent)
 	last = null
 
-/obj/item/twohanded/rcl/power/attack_self(mob/user)
+/obj/item/twohanded/rcl/attack_self(mob/user)
 	..()
 	setActive(wielded, user)
 	if(!active)
@@ -139,7 +139,7 @@
 				last = C
 				break
 
-/obj/item/twohanded/rcl/power/proc/setActive(toggle, mob/user)
+/obj/item/twohanded/rcl/proc/setActive(toggle, mob/user)
 	active = toggle
 	if (active && user)
 		if (mobhook && mobhook.parent != user)
@@ -149,7 +149,7 @@
 	else
 		QDEL_NULL(mobhook)
 
-/obj/item/twohanded/rcl/power/proc/trigger(mob/user)
+/obj/item/twohanded/rcl/proc/trigger(mob/user)
 	if(!isturf(user.loc))
 		return
 	if(is_empty(user, 0))
@@ -182,18 +182,18 @@
 	update_icon()
 
 
-/obj/item/twohanded/rcl/power/pre_loaded/Initialize() //Comes preloaded with cable, for testing stuff
+/obj/item/twohanded/rcl/pre_loaded/Initialize() //Comes preloaded with cable, for testing stuff
 	. = ..()
 	loaded = new()
 	loaded.max_amount = max_amount
 	loaded.amount = max_amount
 	update_icon()
 
-/obj/item/twohanded/rcl/power/Initialize()
+/obj/item/twohanded/rcl/Initialize()
 	. = ..()
 	update_icon()
 
-/obj/item/twohanded/rcl/power/ui_action_click(mob/user, action)
+/obj/item/twohanded/rcl/ui_action_click(mob/user, action)
 	if(istype(action, /datum/action/item_action/rcl))
 		current_color_index++;
 		if (current_color_index > colors.len)
@@ -201,13 +201,13 @@
 		var/cwname = colors[current_color_index]
 		to_chat(user, "Color changed to [cwname]!")
 
-/obj/item/twohanded/rcl/power/ghetto
+/obj/item/twohanded/rcl/ghetto
 	actions_types = list()
 	max_amount = 30
 	name = "makeshift rapid cable layer"
 	ghetto = TRUE
 
-/obj/item/twohanded/rcl/power/ghetto/update_icon()
+/obj/item/twohanded/rcl/ghetto/update_icon()
 	if(!loaded)
 		icon_state = "rclg-0"
 		item_state = "rclg-0"

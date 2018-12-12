@@ -131,7 +131,7 @@ By design, d1 is the smallest direction and d2 is the highest
 		return FALSE
 
 	else if(W.type == cable_item_type)
-		var/obj/item/stack/cable_coil/power/coil = W
+		var/obj/item/stack/cable_coil/coil = W
 		if (coil.get_amount() < 1)
 			to_chat(user, "<span class='warning'>Not enough cable!</span>")
 			return TRUE
@@ -163,7 +163,6 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/proc/connected_cables(d1 = src.d1, d2 = src.d2)
 	. = list()
 	var/turf/T = get_turf(src)
-	var/is_node = is_node()
 	for(var/i in T.contents)			//Get stuff on our turf
 		var/obj/structure/cable/C = i
 		if((C.type == type) && ((C.d1 == d1) || (C.d2 == d2)) && can_connect_cable(C) && C.can_connect_cable(src))

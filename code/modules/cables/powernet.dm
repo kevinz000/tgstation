@@ -59,8 +59,8 @@
 	//see if there's a surplus of power remaining in the powernet and stores unused power in the SMES
 	netexcess = avail - load
 
-	if(netexcess > 100 && nodes && nodes.len)		// if there was excess power last cycle
-		for(var/obj/machinery/power/smes/S in nodes)	// find the SMESes in the network
+	if(netexcess > 100 && machines && machines.len)		// if there was excess power last cycle
+		for(var/obj/machinery/power/smes/S in machines)	// find the SMESes in the network
 			S.restore()				// and restore some of the power that was used
 
 	// update power consoles

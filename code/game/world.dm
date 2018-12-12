@@ -201,7 +201,7 @@ GLOBAL_VAR(restart_counter)
 	else
 		to_chat(world, "<span class='boldannounce'>Rebooting world...</span>")
 		Master.Shutdown()	//run SS shutdowns
-	
+
 	TgsReboot()
 
 	if(TEST_RUN_PARAMETER in params)

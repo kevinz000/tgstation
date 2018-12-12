@@ -52,8 +52,8 @@
 		stack_trace("Unrelated cablenets attempted to merge.")
 		return
 	for(var/i in C.cables)
-		var/obj/structure/cable/C = i
-		add_cable(C)
+		var/obj/structure/cable/other = i
+		add_cable(other)
 	C.cables.Cut()
 	qdel(C)
 
@@ -74,7 +74,7 @@
 			var/obj/structure/cable/C = i
 			C.connect_to_network()
 
-/datum/cablenet/proc/propogate_network(obj/structure/cable/source)
+/datum/cablenet/proc/propagate_network(obj/structure/cable/source)
 	var/list/obj/structure/cable/running = list(source)
 	while(running.len)
 		var/obj/structure/cable/C = cables[1]
