@@ -141,8 +141,8 @@
 	* \ref referencing: {0x30000cc} grabs the object with \ref [0x30000cc]
 	* Lists: [a, b, c] or [a: b, c: d]
 	* Math and stuff.
-	* A few special variables: src (the object currently scoped on), usr (your mob), marked (your marked
-	datum), global(global scope)
+	* A few special variables: src (the object currently scoped on), usr (your mob),
+		marked (your marked datum), global(global scope)
 */
 
 /client/proc/SDQL2_query(query_text as message)
