@@ -10,11 +10,21 @@ PROCESSING_SUBSYSTEM_DEF(computers)
 
 	var/static/list/datum/computer/computers = list()
 
+	var/static/list/datum/computer_file/program/system_programs = list()
+
+/datum/controller/subsystem/processing/computers/Initialize()
+	initialize_system_programs()
+	return ..()
+
 /datum/controller/subsystem/processing/computers/proc/next_file_UID()
-	return "[num2text(next_file_id++)]"
+	if(next_file_id > 10^12)
+		next_file_id = 1
+	return "[num2text(next_file_id++, 12)]"
 
 /datum/controller/subsystem/processing/computers/proc/next_terminal_id()
-	return "[num2text(next_termianl_id++)]"
+	if(next_terminal_id > 10^12)
+		next_terminal_id = 1
+	return "[num2text(next_terminal_id++, 12)]"
 
 /datum/controller/subsystem/processing/computers/proc/add_computer(datum/computer/C)
 	START_PROCESSING(src, C)
@@ -24,7 +34,15 @@ PROCESSING_SUBSYSTEM_DEF(computers)
 	STOP_PROCESSING(src, C)
 	computers -= C
 
+/datum/controller/subsystem/processing/computers/proc/get_system_program(id)
+	return system_programs[id]
 
+/datum/controller/subsystem/processing/computers/proc/initialize_system_programs()
+	for(var/path in subtypesof(/datum/computer_file/program))
+		var/datum/computer_file/program/P = path
+		if(initial(P.computer_program_flags) & COMPUTER_PROGRAM_FLAG_SYSTEM_INTERNAL)
+			P = new
+			system_programs[P.unique_id] = P
 
 
 

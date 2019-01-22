@@ -11,6 +11,7 @@ GLOBAL_DATUM_INIT
 	var/datum/file_system/holder
 	var/file_UID							//THIS MUST BE UNIQUE PER FILE. Assigned by SScomputers.
 	var/_abstract_type = /datum/computer_file
+	var/computer_file_flags = COMPUTER_FILE_FLAGS_DEFAULT
 
 /datum/computer_file/New()
 	file_UID = SScomputers.next_file_UID()

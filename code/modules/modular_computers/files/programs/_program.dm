@@ -2,13 +2,14 @@
 	extension = MODULAR_COMPUTERS_FILE_TYPE_PROGRAM
 	name = "Unknown Program"
 	abstract_type = /datum/computer_file/program
+	var/computer_program_flags = COMPUTER_PROGRAM_FLAGS_DEFAULT
 	var/desc = "Unknown program."			// User-facing description of program.
 	var/tgui_id								// ID of TG UI interface
 	var/ui_style							// ID of custom TG UI style (optional)
 	var/ui_x = 575							// Default size of TG UI window, in pixels
 	var/ui_y = 700
 	var/ui_header = null					// Example: "something.gif" - a header image that will be rendered in computer's UI when this program is running at background. Images are taken from /icons/program_icons. Be careful not to use too large images!
-	var/program_id = "INVALID_ID"			//THIS MUST BE UNIQUE PER TYPE AND SUBTYPE!
+	var/unique_id = "INVALID_ID"			//THIS MUST BE UNIQUE PER TYPE AND SUBTYPE!
 	var/can_terminal_execute = TRUE
 	var/list/datum/computer_terminal/terminal_sessions
 
@@ -65,6 +66,12 @@
 
 /datum/computer_file/program/proc/supports_terminal_execution()			//Whether this is supported CODEWISE.
 	return FALSE
+
+/datum/computer_file/program/proc/supports_gui_execution()
+	return TRUE
+
+/datum/computer_file/program/proc/idle_cpu_cost()
+	return 1
 
 /*
 // /program/ files are executable programs that do things.

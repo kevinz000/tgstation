@@ -3,7 +3,7 @@
 	var/size = 512
 	var/used_size_cached = 0
 	var/max_files = 128			//More to prevent OOMs and stuff.
-	var/datum/computer/holder							//The PRIMARY computer on which this is "mounted".
+	var/datum/component/computer/holder							//The PRIMARY computer on which this is "mounted".
 
 /datum/file_system/Destroy()
 	QDEL_LIST_ASSOC(files)
