@@ -170,10 +170,11 @@
 	var/turf/open/floor/T = holder.loc
 	if(istype(T))
 		var/datum/gas_mixture/GM = T.air
-		if(!GM.gases[/datum/gas/oxygen])
+		var/list/cached_gases = GM.gases
+		if(!cached_gases[/datum/gas/oxygen])
 			return
-		GM.gases[/datum/gas/oxygen][MOLES] = max(GM.gases[/datum/gas/oxygen][MOLES] - severity * holder.energy, 0)
-		GM.garbage_collect()
+		cached_gases[/datum/gas/oxygen][MOLES] = max(GM.gases[/datum/gas/oxygen][MOLES] - severity * holder.energy, 0)
+		GAS_GARBAGE_COLLECT(cached_gases)
 
 /datum/spacevine_mutation/nitro_eater
 	name = "nitrogen consuming"
@@ -185,10 +186,11 @@
 	var/turf/open/floor/T = holder.loc
 	if(istype(T))
 		var/datum/gas_mixture/GM = T.air
-		if(!GM.gases[/datum/gas/nitrogen])
+		var/list/cached_gases = GM.gases
+		if(!cached_gases[/datum/gas/nitrogen])
 			return
-		GM.gases[/datum/gas/nitrogen][MOLES] = max(GM.gases[/datum/gas/nitrogen][MOLES] - severity * holder.energy, 0)
-		GM.garbage_collect()
+		cached_gases[/datum/gas/nitrogen][MOLES] = max(GM.gases[/datum/gas/nitrogen][MOLES] - severity * holder.energy, 0)
+		GAS_GARBAGE_COLLECT(cached_gases)
 
 /datum/spacevine_mutation/carbondioxide_eater
 	name = "CO2 consuming"
@@ -200,10 +202,11 @@
 	var/turf/open/floor/T = holder.loc
 	if(istype(T))
 		var/datum/gas_mixture/GM = T.air
-		if(!GM.gases[/datum/gas/carbon_dioxide])
+		var/list/cached_gases = GM.gases
+		if(!cached_gases[/datum/gas/carbon_dioxide])
 			return
-		GM.gases[/datum/gas/carbon_dioxide][MOLES] = max(GM.gases[/datum/gas/carbon_dioxide][MOLES] - severity * holder.energy, 0)
-		GM.garbage_collect()
+		cached_gases[/datum/gas/carbon_dioxide][MOLES] = max(GM.gases[/datum/gas/carbon_dioxide][MOLES] - severity * holder.energy, 0)
+		GAS_GARBAGE_COLLECT(cached_gases)
 
 /datum/spacevine_mutation/plasma_eater
 	name = "toxins consuming"
@@ -215,10 +218,11 @@
 	var/turf/open/floor/T = holder.loc
 	if(istype(T))
 		var/datum/gas_mixture/GM = T.air
-		if(!GM.gases[/datum/gas/plasma])
+		var/list/cached_gases = GM.gases
+		if(!cached_gases[/datum/gas/plasma])
 			return
-		GM.gases[/datum/gas/plasma][MOLES] = max(GM.gases[/datum/gas/plasma][MOLES] - severity * holder.energy, 0)
-		GM.garbage_collect()
+		cached_gases[/datum/gas/plasma][MOLES] = max(GM.gases[/datum/gas/plasma][MOLES] - severity * holder.energy, 0)
+		GAS_GARBAGE_COLLECT(cached_gases)
 
 /datum/spacevine_mutation/thorns
 	name = "thorny"

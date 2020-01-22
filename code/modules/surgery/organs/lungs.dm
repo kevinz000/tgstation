@@ -340,7 +340,7 @@
 			SEND_SIGNAL(owner, COMSIG_CLEAR_MOOD_EVENT, "smell")
 
 		handle_breath_temperature(breath, H)
-		breath.garbage_collect()
+		GAS_GARBAGE_COLLECT(breath_gases)
 	return TRUE
 
 

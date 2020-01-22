@@ -72,7 +72,7 @@
 			loaded_tank.air_contents.gases[/datum/gas/oxygen][MOLES] -= gasdrained
 			loaded_tank.air_contents.assert_gas(/datum/gas/carbon_dioxide)
 			loaded_tank.air_contents.gases[/datum/gas/carbon_dioxide][MOLES] += gasdrained*2
-			loaded_tank.air_contents.garbage_collect()
+			GAS_GARBAGE_COLLECT(loaded_tank.air_contents.gases)
 			var/bitcoins_mined = RAD_COLLECTOR_OUTPUT
 			var/datum/bank_account/D = SSeconomy.get_dep_account(ACCOUNT_ENG)
 			if(D)

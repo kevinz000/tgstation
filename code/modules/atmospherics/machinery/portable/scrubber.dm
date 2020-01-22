@@ -45,16 +45,17 @@
 	var/transfer_moles = min(1, volume_rate / mixture.volume) * mixture.total_moles()
 
 	var/datum/gas_mixture/filtering = mixture.remove(transfer_moles) // Remove part of the mixture to filter.
+	var/list/filtering_gases = filtering.gases
 	var/datum/gas_mixture/filtered = new
 	if(!filtering)
 		return
 
 	filtered.temperature = filtering.temperature
-	for(var/gas in filtering.gases & scrubbing)
+	for(var/gas in filtering_gases & scrubbing)
 		filtered.add_gas(gas)
 		filtered.gases[gas][MOLES] = filtering.gases[gas][MOLES] // Shuffle the "bad" gasses to the filtered mixture.
-		filtering.gases[gas][MOLES] = 0
-	filtering.garbage_collect() // Now that the gasses are set to 0, clean up the mixture.
+		filtering_gases[gas][MOLES] = 0
+	GAS_GARBAGE_COLLECT(filtering_gases)
 
 	air_contents.merge(filtered) // Store filtered out gasses.
 	mixture.merge(filtering) // Returned the cleaned gas.

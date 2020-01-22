@@ -456,7 +456,7 @@ GENE SCANNER
 			\n<span class='[co2_concentration > 0.01 ? "alert" : "info"]'>CO2: [round(co2_concentration*100, 0.01)] % ([round(env_gases[/datum/gas/carbon_dioxide][MOLES], 0.01)] mol)</span>\
 			\n<span class='[plasma_concentration > 0.005 ? "alert" : "info"]'>Plasma: [round(plasma_concentration*100, 0.01)] % ([round(env_gases[/datum/gas/plasma][MOLES], 0.01)] mol)</span>\n"
 
-		environment.garbage_collect()
+		GAS_GARBAGE_COLLECT(env_gases)
 
 		for(var/id in env_gases)
 			if(id in GLOB.hardcoded_gases)

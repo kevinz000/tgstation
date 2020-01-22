@@ -350,6 +350,9 @@
 #define PIPING_CARDINAL_AUTONORMALIZE	(1<<3)
 
 //HELPERS
+#define QUANTIZE(variable)		(round(variable,0.0000001))/*I feel the need to document what happens here. Basically this is used to catch most rounding errors, however it's previous value made it so that
+															once gases got hot enough, most procedures wouldnt occur due to the fact that the mole counts would get rounded away. Thus, we lowered it a few orders of magnititude */
+
 #define PIPING_LAYER_SHIFT(T, PipingLayer) \
 	if(T.dir & (NORTH|SOUTH)) {									\
 		T.pixel_x = (PipingLayer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_P_X;\
@@ -369,6 +372,8 @@
 
 #define ASSERT_GAS(gas_id, gas_mixture) if (!gas_mixture.gases[gas_id]) { ADD_GAS(gas_id, gas_mixture.gases) };
 
+#define ASSERT_GAS_IN_LIST(gas_id, out_list) if(!out_list[gas_id]) { ADD_GAS(gas_id, out_list) };
+
 //prefer this to gas_mixture/total_moles in performance critical areas
 #define TOTAL_MOLES(cached_gases, out_var)\
 	out_var = 0;\
@@ -381,6 +386,18 @@ GLOBAL_LIST_INIT(atmos_adjacent_savings, list(0,0))
 #else
 #define CALCULATE_ADJACENT_TURFS(T) SSadjacent_air.queue[T] = 1
 #endif
+
+/// Removes any gases under the quantization threshold from the list fed to it. PRECACHE THE GAS LIST AS A PROC VAR IF YOU CARE ABOUT PERFORMANCE!
+#define GAS_GARBAGE_COLLECT(gasgasgas) \
+	for(var/id in gasgasgas) \
+		if(QUANTIZE(gasgasgas[id][MOLES]) <= 0 && QUANTIZE(gasgasgas[id][ARCHIVE]) <= 0) \
+			gasgasgas -= id
+
+/// Removes any gases in the list fed to it on the gas_mixture datum this is called from. PRECACHE THE GAS LIST AS A PROC VAR IF YOU CARE ABOUT PERFORMANCE!
+#define GAS_MIXTURE_GARBAGE_COLLECT(cached_gases, to_check) \
+	for(var/id in to_check) \
+		if(QUANTIZE(cached_gases[id][MOLES]) <= 0 && QUANTIZE(cached_gases[id][ARCHIVE]) <= 0) \
+			cached_gases -= id
 
 GLOBAL_LIST_INIT(pipe_paint_colors, sortList(list(
 		"amethyst" = rgb(130,43,255), //supplymain

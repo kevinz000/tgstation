@@ -5,8 +5,6 @@ What are the archived variables for?
 */
 #define MINIMUM_HEAT_CAPACITY	0.0003
 #define MINIMUM_MOLE_COUNT		0.01
-#define QUANTIZE(variable)		(round(variable,0.0000001))/*I feel the need to document what happens here. Basically this is used to catch most rounding errors, however it's previous value made it so that
-															once gases got hot enough, most procedures wouldnt occur due to the fact that the mole counts would get rounded away. Thus, we lowered it a few orders of magnititude */
 GLOBAL_LIST_INIT(meta_gas_info, meta_gas_list()) //see ATMOSPHERICS/gas_types.dm
 GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 
@@ -29,7 +27,7 @@ GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 	var/last_share = 0
 	var/list/reaction_results
 	var/list/analyzer_results //used for analyzer feedback - not initialized until its used
-	var/gc_share = FALSE // Whether to call garbage_collect() on the sharer during shares, used for immutable mixtures
+	var/share_reset = FALSE		//whether to call gasmix_reset() during shares. used for immutable mixtures.
 
 /datum/gas_mixture/New(volume)
 	gases = new
@@ -67,11 +65,9 @@ GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 	//Must be used after subtracting from a gas. Must be used after assert_gas()
 		//if assert_gas() was called only to read from the gas.
 	//By removing empty gases, processing speed is increased.
-/datum/gas_mixture/proc/garbage_collect(list/tocheck)
+/datum/gas_mixture/proc/_garbage_collect()
 	var/list/cached_gases = gases
-	for(var/id in (tocheck || cached_gases))
-		if(QUANTIZE(cached_gases[id][MOLES]) <= 0 && QUANTIZE(cached_gases[id][ARCHIVE]) <= 0)
-			cached_gases -= id
+	GAS_GARBAGE_COLLECT(cached_gases)
 
 	//PV = nRT
 
@@ -160,6 +156,9 @@ GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 	//Performs various reactions such as combustion or fusion (LOL)
 	//Returns: 1 if any reaction took place; 0 otherwise
 
+/// Resets the gas mixture. Only defined on immutable mixtures. Only called if share_reset is TRUE during shares.
+/datum/gas_mixture/proc/gasmix_reset()
+
 /datum/gas_mixture/archive()
 	var/list/cached_gases = gases
 
@@ -205,7 +204,7 @@ GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 		ADD_GAS(id, removed.gases)
 		removed_gases[id][MOLES] = QUANTIZE((cached_gases[id][MOLES] / sum) * amount)
 		cached_gases[id][MOLES] -= removed_gases[id][MOLES]
-	garbage_collect()
+	GAS_GARBAGE_COLLECT(cached_gases)
 
 	return removed
 
@@ -224,7 +223,7 @@ GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 		removed_gases[id][MOLES] = QUANTIZE(cached_gases[id][MOLES] * ratio)
 		cached_gases[id][MOLES] -= removed_gases[id][MOLES]
 
-	garbage_collect()
+	GAS_GARBAGE_COLLECT(cached_gases)
 
 	return removed
 
@@ -345,10 +344,10 @@ GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 					temperature_share(sharer, OPEN_HEAT_TRANSFER_COEFFICIENT)
 
 	if(length(cached_gases ^ sharer_gases)) //if all gases were present in both mixtures, we know that no gases are 0
-		garbage_collect(cached_gases - sharer_gases) //any gases the sharer had, we are guaranteed to have. gases that it didn't have we are not.
-		sharer.garbage_collect(sharer_gases - cached_gases) //the reverse is equally true
-	if (initial(sharer.gc_share))
-		sharer.garbage_collect()
+		GAS_MIXTURE_GARBAGE_COLLECT(cached_gases, cached_gases - sharer_gases)
+		GAS_MIXTURE_GARBAGE_COLLECT(sharer_gases, sharer_gases - cached_gases)
+	if (initial(sharer.share_reset))
+		sharer.gasmix_reset()
 	if(temperature_delta > MINIMUM_TEMPERATURE_TO_MOVE || abs(moved_moles) > MINIMUM_MOLES_DELTA_TO_MOVE)
 		var/our_moles
 		TOTAL_MOLES(cached_gases,our_moles)
@@ -373,8 +372,8 @@ GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 			sharer_temperature = max(sharer_temperature + heat/sharer_heat_capacity, TCMB)
 			if(sharer)
 				sharer.temperature = sharer_temperature
-				if (initial(sharer.gc_share)) 
-					sharer.garbage_collect() 
+				if (initial(sharer.share_reset))
+					sharer.gasmix_reset()
 	return sharer_temperature
 	//thermal energy of the system (self and sharer) is unchanged
 
@@ -439,7 +438,7 @@ GLOBAL_LIST_INIT(gaslist_cache, init_gaslist_cache())
 			if (. & STOP_REACTIONS)
 				break
 	if(.)
-		garbage_collect()
+		GAS_GARBAGE_COLLECT(cached_gases)
 
 //Takes the amount of the gas you want to PP as an argument
 //So I don't have to do some hacky switches/defines/magic strings

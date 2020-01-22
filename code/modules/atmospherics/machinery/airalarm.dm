@@ -662,7 +662,7 @@
 		cur_tlv = TLV[gas_id]
 		gas_dangerlevel = max(gas_dangerlevel, cur_tlv.get_danger_level(env_gases[gas_id][MOLES] * partial_pressure))
 
-	environment.garbage_collect()
+	GAS_GARBAGE_COLLECT(env_gases)
 
 	var/old_danger_level = danger_level
 	danger_level = max(pressure_dangerlevel, temperature_dangerlevel, gas_dangerlevel)

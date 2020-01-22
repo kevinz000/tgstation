@@ -239,10 +239,11 @@
 
 /turf/open/rad_act(pulse_strength)
 	. = ..()
-	if (air.gases[/datum/gas/carbon_dioxide] && air.gases[/datum/gas/oxygen])
-		pulse_strength = min(pulse_strength,air.gases[/datum/gas/carbon_dioxide][MOLES]*1000,air.gases[/datum/gas/oxygen][MOLES]*2000) //Ensures matter is conserved properly
-		air.gases[/datum/gas/carbon_dioxide][MOLES]=max(air.gases[/datum/gas/carbon_dioxide][MOLES]-(pulse_strength/1000),0)
-		air.gases[/datum/gas/oxygen][MOLES]=max(air.gases[/datum/gas/oxygen][MOLES]-(pulse_strength/2000),0)
-		air.assert_gas(/datum/gas/pluoxium)
-		air.gases[/datum/gas/pluoxium][MOLES]+=(pulse_strength/4000)
-		air.garbage_collect()
+	var/list/air_gases = air.gases
+	if (air_gases[/datum/gas/carbon_dioxide] && air_gases[/datum/gas/oxygen])
+		pulse_strength = min(pulse_strength,air_gases[/datum/gas/carbon_dioxide][MOLES]*1000,air_gases[/datum/gas/oxygen][MOLES]*2000) //Ensures matter is conserved properly
+		air_gases[/datum/gas/carbon_dioxide][MOLES]=max(air_gases[/datum/gas/carbon_dioxide][MOLES]-(pulse_strength/1000),0)
+		air_gases[/datum/gas/oxygen][MOLES]=max(air_gases[/datum/gas/oxygen][MOLES]-(pulse_strength/2000),0)
+		ASSERT_GAS_IN_LIST(/datum/gas/pluoxium, air_gases)
+		air_gases[/datum/gas/pluoxium][MOLES]+=(pulse_strength/4000)
+		GAS_GARBAGE_COLLECT(air_gases)

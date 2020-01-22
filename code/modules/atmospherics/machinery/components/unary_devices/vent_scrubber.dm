@@ -179,7 +179,7 @@
 				filtered_gases[gas][MOLES] = removed_gases[gas][MOLES]
 				removed_gases[gas][MOLES] = 0
 
-			removed.garbage_collect()
+			GAS_GARBAGE_COLLECT(removed_gases)
 
 			//Remix the resulting gases
 			air_contents.merge(filtered_out)
