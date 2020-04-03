@@ -75,10 +75,13 @@
 /obj/item/proc/initialize_storage_grid(replace_existing, stack_tracing)
 	if(storage_grid)		//we already have one
 		//if replace existing is specified, reinitialize it
-		if(replace_existing)
+		if(replace_existing && storage_item_str)
 			storage_grid.initialize_from_string(storage_item_str, stack_tracing)
 		return
-	storage_grid = new(null, null, storage_item_str, stack_tracing)
+	if(storage_item_str)
+		storage_grid = new(null, null, storage_item_str, stack_tracing)
+	else if(stack_tracing)
+		stack_trace("No string to initialize storage grid from.")
 	return storage_grid
 
 /**
