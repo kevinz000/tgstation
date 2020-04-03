@@ -22,7 +22,7 @@
 /datum/grid/New(rows, columns, initialize_from_string)
 	if(initialize_from_string)
 		initialize_from_string(initialize_from_string)
-	else if(rowS && columns)
+	else if(rows && columns)
 		set_size(rows, columns)
 
 /// Sets our size. If larger, any existing data is kept. If smaller, existing data is truncated.
@@ -86,7 +86,7 @@
 	var/effective_x = x - por_x + 1
 	var/effective_y = y - por_y + 1
 	// check fit.
-	if(!ISINRANGE(effective_x, 1, columns) || !ISINRANGE(effective_y, 1, rows))
+	if(!ISINRANGE(effective_x, 1, columns) || !ISINRANGE(effective_x + their_columns, 1, columns) || !ISINRANGE(effective_y, 1, rows) || !ISINRANGE(effective_y + their_rows, 1, rows))
 		return FALSE
 	return TRUE
 

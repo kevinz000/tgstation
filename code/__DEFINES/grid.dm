@@ -4,4 +4,4 @@
 /// The grid physically does not fit
 #define GRID_DOES_NOT_FIT 1
 /// Can fit
-#define GRID_CAN_FIT 0
+#define GRID_CAN_PLACE 0
