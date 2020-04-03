@@ -46,7 +46,7 @@
 			if(WEIGHT_CLASS_GIGANTIC)
 				factor = 9
 		columns = rows * factor
-	storage_master = new(columns, rowS)
+	storage_master = new(columns, rows)
 	attempt_auto_tetris_fit()
 
 /**
@@ -76,9 +76,9 @@
 	if(storage_grid)		//we already have one
 		//if replace existing is specified, reinitialize it
 		if(replace_existing)
-			storage_grid.initialize_from_string(storage_item_str(), stack_tracing)
+			storage_grid.initialize_from_string(storage_item_str, stack_tracing)
 		return
-	storage_grid = new(null, null, storage_item_str(), stack_tracing)
+	storage_grid = new(null, null, storage_item_str, stack_tracing)
 	return storage_grid
 
 /**
@@ -125,7 +125,7 @@ GLOBAL_LIST_INIT(cached_w_class_storage_grids, generate_w_class_storage_grids())
 
 /obj/item/dropped(mob/user, silent)
 	. = ..()
-	if(!ismob(loc) && !(SEND_SIGNAL(loc, COMSIG_CONTAINS_SIGNAL) & COMPONENT_CONTAINS_STORAGE))		//the current heuristics is that if we get dropped to the ground we're more likely to not instantly need our storage grid again.
+	if(!ismob(loc) && !(SEND_SIGNAL(loc, COMSIG_CONTAINS_STORAGE) & COMPONENT_CONTAINS_STORAGE))		//the current heuristics is that if we get dropped to the ground we're more likely to not instantly need our storage grid again.
 		clear_storage_grid()
 
 // Base class for item storage grids. This is just a normal binary grid.
@@ -136,7 +136,7 @@ GLOBAL_LIST_INIT(cached_w_class_storage_grids, generate_w_class_storage_grids())
   * Admins get a vv catch-all, so all they need to do is change one variable I guess.
   */
 /datum/grid/binary/storage_item/proc/is_modified()
-	return CHECK_BITFIELD(datum_flags, DF_VAR_EDITED)
+	return (datum_flags & DF_VAR_EDITED)
 
 /** Base class for storage master grids.
   * Its grid elements will be an item reference.
