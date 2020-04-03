@@ -26,14 +26,14 @@
 		set_size(rows, columns)
 
 /// Sets our size. If larger, any existing data is kept. If smaller, existing data is truncated.
-/datum/grid/proc/set_size(rows, columns)
+/datum/grid/proc/set_size(x, y)
 	LAZYINITLIST(grid)
-	grid.len = rows
-	for(var/i in 1 to rows)
+	grid.len = y
+	for(var/i in 1 to y)
 		if(!islist(grid[i]))
 			grid[i] = list()
 		var/list/L = grid[i]
-		L.len = columns
+		L.len = x
 
 // Rotates clockwise by turns of 90 degrees.
 /datum/grid/proc/rotate_clockwise(turns)
@@ -73,7 +73,7 @@
 
 /// Point check for fit, much like value_to_write_on_placement_at_point
 /datum/grid/proc/can_place_at_point(their_value, our_value, datum/grid/them, their_x, their_y, our_x, our_y)
-	return // overridei n subtypes
+	return TRUE // override in subtypes
 
 /// See if a grid would physically fit on us at a certain x/y value based on its placement point.
 /datum/grid/proc/can_fit_other(datum/grid/other, x, y)
@@ -96,7 +96,7 @@
 
 /// I suck at naming procs - This is to determine what we write on our grid when we place a point of another grid on us. This is called on the RECEIVING grid!
 /datum/grid/proc/value_to_write_on_placement_at_point(their_value, our_value, datum/grid/them, their_x, their_y, our_x, our_y)
-	return // yeah we're not going to bother implementing. doing it on subtypes.
+	return their_value // defafult to overwrite
 
 /// Initialize the grid from a string.
 /datum/grid/proc/initialize_from_string(str)
@@ -154,3 +154,41 @@
 			var/ovalue = grid[oy][ox]
 			var/nvalue = value_to_write_on_placement_at_point(tvalue, ovalue, other, tx, ty, ox, oy)
 			grid[oy][ox] = nvalue
+
+/** Simple implementation of a "binary grid" - Where each element/spot is either an 1 or a 0.
+  * STRING INITIALIZATION FORMAT: "[x or columns],[y or rows],[bitstring]" where rows/columns are integers.
+  * bitstring should be a string of 0's and 1's. The initialization will sweep from left to right, bottom to top.
+  * Meaning you go 1,1, 1,2, 1,3, 2,1, 2,2, 2,3, 3,1, so on, for an example 3x3 grid.
+  */
+/datum/grid/binary
+	/// Determines behavior on placing grids on it, if TRUE, it'll set a spot to 1 if either it or the thing being placed on it has an 1, rather than full replacement.
+	var/binary_or = FALSE
+
+/datum/grid/binary/value_to_write_on_placement_at_point(their_value, our_value, datum/grid/them, their_x, their_y, our_x, our_y)
+	if(binary_or)
+		return their_value || our_value
+	else
+		return their_value
+
+/datum/grid/binary/initialize_from_string(str)
+	var/list/split = splittext(str, ",")
+	var/columns = text2num(split[1])
+	var/rows = text2num(split[2])
+	set_size(columns, rows)
+	var/bitstring = split[3]
+	var/xpos = 1
+	var/ypos = 1
+	for(var/i in 1 to length(bitstring))
+		var/char = i
+		if(char == "1")
+			grid[ypos][xpos] = TRUE
+		else if(char == "0")
+			grid[ypos][xpos] = FALSE
+		else
+			continue
+		xpos++
+		if(xpos > columns)
+			xpos = 1
+			ypos++
+		if(ypos > rows)
+			break
