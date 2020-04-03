@@ -1,8 +1,62 @@
 /datum/component/storage
 	/// How many rows our storage grid has
-	var/rows = DEFAULT_STORAGE_ROWS
+	var/rows
 	/// How many columns our storage grid has
-	var/columns = DEFAULT_STORAGE_COLUMNS
+	var/columns
+	/// Are we operating on grids?
+	var/tetris_mode = FALSE
+
+/datum/component/storage/concrete
+	/// Our actual storage grid
+	var/datum/grid/storage_master
+
+/datum/component/storage/concrete/New()
+	. = ..()
+	if(tetris_mode)
+		initialize_tetris_mode()
+
+/datum/component/storage/concrete/proc/initialize_tetris_mode()
+	if(!rows)
+		switch(max_w_class)
+			if(WEIGHT_CLASS_TINY)
+				rows = 1
+			if(WEIGHT_CLASS_SMALL)
+				rows = 2
+			if(WEIGHT_CLASS_NORMAL)
+				rows = 5
+			if(WEIGHT_CLASS_BULKY)
+				rows = 10
+			if(WEIGHT_CLASS_HUGE)
+				rows = 12
+			if(WEIGHT_CLASS_GIGANTIC)
+				rows = 15
+	if(!columns)
+		var/factor
+		switch(max_w_class)
+			if(WEIGHT_CLASS_TINY)
+				factor = 1
+			if(WEIGHT_CLASS_SMALL)
+				factor = 2
+			if(WEIGHT_CLASS_NORMAL)
+				factor = 5
+			if(WEIGHT_CLASS_BULKY)
+				factor = 5
+			if(WEIGHT_CLASS_HUGE)
+				factor = 7
+			if(WEIGHT_CLASS_GIGANTIC)
+				factor = 9
+		columns = rows * factor
+	storage_master = new(columns, rowS)
+	attempt_auto_tetris_fit()
+
+/**
+  * Attempts to fit all existing items on the storage grid.
+  */
+/datum/component/storage/concrete/proc/attempt_auto_tetris_fit()
+	var/atom/real_location = real_location()
+	for(var/obj/item/I in real_location)
+		var/datum/grid/binary/storage_item/item_grid = I.get_storage_grid()
+
 
 /obj/item
 	/// The storage grid for us. Not always set, because we want to save memory.
