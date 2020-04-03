@@ -35,18 +35,41 @@
 		var/list/L = grid[i]
 		L.len = columns
 
-/// Get our pivot point for rotations. List(x, y)
-/datum/grid/proc/get_pivot_point()
-	/// Default - bottom left. If rotated, proceed uh, accordingly.
-	switch(dir)
-		if(NORTH)
-			return list(1, 1)
-		if(SOUTH)
-			return list(columns, rows)
-		if(EAST)
-			return list(1, rows)
-		if(WEST)
-			return list(columns, 1)
+// Rotates clockwise by turns of 90 degrees.
+/datum/grid/proc/rotate_clockwise(turns)
+	turns %= 4
+	if(!turns)		// why are you even calling the proc 4head
+		return
+	// If we ever add customizable placement points, here's where you'd turn it.
+	// now for the actual rotation
+	if(turns == 2)		//easy
+		reverseRange(grid)
+		for(var/i in 1 to length(grid))
+			reverseRange(grid[i])
+	else
+		// meh, it isn't just north/south.
+		// now i could do some complex thing to inplace this but
+		// who cares, grids are already going to be a trainwreck performancewise
+		// let's just make a new one and iterate
+		var/list/ngrid = list()
+		ngrid.len = columns
+		for(var/i in ngrid)
+			var/list/L = list()
+			L.len = rows
+			ngrid[i] = L
+		// now that the list is made do the painstaking thing of iterating our list into it.
+		if(turns == 1)
+			for(var/y in 1 to rows)
+				for(var/x in 1 to columns)
+					ngrid[columns - x + 1][y] = grid[y][x]
+		else		//turns == 3
+			for(var/y in 1 to rows)
+				for(var/x in 1 to columns)
+					ngrid[x][rows - x + 1] = grid[y][x]
+		// finally, update rows/columns.
+		var/old = rows
+		rows = columns
+		columns = old
 
 /// Point check for fit, much like value_to_write_on_placement_at_point
 /datum/grid/proc/can_place_at_point(their_value, our_value, datum/grid/them, their_x, their_y, our_x, our_y)
