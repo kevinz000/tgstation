@@ -14,6 +14,10 @@
 /// Essentially means it cannot be picked up or placed in an inventory, (e.g. mech parts, safe)
 #define WEIGHT_CLASS_GIGANTIC 6
 
+// Default storage component rows/columns
+#define DEFAULT_STORAGE_ROWs			5
+#define DEFAULT_STORAGE_COLUMNS			35
+
 //Inventory depth: limits how many nested storage items you can access directly.
 //1: stuff in mob, 2: stuff in backpack, 3: stuff in box in backpack, etc
 #define INVENTORY_DEPTH		3

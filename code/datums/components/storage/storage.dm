@@ -24,10 +24,6 @@
 
 	var/locked = FALSE								//when locked nothing can see inside or use it.
 
-	var/max_w_class = WEIGHT_CLASS_SMALL			//max size of objects that will fit.
-	var/max_combined_w_class = 14					//max combined sizes of objects that will fit.
-	var/max_items = 7								//max number of objects that will fit.
-
 	var/emp_shielded = FALSE
 
 	var/silent = FALSE								//whether this makes a message when things are put in.
@@ -692,7 +688,7 @@
 	return user_show_to_mob(showto, force)
 
 /datum/component/storage/proc/on_check()
-	return TRUE
+	return COMPONENT_CONTAINS_STORAGE | COMPONENT_STORAGE_SLAVE
 
 /datum/component/storage/proc/check_locked()
 	return locked

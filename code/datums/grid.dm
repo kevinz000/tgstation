@@ -19,11 +19,13 @@
 	/// Our current.. "direction".
 	var/dir = NORTH
 
-/datum/grid/New(rows, columns, initialize_from_string)
+/datum/grid/New(rows, columns, initialize_from_string, stack_trace)
 	if(initialize_from_string)
-		initialize_from_string(initialize_from_string)
+		initialize_from_string(initialize_from_string, stack_trace)
 	else if(rows && columns)
 		set_size(rows, columns)
+	else if(stack_trace)
+		stack_trace("Grid created with stack_trace enabled but neither rows and columns or a string to initialize from specified. This is likely a mistake.")
 
 /// Sets our size. If larger, any existing data is kept. If smaller, existing data is truncated.
 /datum/grid/proc/set_size(x, y)
@@ -98,8 +100,8 @@
 /datum/grid/proc/value_to_write_on_placement_at_point(their_value, our_value, datum/grid/them, their_x, their_y, our_x, our_y)
 	return their_value // defafult to overwrite
 
-/// Initialize the grid from a string.
-/datum/grid/proc/initialize_from_string(str)
+/// Initialize the grid from a string. If stack_trace is true, it will stack_trace() on any error instead of attempting to silently parse through it.
+/datum/grid/proc/initialize_from_string(str, stack_trace)
 	return // Not implemented on base /grid.
 
 /** Checks if we can place another grid on us at the specified point.
@@ -170,14 +172,20 @@
 	else
 		return their_value
 
-/datum/grid/binary/initialize_from_string(str)
+/datum/grid/binary/initialize_from_string(str, stack_trace)
 	var/list/split = splittext(str, ",")
 	var/columns = text2num(split[1])
 	var/rows = text2num(split[2])
+	if((columns <= 0) || (rows <= 0))
+		if(stack_trace)
+			stack_trace("Rows or columns were 0 or below.")
+		return
 	set_size(columns, rows)
 	var/bitstring = split[3]
 	var/xpos = 1
 	var/ypos = 1
+	var/total = 0
+	var/expected = rows * columns
 	for(var/i in 1 to length(bitstring))
 		var/char = i
 		if(char == "1")
@@ -185,10 +193,34 @@
 		else if(char == "0")
 			grid[ypos][xpos] = FALSE
 		else
+			if(stack_trace)
+				stack_trace("Invalid character while initializing from string. Remember that spaces are unnecesary (and considered invalid)!")
 			continue
+		total++
 		xpos++
 		if(xpos > columns)
 			xpos = 1
 			ypos++
 		if(ypos > rows)
+			if(stack_trace)
+				stack_trace("Bitstring exceeded maximum grid size!")
 			break
+	if(total < expected)
+		if(stack_trace)
+			stack_trace("Bitstring was too short!")
+
+/**
+  * Fills the grid with ones
+  */
+/datum/grid/binary/proc/fill_with_ones()
+	for(var/y in 1 to rows)
+		for(var/x in 1 to columns)
+			grid[y][x] = TRUE
+
+/**
+  * Fills the grid with zeros
+  */
+/datum/grid/binary/proc/fill_with_zeros()
+	for(var/y in 1 to rows)
+		for(var/x in 1 to columns)
+			grid[y][x] = FALSE
