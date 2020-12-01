@@ -4,6 +4,7 @@
 	desc = "A strange molluscoidal creature carrying a busted growing vat.\nYou wonder if this burden is a voluntary undertaking in order to achieve comfort and protection, or simply because the creature is fused to its metal shell?"
 	icon = 'icons/mob/vatgrowing.dmi'
 	icon_state = "vat_beast"
+	icon_living = "vat_beast"
 	icon_dead = "vat_beast_dead"
 	mob_biotypes = MOB_ORGANIC|MOB_BEAST
 	mob_size = MOB_SIZE_LARGE
@@ -21,7 +22,7 @@
 	attack_sound = 'sound/weapons/punch3.ogg'
 	attack_verb_continuous = "slaps"
 	attack_verb_simple = "slap"
-	food_type = list(/obj/item/reagent_containers/food/snacks/fries, /obj/item/reagent_containers/food/snacks/cheesyfries, /obj/item/reagent_containers/food/snacks/cornchips, /obj/item/reagent_containers/food/snacks/carrotfries)
+	food_type = list(/obj/item/food/fries, /obj/item/food/cheesyfries, /obj/item/food/cornchips, /obj/item/food/carrotfries)
 	tame_chance = 30
 
 	var/obj/effect/proc_holder/tentacle_slap/tentacle_slap
@@ -49,7 +50,6 @@
 	riding.set_vehicle_dir_layer(WEST, OBJ_LAYER)
 	riding.drive_verb = "ride"
 	riding.override_allow_spacemove = TRUE
-	faction = list("neutral")
 
 /mob/living/simple_animal/hostile/vatbeast/add_cell_sample()
 	AddElement(/datum/element/swabable, CELL_LINE_TABLE_VATBEAST, CELL_VIRUS_TABLE_GENERIC_MOB, 1, 5)

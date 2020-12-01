@@ -92,6 +92,7 @@ GLOBAL_LIST_INIT(nonreactive_gases, typecacheof(list(/datum/gas/oxygen, /datum/g
 	gas_overlay = "freon"
 	moles_visible = MOLES_GAS_VISIBLE
 	dangerous = TRUE
+	fusion_power = 10
 	rarity = 50
 
 /datum/gas/nitrous_oxide
@@ -111,7 +112,6 @@ GLOBAL_LIST_INIT(nonreactive_gases, typecacheof(list(/datum/gas/oxygen, /datum/g
 	gas_overlay = "nitryl"
 	moles_visible = MOLES_GAS_VISIBLE
 	dangerous = TRUE
-	fusion_power = 16
 	rarity = 100
 
 /datum/gas/tritium
@@ -121,7 +121,7 @@ GLOBAL_LIST_INIT(nonreactive_gases, typecacheof(list(/datum/gas/oxygen, /datum/g
 	gas_overlay = "tritium"
 	moles_visible = MOLES_GAS_VISIBLE
 	dangerous = TRUE
-	fusion_power = 1
+	fusion_power = 5
 	rarity = 300
 
 /datum/gas/bz
@@ -168,7 +168,8 @@ GLOBAL_LIST_INIT(nonreactive_gases, typecacheof(list(/datum/gas/oxygen, /datum/g
 	specific_heat = 15
 	name = "Hydrogen"
 	dangerous = TRUE
-	rarity = 700
+	fusion_power = 2
+	rarity = 600
 
 /datum/gas/healium
 	id = "healium"
@@ -177,7 +178,7 @@ GLOBAL_LIST_INIT(nonreactive_gases, typecacheof(list(/datum/gas/oxygen, /datum/g
 	dangerous = TRUE
 	gas_overlay = "healium"
 	moles_visible = MOLES_GAS_VISIBLE
-	rarity = 100
+	rarity = 300
 
 /datum/gas/proto_nitrate
 	id = "proto_nitrate"
@@ -186,16 +187,16 @@ GLOBAL_LIST_INIT(nonreactive_gases, typecacheof(list(/datum/gas/oxygen, /datum/g
 	dangerous = TRUE
 	gas_overlay = "proto_nitrate"
 	moles_visible = MOLES_GAS_VISIBLE
-	rarity = 100
+	rarity = 200
 
-/datum/gas/cyrion_b
-	id = "cyrion_b"
+/datum/gas/zauker
+	id = "zauker"
 	specific_heat = 350
-	name = "Cyrion B"
+	name = "Zauker"
 	dangerous = TRUE
-	gas_overlay = "cyrion_b"
+	gas_overlay = "zauker"
 	moles_visible = MOLES_GAS_VISIBLE
-	rarity = 100
+	rarity = 1
 
 /datum/gas/halon
 	id = "halon"
@@ -204,16 +205,24 @@ GLOBAL_LIST_INIT(nonreactive_gases, typecacheof(list(/datum/gas/oxygen, /datum/g
 	dangerous = TRUE
 	gas_overlay = "halon"
 	moles_visible = MOLES_GAS_VISIBLE
-	rarity = 100
+	rarity = 300
 
-/datum/gas/hexane
-	id = "hexane"
-	specific_heat = 5
-	name = "Hexane"
+/datum/gas/helium
+	id = "helium"
+	specific_heat = 15
+	name = "Helium"
+	fusion_power = 7
+	rarity = 50
+
+/datum/gas/antinoblium
+	id = "antinoblium"
+	specific_heat = 1
+	name = "Antinoblium"
 	dangerous = TRUE
-	gas_overlay = "hexane"
+	gas_overlay = "antinoblium"
 	moles_visible = MOLES_GAS_VISIBLE
-	rarity = 100
+	fusion_power = 20
+	rarity = 1
 
 /obj/effect/overlay/gas
 	icon = 'icons/effects/atmospherics.dmi'

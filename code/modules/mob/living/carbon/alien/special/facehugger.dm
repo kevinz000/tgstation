@@ -43,6 +43,7 @@
 /obj/item/clothing/mask/facehugger/impregnated
 	icon_state = "facehugger_impregnated"
 	inhand_icon_state = "facehugger_impregnated"
+	worn_icon_state = "facehugger_dead"
 	stat = DEAD
 
 /obj/item/clothing/mask/facehugger/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir)
@@ -52,9 +53,6 @@
 
 /obj/item/clothing/mask/facehugger/attackby(obj/item/O, mob/user, params)
 	return O.attack_obj(src, user)
-
-/obj/item/clothing/mask/facehugger/attack_alien(mob/user) //can be picked up by aliens
-	return attack_hand(user)
 
 //ATTACK HAND IGNORING PARENT RETURN VALUE
 /obj/item/clothing/mask/facehugger/attack_hand(mob/user)
@@ -128,7 +126,7 @@
 		return FALSE
 	if(iscarbon(M))
 		// disallowed carbons
-		if(isalien(M) || istruedevil(M))
+		if(isalien(M))
 			return FALSE
 		var/mob/living/carbon/target = M
 		// gotta have a head to be implanted (no changelings or sentient plants)

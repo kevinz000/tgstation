@@ -41,7 +41,7 @@
 	desc = "A large, yet comfortable piece of armor, protecting you from some threats."
 	icon_state = "blueshift"
 	inhand_icon_state = "blueshift"
-	custom_premium_price = 750
+	custom_premium_price = PAYCHECK_HARD
 
 /obj/item/clothing/suit/armor/hos
 	name = "armored greatcoat"
@@ -290,7 +290,7 @@
 
 /obj/item/clothing/suit/armor/elder_atmosian
 	name = "Elder Atmosian Armor"
-	desc = "A superb armor made with the thoughest and rarest materials avaiable to man."
+	desc = "A superb armor made with the toughest and rarest materials available to man."
 	icon_state = "knight_grey"
 	inhand_icon_state = "knight_greyscale"
 	material_flags = MATERIAL_COLOR | MATERIAL_AFFECT_STATISTICS//Can change color and add prefix

@@ -101,13 +101,14 @@
 	name = "sandbags"
 	desc = "Bags of sand. Self explanatory."
 	icon = 'icons/obj/smooth_structures/sandbags.dmi'
-	icon_state = "sandbags"
+	icon_state = "sandbags-0"
+	base_icon_state = "sandbags"
 	max_integrity = 280
 	proj_pass_rate = 20
 	pass_flags = LETPASSTHROW
 	bar_material = SAND
 	climbable = TRUE
-	smoothing_flags = SMOOTH_CORNERS
+	smoothing_flags = SMOOTH_BITMASK
 	smoothing_groups = list(SMOOTH_GROUP_SANDBAGS)
 	canSmoothWith = list(SMOOTH_GROUP_SANDBAGS, SMOOTH_GROUP_WALLS, SMOOTH_GROUP_SECURITY_BARRICADE)
 
@@ -168,7 +169,7 @@
 
 	to_chat(user, "<span class='notice'>[src] is now in [mode] mode.</span>")
 
-/obj/item/grenade/barrier/prime(mob/living/lanced_by)
+/obj/item/grenade/barrier/detonate(mob/living/lanced_by)
 	. = ..()
 	new /obj/structure/barricade/security(get_turf(src.loc))
 	switch(mode)

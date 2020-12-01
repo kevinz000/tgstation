@@ -1,11 +1,11 @@
 /**
-  * The mob, usually meant to be a creature of some type
-  *
-  * Has a client attached that is a living person (most of the time), although I have to admit
-  * sometimes it's hard to tell they're sentient
-  *
-  * Has a lot of the creature game world logic, such as health etc
-  */
+ * The mob, usually meant to be a creature of some type
+ *
+ * Has a client attached that is a living person (most of the time), although I have to admit
+ * sometimes it's hard to tell they're sentient
+ *
+ * Has a lot of the creature game world logic, such as health etc
+ */
 /mob
 	datum_flags = DF_USE_TAG
 	density = TRUE
@@ -18,7 +18,7 @@
 	throwforce = 10
 	blocks_emissive = EMISSIVE_BLOCK_GENERIC
 
- 	///when this be added to vis_contents of something it inherit something.plane, important for visualisation of mob in openspace.
+	///when this be added to vis_contents of something it inherit something.plane, important for visualisation of mob in openspace.
 	vis_flags = VIS_INHERIT_PLANE
 
 	var/lighting_alpha = LIGHTING_PLANE_ALPHA_VISIBLE
@@ -41,6 +41,8 @@
 	var/list/datum/action/actions
 	/// A special action? No idea why this lives here
 	var/list/datum/action/chameleon_item_actions
+	///Cursor icon used when holding shift over things
+	var/examine_cursor_icon = 'icons/effects/mouse_pointers/examine_pointer.dmi'
 
 	/// Whether a mob is alive or dead. TODO: Move this to living - Nodrak (2019, still here)
 	var/stat = CONSCIOUS
@@ -116,8 +118,6 @@
 
 	/// movable atom we are buckled to
 	var/atom/movable/buckled = null//Living
-	/// movable atoms buckled to this mob
-	var/atom/movable/buckling
 
 	//Hands
 	///What hand is the active hand
@@ -130,7 +130,7 @@
 	  *
 	  * NB: contains nulls!
 	  *
-	  * held_items[active_hand_index] is the actively held item, but please use
+	  * `held_items[active_hand_index]` is the actively held item, but please use
 	  * [get_active_held_item()][/mob/proc/get_active_held_item] instead, because OOP
 	  */
 	var/list/held_items = list()
@@ -207,7 +207,10 @@
 
 	var/memory_throttle_time = 0
 
-	var/list/alerts = list() /// contains [/obj/screen/alert only] // On /mob so clientless mobs will throw alerts properly
+	/// Contains [/atom/movable/screen/alert] only.
+	///
+	/// On [/mob] so clientless mobs will throw alerts properly.
+	var/list/alerts = list()
 	var/list/screens = list()
 	var/list/client_colours = list()
 	var/hud_type = /datum/hud

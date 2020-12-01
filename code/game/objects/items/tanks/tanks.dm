@@ -1,6 +1,7 @@
 /obj/item/tank
 	name = "tank"
 	icon = 'icons/obj/tank.dmi'
+	icon_state = "generic"
 	lefthand_file = 'icons/mob/inhands/equipment/tanks_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/tanks_righthand.dmi'
 	flags_1 = CONDUCT_1
@@ -19,6 +20,8 @@
 	var/distribute_pressure = ONE_ATMOSPHERE
 	var/integrity = 3
 	var/volume = 70
+	/// Icon state when in a tank holder. Null makes it incompatible with tank holder.
+	var/tank_holder_icon_state = "holder_generic"
 
 /obj/item/tank/ui_action_click(mob/user)
 	toggle_internals(user)
@@ -72,6 +75,11 @@
 
 	STOP_PROCESSING(SSobj, src)
 	. = ..()
+
+/obj/item/tank/ComponentInitialize()
+	. = ..()
+	if(tank_holder_icon_state)
+		AddComponent(/datum/component/container_item/tank_holder, tank_holder_icon_state)
 
 /obj/item/tank/examine(mob/user)
 	var/obj/icon = src
@@ -151,27 +159,30 @@
 		ui = new(user, src, "Tank", name)
 		ui.open()
 
+/obj/item/tank/ui_static_data(mob/user)
+	. = list (
+		"defaultReleasePressure" = round(TANK_DEFAULT_RELEASE_PRESSURE),
+		"minReleasePressure" = round(TANK_MIN_RELEASE_PRESSURE),
+		"maxReleasePressure" = round(TANK_MAX_RELEASE_PRESSURE),
+		"leakPressure" = round(TANK_LEAK_PRESSURE),
+		"fragmentPressure" = round(TANK_FRAGMENT_PRESSURE)
+	)
+
 /obj/item/tank/ui_data(mob/user)
-	var/list/data = list()
-	data["tankPressure"] = round(air_contents.return_pressure() ? air_contents.return_pressure() : 0)
-	data["releasePressure"] = round(distribute_pressure ? distribute_pressure : 0)
-	data["defaultReleasePressure"] = round(TANK_DEFAULT_RELEASE_PRESSURE)
-	data["minReleasePressure"] = round(TANK_MIN_RELEASE_PRESSURE)
-	data["maxReleasePressure"] = round(TANK_MAX_RELEASE_PRESSURE)
+	. = list(
+		"tankPressure" = round(air_contents.return_pressure()),
+		"releasePressure" = round(distribute_pressure)
+	)
 
 	var/mob/living/carbon/C = user
 	if(!istype(C))
 		C = loc.loc
-	if(!istype(C))
-		return data
-
-	if(C.internal == src)
-		data["connected"] = TRUE
-
-	return data
+	if(istype(C) && C.internal == src)
+		.["connected"] = TRUE
 
 /obj/item/tank/ui_act(action, params)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	switch(action)
 		if("pressure")

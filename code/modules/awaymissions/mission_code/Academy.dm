@@ -227,7 +227,6 @@
 		if(1)
 			//Dust
 			T.visible_message("<span class='userdanger'>[user] turns to dust!</span>")
-			user.hellbound = TRUE
 			user.dust()
 		if(2)
 			//Death
@@ -276,7 +275,7 @@
 		if(11)
 			//Cookie
 			T.visible_message("<span class='userdanger'>A cookie appears out of thin air!</span>")
-			var/obj/item/reagent_containers/food/snacks/cookie/C = new(drop_location())
+			var/obj/item/food/cookie/C = new(drop_location())
 			do_smoke(0, drop_location())
 			C.name = "Cookie of Fate"
 		if(12)

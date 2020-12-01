@@ -27,7 +27,7 @@
 	flags_1 &= ~PREVENT_CLICK_UNDER_1
 	if(set_dir)
 		setDir(set_dir)
-	if(req_access && req_access.len)
+	if(req_access?.len)
 		icon_state = "[icon_state]"
 		base_state = icon_state
 	for(var/i in 1 to shards)
@@ -82,7 +82,7 @@
 	if(!SSticker)
 		return
 	var/mob/M = AM
-	if(M.restrained() || ((isdrone(M) || iscyborg(M)) && M.stat))
+	if(HAS_TRAIT(M, TRAIT_HANDS_BLOCKED) || ((isdrone(M) || iscyborg(M)) && M.stat != CONSCIOUS))
 		return
 	bumpopen(M)
 
@@ -210,7 +210,7 @@
 		obj_flags |= EMAGGED
 		operating = TRUE
 		flick("[base_state]spark", src)
-		playsound(src, "sparks", 75, TRUE)
+		playsound(src, "sparks", 75, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 		sleep(6)
 		operating = FALSE
 		desc += "<BR><span class='warning'>Its access panel is smoking slightly.</span>"
@@ -235,7 +235,7 @@
 		if(I.tool_behaviour == TOOL_CROWBAR)
 			if(panel_open && !density && !operating)
 				user.visible_message("<span class='notice'>[user] removes the electronics from the [name].</span>", \
-									 "<span class='notice'>You start to remove electronics from the [name]...</span>")
+					"<span class='notice'>You start to remove electronics from the [name]...</span>")
 				if(I.use_tool(src, user, 40, volume=50))
 					if(panel_open && !density && !operating && loc)
 						var/obj/structure/windoor_assembly/WA = new /obj/structure/windoor_assembly(loc)

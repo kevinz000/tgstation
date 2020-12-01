@@ -67,9 +67,10 @@
 		"hydrogen" = /obj/machinery/portable_atmospherics/canister/hydrogen,
 		"healium" = /obj/machinery/portable_atmospherics/canister/healium,
 		"proto_nitrate" = /obj/machinery/portable_atmospherics/canister/proto_nitrate,
-		"cyrion_b" = /obj/machinery/portable_atmospherics/canister/cyrion_b,
-		"halon" = /obj/machinery/portable_atmospherics/canister/halon,
-		"hexane" = /obj/machinery/portable_atmospherics/canister/hexane
+		"zauker" = /obj/machinery/portable_atmospherics/canister/zauker,
+		"helium" = /obj/machinery/portable_atmospherics/canister/helium,
+		"antinoblium" = /obj/machinery/portable_atmospherics/canister/antinoblium,
+		"halon" = /obj/machinery/portable_atmospherics/canister/halon
 	)
 
 /obj/machinery/portable_atmospherics/canister/interact(mob/user)
@@ -82,7 +83,7 @@
 /obj/machinery/portable_atmospherics/canister/examine(user)
 	. = ..()
 	if(mode)
-		. += "<span class='notice'>This canister is [mode]. A sticker on its side says <b>MAX PRESSURE: [siunit(pressure_limit, "Pa", 0)]</b>.</span>"
+		. += "<span class='notice'>This canister is [mode]. A sticker on its side says <b>MAX PRESSURE: [siunit_pressure(pressure_limit, 0)]</b>.</span>"
 
 /obj/machinery/portable_atmospherics/canister/nitrogen
 	name = "Nitrogen canister"
@@ -177,7 +178,7 @@
 
 /obj/machinery/portable_atmospherics/canister/miasma
 	name = "Miasma canister"
-	desc = "Miasma. Makes you wish your nose were blocked."
+	desc = "Miasma. Makes you wish your nose was blocked."
 	icon_state = "miasma"
 	base_icon_state = "miasma"
 	gas_type = /datum/gas/miasma
@@ -209,34 +210,42 @@
 
 /obj/machinery/portable_atmospherics/canister/proto_nitrate
 	name = "Proto Nitrate canister"
-	desc = "Proto Nitrate, react differently with various gases"
+	desc = "Proto Nitrate, reacts differently with various gases"
 	icon_state = "proto_nitrate"
 	base_icon_state = "proto_nitrate"
 	gas_type = /datum/gas/proto_nitrate
 	filled = 1
 
-/obj/machinery/portable_atmospherics/canister/cyrion_b
-	name = "Cyrion B canister"
-	desc = "Cyrion B, highly toxic"
-	icon_state = "cyrion_b"
-	base_icon_state = "cyrion_b"
-	gas_type = /datum/gas/cyrion_b
+/obj/machinery/portable_atmospherics/canister/zauker
+	name = "Zauker canister"
+	desc = "Zauker, highly toxic"
+	icon_state = "zauker"
+	base_icon_state = "zauker"
+	gas_type = /datum/gas/zauker
 	filled = 1
 
 /obj/machinery/portable_atmospherics/canister/halon
 	name = "Halon canister"
-	desc = "Halon, remove oxygen from high temperature fires and cool down the area"
+	desc = "Halon, removes oxygen from high temperature fires and cools down the area"
 	icon_state = "halon"
 	base_icon_state = "halon"
 	gas_type = /datum/gas/halon
 	filled = 1
 
-/obj/machinery/portable_atmospherics/canister/hexane
-	name = "Hexane canister"
-	desc = "hexane, highly flammable"
-	icon_state = "hexane"
-	base_icon_state = "hexane"
-	gas_type = /datum/gas/hexane
+/obj/machinery/portable_atmospherics/canister/helium
+	name = "Helium canister"
+	desc = "Helium, inert gas"
+	icon_state = "halon"
+	base_icon_state = "halon"
+	gas_type = /datum/gas/helium
+	filled = 1
+
+/obj/machinery/portable_atmospherics/canister/antinoblium
+	name = "Antinoblium canister"
+	desc = "Antinoblium, we still don't know what it does, but it sells for a lot"
+	icon_state = "halon"
+	base_icon_state = "halon"
+	gas_type = /datum/gas/antinoblium
 	filled = 1
 
 /obj/machinery/portable_atmospherics/canister/fusion_test
@@ -247,10 +256,9 @@
 	mode = CANISTER_TIER_3
 
 /obj/machinery/portable_atmospherics/canister/fusion_test/create_gas()
-	air_contents.add_gases(/datum/gas/hydrogen, /datum/gas/plasma, /datum/gas/tritium)
-	air_contents.gases[/datum/gas/hydrogen][MOLES] = 500
-	air_contents.gases[/datum/gas/plasma][MOLES] = 500
-	air_contents.gases[/datum/gas/tritium][MOLES] = 350
+	air_contents.add_gases(/datum/gas/hydrogen, /datum/gas/tritium)
+	air_contents.gases[/datum/gas/hydrogen][MOLES] = 300
+	air_contents.gases[/datum/gas/tritium][MOLES] = 300
 	air_contents.temperature = 10000
 
 /obj/machinery/portable_atmospherics/canister/proc/get_time_left()
@@ -468,35 +476,48 @@
 		ui = new(user, src, "Canister", name)
 		ui.open()
 
+/obj/machinery/portable_atmospherics/canister/ui_static_data(mob/user)
+	return list(
+		"defaultReleasePressure" = round(CAN_DEFAULT_RELEASE_PRESSURE),
+		"minReleasePressure" = round(can_min_release_pressure),
+		"maxReleasePressure" = round(can_max_release_pressure),
+		"pressureLimit" = round(pressure_limit),
+		"holdingTankLeakPressure" = round(TANK_LEAK_PRESSURE),
+		"holdingTankFragPressure" = round(TANK_FRAGMENT_PRESSURE)
+	)
+
 /obj/machinery/portable_atmospherics/canister/ui_data()
-	var/data = list()
-	data["portConnected"] = connected_port ? 1 : 0
-	data["tankPressure"] = round(air_contents.return_pressure() ? air_contents.return_pressure() : 0)
-	data["releasePressure"] = round(release_pressure ? release_pressure : 0)
-	data["defaultReleasePressure"] = round(CAN_DEFAULT_RELEASE_PRESSURE)
-	data["minReleasePressure"] = round(can_min_release_pressure)
-	data["maxReleasePressure"] = round(can_max_release_pressure)
-	data["valveOpen"] = valve_open ? 1 : 0
+	. = list(
+		"portConnected" = !!connected_port,
+		"tankPressure" = round(air_contents.return_pressure()),
+		"releasePressure" = round(release_pressure),
+		"valveOpen" = !!valve_open,
+		"isPrototype" = !!prototype,
+		"hasHoldingTank" = !!holding
+	)
 
-	data["isPrototype"] = prototype ? 1 : 0
 	if (prototype)
-		data["restricted"] = restricted
-		data["timing"] = timing
-		data["time_left"] = get_time_left()
-		data["timer_set"] = timer_set
-		data["timer_is_not_default"] = timer_set != default_timer_set
-		data["timer_is_not_min"] = timer_set != minimum_timer_set
-		data["timer_is_not_max"] = timer_set != maximum_timer_set
+		. += list(
+			"restricted" = restricted,
+			"timing" = timing,
+			"time_left" = get_time_left(),
+			"timer_set" = timer_set,
+			"timer_is_not_default" = timer_set != default_timer_set,
+			"timer_is_not_min" = timer_set != minimum_timer_set,
+			"timer_is_not_max" = timer_set != maximum_timer_set
+		)
 
-	data["hasHoldingTank"] = holding ? 1 : 0
 	if (holding)
-		data["holdingTank"] = list()
-		data["holdingTank"]["name"] = holding.name
-		data["holdingTank"]["tankPressure"] = round(holding.air_contents.return_pressure())
-	return data
+		. += list(
+			"holdingTank" = list(
+				"name" = holding.name,
+				"tankPressure" = round(holding.air_contents.return_pressure())
+			)
+		)
 
 /obj/machinery/portable_atmospherics/canister/ui_act(action, params)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	switch(action)
 		if("relabel")

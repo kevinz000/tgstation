@@ -13,7 +13,7 @@
 	see_in_dark = 6
 	maxHealth = 5
 	health = 5
-	butcher_results = list(/obj/item/reagent_containers/food/snacks/meat/slab/mouse = 1)
+	butcher_results = list(/obj/item/food/meat/slab/mouse = 1)
 	response_help_continuous = "pets"
 	response_help_simple = "pet"
 	response_disarm_continuous = "gently pushes aside"
@@ -34,7 +34,7 @@
 
 /mob/living/simple_animal/mouse/Initialize()
 	. = ..()
-	AddComponent(/datum/component/squeak, list('sound/effects/mousesqueek.ogg'=1), 100)
+	AddComponent(/datum/component/squeak, list('sound/effects/mousesqueek.ogg'=1), 100, extrarange = SHORT_RANGE_SOUND_EXTRARANGE) //as quiet as a mouse or whatever
 	if(!body_color)
 		body_color = pick( list("brown","gray","white") )
 	icon_state = "mouse_[body_color]"
@@ -79,7 +79,7 @@
 		if(!stat)
 			var/mob/M = AM
 			to_chat(M, "<span class='notice'>[icon2html(src, M)] Squeak!</span>")
-	if(istype(AM, /obj/item/reagent_containers/food/snacks/royalcheese))
+	if(istype(AM, /obj/item/food/royalcheese))
 		evolve()
 		qdel(AM)
 	..()
@@ -98,19 +98,19 @@
 				else
 					C.deconstruct()
 					visible_message("<span class='warning'>[src] chews through the [C].</span>")
-	for(var/obj/item/reagent_containers/food/snacks/cheesewedge/cheese in range(1, src))
+	for(var/obj/item/food/cheesewedge/cheese in range(1, src))
 		if(prob(10))
 			be_fruitful()
 			qdel(cheese)
 			return
-	for(var/obj/item/reagent_containers/food/snacks/royalcheese/bigcheese in range(1, src))
+	for(var/obj/item/food/royalcheese/bigcheese in range(1, src))
 		qdel(bigcheese)
 		evolve()
 		return
 
 /mob/living/simple_animal/mouse/UnarmedAttack(atom/A, proximity)
 	. = ..()
-	if(istype(A, /obj/item/reagent_containers/food/snacks/cheesewedge) && canUseTopic(A, BE_CLOSE, NO_DEXTERITY))
+	if(istype(A, /obj/item/food/cheesewedge) && canUseTopic(A, BE_CLOSE, NO_DEXTERITY))
 		if(health == maxHealth)
 			to_chat(src,"<span class='warning'>You don't need to eat or heal.</span>")
 			return
@@ -121,8 +121,8 @@
 	return ..()
 
 /**
-  *Checks the mouse cap, if it's above the cap, doesn't spawn a mouse. If below, spawns a mouse and adds it to cheeserats.
-  */
+ *Checks the mouse cap, if it's above the cap, doesn't spawn a mouse. If below, spawns a mouse and adds it to cheeserats.
+ */
 /mob/living/simple_animal/mouse/proc/be_fruitful()
 	var/cap = CONFIG_GET(number/ratcap)
 	if(LAZYLEN(SSmobs.cheeserats) >= cap)
@@ -133,10 +133,10 @@
 	visible_message("<span class='notice'>[src] nibbles through the cheese, attracting another mouse!</span>")
 
 /**
-  *Spawns a new regal rat, says some good jazz, and if sentient, transfers the relivant mind.
-  */
+ *Spawns a new regal rat, says some good jazz, and if sentient, transfers the relivant mind.
+ */
 /mob/living/simple_animal/mouse/proc/evolve()
-	var/mob/living/simple_animal/hostile/regalrat = new /mob/living/simple_animal/hostile/regalrat(loc)
+	var/mob/living/simple_animal/hostile/regalrat/regalrat = new /mob/living/simple_animal/hostile/regalrat/controlled(loc)
 	visible_message("<span class='warning'>[src] devours the cheese! He morphs into something... greater!</span>")
 	regalrat.say("RISE, MY SUBJECTS! SCREEEEEEE!")
 	if(mind)
@@ -202,7 +202,7 @@
 /obj/item/reagent_containers/food/snacks/deadmouse/attackby(obj/item/I, mob/user, params)
 	if(I.get_sharpness() && user.a_intent == INTENT_HARM)
 		if(isturf(loc))
-			new /obj/item/reagent_containers/food/snacks/meat/slab/mouse(loc)
+			new /obj/item/food/meat/slab/mouse(loc)
 			to_chat(user, "<span class='notice'>You butcher [src].</span>")
 			qdel(src)
 		else

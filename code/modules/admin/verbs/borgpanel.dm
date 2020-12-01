@@ -1,5 +1,5 @@
 /datum/admins/proc/open_borgopanel(borgo in GLOB.silicon_mobs)
-	set category = "Admin - Game"
+	set category = "Admin.Game"
 	set name = "Show Borg Panel"
 	set desc = "Show borg panel"
 
@@ -79,7 +79,8 @@
 
 
 /datum/borgpanel/ui_act(action, params)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	switch (action)
 		if ("set_charge")
@@ -148,11 +149,9 @@
 			var/upgradepath = text2path(params["upgrade"])
 			var/obj/item/borg/upgrade/installedupgrade = locate(upgradepath) in borg
 			if (installedupgrade)
-				installedupgrade.deactivate(borg, user)
-				borg.upgrades -= installedupgrade
 				message_admins("[key_name_admin(user)] removed the [installedupgrade] upgrade from [ADMIN_LOOKUPFLW(borg)].")
 				log_admin("[key_name(user)] removed the [installedupgrade] upgrade from [key_name(borg)].")
-				qdel(installedupgrade)
+				qdel(installedupgrade) // see [mob/living/silicon/robot/on_upgrade_deleted()].
 			else
 				var/obj/item/borg/upgrade/upgrade = new upgradepath(borg)
 				upgrade.action(borg, user)

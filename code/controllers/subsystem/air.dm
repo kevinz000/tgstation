@@ -6,6 +6,7 @@ SUBSYSTEM_DEF(air)
 	flags = SS_BACKGROUND
 	runlevels = RUNLEVEL_GAME | RUNLEVEL_POSTGAME
 
+	var/cached_cost = 0
 	var/cost_turfs = 0
 	var/cost_groups = 0
 	var/cost_highpressure = 0
@@ -20,6 +21,7 @@ SUBSYSTEM_DEF(air)
 	var/list/hotspots = list()
 	var/list/networks = list()
 	var/list/pipenets_needing_rebuilt = list()
+	/// A list of machines that will be processed when currentpart == SSAIR_ATMOSMACHINERY. Use SSair.begin_processing_machine and SSair.stop_processing_machine to add and remove machines.
 	var/list/obj/machinery/atmos_machinery = list()
 	var/list/pipe_init_dirs_cache = list()
 
@@ -31,15 +33,14 @@ SUBSYSTEM_DEF(air)
 	var/list/turf/active_super_conductivity = list()
 	var/list/turf/open/high_pressure_delta = list()
 
-
+	/// A cache of objects that perisists between processing runs when resumed == TRUE. Dangerous, qdel'd objects not cleared from this may cause runtimes on processing.
 	var/list/currentrun = list()
-	var/currentpart = SSAIR_REBUILD_PIPENETS
+	var/currentpart = SSAIR_PIPENETS
 
 	var/map_loading = TRUE
 	var/list/queued_for_activation
 	var/display_all_groups = FALSE
 
-	var/lasttick = 0
 
 /datum/controller/subsystem/air/stat_entry(msg)
 	msg += "C:{"
@@ -76,79 +77,102 @@ SUBSYSTEM_DEF(air)
 	var/timer = TICK_USAGE_REAL
 	var/delta_time = wait * 0.1
 
-	if(currentpart == SSAIR_REBUILD_PIPENETS)
+	// Every time we fire, we want to make sure pipenets are rebuilt. The game state could have changed between each fire() proc call
+	// and anything missing a pipenet can lead to unintended behaviour at worse and various runtimes at best.
+	if(length(pipenets_needing_rebuilt))
 		var/list/pipenet_rebuilds = pipenets_needing_rebuilt
 		for(var/thing in pipenet_rebuilds)
 			var/obj/machinery/atmospherics/AT = thing
 			AT.build_network()
-		cost_rebuilds = MC_AVERAGE(cost_rebuilds, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		cached_cost += TICK_USAGE_REAL - timer
 		pipenets_needing_rebuilt.Cut()
 		if(state != SS_RUNNING)
 			return
-		resumed = FALSE
-		currentpart = SSAIR_PIPENETS
+		cost_rebuilds = MC_AVERAGE(cost_rebuilds, TICK_DELTA_TO_MS(cached_cost))
 
 	if(currentpart == SSAIR_PIPENETS || !resumed)
+		timer = TICK_USAGE_REAL
+		if(!resumed)
+			cached_cost = 0
 		process_pipenets(delta_time, resumed)
-		cost_pipenets = MC_AVERAGE(cost_pipenets, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		cached_cost += TICK_USAGE_REAL - timer
 		if(state != SS_RUNNING)
 			return
+		cost_pipenets = MC_AVERAGE(cost_pipenets, TICK_DELTA_TO_MS(cached_cost))
 		resumed = FALSE
 		currentpart = SSAIR_ATMOSMACHINERY
 
 	if(currentpart == SSAIR_ATMOSMACHINERY)
 		timer = TICK_USAGE_REAL
+		if(!resumed)
+			cached_cost = 0
 		process_atmos_machinery(delta_time, resumed)
-		cost_atmos_machinery = MC_AVERAGE(cost_atmos_machinery, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		cached_cost += TICK_USAGE_REAL - timer
 		if(state != SS_RUNNING)
 			return
+		cost_atmos_machinery = MC_AVERAGE(cost_atmos_machinery, TICK_DELTA_TO_MS(cached_cost))
 		resumed = FALSE
 		currentpart = SSAIR_ACTIVETURFS
 
 	if(currentpart == SSAIR_ACTIVETURFS)
 		timer = TICK_USAGE_REAL
+		if(!resumed)
+			cached_cost = 0
 		process_active_turfs(resumed)
-		cost_turfs = MC_AVERAGE(cost_turfs, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		cached_cost += TICK_USAGE_REAL - timer
 		if(state != SS_RUNNING)
 			return
+		cost_turfs = MC_AVERAGE(cost_turfs, TICK_DELTA_TO_MS(cached_cost))
 		resumed = FALSE
 		currentpart = SSAIR_EXCITEDGROUPS
 
 	if(currentpart == SSAIR_EXCITEDGROUPS)
 		timer = TICK_USAGE_REAL
+		if(!resumed)
+			cached_cost = 0
 		process_excited_groups(resumed)
-		cost_groups = MC_AVERAGE(cost_groups, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		cached_cost += TICK_USAGE_REAL - timer
 		if(state != SS_RUNNING)
 			return
+		cost_groups = MC_AVERAGE(cost_groups, TICK_DELTA_TO_MS(cached_cost))
 		resumed = FALSE
 		currentpart = SSAIR_HIGHPRESSURE
 
 	if(currentpart == SSAIR_HIGHPRESSURE)
 		timer = TICK_USAGE_REAL
+		if(!resumed)
+			cached_cost = 0
 		process_high_pressure_delta(resumed)
-		cost_highpressure = MC_AVERAGE(cost_highpressure, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		cached_cost += TICK_USAGE_REAL - timer
 		if(state != SS_RUNNING)
 			return
+		cost_highpressure = MC_AVERAGE(cost_highpressure, TICK_DELTA_TO_MS(cached_cost))
 		resumed = FALSE
 		currentpart = SSAIR_HOTSPOTS
 
 	if(currentpart == SSAIR_HOTSPOTS)
 		timer = TICK_USAGE_REAL
+		if(!resumed)
+			cached_cost = 0
 		process_hotspots(delta_time, resumed)
-		cost_hotspots = MC_AVERAGE(cost_hotspots, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		cached_cost += TICK_USAGE_REAL - timer
 		if(state != SS_RUNNING)
 			return
+		cost_hotspots = MC_AVERAGE(cost_hotspots, TICK_DELTA_TO_MS(cached_cost))
 		resumed = FALSE
 		currentpart = SSAIR_SUPERCONDUCTIVITY
 
 	if(currentpart == SSAIR_SUPERCONDUCTIVITY)
 		timer = TICK_USAGE_REAL
+		if(!resumed)
+			cached_cost = 0
 		process_super_conductivity(resumed)
-		cost_superconductivity = MC_AVERAGE(cost_superconductivity, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		cached_cost += TICK_USAGE_REAL - timer
 		if(state != SS_RUNNING)
 			return
+		cost_superconductivity = MC_AVERAGE(cost_superconductivity, TICK_DELTA_TO_MS(cached_cost))
 		resumed = FALSE
-	currentpart = SSAIR_REBUILD_PIPENETS
+	currentpart = SSAIR_PIPENETS
 
 	SStgui.update_uis(SSair) //Lightning fast debugging motherfucker
 
@@ -437,6 +461,36 @@ GLOBAL_LIST_EMPTY(colored_images)
 	var/datum/atmosphere/mix = atmos_gen[gas_string]
 	return mix.gas_string
 
+/**
+ * Adds a given machine to the processing system for SSAIR_ATMOSMACHINERY processing.
+ *
+ * This should be fast, so no error checking is done.
+ * If you start adding in things you shouldn't, you'll cause runtimes every 2 seconds for every
+ * object you added. Do not use irresponsibly.
+ * Arguments:
+ * * machine - The machine to start processing. Can be any /obj/machinery.
+ */
+/datum/controller/subsystem/air/proc/start_processing_machine(obj/machinery/machine)
+	atmos_machinery += machine
+
+/**
+ * Removes a given machine to the processing system for SSAIR_ATMOSMACHINERY processing.
+ *
+ * This should be fast, so no error checking is done.
+ * If you call this proc when your machine isn't processing, you're likely attempting to
+ * remove something that isn't in a list with over 1000 objects, twice. Do not use
+ * irresponsibly.
+ * Arguments:
+ * * machine - The machine to stop processing.
+ */
+/datum/controller/subsystem/air/proc/stop_processing_machine(obj/machinery/machine)
+	atmos_machinery -= machine
+
+	// If we're currently processing atmos machines, there's a chance this machine is in
+	// the currentrun list, which is a cache of atmos_machinery. Remove it from that list
+	// as well to prevent processing qdeleted objects in the cache.
+	if(currentpart == SSAIR_ATMOSMACHINERY)
+		currentrun -= machine
 
 /datum/controller/subsystem/air/ui_state(mob/user)
 	return GLOB.debug_state
@@ -482,12 +536,13 @@ GLOBAL_LIST_EMPTY(colored_images)
 	#else
 	data["display_max"] = FALSE
 	#endif
-	var/obj/screen/plane_master/plane = user.hud_used.plane_masters["[ATMOS_GROUP_PLANE]"]
+	var/atom/movable/screen/plane_master/plane = user.hud_used.plane_masters["[ATMOS_GROUP_PLANE]"]
 	data["showing_user"] = (plane.alpha == 255)
 	return data
 
 /datum/controller/subsystem/air/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
-	if(..() || !check_rights_for(usr.client, R_DEBUG))
+	. = ..()
+	if(. || !check_rights_for(usr.client, R_DEBUG))
 		return
 	switch(action)
 		if("move-to-target")
@@ -520,7 +575,7 @@ GLOBAL_LIST_EMPTY(colored_images)
 					group.hide_turfs()
 			return TRUE
 		if("toggle_user_display")
-			var/obj/screen/plane_master/plane = ui.user.hud_used.plane_masters["[ATMOS_GROUP_PLANE]"]
+			var/atom/movable/screen/plane_master/plane = ui.user.hud_used.plane_masters["[ATMOS_GROUP_PLANE]"]
 			if(!plane.alpha)
 				if(ui.user.client)
 					ui.user.client.images += GLOB.colored_images

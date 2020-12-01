@@ -16,7 +16,8 @@
 	var/effectmod ///Which type of crossbred
 	var/list/activate_reagents = list() ///Reagents required for activation
 	var/recurring = FALSE
-	var/research ///Research point value for slime cores. These are defines stored in [/__DEFINES/research] - the actual values are updated there.
+	/// Research point value for slime cores. These are defines stored in [code/__DEFINES/research.dm] - the actual values are updated there.
+	var/research
 
 /obj/item/slime_extract/examine(mob/user)
 	. = ..()
@@ -97,7 +98,7 @@
 /obj/item/slime_extract/grey/activate(mob/living/carbon/human/user, datum/species/jelly/luminescent/species, activation_type)
 	switch(activation_type)
 		if(SLIME_ACTIVATE_MINOR)
-			var/obj/item/reagent_containers/food/snacks/monkeycube/M = new
+			var/obj/item/food/monkeycube/M = new
 			if(!user.put_in_active_hand(M))
 				M.forceMove(user.drop_location())
 			playsound(user, 'sound/effects/splat.ogg', 50, TRUE)
@@ -264,7 +265,7 @@
 	name = "yellow slime extract"
 	icon_state = "yellow slime extract"
 	effectmod = "charged"
-	activate_reagents = list(/datum/reagent/blood,/datum/reagent/toxin/plasma,/datum/reagent/water)
+	activate_reagents = list(/datum/reagent/blood,/datum/reagent/water)
 	research = SLIME_RESEARCH_TIER_2
 
 /obj/item/slime_extract/yellow/activate(mob/living/carbon/human/user, datum/species/jelly/luminescent/species, activation_type)
@@ -764,7 +765,7 @@
 	var/prompted = 0
 	var/animal_type = SENTIENCE_ORGANIC
 
-/obj/item/slimepotion/transference/afterattack(mob/living/M, mob/user, proximity)
+/obj/item/slimepotion/transference/afterattack(mob/living/M, mob/living/user, proximity)
 	if(!proximity)
 		return
 	if(prompted || !ismob(M))
@@ -1036,14 +1037,14 @@
 	inhand_icon_state = "tile-bluespace"
 	w_class = WEIGHT_CLASS_NORMAL
 	force = 6
-	custom_materials = list(/datum/material/iron=500)
+	mats_per_unit = list(/datum/material/iron=500)
 	throwforce = 10
 	throw_speed = 3
 	throw_range = 7
 	flags_1 = CONDUCT_1
 	max_amount = 60
 	turf_type = /turf/open/floor/bluespace
-
+	merge_type = /obj/item/stack/tile/bluespace
 
 /obj/item/stack/tile/sepia
 	name = "sepia floor tile"
@@ -1053,14 +1054,14 @@
 	inhand_icon_state = "tile-sepia"
 	w_class = WEIGHT_CLASS_NORMAL
 	force = 6
-	custom_materials = list(/datum/material/iron=500)
+	mats_per_unit = list(/datum/material/iron=500)
 	throwforce = 10
 	throw_speed = 0.1
 	throw_range = 28
 	flags_1 = CONDUCT_1
 	max_amount = 60
 	turf_type = /turf/open/floor/sepia
-
+	merge_type = /obj/item/stack/tile/sepia
 
 /obj/item/areaeditor/blueprints/slime
 	name = "cerulean prints"
