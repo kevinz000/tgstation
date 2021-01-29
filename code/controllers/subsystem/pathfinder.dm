@@ -148,7 +148,7 @@ SUBSYSTEM_DEF(pathfinder)
 /// Pause for 0.5 ds if debugging with visuals.
 /// SETUP_VISUALS sets up and defines common things used in the debug visualizer, that will likely be useful when visualizing basically any algorithm.
 #ifdef PATHFINDING_DEBUG
-#define PAUSE_IF_DEBUGGING if(visualize_pathfinding && visualize_sleep) { sleep(0); }
+#define PAUSE_IF_DEBUGGING if(visualize_pathfinding && visualize_sleep) { sleep(0.5); }
 #define SETUP_VISUALS \
 	var/list/obj/effect/overlay/pathfinding/debug_effects = list(); \
 	var/list/obj/effect/overlay/pathfinding/debug_turf_to_node = list(); \
@@ -227,17 +227,52 @@ SUBSYSTEM_DEF(pathfinder)
 	deltimer(timerid)
 	queues[queue] -= timerid
 
+// notice: JPS has not undergone optimization yet, as it is still in development/debugging stages.
+
+/datum/jump_point
+	var/dir = NONE
+	var/turf/turf = null
+	var/datum/jump_point/previous = null
+	var/cost = null
+	var/heuristic = null
+	var/depth = null
+
+/datum/jump_point/New(turf, dir, prev, cost, heuristic, depth)
+	src.turf = turf
+	src.dir = dir
+	src.previous = prev
+	src.cost = cost
+	src.heuristic = heuristic
+	src.depth = depth
+
 /datum/controller/subsystem/pathfinder/proc/run_JPS_pathfind(caller, start, end, can_cross_proc, heuristic_type, max_node_depth, max_path_distance, min_target_distance, list/turf_blacklist_typecache, obj/item/card/id/ID)
 	PRIVATE_PROC(TRUE)
 	SETUP_VISUALS
+
+	// Variable definitions/setup
+	var/current_distance
+	var/turf/scanning
+	var/turf/next
+	var/jps_trace_safety = max(world.maxx, world.maxy)
+	var/safety = jps_trace_safety
+	var/datum/jump_point/current
+	var/datum/jump_point/newnode
+	var/list/injecting
+	var/turf/left
+	var/turf/right
+	var/cost
+	var/obstructed
+
 	// We're going to assume everything is valid type-wise as we're only ran by a wrapper.
 	// If anything ISN'T valid, we're going to crash and burn, because why are you not using the wrapper and/or passing in invalid arguments?
 	// simple checks first
 	if(start.z != end.z)
 		return PATHFIND_FAIL_MULTIZ
-	// fun fact, variable declarations are costly, so let's just do it all here.
-	// we want to optimize for cpu so expect some messy code, these vars may or may not be used depending on where, they'll only be set and used if they're being used more than once to avoid more calculations.
-	var/current_distance		// current distance in whatever context it's used.
+
+	var/list/open = list()		// jump points yet to be checked
+	if(start == end)
+		return list()		// already there
+	CALCULATE_DISTANCE(start end)
 	// if we have max path distance, make sure we're not too far
 	if(max_path_distance || min_target_distance)
 		switch(heuristic_type)
@@ -259,79 +294,98 @@ SUBSYSTEM_DEF(pathfinder)
 					return PATHFIND_FAIL_TOO_FAR
 				if(current_distance < min_target_distance)
 					return PATHFIND_FAIL_TOO_CLOSE
-	// basic stuff is done.
-	// this used to use a datum/Heap but let's Not(tm) because proccall overhead is a Thing(tm) in byond and that's Bad(tm) for us.
-	// instead we're going to play the list game
-	INJECTION_SETUP // See defines
-	var/list/open = list()		// astar open node list, see defines
-	var/list/node_by_turf = list()		//turf = node assoc list for reverse lookup.
-	var/list/path				// assembled turf path
-	var/list/current = list()		//current node list
-	var/turf/current_turf		// because unironically : operators are slower (not to mention the fact they're banned) than .'s for some reason?
-	var/turf/expand_turf		// turf we're trying to expand to
-	var/list/expand = list()	// node list of turf we're trying to expand to, if it exists.
-	var/new_cost				// new cost of a new turf being expanded to.
-	var/reverse_dir_of_expand	// reverse direction of where we're expanding to.
-	SETUP_NODE(open, null, 0, current_distance, 0, NORTH|SOUTH|EAST|WEST, start)		// initially we want to explore all cardinals.
+	// add all directions for start to open
+	for(var/d in GLOB.alldirs)
+		open += new /datum/jump_point(start, d, null, 0, current_distance, 0)
 	PAUSE_IF_DEBUGGING
-	while(length(open))		// while we still have open nodes
-		current = open[length(open)]		// pop a node
-		open.len--
-		current_turf = current[NODE_TURF] // get its turf
-#ifdef PATHFINDING_DEBUG
-		if(visualize_pathfinding)
-			current_node_effect = debug_turf_to_node[current_turf]
-			current_node_effect.color = node_color_current
-			PAUSE_IF_DEBUGGING
-#endif
-		// see how far we are
-		CALCULATE_DISTANCE(current_turf, end)
-		// if we're at the end or close enough, we're done
-		if((current_turf == end) || (current_distance <= min_target_distance))
-			// assemble our path
-			path = list(current_turf)
-			// go up the chain
-			while(current[NODE_PREVIOUS])
-#ifdef PATHFINDING_DEBUG
-				traceback_dir = turn(get_dir(current[NODE_TURF], current[NODE_PREVIOUS][NODE_TURF]), 180)
-#endif
-				current = current[NODE_PREVIOUS]
-				path += current[NODE_TURF]
-#ifdef PATHFINDING_DEBUG
-				if(visualize_pathfinding)
-					current_arrow_effect = new(current[NODE_TURF])
-					current_arrow_effect.appearance = successful_pathfind
-					current_arrow_effect.orient(traceback_dir)
-					debug_effects += current_arrow_effect
-#endif
-			// get the path in the right direction
-			reverseRange(path)
-			break		// we're done!
-		// if we get to this point, the !fun! begins.
-		if(current[NODE_DEPTH] > max_node_depth)		// too deep, skip
-			continue
-		// Run each direction
-		RUN_ASTAR(NORTH)
-		RUN_ASTAR(SOUTH)
-		RUN_ASTAR(EAST)
-		RUN_ASTAR(WEST)
-		// Clear directions, we're done with this node.
-		current[NODE_DIR] = NONE
-#ifdef PATHFINDING_DEBUG
-		if(visualize_pathfinding)
-			current_node_effect = debug_turf_to_node[current_turf]
-			current_node_effect.color = node_color_explored
-		else
-			CHECK_TICK
-#else
-		CHECK_TICK
-#endif
+	// if this is set, we know this is the right path
+	var/datum/jump_point/found
+	while(open.len && !found)		// while we still have jump points to check
+		// fetch the one at end, and decrement to ensure it isn't checked again
+		current = open[open.len--]
 
-#ifdef PATHFINDING_DEBUG
-	QDEL_LIST_IN(debug_effects, visual_lifetime)
-#endif
+		if(!ISDIAGONALDIR(current.dir))		// JPS CARDINAL SCAN
+			found = JPS_cardinal_scan(current, open, end, jps_trace_safety)
+		else				// JPS DIAGONAL SCAN
 
-	return path || PATHFIND_FAIL_NO_PATH
+
+	// return path
+	if(!found)
+#ifdef PATHFINDING_DEBUG
+		QDEL_LIST_IN(debug_effects, visual_lifetime)
+#endif
+		return PATHFIND_FAIL_NO_PATH
+	else
+		// custom line trace from end to start
+		var/list/trace = list()
+		var/turf/tracing = found.turf
+		trace += tracing
+		while(found.previous)
+			safety = jps_trace_safety
+			var/tracedir = REVERSE_DIR(found.dir)
+			while(tracing != found.previous.turf)
+				if(!--safety)
+					CRASH("JPS traceback > [safety]")
+				tracing = get_step(tracing, tracedir)
+				trace += tracing
+			found = found.previous
+			tracing = found.turf
+		trace -= start
+		reverseRange(trace)
+#ifdef PATHFINDING_DEBUG
+		// visuals
+		for(var/i in 1 to trace.len - 1)
+			var/obj/effect/overlay/pathfinding/v = new(trace[i])
+			v.appearance = successful_pathfind
+			v.dir = get_dir(trace[i], trace[i+1])
+		QDEL_LIST_IN(debug_effects, visual_lifetime)
+#endif
+		return trace
+
+/datum/controller/subsystem/pathfinding/proc/JPS_cardinal_scan(datum/jump_point/current, list/open, turf/end, trace_safety)
+	var/turf/scanning = current.turf
+	var/current_distance
+	var/turf/next
+	var/datum/jump_point/newnode
+	var/list/injecting
+	var/turf/left
+	var/turf/right
+	var/cost
+	var/obstructed
+
+	while(scanning)
+		if(!--trace_safety)
+			CRASH("JPS cardinal trace > safety]")
+		next = get_step(scanning, current.dir)
+		if(next == end)
+			return new /datum/jump_point(next, currents.dir, current, current.cost + get_dist(current.turf, next), 0, current + 1)
+		if(turf_blacklist_typecache[next.type])
+			break
+		if(!call(scanning, can_cross_proc)(caller, next, ID, current.dir, REVERSE_DIR(current.dir)))
+			break
+		// now that we have ensured we actually can cross over, determine if need to break due to a new jump point
+		var/leftdir = turn(current.dir, -90)
+		var/rightdir = turn(current.dir, 90)
+		left = get_step(scanning, leftdir)
+		right = get_step(scanning, rightdir)
+		// if either left or right is obstructed, break with a new jump point for searching diagonally in that direction
+		obstructed = NONE
+		// we use east/west for obstructed because we don't have left/right defines even though it may not actually be east/west
+		if(left && (turf_blacklist_typecache[left.type] || (call(scanning, can_cross_proc)(caller, left, ID, leftdir, REVERSE_DIR(leftdir)))))
+			obstructed = WEST
+		if(right && (turf_blacklist_typecache[right.type] || (call(scanning, can_cross_proc)(caller, right, ID, rightdir, REVERSE_DIR(rightdir)))))
+			obstructed = EAST
+		if(obstructed)
+			CALCULATE_DISTANCE(scanning, end)
+			cost = get_dist(current.turf, scanning) + current.cost
+			injecting = list(new /datum/jump_point(scanning, current.dir, current, cost, current_distance, current.depth + 1))
+			if(obstructed & EAST)
+				injecting += new /datum/jump_point(scanning, turn(current.dir, 45), current, cost, current_distance, current.depth + 1)
+			if(obstructed & WEST)
+				injecting += new /datum/jump_point(scanning, turn(current.dir, -45), current, cost, current_distance, current.depth + 1)
+			JPS_NODE_INJECT(open, newnode, current_distance)
+			break
+
 
 ///////////////////////////////////////////////////
 //////// JUMP POINT SEARCH VARIANT-ASTAR END //////
