@@ -207,8 +207,10 @@ SUBSYSTEM_DEF(pathfinder)
   * * turf_blacklist_typecache - blacklist typecache of turfs we can't cross no matter what. defaults to space tiles.
   * * queue - queue to put this in/use with this.
   * * ID - obj/item/card/id to provide access. why this uses an id card and not an access list, .. don't ask.
+  * * no_line_trace - We don't need to manually trace out the full line(s) of turfs, and the caller can just accept the ordered turf list of the nodes themselves.
   */
-/datum/controller/subsystem/pathfinder/proc/JPS_pathfind(caller, turf/start, turf/end, can_cross_proc = /turf/proc/pathfinding_can_cross, heuristic_type = PATHFINDING_HEURISTIC_BYOND, max_node_depth = 30, max_path_distance = 0, min_target_distance = 0, turf_blacklist_typecache = SSpathfinder.space_type_cache, queue = PATHFINDING_QUEUE_DEFAULT, obj/item/card/id/ID)
+/datum/controller/subsystem/pathfinder/proc/JPS_pathfind(caller, turf/start, turf/end, can_cross_proc = /turf/proc/pathfinding_can_cross, heuristic_type = PATHFINDING_HEURISTIC_BYOND, max_node_depth = 30,
+	max_path_distance = 0, min_target_distance = 0, turf_blacklist_typecache = SSpathfinder.space_type_cache, queue = PATHFINDING_QUEUE_DEFAULT, obj/item/card/id/ID, no_line_trace = FALSE)
 	if(!end)
 		. = PATHFIND_FAIL_NO_END_TURF
 		CRASH("No ending turf")
@@ -223,7 +225,7 @@ SUBSYSTEM_DEF(pathfinder)
 	var/timeout = queue_timeouts[queue] || 10 SECONDS
 	var/timerid = addtimer(CALLBACK(src, .proc/warn_overtime, "JPS pathfind timed out over [timeout]: [caller], [COORD(start)], [COORD(end)], ..."), timeout, TIMER_STOPPABLE)
 	queues[queue] += timerid
-	. = run_JPS_pathfind(caller, start, end, can_cross_proc, heuristic_type, max_node_depth, max_path_distance, min_target_distance, turf_blacklist_typecache, ID)
+	. = run_JPS_pathfind(caller, start, end, can_cross_proc, heuristic_type, max_node_depth, max_path_distance, min_target_distance, turf_blacklist_typecache, ID, no_line_trace)
 	deltimer(timerid)
 	queues[queue] -= timerid
 
@@ -245,7 +247,7 @@ SUBSYSTEM_DEF(pathfinder)
 	src.heuristic = heuristic
 	src.depth = depth
 
-/datum/controller/subsystem/pathfinder/proc/run_JPS_pathfind(caller, start, end, can_cross_proc, heuristic_type, max_node_depth, max_path_distance, min_target_distance, list/turf_blacklist_typecache, obj/item/card/id/ID)
+/datum/controller/subsystem/pathfinder/proc/run_JPS_pathfind(caller, start, end, can_cross_proc, heuristic_type, max_node_depth, max_path_distance, min_target_distance, list/turf_blacklist_typecache, obj/item/card/id/ID, no_line_trace)
 	PRIVATE_PROC(TRUE)
 	SETUP_VISUALS
 
@@ -323,22 +325,30 @@ SUBSYSTEM_DEF(pathfinder)
 #endif
 		return PATHFIND_FAIL_NO_PATH
 	else
-		// custom line trace from end to start
-		var/list/trace = list()
-		var/turf/tracing = found.turf
-		trace += tracing
-		while(found.previous)
-			safety = jps_trace_safety
-			var/tracedir = REVERSE_DIR(found.dir)
-			while(tracing != found.previous.turf)
-				if(!--safety)
-					CRASH("JPS traceback > [safety]")
-				tracing = get_step(tracing, tracedir)
-				trace += tracing
-			found = found.previous
-			tracing = found.turf
-		trace -= start
-		reverseRange(trace)
+		if(!no_line_trace)
+			// custom line trace from end to start
+			var/list/trace = list()
+			var/turf/tracing = found.turf
+			trace += tracing
+			while(found.previous)
+				safety = jps_trace_safety
+				var/tracedir = REVERSE_DIR(found.dir)
+				while(tracing != found.previous.turf)
+					if(!--safety)
+						CRASH("JPS traceback > [safety]")
+					tracing = get_step(tracing, tracedir)
+					trace += tracing
+				found = found.previous
+				tracing = found.turf
+			trace -= start
+			reverseRange(trace)
+		else
+			var/list/trace = list()
+			trace += found.turf
+			while(found.previous)
+				found = found.previous
+				trace += found.turf
+			reverseRange(trace)
 #ifdef PATHFINDING_DEBUG
 		// visuals
 		for(var/i in 1 to trace.len - 1)
@@ -402,6 +412,7 @@ SUBSYSTEM_DEF(pathfinder)
 #else
 /datum/controller/subsystem/pathfinding/proc/JPS_diagonal_scan(datum/jump_point/current, list/open, turf/end, trace_safety)
 #endif
+
 
 ///////////////////////////////////////////////////
 //////// JUMP POINT SEARCH VARIANT-ASTAR END //////

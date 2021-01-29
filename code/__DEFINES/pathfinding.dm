@@ -25,3 +25,8 @@
 #define PATHFINDING_HEURISTIC_BYOND					2
 /// euclidean distance - sqrt(dx^2 + dy^2)
 #define PATHFINDING_HEURISTIC_EUCLIDEAN				3
+
+// Turf canAstarPass retvals
+#define ASTARPASS_BLOCKED 0
+#define ASTARPASS_OPEN 1
+#define ASTARPASS_FORCED_NEIGHBOR 2
