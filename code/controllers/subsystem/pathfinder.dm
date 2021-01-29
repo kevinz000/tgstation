@@ -303,12 +303,19 @@ SUBSYSTEM_DEF(pathfinder)
 	while(open.len && !found)		// while we still have jump points to check
 		// fetch the one at end, and decrement to ensure it isn't checked again
 		current = open[open.len--]
-
 		if(!ISDIAGONALDIR(current.dir))		// JPS CARDINAL SCAN
+#ifdef PATHFINDING_DEBUG
+			found = JPS_cardinal_scan(current, open, end, jps_trace_safety, debug_effects)
+#else
 			found = JPS_cardinal_scan(current, open, end, jps_trace_safety)
+#endif
 		else				// JPS DIAGONAL SCAN
-
-
+#ifdef PATHFINDING_DEBUG
+			found = JPS_diagonal_scan(current, open, end, jps_trace_safety, debug_effects)
+#else
+			found = JPS_diagonal_scan(current, open, end, jps_trace_safety)
+#endif
+		PAUSE_IF_DEBUGGING
 	// return path
 	if(!found)
 #ifdef PATHFINDING_DEBUG
@@ -342,7 +349,11 @@ SUBSYSTEM_DEF(pathfinder)
 #endif
 		return trace
 
+#ifdef PATHFINDING_DEBUG
+/datum/controller/subsystem/pathfinding/proc/JPS_cardinal_scan(datum/jump_point/current, list/open, turf/end, trace_safety, list/visual_effects)
+#else
 /datum/controller/subsystem/pathfinding/proc/JPS_cardinal_scan(datum/jump_point/current, list/open, turf/end, trace_safety)
+#endif
 	var/turf/scanning = current.turf
 	var/current_distance
 	var/turf/next
@@ -386,6 +397,11 @@ SUBSYSTEM_DEF(pathfinder)
 			JPS_NODE_INJECT(open, newnode, current_distance)
 			break
 
+#ifdef PATHFINDING_DEBUG
+/datum/controller/subsystem/pathfinding/proc/JPS_diagonal_scan(datum/jump_point/current, list/open, turf/end, trace_safety, list/visual_effects)
+#else
+/datum/controller/subsystem/pathfinding/proc/JPS_diagonal_scan(datum/jump_point/current, list/open, turf/end, trace_safety)
+#endif
 
 ///////////////////////////////////////////////////
 //////// JUMP POINT SEARCH VARIANT-ASTAR END //////
