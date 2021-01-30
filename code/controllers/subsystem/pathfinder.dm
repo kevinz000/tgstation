@@ -307,16 +307,19 @@ SUBSYSTEM_DEF(pathfinder)
 		current = open[open.len--]
 		if(!ISDIAGONALDIR(current.dir))		// JPS CARDINAL SCAN
 #ifdef PATHFINDING_DEBUG
-			found = JPS_cardinal_scan(current, open, end, jps_trace_safety, debug_effects)
+			found = JPS_cardinal_scan(current, open, end, jps_trace_safety, debug_effects, debug_turf_to_node)
 #else
 			found = JPS_cardinal_scan(current, open, end, jps_trace_safety)
 #endif
 		else				// JPS DIAGONAL SCAN
 #ifdef PATHFINDING_DEBUG
-			found = JPS_diagonal_scan(current, open, end, jps_trace_safety, debug_effects)
+			found = JPS_diagonal_scan(current, open, end, jps_trace_safety, debug_effects, debug_turf_to_node)
 #else
 			found = JPS_diagonal_scan(current, open, end, jps_trace_safety)
 #endif
+		if(istype(found))
+			break
+
 		PAUSE_IF_DEBUGGING
 	// return path
 	if(!found)
@@ -360,7 +363,7 @@ SUBSYSTEM_DEF(pathfinder)
 		return trace
 
 #ifdef PATHFINDING_DEBUG
-/datum/controller/subsystem/pathfinding/proc/JPS_cardinal_scan(datum/jump_point/current, list/open, turf/end, trace_safety, list/visual_effects)
+/datum/controller/subsystem/pathfinding/proc/JPS_cardinal_scan(datum/jump_point/current, list/open, turf/end, trace_safety, list/visual_effects, list/debug_turf_to_node)
 #else
 /datum/controller/subsystem/pathfinding/proc/JPS_cardinal_scan(datum/jump_point/current, list/open, turf/end, trace_safety)
 #endif
@@ -377,6 +380,12 @@ SUBSYSTEM_DEF(pathfinder)
 	while(scanning)
 		if(!--trace_safety)
 			CRASH("JPS cardinal trace > safety]")
+#ifdef PATHFINDING_DEBUG
+		var/obj/effect/overlay/pathfinding/arrow/A = new(scanning)
+		A.appearance = arrow_to_node
+		A.orient(current.dir)
+		visual_effects += A
+#endif
 		next = get_step(scanning, current.dir)
 		if(next == end)
 			return new /datum/jump_point(next, currents.dir, current, current.cost + get_dist(current.turf, next), 0, current + 1)
@@ -397,6 +406,14 @@ SUBSYSTEM_DEF(pathfinder)
 		if(right && (turf_blacklist_typecache[right.type] || (call(scanning, can_cross_proc)(caller, right, ID, rightdir, REVERSE_DIR(rightdir)))))
 			obstructed = EAST
 		if(obstructed)
+#ifdef PATHFINDING_DEBUG
+			var/obj/effect/overlay/pathfinding/visual = new(scanning)
+			visual.appearance = debug_appearance_node
+			visual.layer += 1
+			visual.color = node_color_potential
+			visual.alpha = debug_visual_alpha
+			debug_turf_to_node[scanning] = visual
+#endif
 			CALCULATE_DISTANCE(scanning, end)
 			cost = get_dist(current.turf, scanning) + current.cost
 			injecting = list(new /datum/jump_point(scanning, current.dir, current, cost, current_distance, current.depth + 1))
@@ -405,14 +422,74 @@ SUBSYSTEM_DEF(pathfinder)
 			if(obstructed & WEST)
 				injecting += new /datum/jump_point(scanning, turn(current.dir, -45), current, cost, current_distance, current.depth + 1)
 			JPS_NODE_INJECT(open, newnode, current_distance)
-			break
+			return JPS_SCAN_NEW_NODE
+	return JPS_SCAN_NO_RESULT
 
 #ifdef PATHFINDING_DEBUG
-/datum/controller/subsystem/pathfinding/proc/JPS_diagonal_scan(datum/jump_point/current, list/open, turf/end, trace_safety, list/visual_effects)
+/datum/controller/subsystem/pathfinding/proc/JPS_diagonal_scan(datum/jump_point/current, list/open, turf/end, trace_safety, list/visual_effects, list/debug_turf_to_node)
 #else
 /datum/controller/subsystem/pathfinding/proc/JPS_diagonal_scan(datum/jump_point/current, list/open, turf/end, trace_safety)
 #endif
 
+	var/turf/scanning = current.turf
+	var/current_distance
+	var/turf/next
+	var/datum/jump_point/newnode
+	var/list/injecting
+	var/turf/left
+	var/turf/right
+	var/cost
+	var/obstructed
+	var/orig_safety = trace_safety
+	var/list/injecting = list()
+	var/ns = NSCOMPONENT(current.dir)
+	var/ew = EWCOMPONENT(current.dir))
+	var/add_cost
+
+	while(scanning)
+		if(!--trace_safety)
+			CRASH("JPS cardinal trace > safety]")
+#ifdef PATHFINDING_DEBUG
+		var/obj/effect/overlay/pathfinding/arrow/A = new(scanning)
+		A.appearance = arrow_to_node
+		A.orient(current.dir)
+		visual_effects += A
+#endif
+		next = get_step(scanning, current.dir)
+		if(next == end)
+			return new /datum/jump_point(next, current.dir, current, current.cost + get_dist(current.turf, scanning), 0, current + 1)
+		if(turf_blacklist_typecache[next.type])
+			break
+		// Diagonal scanning is a bit different
+		// We want to first, ensure that we can pass
+		var/passing = call(scanning, can_cross_proc)(caller, next, ID, current.dir, REVERSE_DIR(current.dir))
+		if(!passing)	// if not, it's over
+			break
+		// Next, if we can pass, but, we need a forced neighbor, make one based on retvals.
+		CALCULATE_DISTANCE(current, end)
+		add_cost = get_dist(current.turf, scanning)
+		var/datum/jump_point/tempnode = new /datum/jump_point(scanning, current.dir, current, current_cost + add_cost, current_distance, current + 1)
+		if(!(passing & (ASTARPASS_NE | ASTARPASS_SW)))
+
+
+		// finally, do cardinal scans from this location.
+		var/datum/jump_point/found_ns
+		var/datum/jump_point/found_ew
+#ifdef PATHFINDING_DEBUG
+		found_ns = JPS_cardinal_scan(new /datum/jump_point(scanning, ns, current, current_cost + add_cost, current_distance, current + 1), open, end, orig_safety, visual_effects, debug_turf_to_node)
+		found_ew = JPS_cardinal_scan(new /datum/jump_point(scanning, ew, current, current_cost + add_cost, current_distance, current + 1), open, end, orig_safety, visual_effects, debug_turf_to_node)
+#else
+		found_ns = JPS_cardinal_scan(new /datum/jump_point(scanning, ns, current, current_cost + add_cost, current_distance, current + 1), open, end, orig_safety)
+		found_ew = JPS_cardinal_scan(new /datum/jump_point(scanning, ew, current, current_cost + add_cost, current_distance, current + 1), open, end, orig_safety)
+#endif
+		if(istype(found_ns))
+			return found_ns		// path found
+		if(istype(found_ew))
+			return found_ew
+		else if(length(injecting) || (found_ns || found_ew))		// new node
+			injecting += new /datum/jump_point(scanning, current.dir, current, current_cost + add_cost, current_distance, current + 1)
+			JPS_NODE_INJECT(open, injecting, current_distance)
+			return JPS_SCAN_NEW_NODE
 
 ///////////////////////////////////////////////////
 //////// JUMP POINT SEARCH VARIANT-ASTAR END //////
@@ -703,21 +780,23 @@ SUBSYSTEM_DEF(pathfinder)
 		var/eastwest = dir_to_other & (EAST|WEST)
 		var/turf/one = get_step(src, northsouth)
 		var/turf/two = get_step(src, eastwest)
-		return (one && pathfinding_can_cross(caller, one, ID, northsouth, REVERSE_DIR(northsouth)) && one.pathfinding_can_cross(caller, other, ID, eastwest, REVERSE_DIR(eastwest))) || (two && pathfinding_can_cross(caller, two, ID, eastwest, REVERSE_DIR(eastwest)) && two.pathfinding_can_cross(caller, other, ID, northsouth, REVERSE_DIR(northsouth)))
+		var/passone = one && pathfinding_can_cross(caller, one, ID, northsouth, REVERSE_DIR(northsouth)) && one.pathfinding_can_cross(caller, other, ID, eastwest, REVERSE_DIR(eastwest)) && ASTARPASS_NS
+		var/passtwo = two && pathfinding_can_cross(caller, two, ID, eastwest, REVERSE_DIR(eastwest)) && two.pathfinding_can_cross(caller, other, ID, northsouth, REVERSE_DIR(northsouth)) && ASTARPASS_EW
+		return passone | passtwo
 	// check density first. good litmus test.
 	if(other.density)
-		return FALSE
+		return ASTARPASS_BLOCKED
 	// we should probably do all on edge objects but honestly can't be arsed right now
 	for(var/obj/structure/window/W in src)
 		if(!W.CanAStarPass(ID, dir_to_other))
-			return FALSE
+			return ASTARPASS_BLOCKED
 	for(var/obj/machinery/door/window/W in src)
 		if(!W.CanAStarPass(ID, dir_to_other))
-			return FALSE
+			return ASTARPASS_BLOCKED
 	for(var/obj/O in other)
 		if(!O.CanAStarPass(ID, reverse_dir, caller))
-			return FALSE
-	return TRUE
+			return ASTARPASS_BLOCKED
+	return ASTARPASS_OPEN
 
 #ifdef PATHFINDING_DEBUG
 /obj/effect/overlay/pathfinding

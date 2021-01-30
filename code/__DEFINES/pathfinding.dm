@@ -29,4 +29,9 @@
 // Turf canAstarPass retvals
 #define ASTARPASS_BLOCKED 0
 #define ASTARPASS_OPEN 1
-#define ASTARPASS_FORCED_NEIGHBOR 2
+#define ASTARPASS_NE 2
+#define ASTARPASS_SW 4
+
+// JPS scan retvals
+#define JPS_SCAN_NO_RESULT		0
+#define JPS_SCAN_NEW_NODE		1
