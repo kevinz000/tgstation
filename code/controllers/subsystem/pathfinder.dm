@@ -445,6 +445,7 @@ SUBSYSTEM_DEF(pathfinder)
 	var/ns = NSCOMPONENT(current.dir)
 	var/ew = EWCOMPONENT(current.dir))
 	var/add_cost
+	var/forced_neighbor_on_next
 
 	while(scanning)
 		if(!--trace_safety)
@@ -467,11 +468,36 @@ SUBSYSTEM_DEF(pathfinder)
 			break
 		// Next, if we can pass, but, we need a forced neighbor, make one based on retvals.
 		CALCULATE_DISTANCE(current, end)
+		// if we already marked a forced neighbor, now is the time to execute
+		if(forced_neighbor_on_next)
+			// we want to turn 90 deg towards it
+			var/turned
+			switch(passing)
+				if(ASTARPASS_NS)
+					switch(current.dir)
+						if(NORTHEAST)
+							turned = -90
+						if(NORTHWEST)
+							turned = 90
+						if(SOUTHEAST)
+							turned = 90
+						if(SOUTHWEST)
+							turned = -90
+				if(ASTARPASS_EW)
+					switch(current.dir)
+						if(NORTHEAST)
+							turned = 90
+						if(NORTHWEST)
+							turned = -90
+						if(SOUTHEAST)
+							turned = -90
+						if(SOUTHWEST)
+							turned = 90
+				injecting += new /datum/jump_point(scanning, turn(current.dir, turned), current, current_cost + add_cost, current_distance, current + 1)
+		if(!(passing & (ASTARPASS_NS | ASTARPASS_EW)))
+			forced_neighbor_on_next = passing		// mark, as we need to do it AFTER we go another step
 		add_cost = get_dist(current.turf, scanning)
 		var/datum/jump_point/tempnode = new /datum/jump_point(scanning, current.dir, current, current_cost + add_cost, current_distance, current + 1)
-		if(!(passing & (ASTARPASS_NE | ASTARPASS_SW)))
-
-
 		// finally, do cardinal scans from this location.
 		var/datum/jump_point/found_ns
 		var/datum/jump_point/found_ew
