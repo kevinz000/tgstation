@@ -184,6 +184,25 @@ SUBSYSTEM_DEF(pathfinder)
 //////// JUMP POINT SEARCH VARIANT-ASTAR START ////
 ///////////////////////////////////////////////////
 
+#define JPS_INJECTION_SETUP
+	var/datum/jump_point/searching
+	var/inserted
+
+#define JPS_NODE_INJECT(open, node)
+	if(open.len > 16)
+
+	else
+		inserted = FALSE
+		for(var/i in open.len to 1 step -1)
+			searching = open[i]
+			if(searching.cost < node.cost)
+				open.Insert(node, i + 1)
+				inserted = TRUE
+				break
+		if(!inserted)
+			open.Insert(node, 1)
+
+
 /**
   * Runs a pathfind with jump point search, a variant of A* with much, much higher performance.
   * You want to use this whenever possible.
@@ -367,6 +386,7 @@ SUBSYSTEM_DEF(pathfinder)
 #else
 /datum/controller/subsystem/pathfinding/proc/JPS_cardinal_scan(datum/jump_point/current, list/open, turf/end, trace_safety)
 #endif
+	JPS_INJECTION_SETUP
 	var/turf/scanning = current.turf
 	var/current_distance
 	var/turf/next
@@ -416,12 +436,14 @@ SUBSYSTEM_DEF(pathfinder)
 #endif
 			CALCULATE_DISTANCE(scanning, end)
 			cost = get_dist(current.turf, scanning) + current.cost
-			injecting = list(new /datum/jump_point(scanning, current.dir, current, cost, current_distance, current.depth + 1))
+			newnode = new /datum/jump_point(scanning, current.dir, current, cost, current_distance, current.depth + 1)
+			JPS_NODE_INJECT(open, newnode)
 			if(obstructed & EAST)
-				injecting += new /datum/jump_point(scanning, turn(current.dir, 45), current, cost, current_distance, current.depth + 1)
+				newnode = new /datum/jump_point(scanning, turn(current.dir, 45), current, cost, current_distance, current.depth + 1)
+				JPS_NODE_INJECT(open, newnode)
 			if(obstructed & WEST)
 				injecting += new /datum/jump_point(scanning, turn(current.dir, -45), current, cost, current_distance, current.depth + 1)
-			JPS_NODE_INJECT(open, newnode, current_distance)
+				JPS_NODE_INJECT(open, newnode)
 			return JPS_SCAN_NEW_NODE
 	return JPS_SCAN_NO_RESULT
 
@@ -430,7 +452,7 @@ SUBSYSTEM_DEF(pathfinder)
 #else
 /datum/controller/subsystem/pathfinding/proc/JPS_diagonal_scan(datum/jump_point/current, list/open, turf/end, trace_safety)
 #endif
-
+	JPS_INJECTION_SETUP
 	var/turf/scanning = current.turf
 	var/current_distance
 	var/turf/next
@@ -493,7 +515,8 @@ SUBSYSTEM_DEF(pathfinder)
 							turned = -90
 						if(SOUTHWEST)
 							turned = 90
-				injecting += new /datum/jump_point(scanning, turn(current.dir, turned), current, current_cost + add_cost, current_distance, current + 1)
+				newnode = new /datum/jump_point(scanning, turn(current.dir, turned), current, current_cost + add_cost, current_distance, current + 1)
+				JPS_NODE_INJECT(open, newnode)
 		if(!(passing & (ASTARPASS_NS | ASTARPASS_EW)))
 			forced_neighbor_on_next = passing		// mark, as we need to do it AFTER we go another step
 		add_cost = get_dist(current.turf, scanning)
@@ -513,8 +536,8 @@ SUBSYSTEM_DEF(pathfinder)
 		if(istype(found_ew))
 			return found_ew
 		else if(length(injecting) || (found_ns || found_ew))		// new node
-			injecting += new /datum/jump_point(scanning, current.dir, current, current_cost + add_cost, current_distance, current + 1)
-			JPS_NODE_INJECT(open, injecting, current_distance)
+			newnode = new /datum/jump_point(scanning, current.dir, current, current_cost + add_cost, current_distance, current + 1)
+			JPS_NODE_INJECT(open, newnode)
 			return JPS_SCAN_NEW_NODE
 
 ///////////////////////////////////////////////////
